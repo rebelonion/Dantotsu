@@ -1,6 +1,5 @@
 package ani.dantotsu.media.manga
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.view.LayoutInflater
@@ -13,24 +12,34 @@ import android.widget.LinearLayout
 import android.widget.NumberPicker
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import ani.dantotsu.*
+import ani.dantotsu.R
+import ani.dantotsu.currActivity
+import ani.dantotsu.currContext
 import ani.dantotsu.databinding.DialogLayoutBinding
 import ani.dantotsu.databinding.ItemAnimeWatchBinding
 import ani.dantotsu.databinding.ItemChipBinding
+import ani.dantotsu.isOnline
+import ani.dantotsu.loadImage
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
+import ani.dantotsu.media.MediaNameAdapter
 import ani.dantotsu.media.SourceSearchDialogFragment
 import ani.dantotsu.media.anime.handleProgress
+import ani.dantotsu.openSettings
 import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.others.webview.CookieCatcher
 import ani.dantotsu.parsers.DynamicMangaParser
 import ani.dantotsu.parsers.MangaReadSources
 import ani.dantotsu.parsers.MangaSources
+import ani.dantotsu.px
 import ani.dantotsu.settings.FAQActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.toast
 import com.google.android.material.chip.Chip
 import eu.kanade.tachiyomi.data.notification.Notifications.CHANNEL_SUBSCRIPTION_CHECK
 import eu.kanade.tachiyomi.source.online.HttpSource
@@ -58,7 +67,6 @@ class MangaReadAdapter(
 
     private var nestedDialog: AlertDialog? = null
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val binding = holder.binding
         _binding = binding
@@ -77,14 +85,12 @@ class MangaReadAdapter(
                 null
             )
         }
-        val offline =
-            if (!isOnline(binding.root.context) || PrefManager.getVal(PrefName.OfflineMode)
-            ) View.GONE else View.VISIBLE
+        val offline = !isOnline(binding.root.context) || PrefManager.getVal(PrefName.OfflineMode)
 
-        binding.animeSourceNameContainer.visibility = offline
-        binding.animeSourceSettings.visibility = offline
-        binding.animeSourceSearch.visibility = offline
-        binding.animeSourceTitle.visibility = offline
+        binding.animeSourceNameContainer.isGone = offline
+        binding.animeSourceSettings.isGone = offline
+        binding.animeSourceSearch.isGone = offline
+        binding.animeSourceTitle.isGone = offline
         //Source Selection
         var source =
             media.selected!!.sourceIndex.let { if (it >= mangaReadSources.names.size) 0 else it }
@@ -95,6 +101,9 @@ class MangaReadAdapter(
                 binding.animeSourceTitle.text = showUserText
                 showUserTextListener = { MainScope().launch { binding.animeSourceTitle.text = it } }
             }
+        }
+        media.selected?.scanlators?.let {
+            hiddenScanlators.addAll(it)
         }
         binding.animeSource.setAdapter(
             ArrayAdapter(
@@ -121,7 +130,7 @@ class MangaReadAdapter(
             // Check if 'extension' and 'selected' properties exist and are accessible
             (mangaReadSources[source] as? DynamicMangaParser)?.let { ext ->
                 ext.sourceLanguage = i
-                fragment.onLangChange(i)
+                fragment.onLangChange(i, ext.saveName)
                 fragment.onSourceChange(media.selected!!.sourceIndex).apply {
                     binding.animeSourceTitle.text = showUserText
                     showUserTextListener =
@@ -188,8 +197,8 @@ class MangaReadAdapter(
                 else -> dialogBinding.animeSourceList
             }
             when (style) {
-                0 -> dialogBinding.layoutText.text = "List"
-                1 -> dialogBinding.layoutText.text = "Compact"
+                0 -> dialogBinding.layoutText.setText(R.string.list)
+                1 -> dialogBinding.layoutText.setText(R.string.compact)
                 else -> dialogBinding.animeSourceList
             }
             selected.alpha = 1f
@@ -201,18 +210,18 @@ class MangaReadAdapter(
             dialogBinding.animeSourceList.setOnClickListener {
                 selected(it as ImageButton)
                 style = 0
-                dialogBinding.layoutText.text = "List"
+                dialogBinding.layoutText.setText(R.string.list)
                 run = true
             }
             dialogBinding.animeSourceCompact.setOnClickListener {
                 selected(it as ImageButton)
                 style = 1
-                dialogBinding.layoutText.text = "Compact"
+                dialogBinding.layoutText.setText(R.string.compact)
                 run = true
             }
             dialogBinding.animeWebviewContainer.setOnClickListener {
                 if (!WebViewUtil.supportsWebView(fragment.requireContext())) {
-                    toast("WebView not installed")
+                    toast(R.string.webview_not_installed)
                 }
                 //start CookieCatcher activity
                 if (mangaReadSources.names.isNotEmpty() && source in 0 until mangaReadSources.names.size) {
@@ -223,7 +232,7 @@ class MangaReadAdapter(
                         refresh = true
                         val intent = Intent(fragment.requireContext(), CookieCatcher::class.java)
                             .putExtra("url", url)
-                        ContextCompat.startActivity(fragment.requireContext(), intent, null)
+                        startActivity(fragment.requireContext(), intent, null)
                     }
                 }
             }
@@ -249,12 +258,13 @@ class MangaReadAdapter(
             }
 
             //Scanlator
-            dialogBinding.animeScanlatorContainer.visibility =
-                if (options.count() > 1) View.VISIBLE else View.GONE
+            dialogBinding.animeScanlatorContainer.isVisible = options.count() > 1
             dialogBinding.scanlatorNo.text = "${options.count()}"
             dialogBinding.animeScanlatorTop.setOnClickListener {
-                val dialogView2 = LayoutInflater.from(currContext()).inflate(R.layout.custom_dialog_layout, null)
-                val checkboxContainer = dialogView2.findViewById<LinearLayout>(R.id.checkboxContainer)
+                val dialogView2 =
+                    LayoutInflater.from(currContext()).inflate(R.layout.custom_dialog_layout, null)
+                val checkboxContainer =
+                    dialogView2.findViewById<LinearLayout>(R.id.checkboxContainer)
                 val tickAllButton = dialogView2.findViewById<ImageButton>(R.id.toggleButton)
 
                 // Function to get the right image resource for the toggle button
@@ -359,7 +369,6 @@ class MangaReadAdapter(
     }
 
     //Chips
-    @SuppressLint("SetTextI18n")
     fun updateChips(limit: Int, names: Array<String>, arr: Array<Int>, selected: Int = 0) {
         val binding = _binding
         if (binding != null) {
@@ -382,8 +391,8 @@ class MangaReadAdapter(
                     )
                 }
 
-                val startChapter = MangaNameAdapter.findChapterNumber(names[limit * (position)])
-                val endChapter = MangaNameAdapter.findChapterNumber(names[last - 1])
+                val startChapter = MediaNameAdapter.findChapterNumber(names[limit * (position)])
+                val endChapter = MediaNameAdapter.findChapterNumber(names[last - 1])
                 val startChapterString = if (startChapter != null) {
                     "Ch.$startChapter"
                 } else {
@@ -395,7 +404,8 @@ class MangaReadAdapter(
                     names[last - 1]
                 }
                 //chip.text = "${names[limit * (position)]} - ${names[last - 1]}"
-                chip.text = "$startChapterString - $endChapterString"
+                val chipText = "$startChapterString - $endChapterString"
+                chip.text = chipText
                 chip.setTextColor(
                     ContextCompat.getColorStateList(
                         fragment.requireContext(),
@@ -429,7 +439,6 @@ class MangaReadAdapter(
         _binding?.animeSourceChipGroup?.removeAllViews()
     }
 
-    @SuppressLint("SetTextI18n")
     fun handleChapters() {
 
         val binding = _binding
@@ -437,7 +446,11 @@ class MangaReadAdapter(
             if (media.manga?.chapters != null) {
                 val chapters = media.manga.chapters!!.keys.toTypedArray()
                 val anilistEp = (media.userProgress ?: 0).plus(1)
-                val appEp = PrefManager.getNullableCustomVal("${media.id}_current_chp", null, String::class.java)
+                val appEp = PrefManager.getNullableCustomVal(
+                    "${media.id}_current_chp",
+                    null,
+                    String::class.java
+                )
                     ?.toIntOrNull() ?: 1
                 var continueEp = (if (anilistEp > appEp) anilistEp else appEp).toString()
                 val filteredChapters = chapters.filter { chapterKey ->
@@ -445,7 +458,7 @@ class MangaReadAdapter(
                     chapter.scanlator !in hiddenScanlators
                 }
                 val formattedChapters = filteredChapters.map {
-                    MangaNameAdapter.findChapterNumber(it)?.toInt()?.toString()
+                    MediaNameAdapter.findChapterNumber(it)?.toInt()?.toString()
                 }
                 if (formattedChapters.contains(continueEp)) {
                     continueEp = chapters[formattedChapters.indexOf(continueEp)]
@@ -466,7 +479,11 @@ class MangaReadAdapter(
                     val ep = media.manga.chapters!![continueEp]!!
                     binding.itemEpisodeImage.loadImage(media.banner ?: media.cover)
                     binding.animeSourceContinueText.text =
-                        currActivity()!!.getString(R.string.continue_chapter) + "${ep.number}${if (!ep.title.isNullOrEmpty()) "\n${ep.title}" else ""}"
+                        currActivity()!!.getString(
+                            R.string.continue_chapter,
+                            ep.number,
+                            if (!ep.title.isNullOrEmpty()) ep.title else ""
+                        )
                     binding.animeSourceContinue.setOnClickListener {
                         fragment.onMangaChapterClick(continueEp)
                     }
@@ -481,12 +498,27 @@ class MangaReadAdapter(
                     binding.animeSourceContinue.visibility = View.GONE
                 }
                 binding.animeSourceProgressBar.visibility = View.GONE
-                if (media.manga.chapters!!.isNotEmpty()) {
-                    binding.animeSourceNotFound.visibility = View.GONE
-                    binding.faqbutton.visibility = View.GONE
-                } else {
-                    binding.animeSourceNotFound.visibility = View.VISIBLE
-                    binding.faqbutton.visibility = View.VISIBLE
+                val sourceFound = media.manga.chapters!!.isNotEmpty()
+                binding.animeSourceNotFound.isGone = sourceFound
+                binding.faqbutton.isGone = sourceFound
+                if (!sourceFound && PrefManager.getVal(PrefName.SearchSources)) {
+                    if (binding.animeSource.adapter.count > media.selected!!.sourceIndex + 1) {
+                        val nextIndex = media.selected!!.sourceIndex + 1
+                        binding.animeSource.setText(
+                            binding.animeSource.adapter
+                                .getItem(nextIndex).toString(), false
+                        )
+                        fragment.onSourceChange(nextIndex).apply {
+                            binding.animeSourceTitle.text = showUserText
+                            showUserTextListener =
+                                { MainScope().launch { binding.animeSourceTitle.text = it } }
+                            setLanguageList(0, nextIndex)
+                        }
+                        subscribeButton(false)
+                        // invalidate if it's the last source
+                        val invalidate = nextIndex == mangaReadSources.names.size - 1
+                        fragment.loadChapters(nextIndex, invalidate)
+                    }
                 }
             } else {
                 binding.animeSourceContinue.visibility = View.GONE
@@ -516,11 +548,10 @@ class MangaReadAdapter(
                 val adapter = ArrayAdapter(
                     fragment.requireContext(),
                     R.layout.item_dropdown,
-                    parser.extension.sources.map { LanguageMapper.mapLanguageCodeToName(it.lang) }
+                    parser.extension.sources.map { LanguageMapper.getLanguageName(it.lang) }
                 )
                 val items = adapter.count
-                binding?.animeSourceLanguageContainer?.visibility =
-                    if (items > 1) View.VISIBLE else View.GONE
+                binding?.animeSourceLanguageContainer?.isVisible = items > 1
 
                 binding?.animeSourceLanguage?.setAdapter(adapter)
 

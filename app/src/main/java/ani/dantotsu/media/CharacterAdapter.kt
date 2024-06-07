@@ -1,6 +1,5 @@
 package ani.dantotsu.media
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater
@@ -24,12 +23,13 @@ class CharacterAdapter(
         return CharacterViewHolder(binding)
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
         val binding = holder.binding
         setAnimation(binding.root.context, holder.binding.root)
         val character = characterList[position]
-        binding.itemCompactRelation.text = character.role + "  "
+        val whitespace = "${character.role}  "
+        character.voiceActor
+        binding.itemCompactRelation.text = whitespace
         binding.itemCompactImage.loadImage(character.image)
         binding.itemCompactTitle.text = character.name
     }

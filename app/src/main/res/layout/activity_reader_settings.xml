@@ -49,6 +49,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="32dp"
                     android:layout_weight="1"
+                    android:fontFamily="@font/poppins_bold"
                     android:text="@string/reader_settings"
                     android:textSize="28sp" />
 
@@ -86,7 +87,7 @@
                     android:gravity="center_vertical"
                     android:paddingStart="32dp"
                     android:paddingEnd="32dp"
-                    android:text="Default Manga Settings"
+                    android:text="@string/default_manga_settings"
                     android:textColor="?attr/colorSecondary"
                     app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
                     tools:ignore="TextContrastCheck" />
@@ -1134,7 +1135,7 @@
                     android:minHeight="64dp"
                     android:paddingStart="32dp"
                     android:paddingEnd="32dp"
-                    android:text="Use Dark Theme"
+                    android:text="@string/use_dark_theme"
                     android:textAlignment="viewStart"
                     android:textColor="?attr/colorOnBackground"
                     app:cornerRadius="0dp"
@@ -1155,7 +1156,7 @@
                     android:minHeight="64dp"
                     android:paddingStart="32dp"
                     android:paddingEnd="32dp"
-                    android:text="Use OLED Theme"
+                    android:text="@string/use_oled_theme"
                     android:textAlignment="viewStart"
                     android:textColor="?attr/colorOnBackground"
                     app:cornerRadius="0dp"
@@ -1318,7 +1319,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:checked="false"
-                android:drawableStart="@drawable/ic_round_early_bird_special"
+                android:drawableStart="@drawable/ic_round_assist_walker_24"
                 android:drawablePadding="16dp"
                 android:elegantTextHeight="true"
                 android:fontFamily="@font/poppins_bold"

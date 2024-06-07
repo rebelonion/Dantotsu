@@ -33,6 +33,7 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -160,9 +161,35 @@ class MangaFragment : Fragment() {
         })
         mangaPageAdapter.ready.observe(viewLifecycleOwner) { i ->
             if (i == true) {
-                model.getTrendingNovel().observe(viewLifecycleOwner) {
+                model.getPopularNovel().observe(viewLifecycleOwner) {
                     if (it != null) {
-                        mangaPageAdapter.updateNovel(MediaAdaptor(0, it, requireActivity()))
+                        mangaPageAdapter.updateNovel(MediaAdaptor(0, it, requireActivity()), it)
+                    }
+                }
+                model.getPopularManga().observe(viewLifecycleOwner) {
+                    if (it != null) {
+                        mangaPageAdapter.updateTrendingManga(MediaAdaptor(0, it, requireActivity()), it)
+                    }
+                }
+                model.getPopularManhwa().observe(viewLifecycleOwner) {
+                    if (it != null) {
+                        mangaPageAdapter.updateTrendingManhwa(
+                            MediaAdaptor(
+                                0,
+                                it,
+                                requireActivity()
+                            ), it
+                        )
+                    }
+                }
+                model.getTopRated().observe(viewLifecycleOwner) {
+                    if (it != null) {
+                        mangaPageAdapter.updateTopRated(MediaAdaptor(0, it, requireActivity()), it)
+                    }
+                }
+                model.getMostFav().observe(viewLifecycleOwner) {
+                    if (it != null) {
+                        mangaPageAdapter.updateMostFav(MediaAdaptor(0, it, requireActivity()), it)
                     }
                 }
                 if (mangaPageAdapter.trendingViewPager != null) {
@@ -227,17 +254,29 @@ class MangaFragment : Fragment() {
             mangaPageAdapter.updateAvatar()
         }
 
-        val live = Refresh.activity.getOrPut(this.hashCode()) { MutableLiveData(false) }
+        var running = false
+        val live = Refresh.activity.getOrPut(this.hashCode()) { MutableLiveData(true) }
         live.observe(viewLifecycleOwner) {
-            if (it) {
+            if (!running && it) {
+                running = true
                 scope.launch {
                     withContext(Dispatchers.IO) {
-                        getUserId(requireContext()) {
-                            load()
+                        Anilist.userid = PrefManager.getNullableVal<String>(PrefName.AnilistUserId, null)
+                            ?.toIntOrNull()
+                        if (Anilist.userid == null) {
+                            getUserId(requireContext()) {
+                                load()
+                            }
+                        } else {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                getUserId(requireContext()) {
+                                    load()
+                                }
+                            }
                         }
                         model.loaded = true
                         model.loadTrending()
-                        model.loadTrendingNovel()
+                        model.loadAll()
                         model.loadPopular(
                             "MANGA", sort = Anilist.sortBy[1], onList = PrefManager.getVal(
                                 PrefName.PopularMangaList
@@ -246,6 +285,7 @@ class MangaFragment : Fragment() {
                     }
                     live.postValue(false)
                     _binding?.mangaRefresh?.isRefreshing = false
+                    running = false
                 }
             }
         }

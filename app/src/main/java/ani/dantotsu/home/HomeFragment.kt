@@ -5,11 +5,13 @@ import android.content.Intent
 import android.graphics.drawable.Animatable
 import android.os.Build
 import android.os.Bundle
+import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LayoutAnimationController
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
@@ -28,9 +30,11 @@ import ani.dantotsu.connections.anilist.AnilistHomeViewModel
 import ani.dantotsu.connections.anilist.getUserId
 import ani.dantotsu.currContext
 import ani.dantotsu.databinding.FragmentHomeBinding
+import ani.dantotsu.home.status.UserStatusAdapter
 import ani.dantotsu.loadImage
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaAdaptor
+import ani.dantotsu.media.MediaListViewActivity
 import ani.dantotsu.media.user.ListActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.profile.ProfileActivity
@@ -39,12 +43,14 @@ import ani.dantotsu.setSlideIn
 import ani.dantotsu.setSlideUp
 import ani.dantotsu.settings.SettingsDialogFragment
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefManager.asLiveBool
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
+import ani.dantotsu.util.Logger
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import kotlin.math.max
 import kotlin.math.min
@@ -53,7 +59,6 @@ import kotlin.math.min
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -72,16 +77,21 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val scope = lifecycleScope
+        Logger.log("HomeFragment")
         fun load() {
+            Logger.log("Loading HomeFragment")
             if (activity != null && _binding != null) lifecycleScope.launch(Dispatchers.Main) {
                 binding.homeUserName.text = Anilist.username
                 binding.homeUserEpisodesWatched.text = Anilist.episodesWatched.toString()
                 binding.homeUserChaptersRead.text = Anilist.chapterRead.toString()
                 binding.homeUserAvatar.loadImage(Anilist.avatar)
-                if (!(PrefManager.getVal(PrefName.BannerAnimations) as Boolean)) binding.homeUserBg.pause()
-                blurImage(binding.homeUserBg, Anilist.bg)
+                val bannerAnimations: Boolean = PrefManager.getVal(PrefName.BannerAnimations)
+                blurImage(
+                    if (bannerAnimations) binding.homeUserBg else binding.homeUserBgNoKen,
+                    Anilist.bg
+                )
                 binding.homeUserDataProgressBar.visibility = View.GONE
-                binding.homeNotificationCount.visibility = if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
+                binding.homeNotificationCount.isVisible = Anilist.unreadNotificationCount > 0
                 binding.homeNotificationCount.text = Anilist.unreadNotificationCount.toString()
 
                 binding.homeAnimeList.setOnClickListener {
@@ -123,9 +133,10 @@ class HomeFragment : Fragment() {
             )
         }
         binding.homeUserAvatarContainer.setOnLongClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
             ContextCompat.startActivity(
                 requireContext(), Intent(requireContext(), ProfileActivity::class.java)
-                    .putExtra("userId", Anilist.userid),null
+                    .putExtra("userId", Anilist.userid), null
             )
             false
         }
@@ -134,6 +145,7 @@ class HomeFragment : Fragment() {
             bottomMargin = navBarHeight
         }
         binding.homeUserBg.updateLayoutParams { height += statusBarHeight }
+        binding.homeUserBgNoKen.updateLayoutParams { height += statusBarHeight }
         binding.homeTopContainer.updatePadding(top = statusBarHeight)
 
         var reached = false
@@ -198,13 +210,16 @@ class HomeFragment : Fragment() {
             recyclerView: RecyclerView,
             progress: View,
             empty: View,
-            title: View
+            title: View,
+            more: View,
+            string: String
         ) {
             container.visibility = View.VISIBLE
             progress.visibility = View.VISIBLE
             recyclerView.visibility = View.GONE
             empty.visibility = View.GONE
             title.visibility = View.INVISIBLE
+            more.visibility = View.INVISIBLE
 
             mode.observe(viewLifecycleOwner) {
                 recyclerView.visibility = View.GONE
@@ -217,6 +232,14 @@ class HomeFragment : Fragment() {
                             LinearLayoutManager.HORIZONTAL,
                             false
                         )
+                        more.setOnClickListener { i ->
+                            MediaListViewActivity.passedMedia = it
+                            ContextCompat.startActivity(
+                                i.context, Intent(i.context, MediaListViewActivity::class.java)
+                                    .putExtra("title", string),
+                                null
+                            )
+                        }
                         recyclerView.visibility = View.VISIBLE
                         recyclerView.layoutAnimation =
                             LayoutAnimationController(setSlideIn(), 0.25f)
@@ -224,7 +247,9 @@ class HomeFragment : Fragment() {
                     } else {
                         empty.visibility = View.VISIBLE
                     }
+                    more.visibility = View.VISIBLE
                     title.visibility = View.VISIBLE
+                    more.startAnimation(setSlideUp())
                     title.startAnimation(setSlideUp())
                     progress.visibility = View.GONE
                 }
@@ -239,7 +264,9 @@ class HomeFragment : Fragment() {
             binding.homeWatchingRecyclerView,
             binding.homeWatchingProgressBar,
             binding.homeWatchingEmpty,
-            binding.homeContinueWatch
+            binding.homeContinueWatch,
+            binding.homeContinueWatchMore,
+            getString(R.string.continue_watching)
         )
         binding.homeWatchingBrowseButton.setOnClickListener {
             bottomBar.selectTabAt(0)
@@ -251,7 +278,9 @@ class HomeFragment : Fragment() {
             binding.homeFavAnimeRecyclerView,
             binding.homeFavAnimeProgressBar,
             binding.homeFavAnimeEmpty,
-            binding.homeFavAnime
+            binding.homeFavAnime,
+            binding.homeFavAnimeMore,
+            getString(R.string.fav_anime)
         )
 
         initRecyclerView(
@@ -260,7 +289,9 @@ class HomeFragment : Fragment() {
             binding.homePlannedAnimeRecyclerView,
             binding.homePlannedAnimeProgressBar,
             binding.homePlannedAnimeEmpty,
-            binding.homePlannedAnime
+            binding.homePlannedAnime,
+            binding.homePlannedAnimeMore,
+            getString(R.string.planned_anime)
         )
         binding.homePlannedAnimeBrowseButton.setOnClickListener {
             bottomBar.selectTabAt(0)
@@ -272,7 +303,9 @@ class HomeFragment : Fragment() {
             binding.homeReadingRecyclerView,
             binding.homeReadingProgressBar,
             binding.homeReadingEmpty,
-            binding.homeContinueRead
+            binding.homeContinueRead,
+            binding.homeContinueReadMore,
+            getString(R.string.continue_reading)
         )
         binding.homeReadingBrowseButton.setOnClickListener {
             bottomBar.selectTabAt(2)
@@ -284,7 +317,9 @@ class HomeFragment : Fragment() {
             binding.homeFavMangaRecyclerView,
             binding.homeFavMangaProgressBar,
             binding.homeFavMangaEmpty,
-            binding.homeFavManga
+            binding.homeFavManga,
+            binding.homeFavMangaMore,
+            getString(R.string.fav_manga)
         )
 
         initRecyclerView(
@@ -293,7 +328,9 @@ class HomeFragment : Fragment() {
             binding.homePlannedMangaRecyclerView,
             binding.homePlannedMangaProgressBar,
             binding.homePlannedMangaEmpty,
-            binding.homePlannedManga
+            binding.homePlannedManga,
+            binding.homePlannedMangaMore,
+            getString(R.string.planned_manga)
         )
         binding.homePlannedMangaBrowseButton.setOnClickListener {
             bottomBar.selectTabAt(2)
@@ -305,12 +342,87 @@ class HomeFragment : Fragment() {
             binding.homeRecommendedRecyclerView,
             binding.homeRecommendedProgressBar,
             binding.homeRecommendedEmpty,
-            binding.homeRecommended
+            binding.homeRecommended,
+            binding.homeRecommendedMore,
+            getString(R.string.recommended)
         )
+        binding.homeUserStatusContainer.visibility = View.VISIBLE
+        binding.homeUserStatusProgressBar.visibility = View.VISIBLE
+        binding.homeUserStatusRecyclerView.visibility = View.GONE
+        model.getUserStatus().observe(viewLifecycleOwner) {
+            binding.homeUserStatusRecyclerView.visibility = View.GONE
+            if (it != null) {
+                if (it.isNotEmpty()) {
+                    PrefManager.getLiveVal(PrefName.RefreshStatus, false).apply {
+                        asLiveBool()
+                        observe(viewLifecycleOwner) { _ ->
+                            binding.homeUserStatusRecyclerView.adapter = UserStatusAdapter(it)
+                        }
+                    }
+                    binding.homeUserStatusRecyclerView.layoutManager = LinearLayoutManager(
+                        requireContext(),
+                        LinearLayoutManager.HORIZONTAL,
+                        false
+                    )
+                    binding.homeUserStatusRecyclerView.visibility = View.VISIBLE
+                    binding.homeUserStatusRecyclerView.layoutAnimation =
+                        LayoutAnimationController(setSlideIn(), 0.25f)
+
+                } else {
+                    binding.homeUserStatusContainer.visibility = View.GONE
+                }
+                binding.homeUserStatusProgressBar.visibility = View.GONE
+            }
+
+        }
+        binding.homeHiddenItemsContainer.visibility = View.GONE
+        model.getHidden().observe(viewLifecycleOwner) {
+            if (it != null) {
+                if (it.isNotEmpty()) {
+                    binding.homeHiddenItemsRecyclerView.adapter =
+                        MediaAdaptor(0, it, requireActivity())
+                    binding.homeHiddenItemsRecyclerView.layoutManager = LinearLayoutManager(
+                        requireContext(),
+                        LinearLayoutManager.HORIZONTAL,
+                        false
+                    )
+                    binding.homeContinueWatch.setOnLongClickListener {
+                        binding.homeHiddenItemsContainer.visibility = View.VISIBLE
+                        binding.homeHiddenItemsRecyclerView.layoutAnimation =
+                            LayoutAnimationController(setSlideIn(), 0.25f)
+                        true
+                    }
+                    binding.homeHiddenItemsMore.setSafeOnClickListener { _ ->
+                        MediaListViewActivity.passedMedia = it
+                        ContextCompat.startActivity(
+                            requireActivity(),
+                            Intent(requireActivity(), MediaListViewActivity::class.java)
+                                .putExtra("title", getString(R.string.hidden)),
+                            null
+                        )
+                    }
+                    binding.homeHiddenItemsTitle.setOnLongClickListener {
+                        binding.homeHiddenItemsContainer.visibility = View.GONE
+                        true
+                    }
+                } else {
+                    binding.homeContinueWatch.setOnLongClickListener {
+                        snackString(getString(R.string.no_hidden_items))
+                        true
+                    }
+                }
+            } else {
+                binding.homeContinueWatch.setOnLongClickListener {
+                    snackString(getString(R.string.no_hidden_items))
+                    true
+                }
+            }
+        }
 
         binding.homeUserAvatarContainer.startAnimation(setSlideUp())
 
-        model.empty.observe(viewLifecycleOwner) {
+        model.empty.observe(viewLifecycleOwner)
+        {
             binding.homeDantotsuContainer.visibility = if (it == true) View.VISIBLE else View.GONE
             (binding.homeDantotsuIcon.drawable as Animatable).start()
             binding.homeDantotsuContainer.startAnimation(setSlideUp())
@@ -327,7 +439,8 @@ class HomeFragment : Fragment() {
             "MangaContinue",
             "MangaFav",
             "MangaPlanned",
-            "Recommendation"
+            "Recommendation",
+            "UserStatus",
         )
 
         val containers = arrayOf(
@@ -337,26 +450,41 @@ class HomeFragment : Fragment() {
             binding.homeContinueReadingContainer,
             binding.homeFavMangaContainer,
             binding.homePlannedMangaContainer,
-            binding.homeRecommendedContainer
+            binding.homeRecommendedContainer,
+            binding.homeUserStatusContainer,
         )
 
-        val live = Refresh.activity.getOrPut(1) { MutableLiveData(false) }
-        live.observe(viewLifecycleOwner) {
-            if (it) {
+        var running = false
+        val live = Refresh.activity.getOrPut(1) { MutableLiveData(true) }
+        live.observe(viewLifecycleOwner)
+        {
+            if (!running && it) {
+                running = true
                 scope.launch {
                     withContext(Dispatchers.IO) {
                         //Get userData First
-                        getUserId(requireContext()) {
-                            load()
+                        Anilist.userid =
+                            PrefManager.getNullableVal<String>(PrefName.AnilistUserId, null)
+                                ?.toIntOrNull()
+                        if (Anilist.userid == null) {
+                            getUserId(requireContext()) {
+                                load()
+                            }
+                        } else {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                getUserId(requireContext()) {
+                                    load()
+                                }
+                            }
                         }
                         model.loaded = true
-                        model.setListImages()
+                        CoroutineScope(Dispatchers.IO).launch {
+                            model.setListImages()
+                        }
                         var empty = true
                         val homeLayoutShow: List<Boolean> =
-                            PrefManager.getVal(PrefName.HomeLayoutShow)
-                        runBlocking {
-                            model.initHomePage()
-                        }
+                            PrefManager.getVal(PrefName.HomeLayout)
+                        model.initHomePage()
                         (array.indices).forEach { i ->
                             if (homeLayoutShow.elementAt(i)) {
                                 empty = false
@@ -368,14 +496,18 @@ class HomeFragment : Fragment() {
                     }
                     live.postValue(false)
                     _binding?.homeRefresh?.isRefreshing = false
+                    running = false
                 }
+                binding.homeHiddenItemsContainer.visibility = View.GONE
             }
+
         }
     }
+
     override fun onResume() {
         if (!model.loaded) Refresh.activity[1]!!.postValue(true)
         if (_binding != null) {
-            binding.homeNotificationCount.visibility = if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
+            binding.homeNotificationCount.isVisible = Anilist.unreadNotificationCount > 0
             binding.homeNotificationCount.text = Anilist.unreadNotificationCount.toString()
         }
         super.onResume()

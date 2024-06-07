@@ -1,14 +1,14 @@
 package ani.dantotsu.media.novel
 
-import android.util.Log
-import android.util.TypedValue
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.R
 import ani.dantotsu.databinding.ItemNovelResponseBinding
+import ani.dantotsu.getThemeColor
+import ani.dantotsu.loadImage
 import ani.dantotsu.parsers.ShowResponse
 import ani.dantotsu.setAnimation
 import ani.dantotsu.snackString
@@ -38,19 +38,9 @@ class NovelResponseAdapter(
         val binding = holder.binding
         val novel = list[position]
         setAnimation(fragment.requireContext(), holder.binding.root)
+        binding.itemEpisodeImage.loadImage(novel.coverUrl, 400, 0)
 
-        val cover = GlideUrl(novel.coverUrl.url) { novel.coverUrl.headers }
-        Glide.with(binding.itemEpisodeImage).load(cover).override(400, 0)
-            .into(binding.itemEpisodeImage)
-
-        val typedValue = TypedValue()
-        fragment.requireContext().theme?.resolveAttribute(
-            com.google.android.material.R.attr.colorOnBackground,
-            typedValue,
-            true
-        )
-        val color = typedValue.data
-
+        val color =fragment.requireContext().getThemeColor(com.google.android.material.R.attr.colorOnBackground)
         binding.itemEpisodeTitle.text = novel.name
         binding.itemEpisodeFiller.text =
             if (downloadedCheckCallback.downloadedCheck(novel)) {
@@ -71,8 +61,7 @@ class NovelResponseAdapter(
         }
         binding.itemEpisodeDesc2.text = novel.extra?.get("1") ?: ""
         val desc = novel.extra?.get("2")
-        binding.itemEpisodeDesc.visibility =
-            if (desc != null && desc.trim(' ') != "") View.VISIBLE else View.GONE
+        binding.itemEpisodeDesc.isVisible = !desc.isNullOrBlank()
         binding.itemEpisodeDesc.text = desc ?: ""
 
         binding.root.setOnClickListener {
@@ -183,7 +172,7 @@ class NovelResponseAdapter(
         if (position != -1) {
             list[position].extra?.remove("0")
             list[position].extra?.set("0", "Downloading: $progress%")
-            Logger.log( "updateDownloadProgress: $progress, position: $position")
+            Logger.log("updateDownloadProgress: $progress, position: $position")
             notifyItemChanged(position)
         }
     }

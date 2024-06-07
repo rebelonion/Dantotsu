@@ -1,6 +1,5 @@
 package ani.dantotsu.settings.paging
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
@@ -38,6 +37,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@Suppress("UNCHECKED_CAST")
 class MangaExtensionsViewModelFactory(
     private val mangaExtensionManager: MangaExtensionManager
 ) : ViewModelProvider.Factory {
@@ -47,7 +47,7 @@ class MangaExtensionsViewModelFactory(
 }
 
 class MangaExtensionsViewModel(
-    private val mangaExtensionManager: MangaExtensionManager
+    mangaExtensionManager: MangaExtensionManager
 ) : ViewModel() {
     private val searchQuery = MutableStateFlow("")
     private var currentPagingSource: MangaExtensionPagingSource? = null
@@ -199,12 +199,12 @@ class MangaExtensionAdapter(private val clickListener: OnMangaInstallClickListen
 
         val extensionIconImageView: ImageView = binding.extensionIconImageView
 
-        @SuppressLint("SetTextI18n")
         fun bind(extension: MangaExtension.Available) {
             val nsfw = if (extension.isNsfw) "(18+)" else ""
-            val lang = LanguageMapper.mapLanguageCodeToName(extension.lang)
+            val lang = LanguageMapper.getLanguageName(extension.lang)
             binding.extensionNameTextView.text = extension.name
-            binding.extensionVersionTextView.text = "$lang ${extension.versionName} $nsfw"
+            val versionText = "$lang ${extension.versionName} $nsfw"
+            binding.extensionVersionTextView.text = versionText
         }
 
         fun clear() {

@@ -2,6 +2,7 @@ package ani.dantotsu.profile
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.SpannableString
 import android.view.View
 import android.view.ViewGroup.MarginLayoutParams
 import android.widget.ImageButton
@@ -25,7 +26,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-class FollowActivity : AppCompatActivity(){
+class FollowActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFollowBinding
     val adapter = GroupieAdapter()
     var users: List<User>? = null
@@ -37,10 +38,13 @@ class FollowActivity : AppCompatActivity(){
         initActivity(this)
         binding = ActivityFollowBinding.inflate(layoutInflater)
         binding.listToolbar.updateLayoutParams<MarginLayoutParams> { topMargin = statusBarHeight }
-        binding.listFrameLayout.updateLayoutParams<MarginLayoutParams> { bottomMargin = navBarHeight }
+        binding.listFrameLayout.updateLayoutParams<MarginLayoutParams> {
+            bottomMargin = navBarHeight
+        }
         setContentView(binding.root)
         val layoutType = PrefManager.getVal<Int>(PrefName.FollowerLayout)
         selected = getSelected(layoutType)
+        binding.followFilterButton.visibility = View.GONE
         binding.followerGrid.alpha = 0.33f
         binding.followerList.alpha = 0.33f
         selected(selected)
@@ -51,10 +55,10 @@ class FollowActivity : AppCompatActivity(){
         )
         binding.listRecyclerView.adapter = adapter
         binding.listProgressBar.visibility = View.VISIBLE
-        binding.listBack.setOnClickListener { finish() }
+        binding.listBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
         val title = intent.getStringExtra("title")
-        val userID= intent.getIntExtra("userId", 0)
+        val userID = intent.getIntExtra("userId", 0)
         binding.listTitle.text = title
 
         lifecycleScope.launch(Dispatchers.IO) {
@@ -86,16 +90,40 @@ class FollowActivity : AppCompatActivity(){
 
     private fun fillList() {
         adapter.clear()
+        val screenWidth = resources.displayMetrics.run { widthPixels / density }
         binding.listRecyclerView.layoutManager = when (getLayoutType(selected)) {
             0 -> LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-            1 -> GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false)
+            1 -> GridLayoutManager(
+                this,
+                (screenWidth / 120f).toInt(),
+                GridLayoutManager.VERTICAL,
+                false
+            )
+
             else -> LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         }
         users?.forEach { user ->
+            val username = SpannableString(user.name ?: "Unknown")
             if (getLayoutType(selected) == 0) {
-                adapter.add(FollowerItem(user.id, user.name ?: "Unknown", user.avatar?.medium, user.bannerImage ?: user.avatar?.medium ) { onUserClick(it) })
+                adapter.add(
+                    FollowerItem(
+                        false,
+                        user.id,
+                        username,
+                        user.avatar?.medium,
+                        user.bannerImage ?: user.avatar?.medium
+                    ) { onUserClick(it) }
+                )
             } else {
-                adapter.add(GridFollowerItem(user.id, user.name ?: "Unknown", user.avatar?.medium) { onUserClick(it) })
+                adapter.add(
+                    FollowerItem(
+                        true,
+                        user.id,
+                        username,
+                        user.avatar?.medium,
+                        user.bannerImage ?: user.avatar?.medium
+                    ) { onUserClick(it) }
+                )
             }
         }
     }

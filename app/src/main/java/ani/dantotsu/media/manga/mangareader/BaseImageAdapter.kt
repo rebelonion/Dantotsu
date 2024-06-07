@@ -13,16 +13,19 @@ import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import ani.dantotsu.*
+import ani.dantotsu.FileUrl
+import ani.dantotsu.GesturesListener
+import ani.dantotsu.R
 import ani.dantotsu.media.manga.MangaCache
 import ani.dantotsu.media.manga.MangaChapter
+import ani.dantotsu.px
 import ani.dantotsu.settings.CurrentReaderSettings
+import ani.dantotsu.tryWithSuspend
 import com.alexvasilkov.gestures.views.GestureFrameLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
-import eu.kanade.tachiyomi.source.model.Page
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -34,7 +37,19 @@ abstract class BaseImageAdapter(
     chapter: MangaChapter
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     val settings = activity.defaultSettings
-    val images = chapter.images()
+    private val chapterImages = chapter.images()
+    var images = chapterImages
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        images = if (settings.layout == CurrentReaderSettings.Layouts.PAGED
+            && settings.direction == CurrentReaderSettings.Directions.BOTTOM_TO_TOP
+        ) {
+            chapterImages.reversed()
+        } else {
+            chapterImages
+        }
+        super.onAttachedToRecyclerView(recyclerView)
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -118,13 +133,13 @@ abstract class BaseImageAdapter(
     abstract suspend fun loadImage(position: Int, parent: View): Boolean
 
     companion object {
-        suspend fun Context.loadBitmap_old(
+        suspend fun Context.loadBitmapOld(
             link: FileUrl,
             transforms: List<BitmapTransformation>
         ): Bitmap? { //still used in some places
             return tryWithSuspend {
                 withContext(Dispatchers.IO) {
-                    Glide.with(this@loadBitmap_old)
+                    Glide.with(this@loadBitmapOld)
                         .asBitmap()
                         .let {
                             if (link.url.startsWith("file://")) {
@@ -158,23 +173,26 @@ abstract class BaseImageAdapter(
                     Glide.with(this@loadBitmap)
                         .asBitmap()
                         .let {
-                            val fileUri = Uri.fromFile(File(link.url)).toString()
                             val localFile = File(link.url)
                             if (localFile.exists()) {
                                 it.load(localFile.absoluteFile)
+                                    .skipMemoryCache(true)
+                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            } else if (link.url.startsWith("content://")) {
+                                it.load(Uri.parse(link.url))
                                     .skipMemoryCache(true)
                                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                             } else {
                                 mangaCache.get(link.url)?.let { imageData ->
                                     val bitmap = imageData.fetchAndProcessImage(
                                         imageData.page,
-                                        imageData.source,
-                                        context = this@loadBitmap
+                                        imageData.source
                                     )
                                     it.load(bitmap)
                                         .skipMemoryCache(true)
                                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                                 }
+
                             }
                         }
                         ?.let {
@@ -207,9 +225,4 @@ abstract class BaseImageAdapter(
             return newBitmap
         }
     }
-
-}
-
-interface ImageFetcher {
-    suspend fun fetchImage(page: Page): Bitmap?
 }

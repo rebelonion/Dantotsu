@@ -12,19 +12,20 @@ import androidx.appcompat.app.AppCompatActivity
 import ani.dantotsu.R
 import ani.dantotsu.themes.ThemeManager
 import eu.kanade.tachiyomi.network.NetworkHelper
+import eu.kanade.tachiyomi.util.system.getSerializableExtraCompat
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 class CookieCatcher : AppCompatActivity() {
     @SuppressLint("SetJavaScriptEnabled")
-    @Suppress("UNCHECKED_CAST")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ThemeManager(this).applyTheme()
 
         //get url from intent
-        val url = intent.getStringExtra("url") ?: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-        val headers: Map<String, String> = intent.getSerializableExtra("headers") as? Map<String, String> ?: emptyMap()
+        val url = intent.getStringExtra("url") ?: getString(R.string.cursed_yt)
+        val headers: Map<String, String> =
+            intent.getSerializableExtraCompat("headers") as? Map<String, String> ?: emptyMap()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             val process = Application.getProcessName()

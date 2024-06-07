@@ -1,23 +1,24 @@
 package ani.dantotsu.media.user
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import ani.dantotsu.R
 import ani.dantotsu.Refresh
 import ani.dantotsu.databinding.ActivityListBinding
-import ani.dantotsu.navBarHeight
+import ani.dantotsu.getThemeColor
+import ani.dantotsu.hideSystemBarsExtendView
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
@@ -28,34 +29,21 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+
 class ListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityListBinding
     private val scope = lifecycleScope
     private var selectedTabIdx = 0
 
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         ThemeManager(this).applyTheme()
         binding = ActivityListBinding.inflate(layoutInflater)
 
-        val typedValue = TypedValue()
-        theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, typedValue, true)
-        val primaryColor = typedValue.data
-        val typedValue2 = TypedValue()
-        theme.resolveAttribute(
-            com.google.android.material.R.attr.colorOnBackground,
-            typedValue2,
-            true
-        )
-        val titleTextColor = typedValue2.data
-        val typedValue3 = TypedValue()
-        theme.resolveAttribute(com.google.android.material.R.attr.colorPrimary, typedValue3, true)
-        val primaryTextColor = typedValue3.data
-        val typedValue4 = TypedValue()
-        theme.resolveAttribute(com.google.android.material.R.attr.colorOutline, typedValue4, true)
-        val secondaryTextColor = typedValue4.data
+        val primaryColor = getThemeColor(com.google.android.material.R.attr.colorSurface)
+        val primaryTextColor = getThemeColor(com.google.android.material.R.attr.colorPrimary)
+        val secondaryTextColor = getThemeColor(com.google.android.material.R.attr.colorOutline)
 
         window.statusBarColor = primaryColor
         window.navigationBarColor = primaryColor
@@ -72,10 +60,7 @@ class ListActivity : AppCompatActivity() {
         } else {
             binding.root.fitsSystemWindows = false
             requestWindowFeature(Window.FEATURE_NO_TITLE)
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-            )
+            hideSystemBarsExtendView()
             binding.settingsContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 topMargin = statusBarHeight
             }
@@ -83,8 +68,10 @@ class ListActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val anime = intent.getBooleanExtra("anime", true)
-        binding.listTitle.text =
-            intent.getStringExtra("username") + "'s " + (if (anime) "Anime" else "Manga") + " List"
+        binding.listTitle.text = getString(
+            R.string.user_list, intent.getStringExtra("username"),
+            if (anime) getString(R.string.anime) else getString(R.string.manga)
+        )
         binding.listTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 this@ListActivity.selectedTabIdx = tab?.position ?: 0
@@ -171,7 +158,8 @@ class ListActivity : AppCompatActivity() {
         }
 
         binding.filter.setOnClickListener {
-            val genres = PrefManager.getVal<Set<String>>(PrefName.GenresList).toMutableSet().sorted()
+            val genres =
+                PrefManager.getVal<Set<String>>(PrefName.GenresList).toMutableSet().sorted()
             val popup = PopupMenu(this, it)
             popup.menu.add("All")
             genres.forEach { genre ->
@@ -189,10 +177,32 @@ class ListActivity : AppCompatActivity() {
             //get the current tab
             val currentTab =
                 binding.listTabLayout.getTabAt(binding.listTabLayout.selectedTabPosition)
-            val currentViewePager = binding.listViewPager.getChildAt(0)
             val currentFragment =
                 supportFragmentManager.findFragmentByTag("f" + currentTab?.position.toString()) as? ListFragment
             currentFragment?.randomOptionClick()
+        }
+
+        binding.search.setOnClickListener {
+            toggleSearchView(binding.searchView.isVisible)
+            if (!binding.searchView.isVisible) {
+                model.unfilterLists()
+            }
+        }
+
+        binding.searchViewText.addTextChangedListener {
+            model.searchLists(binding.searchViewText.text.toString())
+        }
+    }
+
+    private fun toggleSearchView(isVisible: Boolean) {
+        if (isVisible) {
+            binding.searchView.visibility = View.GONE
+            binding.searchViewText.text.clear()
+        } else {
+            binding.searchView.visibility = View.VISIBLE
+            binding.searchViewText.requestFocus()
+            val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(binding.searchViewText, InputMethodManager.SHOW_IMPLICIT)
         }
     }
 }

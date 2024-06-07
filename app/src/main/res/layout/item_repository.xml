@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:orientation="horizontal">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="3dp"
+        android:alpha="0.7"
+        android:fontFamily="@font/poppins_bold"
+        android:text="•"
+        android:textSize="16sp"
+        tools:ignore="HardcodedText,RtlSymmetry" />
+
+    <TextView
+        android:id="@+id/repositoryItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:alpha="0.66"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="?attr/colorOnBackground"
+        android:textSize="12sp"
+        tools:text="xyz repo" />
+
+</LinearLayout>

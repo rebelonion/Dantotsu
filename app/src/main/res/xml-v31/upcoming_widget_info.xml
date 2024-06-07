@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:configure="ani.dantotsu.widgets.upcoming.UpcomingWidgetConfigure"
+    android:description="@string/upcoming_anime"
+    android:initialKeyguardLayout="@layout/upcoming_widget"
+    android:initialLayout="@layout/upcoming_widget"
+    android:minWidth="160dp"
+    android:minHeight="80dp"
+    android:previewImage="@drawable/upcoming_widget_preview"
+    android:previewLayout="@layout/upcoming_widget"
+    android:resizeMode="horizontal|vertical"
+    android:updatePeriodMillis="3600000"
+    android:widgetCategory="home_screen" />

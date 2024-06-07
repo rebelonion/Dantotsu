@@ -2,10 +2,10 @@ package ani.dantotsu.others
 
 import ani.dantotsu.FileUrl
 import ani.dantotsu.client
-import ani.dantotsu.util.Logger
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.anime.Episode
 import ani.dantotsu.tryWithSuspend
+import ani.dantotsu.util.Logger
 import com.google.gson.Gson
 import com.lagradost.nicehttp.NiceResponse
 import kotlinx.serialization.SerialName

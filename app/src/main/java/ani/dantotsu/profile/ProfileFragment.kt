@@ -1,8 +1,6 @@
 package ani.dantotsu.profile
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +9,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
@@ -21,18 +20,18 @@ import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.ProfileViewModel
 import ani.dantotsu.connections.anilist.api.Query
 import ani.dantotsu.databinding.FragmentProfileBinding
-import ani.dantotsu.loadImage
 import ani.dantotsu.media.Author
 import ani.dantotsu.media.AuthorAdapter
 import ani.dantotsu.media.Character
 import ani.dantotsu.media.CharacterAdapter
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaAdaptor
-import ani.dantotsu.media.user.ListActivity
+import ani.dantotsu.openOrCopyAnilistLink
+import ani.dantotsu.setBaseline
 import ani.dantotsu.setSlideIn
 import ani.dantotsu.setSlideUp
 import ani.dantotsu.util.AniMarkdown.Companion.getFullAniHTML
-import ani.dantotsu.util.Logger
+import eu.kanade.tachiyomi.util.system.getSerializableCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -57,7 +56,9 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         activity = requireActivity() as ProfileActivity
 
-        user = arguments?.getSerializable("user") as Query.UserProfile
+        binding.root.setBaseline(activity.navBar)
+
+        user = arguments?.getSerializableCompat<Query.UserProfile>("user") as Query.UserProfile
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
             model.setData(user.id)
         }
@@ -97,12 +98,12 @@ class ProfileFragment : Fragment() {
                 view: WebView?,
                 request: WebResourceRequest?
             ): Boolean {
+                openOrCopyAnilistLink(request?.url.toString())
                 return true
             }
         }
 
-        binding.userInfoContainer.visibility =
-            if (user.about != null) View.VISIBLE else View.GONE
+        binding.userInfoContainer.isVisible = user.about != null
 
 
         binding.statsEpisodesWatched.text = user.statistics.anime.episodesWatched.toString()
@@ -133,7 +134,7 @@ class ProfileFragment : Fragment() {
         }
 
         user.favourites?.staff?.nodes?.forEach { i ->
-            favStaff.add(Author(i.id, i.name.full, i.image.large , "" ))
+            favStaff.add(Author(i.id, i.name.full, i.image.large, ""))
         }
 
         setFavPeople()
@@ -143,30 +144,32 @@ class ProfileFragment : Fragment() {
         super.onResume()
         if (this::binding.isInitialized) {
             binding.root.requestLayout()
-            setFavPeople()
-            model.refresh()
+            binding.root.setBaseline(activity.navBar)
         }
     }
 
     private fun setFavPeople() {
         if (favStaff.isEmpty()) {
             binding.profileFavStaffContainer.visibility = View.GONE
+        } else {
+            binding.profileFavStaffRecycler.adapter = AuthorAdapter(favStaff)
+            binding.profileFavStaffRecycler.layoutManager = LinearLayoutManager(
+                activity, LinearLayoutManager.HORIZONTAL, false
+            )
+            binding.profileFavStaffRecycler.layoutAnimation =
+                LayoutAnimationController(setSlideIn(), 0.25f)
         }
-        binding.profileFavStaffRecycler.adapter = AuthorAdapter(favStaff)
-        binding.profileFavStaffRecycler.layoutManager = LinearLayoutManager(
-            activity,
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
+
         if (favCharacter.isEmpty()) {
             binding.profileFavCharactersContainer.visibility = View.GONE
+        } else {
+            binding.profileFavCharactersRecycler.adapter = CharacterAdapter(favCharacter)
+            binding.profileFavCharactersRecycler.layoutManager = LinearLayoutManager(
+                activity, LinearLayoutManager.HORIZONTAL, false
+            )
+            binding.profileFavCharactersRecycler.layoutAnimation =
+                LayoutAnimationController(setSlideIn(), 0.25f)
         }
-        binding.profileFavCharactersRecycler.adapter = CharacterAdapter(favCharacter)
-        binding.profileFavCharactersRecycler.layoutManager = LinearLayoutManager(
-            activity,
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
     }
 
     private fun initRecyclerView(
@@ -185,7 +188,7 @@ class ProfileFragment : Fragment() {
             recyclerView.visibility = View.GONE
             if (it != null) {
                 if (it.isNotEmpty()) {
-                    recyclerView.adapter = MediaAdaptor(0, it, activity, fav=true)
+                    recyclerView.adapter = MediaAdaptor(0, it, activity, fav = true)
                     recyclerView.layoutManager = LinearLayoutManager(
                         activity,
                         LinearLayoutManager.HORIZONTAL,

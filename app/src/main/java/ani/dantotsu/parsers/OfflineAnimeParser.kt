@@ -1,22 +1,27 @@
 package ani.dantotsu.parsers
 
-import android.net.Uri
-import android.os.Environment
+import android.app.Application
 import ani.dantotsu.currContext
+import ani.dantotsu.download.DownloadCompat.Companion.loadEpisodesCompat
+import ani.dantotsu.download.DownloadCompat.Companion.loadSubtitleCompat
 import ani.dantotsu.download.DownloadsManager
-import ani.dantotsu.media.anime.AnimeNameAdapter
+import ani.dantotsu.download.DownloadsManager.Companion.getSubDirectory
+import ani.dantotsu.download.anime.AnimeDownloaderService.AnimeDownloadTask.Companion.getTaskName
+import ani.dantotsu.media.MediaNameAdapter
+import ani.dantotsu.media.MediaType
 import ani.dantotsu.tryWithSuspend
+import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.animesource.model.SEpisodeImpl
 import me.xdrop.fuzzywuzzy.FuzzySearch
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.File
 import java.util.Locale
 
 class OfflineAnimeParser : AnimeParser() {
     private val downloadManager = Injekt.get<DownloadsManager>()
+    private val context = Injekt.get<Application>()
 
     override val name = "Offline"
     override val saveName = "Offline"
@@ -28,22 +33,19 @@ class OfflineAnimeParser : AnimeParser() {
         extra: Map<String, String>?,
         sAnime: SAnime
     ): List<Episode> {
-        val directory = File(
-            currContext()?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-            "${DownloadsManager.animeLocation}/$animeLink"
-        )
+        val directory = getSubDirectory(context, MediaType.ANIME, false, animeLink)
         //get all of the folder names and add them to the list
         val episodes = mutableListOf<Episode>()
-        if (directory.exists()) {
-            directory.listFiles()?.forEach {
+        if (directory?.exists() == true) {
+            directory.listFiles().forEach {
                 //put the title and episdode number in the extra data
                 val extraData = mutableMapOf<String, String>()
                 extraData["title"] = animeLink
-                extraData["episode"] = it.name
+                extraData["episode"] = it.name!!
                 if (it.isDirectory) {
                     val episode = Episode(
-                        it.name,
-                        "$animeLink - ${it.name}",
+                        it.name!!,
+                        getTaskName(animeLink, it.name!!),
                         it.name,
                         null,
                         null,
@@ -53,8 +55,11 @@ class OfflineAnimeParser : AnimeParser() {
                     episodes.add(episode)
                 }
             }
-            episodes.sortBy { AnimeNameAdapter.findEpisodeNumber(it.number) }
-            return episodes
+            //episodes.sortBy { MediaNameAdapter.findEpisodeNumber(it.number) }
+            episodes.addAll(loadEpisodesCompat(animeLink, extra, sAnime))
+            //filter those with the same name
+            return episodes.distinctBy { it.number }
+                .sortedBy { MediaNameAdapter.findEpisodeNumber(it.number) }
         }
         return emptyList()
     }
@@ -75,13 +80,16 @@ class OfflineAnimeParser : AnimeParser() {
 
 
     override suspend fun search(query: String): List<ShowResponse> {
-        val titles = downloadManager.animeDownloadedTypes.map { it.title }.distinct()
-        val returnTitles: MutableList<String> = mutableListOf()
+        val titles = downloadManager.animeDownloadedTypes.map { it.titleName }.distinct()
+        val returnTitlesPair: MutableList<Pair<String, Int>> = mutableListOf()
         for (title in titles) {
-            if (FuzzySearch.ratio(title.lowercase(), query.lowercase()) > 80) {
-                returnTitles.add(title)
+            Logger.log("Comparing $title to $query")
+            val score = FuzzySearch.ratio(title.lowercase(), query.lowercase())
+            if (score > 80) {
+                returnTitlesPair.add(Pair(title, score))
             }
         }
+        val returnTitles = returnTitlesPair.sortedByDescending { it.second }.map { it.first }
         val returnList: MutableList<ShowResponse> = mutableListOf()
         for (title in returnTitles) {
             returnList.add(ShowResponse(title, title, title))
@@ -110,7 +118,7 @@ class OfflineAnimeParser : AnimeParser() {
 
 }
 
-class OfflineVideoExtractor(val videoServer: VideoServer) : VideoExtractor() {
+class OfflineVideoExtractor(private val videoServer: VideoServer) : VideoExtractor() {
     override val server: VideoServer
         get() = videoServer
 
@@ -130,27 +138,29 @@ class OfflineVideoExtractor(val videoServer: VideoServer) : VideoExtractor() {
 
     private fun getSubtitle(title: String, episode: String): List<Subtitle>? {
         currContext()?.let {
-            DownloadsManager.getDirectory(
+            getSubDirectory(
                 it,
-                ani.dantotsu.download.DownloadedType.Type.ANIME,
+                MediaType.ANIME,
+                false,
                 title,
                 episode
-            ).listFiles()?.forEach {
-                if (it.name.contains("subtitle")) {
+            )?.listFiles()?.forEach { file ->
+                if (file.name?.contains("subtitle") == true) {
                     return listOf(
                         Subtitle(
                             "Downloaded Subtitle",
-                            Uri.fromFile(it).toString(),
-                            determineSubtitletype(it.absolutePath)
+                            file.uri.toString(),
+                            determineSubtitleType(file.name ?: "")
                         )
                     )
                 }
             }
+            loadSubtitleCompat(title, episode)?.let { return it }
         }
         return null
     }
 
-    fun determineSubtitletype(url: String): SubtitleType {
+    private fun determineSubtitleType(url: String): SubtitleType {
         return when {
             url.lowercase(Locale.ROOT).endsWith("ass") -> SubtitleType.ASS
             url.lowercase(Locale.ROOT).endsWith("vtt") -> SubtitleType.VTT

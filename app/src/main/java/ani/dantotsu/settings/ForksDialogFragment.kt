@@ -13,15 +13,6 @@ class ForksDialogFragment : BottomSheetDialogFragment() {
     private var _binding: BottomSheetDevelopersBinding? = null
     private val binding get() = _binding!!
 
-    private val developers = arrayOf(
-        Developer(
-            "Dantotsu",
-            "https://avatars.githubusercontent.com/u/87634197?v=4",
-            "rebelonion",
-            "https://github.com/rebelonion/Dantotsu"
-        ),
-    )
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,7 +25,16 @@ class ForksDialogFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.devsTitle.setText(R.string.forks)
-        binding.devsRecyclerView.adapter = DevelopersAdapter(developers)
+        binding.devsRecyclerView.adapter = DevelopersAdapter(
+            arrayOf(
+                Developer(
+                    "Awery",
+                    "https://avatars.githubusercontent.com/u/92123190?v=4",
+                    "MrBoomDeveloper",
+                    "https://github.com/MrBoomDeveloper/Awery"
+                ),
+            )
+        )
         binding.devsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
 

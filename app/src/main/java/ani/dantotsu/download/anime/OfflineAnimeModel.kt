@@ -3,7 +3,7 @@ package ani.dantotsu.download.anime
 import android.net.Uri
 
 data class OfflineAnimeModel(
-    val title: String,
+    var title: String,
     val score: String,
     val totalEpisode: String,
     val totalEpisodeList: String,

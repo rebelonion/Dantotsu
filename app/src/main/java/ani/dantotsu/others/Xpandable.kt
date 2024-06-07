@@ -12,7 +12,8 @@ import ani.dantotsu.R
 class Xpandable @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : LinearLayout(context, attrs) {
-    var expanded: Boolean = false
+    private var expanded: Boolean = false
+    private var listeners: ArrayList<OnChangeListener> = arrayListOf()
 
     init {
         context.withStyledAttributes(attrs, R.styleable.Xpandable) {
@@ -37,7 +38,6 @@ class Xpandable @JvmOverloads constructor(
         super.onAttachedToWindow()
     }
 
-
     private fun hideAll() {
         children.forEach {
             if (it != getChildAt(0)) {
@@ -48,8 +48,12 @@ class Xpandable @JvmOverloads constructor(
                     it.visibility = GONE
                 }, 300)
             }
-
         }
+        postDelayed({
+            listeners.forEach {
+                it.onRetract()
+            }
+        }, 300)
     }
 
     private fun showAll() {
@@ -61,6 +65,25 @@ class Xpandable @JvmOverloads constructor(
                 ObjectAnimator.ofFloat(it, "alpha", 0f, 1f).setDuration(200).start()
             }
         }
+        postDelayed({
+            listeners.forEach {
+                it.onExpand()
+            }
+        }, 300)
+    }
+
+    @Suppress("unused")
+    fun addOnChangeListener(listener: OnChangeListener) {
+        listeners.add(listener)
+    }
+
+    fun removeListener(listener: OnChangeListener) {
+        listeners.remove(listener)
+    }
+
+    interface OnChangeListener {
+        fun onExpand()
+        fun onRetract()
     }
 
 }

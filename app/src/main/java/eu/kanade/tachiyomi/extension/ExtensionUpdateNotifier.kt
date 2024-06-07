@@ -15,7 +15,7 @@ class ExtensionUpdateNotifier(private val context: Context) {
             Notifications.CHANNEL_EXTENSIONS_UPDATE,
         ) {
             setContentTitle(
-                "Extension updates available"
+                context.getString(R.string.extension_updates_available)
             )
             val extNames = names.joinToString(", ")
             setContentText(extNames)

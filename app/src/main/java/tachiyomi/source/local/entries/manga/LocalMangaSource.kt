@@ -19,8 +19,8 @@ class LocalMangaSource(
 ) : CatalogueSource, UnmeteredSource {
 
 
-    private val POPULAR_FILTERS = FilterList(MangaOrderBy.Popular(context))
-    private val LATEST_FILTERS = FilterList(MangaOrderBy.Latest(context))
+    private val POPULAR_FILTERS = FilterList(MangaOrderBy.Popular())
+    private val LATEST_FILTERS = FilterList(MangaOrderBy.Latest())
 
     override val name: String = "Local manga source"
 
@@ -56,7 +56,7 @@ class LocalMangaSource(
     }
 
     // Filters
-    override fun getFilterList() = FilterList(MangaOrderBy.Popular(context))
+    override fun getFilterList() = FilterList(MangaOrderBy.Popular())
 
     // Unused stuff
     override suspend fun getPageList(chapter: SChapter) =

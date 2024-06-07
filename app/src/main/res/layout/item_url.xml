@@ -67,6 +67,20 @@
         </LinearLayout>
 
         <ImageButton
+            android:id="@+id/urlSub"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="#00FFFFFF"
+            android:src="@drawable/ic_round_subtitles_24"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="?attr/colorOnBackground"
+            tools:ignore="ContentDescription,SpeakableTextPresentCheck"
+            tools:visibility="visible" />
+
+        <ImageButton
             android:id="@+id/urlDownload"
             android:layout_width="wrap_content"
             android:layout_height="48dp"

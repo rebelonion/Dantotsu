@@ -7,6 +7,7 @@ class CrashlyticsStub : CrashlyticsInterface {
     override fun initialize(context: Context) {
         //no-op
     }
+
     override fun logException(e: Throwable) {
         Logger.log(e)
     }

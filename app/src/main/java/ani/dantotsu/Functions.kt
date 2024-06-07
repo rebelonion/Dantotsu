@@ -10,6 +10,7 @@ import android.app.PendingIntent
 import android.content.ActivityNotFoundException
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -66,9 +67,9 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -83,6 +84,7 @@ import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
@@ -90,16 +92,21 @@ import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.BuildConfig.APPLICATION_ID
 import ani.dantotsu.connections.anilist.Genre
 import ani.dantotsu.connections.anilist.api.FuzzyDate
+import ani.dantotsu.connections.bakaupdates.MangaUpdates
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.databinding.ItemCountDownBinding
 import ani.dantotsu.media.Media
+import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.notifications.IncognitoNotificationClickReceiver
+import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.others.SpoilerPlugin
 import ani.dantotsu.parsers.ShowResponse
+import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.internal.PreferenceKeystore
 import ani.dantotsu.settings.saving.internal.PreferenceKeystore.Companion.generateSalt
+import ani.dantotsu.util.CountUpTimer
 import ani.dantotsu.util.Logger
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
@@ -113,6 +120,7 @@ import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.request.target.ViewTarget
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -132,9 +140,12 @@ import io.noties.markwon.html.TagHandlerNoOp
 import io.noties.markwon.image.AsyncDrawable
 import io.noties.markwon.image.glide.GlideImagesPlugin
 import jp.wasabeef.glide.transformations.BlurTransformation
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import nl.joery.animatedbottombar.AnimatedBottomBar
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -182,6 +193,11 @@ fun currActivity(): Activity? {
 var loadMedia: Int? = null
 var loadIsMAL = false
 
+val Int.toPx
+    get() = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), getSystem().displayMetrics
+    ).toInt()
+
 fun initActivity(a: Activity) {
     val window = a.window
     WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -201,13 +217,16 @@ fun initActivity(a: Activity) {
             ViewCompat.getRootWindowInsets(window.decorView.findViewById(android.R.id.content))
                 ?.apply {
                     navBarHeight = this.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) navBarHeight += 48.toPx
                 }
         }
         WindowInsetsControllerCompat(
             window,
             window.decorView
         ).hide(WindowInsetsCompat.Type.statusBars())
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && statusBarHeight == 0 && a.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && statusBarHeight == 0
+            && a.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+        ) {
             window.decorView.rootWindowInsets?.displayCutout?.apply {
                 if (boundingRects.size > 0) {
                     statusBarHeight = min(boundingRects[0].width(), boundingRects[0].height())
@@ -222,6 +241,7 @@ fun initActivity(a: Activity) {
                 statusBarHeight = windowInsets.getInsets(WindowInsetsCompat.Type.statusBars()).top
                 navBarHeight =
                     windowInsets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) navBarHeight += 48.toPx
             }
         }
     if (a !is MainActivity) a.setNavigationTheme()
@@ -262,6 +282,56 @@ fun Activity.setNavigationTheme() {
     }
 }
 
+/**
+ * Sets clipToPadding false and sets the combined height of navigation bars as bottom padding.
+ *
+ * When nesting multiple scrolling views, only call this method on the inner most scrolling view.
+ */
+fun ViewGroup.setBaseline(navBar: AnimatedBottomBar) {
+    navBar.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+    clipToPadding = false
+    setPadding(paddingLeft, paddingTop, paddingRight, navBarHeight + navBar.measuredHeight)
+}
+
+/**
+ * Sets clipToPadding false and sets the combined height of navigation bars as bottom padding.
+ *
+ * When nesting multiple scrolling views, only call this method on the inner most scrolling view.
+ */
+fun ViewGroup.setBaseline(navBar: AnimatedBottomBar, overlayView: View) {
+    navBar.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+    overlayView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+    clipToPadding = false
+    setPadding(
+        paddingLeft,
+        paddingTop,
+        paddingRight,
+        navBarHeight + navBar.measuredHeight + overlayView.measuredHeight
+    )
+}
+
+fun Activity.reloadActivity() {
+    Refresh.all()
+    finish()
+    startActivity(Intent(this, this::class.java))
+    initActivity(this)
+}
+
+fun Activity.restartApp() {
+    val mainIntent = Intent.makeRestartActivityTask(
+        packageManager.getLaunchIntentForPackage(this.packageName)!!.component
+    )
+    val component =
+        ComponentName(this@restartApp.packageName, this@restartApp::class.qualifiedName!!)
+    try {
+        startActivity(Intent().setComponent(component))
+    } catch (e: Exception) {
+        startActivity(mainIntent)
+    }
+    finishAndRemoveTask()
+    PrefManager.setCustomVal("reload", true)
+}
+
 open class BottomSheetDialogFragment : BottomSheetDialogFragment() {
     override fun onStart() {
         super.onStart()
@@ -277,14 +347,8 @@ open class BottomSheetDialogFragment : BottomSheetDialogFragment() {
                 val behavior = BottomSheetBehavior.from(requireView().parent as View)
                 behavior.state = BottomSheetBehavior.STATE_EXPANDED
             }
-            val typedValue = TypedValue()
-            val theme = requireContext().theme
-            theme.resolveAttribute(
-                com.google.android.material.R.attr.colorSurface,
-                typedValue,
-                true
-            )
-            window.navigationBarColor = typedValue.data
+            window.navigationBarColor =
+                requireContext().getThemeColor(com.google.android.material.R.attr.colorSurface)
         }
     }
 
@@ -359,7 +423,7 @@ class DatePickerFragment(activity: Activity, var date: FuzzyDate = FuzzyDate().g
         dialog.setButton(
             DialogInterface.BUTTON_NEUTRAL,
             activity.getString(R.string.remove)
-        ) { dialog, which ->
+        ) { _, which ->
             if (which == DialogInterface.BUTTON_NEUTRAL) {
                 date = FuzzyDate()
             }
@@ -394,7 +458,6 @@ class InputFilterMinMax(
         return ""
     }
 
-    @SuppressLint("SetTextI18n")
     private fun isInRange(a: Double, b: Double, c: Double): Boolean {
         val statusStrings = currContext()!!.resources.getStringArray(R.array.status_manga)[2]
 
@@ -407,7 +470,7 @@ class InputFilterMinMax(
 }
 
 
-class ZoomOutPageTransformer() :
+class ZoomOutPageTransformer :
     ViewPager2.PageTransformer {
     override fun transformPage(view: View, position: Float) {
         if (position == 0.0f && PrefManager.getVal(PrefName.LayoutAnimations)) {
@@ -563,12 +626,35 @@ fun ImageView.loadImage(file: FileUrl?, size: Int = 0) {
     file?.url = PrefManager.getVal<String>(PrefName.ImageUrl).ifEmpty { file?.url ?: "" }
     if (file?.url?.isNotEmpty() == true) {
         tryWith {
-            val glideUrl = GlideUrl(file.url) { file.headers }
-            Glide.with(this.context).load(glideUrl).transition(withCrossFade()).override(size)
-                .into(this)
+            if (file.url.startsWith("content://")) {
+                Glide.with(this.context).load(Uri.parse(file.url)).transition(withCrossFade())
+                    .override(size).into(this)
+            } else {
+                val glideUrl = GlideUrl(file.url) { file.headers }
+                Glide.with(this.context).load(glideUrl).transition(withCrossFade()).override(size)
+                    .into(this)
+            }
         }
     }
 }
+
+fun ImageView.loadImage(file: FileUrl?, width: Int = 0, height: Int = 0) {
+    file?.url = PrefManager.getVal<String>(PrefName.ImageUrl).ifEmpty { file?.url ?: "" }
+    if (file?.url?.isNotEmpty() == true) {
+        tryWith {
+            if (file.url.startsWith("content://")) {
+                Glide.with(this.context).load(Uri.parse(file.url)).transition(withCrossFade())
+                    .override(width, height).into(this)
+            } else {
+                val glideUrl = GlideUrl(file.url) { file.headers }
+                Glide.with(this.context).load(glideUrl).transition(withCrossFade())
+                    .override(width, height)
+                    .into(this)
+            }
+        }
+    }
+}
+
 
 fun ImageView.loadLocalImage(file: File?, size: Int = 0) {
     if (file?.exists() == true) {
@@ -712,6 +798,23 @@ fun openLinkInBrowser(link: String?) {
     }
 }
 
+fun openLinkInYouTube(link: String?) {
+    link?.let {
+        try {
+            val videoIntent = Intent(Intent.ACTION_VIEW).apply {
+                addCategory(Intent.CATEGORY_BROWSABLE)
+                data = Uri.parse(link)
+                setPackage("com.google.android.youtube")
+            }
+            currContext()!!.startActivity(videoIntent)
+        } catch (e: ActivityNotFoundException) {
+            openLinkInBrowser(link)
+        } catch (e: Exception) {
+            Logger.log(e)
+        }
+    }
+}
+
 fun saveImageToDownloads(title: String, bitmap: Bitmap, context: Activity) {
     FileProvider.getUriForFile(
         context,
@@ -803,31 +906,6 @@ fun savePrefs(
     }
 }
 
-fun downloadsPermission(activity: AppCompatActivity): Boolean {
-    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) return true
-    val permissions = arrayOf(
-        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        Manifest.permission.READ_EXTERNAL_STORAGE
-    )
-
-    val requiredPermissions = permissions.filter {
-        ContextCompat.checkSelfPermission(activity, it) != PackageManager.PERMISSION_GRANTED
-    }.toTypedArray()
-
-    return if (requiredPermissions.isNotEmpty()) {
-        ActivityCompat.requestPermissions(
-            activity,
-            requiredPermissions,
-            DOWNLOADS_PERMISSION_REQUEST_CODE
-        )
-        false
-    } else {
-        true
-    }
-}
-
-private const val DOWNLOADS_PERMISSION_REQUEST_CODE = 100
-
 fun shareImage(title: String, bitmap: Bitmap, context: Context) {
 
     val contentUri = FileProvider.getUriForFile(
@@ -897,9 +975,10 @@ fun copyToClipboard(string: String, toast: Boolean = true) {
     }
 }
 
-@SuppressLint("SetTextI18n")
 fun countDown(media: Media, view: ViewGroup) {
-    if (media.anime?.nextAiringEpisode != null && media.anime.nextAiringEpisodeTime != null && (media.anime.nextAiringEpisodeTime!! - System.currentTimeMillis() / 1000) <= 86400 * 28.toLong()) {
+    if (media.anime?.nextAiringEpisode != null && media.anime.nextAiringEpisodeTime != null
+        && (media.anime.nextAiringEpisodeTime!! - System.currentTimeMillis() / 1000) <= 86400 * 28.toLong()
+    ) {
         val v = ItemCountDownBinding.inflate(LayoutInflater.from(view.context), view, false)
         view.addView(v.root, 0)
         v.mediaCountdownText.text =
@@ -928,6 +1007,50 @@ fun countDown(media: Media, view: ViewGroup) {
                 snackString(currContext()?.getString(R.string.congrats_vro))
             }
         }.start()
+    }
+}
+
+fun sinceWhen(media: Media, view: ViewGroup) {
+    if (media.status != "RELEASING" && media.status != "HIATUS") return
+    CoroutineScope(Dispatchers.IO).launch {
+        MangaUpdates().search(media.mangaName(), media.startDate)?.let {
+            val latestChapter = MangaUpdates.getLatestChapter(view.context, it)
+            val timeSince = (System.currentTimeMillis() -
+                    (it.metadata.series.lastUpdated!!.timestamp * 1000)) / 1000
+
+            withContext(Dispatchers.Main) {
+                val v =
+                    ItemCountDownBinding.inflate(LayoutInflater.from(view.context), view, false)
+                view.addView(v.root, 0)
+                v.mediaCountdownText.text =
+                    currActivity()?.getString(R.string.chapter_release_timeout, latestChapter)
+
+                object : CountUpTimer(86400000) {
+                    override fun onTick(second: Int) {
+                        val a = second + timeSince
+                        v.mediaCountdown.text = currActivity()?.getString(
+                            R.string.time_format,
+                            a / 86400,
+                            a % 86400 / 3600,
+                            a % 86400 % 3600 / 60,
+                            a % 86400 % 3600 % 60
+                        )
+                    }
+
+                    override fun onFinish() {
+                        // The legend will never die.
+                    }
+                }.start()
+            }
+        }
+    }
+}
+
+fun displayTimer(media: Media, view: ViewGroup) {
+    when {
+        media.anime != null -> countDown(media, view)
+        media.format == "MANGA" || media.format == "ONE_SHOT" -> sinceWhen(media, view)
+        else -> {} // No timer yet
     }
 }
 
@@ -1000,6 +1123,10 @@ class EmptyAdapter(private val count: Int) : RecyclerView.Adapter<RecyclerView.V
     inner class EmptyViewHolder(view: View) : RecyclerView.ViewHolder(view)
 }
 
+fun getAppString(res: Int): String {
+    return currContext()?.getString(res) ?: ""
+}
+
 fun toast(string: String?) {
     if (string != null) {
         Logger.log(string)
@@ -1008,6 +1135,10 @@ fun toast(string: String?) {
                 .show()
         }
     }
+}
+
+fun toast(res: Int) {
+    toast(getAppString(res))
 }
 
 fun snackString(s: String?, activity: Activity? = null, clipboard: String? = null): Snackbar? {
@@ -1048,6 +1179,10 @@ fun snackString(s: String?, activity: Activity? = null, clipboard: String? = nul
         Injekt.get<CrashlyticsInterface>().logException(e)
     }
     return null
+}
+
+fun snackString(r: Int, activity: Activity? = null, clipboard: String? = null): Snackbar? {
+    return snackString(getAppString(r), activity, clipboard)
 }
 
 open class NoPaddingArrayAdapter<T>(context: Context, layoutId: Int, items: List<T>) :
@@ -1230,21 +1365,90 @@ fun blurImage(imageView: ImageView, banner: String?) {
     if (banner != null) {
         val radius = PrefManager.getVal<Float>(PrefName.BlurRadius).toInt()
         val sampling = PrefManager.getVal<Float>(PrefName.BlurSampling).toInt()
-        if (PrefManager.getVal(PrefName.BlurBanners)) {
-            val context = imageView.context
-            if (!(context as Activity).isDestroyed) {
-                val url = PrefManager.getVal<String>(PrefName.ImageUrl).ifEmpty { banner }
+        val context = imageView.context
+        if (!(context as Activity).isDestroyed) {
+            val url = PrefManager.getVal<String>(PrefName.ImageUrl).ifEmpty { banner }
+            if (PrefManager.getVal(PrefName.BlurBanners)) {
                 Glide.with(context as Context)
-                    .load(GlideUrl(url))
-                    .diskCacheStrategy(DiskCacheStrategy.ALL).override(400)
+                    .load(
+                        if (banner.startsWith("http")) GlideUrl(url) else if (banner.startsWith("content://")) Uri.parse(
+                            url
+                        ) else File(url)
+                    )
+                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE).override(400)
                     .apply(RequestOptions.bitmapTransform(BlurTransformation(radius, sampling)))
                     .into(imageView)
+
+            } else {
+                Glide.with(context as Context)
+                    .load(
+                        if (banner.startsWith("http")) GlideUrl(url) else if (banner.startsWith("content://")) Uri.parse(
+                            url
+                        ) else File(url)
+                    )
+                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE).override(400)
+                    .into(imageView)
             }
-        } else {
-            imageView.loadImage(banner)
         }
     } else {
         imageView.setImageResource(R.drawable.linear_gradient_bg)
+    }
+}
+
+fun Context.getThemeColor(@AttrRes attribute: Int): Int {
+    val typedValue = TypedValue()
+    theme.resolveAttribute(attribute, typedValue, true)
+    return typedValue.data
+}
+
+fun ImageView.openImage(title: String, image: String) {
+    setOnLongClickListener {
+        ImageViewDialog.newInstance(
+            context as FragmentActivity, title, image
+        )
+    }
+}
+
+/**
+ * Attempts to open the link in the app, otherwise copies it to the clipboard
+ * @param link the link to open
+ */
+fun openOrCopyAnilistLink(link: String) {
+    if (link.startsWith("https://anilist.co/anime/") || link.startsWith("https://anilist.co/manga/")) {
+        val mangaAnime = link.substringAfter("https://anilist.co/").substringBefore("/")
+        val id =
+            link.substringAfter("https://anilist.co/$mangaAnime/").substringBefore("/")
+                .toIntOrNull()
+        if (id != null && currContext() != null) {
+            ContextCompat.startActivity(
+                currContext()!!,
+                Intent(currContext()!!, MediaDetailsActivity::class.java)
+                    .putExtra("mediaId", id),
+                null
+            )
+        } else {
+            copyToClipboard(link, true)
+        }
+    } else if (link.startsWith("https://anilist.co/user/")) {
+        val username = link.substringAfter("https://anilist.co/user/").substringBefore("/")
+        val id = username.toIntOrNull()
+        if (currContext() != null) {
+            val intent = Intent(currContext()!!, ProfileActivity::class.java)
+            if (id != null) {
+                intent.putExtra("userId", id)
+            } else {
+                intent.putExtra("username", username)
+            }
+            ContextCompat.startActivity(
+                currContext()!!,
+                intent,
+                null
+            )
+        } else {
+            copyToClipboard(link, true)
+        }
+    } else {
+        copyToClipboard(link, true)
     }
 }
 
@@ -1255,14 +1459,15 @@ fun blurImage(imageView: ImageView, banner: String?) {
 fun buildMarkwon(
     activity: Context,
     userInputContent: Boolean = true,
-    fragment: Fragment? = null
+    fragment: Fragment? = null,
+    anilist: Boolean = false
 ): Markwon {
     val glideContext = fragment?.let { Glide.with(it) } ?: Glide.with(activity)
     val markwon = Markwon.builder(activity)
         .usePlugin(object : AbstractMarkwonPlugin() {
             override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
                 builder.linkResolver { _, link ->
-                    copyToClipboard(link, true)
+                    openOrCopyAnilistLink(link)
                 }
             }
         })
@@ -1271,7 +1476,7 @@ fun buildMarkwon(
         .usePlugin(StrikethroughPlugin.create())
         .usePlugin(TablePlugin.create(activity))
         .usePlugin(TaskListPlugin.create(activity))
-        .usePlugin(SpoilerPlugin())
+        .usePlugin(SpoilerPlugin(anilist))
         .usePlugin(HtmlPlugin.create { plugin ->
             if (userInputContent) {
                 plugin.addHandler(

@@ -5,16 +5,12 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
-import android.os.Environment
 import android.os.IBinder
 import android.os.PowerManager
-import android.provider.MediaStore
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -37,7 +33,6 @@ import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import java.io.File
-import java.io.OutputStreamWriter
 
 class DiscordService : Service() {
     private var heartbeat: Int = 0
@@ -49,6 +44,7 @@ class DiscordService : Service() {
     private lateinit var heartbeatThread: Thread
     private lateinit var client: OkHttpClient
     private lateinit var wakeLock: PowerManager.WakeLock
+    private val shouldLog = false
     var presenceStore = ""
     val json = Json {
         encodeDefaults = true
@@ -67,7 +63,7 @@ class DiscordService : Service() {
             PowerManager.PARTIAL_WAKE_LOCK,
             "discordRPC:backgroundPresence"
         )
-        wakeLock.acquire()
+        wakeLock.acquire(30 * 60 * 1000L /*30 minutes*/)
         log("WakeLock Acquired")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val serviceChannel = NotificationChannel(
@@ -162,8 +158,8 @@ class DiscordService : Service() {
 
     inner class DiscordWebSocketListener : WebSocketListener() {
 
-        var retryAttempts = 0
-        val maxRetryAttempts = 10
+        private var retryAttempts = 0
+        private val maxRetryAttempts = 10
         override fun onOpen(webSocket: WebSocket, response: Response) {
             super.onOpen(webSocket, response)
             this@DiscordService.webSocket = webSocket
@@ -232,7 +228,7 @@ class DiscordService : Service() {
                         resume()
                         resume = false
                     } else {
-                        identify(webSocket, baseContext)
+                        identify(webSocket)
                         log("WebSocket: Identified")
                     }
                 }
@@ -245,13 +241,13 @@ class DiscordService : Service() {
             }
         }
 
-        fun identify(webSocket: WebSocket, context: Context) {
+        private fun identify(webSocket: WebSocket) {
             val properties = JsonObject()
             properties.addProperty("os", "linux")
             properties.addProperty("browser", "unknown")
             properties.addProperty("device", "unknown")
             val d = JsonObject()
-            d.addProperty("token", getToken(context))
+            d.addProperty("token", getToken())
             d.addProperty("intents", 0)
             d.add("properties", properties)
             val payload = JsonObject()
@@ -270,7 +266,7 @@ class DiscordService : Service() {
                 retryAttempts++
                 if (retryAttempts >= maxRetryAttempts) {
                     log("WebSocket: Error, onFailure() reason: Max Retry Attempts")
-                    errorNotification("Could not set the presence", "Max Retry Attempts")
+                    errorNotification("Timeout setting presence", "Max Retry Attempts")
                     return
                 }
             }
@@ -311,7 +307,7 @@ class DiscordService : Service() {
         }
     }
 
-    fun getToken(context: Context): String {
+    fun getToken(): String {
         val token = PrefManager.getVal(PrefName.DiscordToken, null as String?)
         return if (token == null) {
             log("WebSocket: Token not found")
@@ -349,13 +345,13 @@ class DiscordService : Service() {
                 Manifest.permission.POST_NOTIFICATIONS
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            //TODO: Request permission
             return
         }
         notificationManager.notify(2, builder.build())
         log("Error Notified")
     }
 
+    @Suppress("unused")
     fun saveSimpleTestPresence() {
         val file = File(baseContext.cacheDir, "payload")
         //fill with test payload
@@ -375,20 +371,22 @@ class DiscordService : Service() {
         log("WebSocket: Simple Test Presence Saved")
     }
 
-    fun setPresence(String: String) {
+    fun setPresence(string: String) {
         log("WebSocket: Sending Presence payload")
-        log(String)
-        webSocket.send(String)
+        log(string)
+        webSocket.send(string)
     }
 
     fun log(string: String) {
-        //Logger.log(string)
+        if (shouldLog) {
+            Logger.log(string)
+        }
     }
 
     fun resume() {
         log("Sending Resume payload")
         val d = JsonObject()
-        d.addProperty("token", getToken(baseContext))
+        d.addProperty("token", getToken())
         d.addProperty("session_id", sessionId)
         d.addProperty("seq", sequence)
         val json = JsonObject()
@@ -404,7 +402,7 @@ class DiscordService : Service() {
                 Thread.sleep(heartbeat.toLong())
                 heartbeatSend(webSocket, sequence)
                 log("WebSocket: Heartbeat Sent")
-            } catch (e: InterruptedException) {
+            } catch (ignored: InterruptedException) {
             }
         }
     }

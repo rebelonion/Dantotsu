@@ -1,7 +1,6 @@
 package ani.dantotsu.settings
 
 import android.app.AlertDialog
-import android.content.Intent
 import android.os.Bundle
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -10,11 +9,11 @@ import ani.dantotsu.R
 import ani.dantotsu.databinding.ActivityUserInterfaceSettingsBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.navBarHeight
+import ani.dantotsu.restartApp
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
-import com.google.android.material.snackbar.Snackbar
 
 class UserInterfaceSettingsActivity : AppCompatActivity() {
     lateinit var binding: ActivityUserInterfaceSettingsBinding
@@ -37,18 +36,18 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
         }
 
         binding.uiSettingsHomeLayout.setOnClickListener {
-            val set = PrefManager.getVal<List<Boolean>>(PrefName.HomeLayoutShow).toMutableList()
+            val set = PrefManager.getVal<List<Boolean>>(PrefName.HomeLayout).toMutableList()
             val views = resources.getStringArray(R.array.home_layouts)
             val dialog = AlertDialog.Builder(this, R.style.MyPopup)
                 .setTitle(getString(R.string.home_layout_show)).apply {
                     setMultiChoiceItems(
                         views,
-                        PrefManager.getVal<List<Boolean>>(PrefName.HomeLayoutShow).toBooleanArray()
+                        PrefManager.getVal<List<Boolean>>(PrefName.HomeLayout).toBooleanArray()
                     ) { _, i, value ->
                         set[i] = value
                     }
                     setPositiveButton("Done") { _, _ ->
-                        PrefManager.setVal(PrefName.HomeLayoutShow, set)
+                        PrefManager.setVal(PrefName.HomeLayout, set)
                         restartApp()
                     }
                 }.show()
@@ -78,6 +77,11 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
             restartApp()
         }
 
+        binding.uiSettingsTrendingScroller.isChecked = PrefManager.getVal(PrefName.TrendingScroller)
+        binding.uiSettingsTrendingScroller.setOnCheckedChangeListener { _, isChecked ->
+            PrefManager.setVal(PrefName.TrendingScroller, isChecked)
+        }
+
         val map = mapOf(
             2f to 0.5f,
             1.75f to 0.625f,
@@ -101,7 +105,7 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
             PrefManager.setVal(PrefName.BlurBanners, isChecked)
             restartApp()
         }
-        binding.uiSettingsBlurRadius.value = (PrefManager.getVal(PrefName.BlurRadius) as  Float)
+        binding.uiSettingsBlurRadius.value = (PrefManager.getVal(PrefName.BlurRadius) as Float)
         binding.uiSettingsBlurRadius.addOnChangeListener { _, value, _ ->
             PrefManager.setVal(PrefName.BlurRadius, value)
             restartApp()
@@ -110,25 +114,6 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
         binding.uiSettingsBlurSampling.addOnChangeListener { _, value, _ ->
             PrefManager.setVal(PrefName.BlurSampling, value)
             restartApp()
-        }
-    }
-
-    private fun restartApp() {
-        Snackbar.make(
-            binding.root,
-            R.string.restart_app, Snackbar.LENGTH_SHORT
-        ).apply {
-            val mainIntent =
-                Intent.makeRestartActivityTask(
-                    context.packageManager.getLaunchIntentForPackage(
-                        context.packageName
-                    )!!.component
-                )
-            setAction("Do it!") {
-                context.startActivity(mainIntent)
-                Runtime.getRuntime().exit(0)
-            }
-            show()
         }
     }
 }

@@ -395,6 +395,16 @@ object PrefManager {
                 val obj = ois.readObject() as T?
                 obj
             } else {
+                Logger.log("Serialized data is null (key: $key)")
+                default
+            }
+        } catch (e: java.io.InvalidClassException) {
+            Logger.log(e)
+            try {
+                getPrefLocation(location).edit().remove(key).apply()
+                default
+            } catch (e: Exception) {
+                Logger.log(e)
                 default
             }
         } catch (e: Exception) {

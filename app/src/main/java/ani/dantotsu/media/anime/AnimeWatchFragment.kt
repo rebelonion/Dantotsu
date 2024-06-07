@@ -17,41 +17,60 @@ import androidx.annotation.OptIn
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.math.MathUtils
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.exoplayer.offline.DownloadService
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import ani.dantotsu.*
+import ani.dantotsu.FileUrl
+import ani.dantotsu.R
+import ani.dantotsu.addons.download.DownloadAddonManager
 import ani.dantotsu.databinding.FragmentAnimeWatchBinding
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
+import ani.dantotsu.download.DownloadsManager.Companion.compareName
+import ani.dantotsu.download.DownloadsManager.Companion.getSubDirectory
 import ani.dantotsu.download.anime.AnimeDownloaderService
-import ani.dantotsu.download.video.ExoplayerDownloadService
+import ani.dantotsu.download.findValidName
+import ani.dantotsu.dp
+import ani.dantotsu.isOnline
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.MediaDetailsViewModel
+import ani.dantotsu.media.MediaNameAdapter
+import ani.dantotsu.media.MediaType
+import ani.dantotsu.navBarHeight
+import ani.dantotsu.notifications.subscription.SubscriptionHelper
+import ani.dantotsu.notifications.subscription.SubscriptionHelper.Companion.saveSubscription
 import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.parsers.AnimeParser
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.HAnimeSources
+import ani.dantotsu.setNavigationTheme
 import ani.dantotsu.settings.extensionprefs.AnimeSourcePreferencesFragment
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.notifications.subscription.SubscriptionHelper
-import ani.dantotsu.notifications.subscription.SubscriptionHelper.Companion.saveSubscription
+import ani.dantotsu.snackString
+import ani.dantotsu.toast
+import ani.dantotsu.util.Logger
+import ani.dantotsu.util.StoragePermissions.Companion.accessAlertDialog
+import ani.dantotsu.util.StoragePermissions.Companion.hasDirAccess
+import com.anggrayudi.storage.file.extension
 import com.google.android.material.appbar.AppBarLayout
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
+import tachiyomi.core.util.lang.launchIO
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import kotlin.math.ceil
@@ -188,10 +207,16 @@ class AnimeWatchFragment : Fragment() {
                         ConcatAdapter(headerAdapter, episodeAdapter)
 
                     lifecycleScope.launch(Dispatchers.IO) {
-                        awaitAll(
-                            async { model.loadKitsuEpisodes(media) },
-                            async { model.loadFillerEpisodes(media) }
-                        )
+                        val offline =
+                            !isOnline(binding.root.context) || PrefManager.getVal(PrefName.OfflineMode)
+                        if (offline) {
+                            media.selected!!.sourceIndex = model.watchSources!!.list.lastIndex
+                        } else {
+                            awaitAll(
+                                async { model.loadKitsuEpisodes(media) },
+                                async { model.loadFillerEpisodes(media) }
+                            )
+                        }
                         model.loadEpisodes(media, media.selected!!.sourceIndex)
                     }
                     loaded = true
@@ -216,7 +241,7 @@ class AnimeWatchFragment : Fragment() {
                             if (media.anime!!.kitsuEpisodes!!.containsKey(i)) {
                                 episode.desc =
                                     media.anime!!.kitsuEpisodes!![i]?.desc ?: episode.desc
-                                episode.title = if (AnimeNameAdapter.removeEpisodeNumberCompletely(
+                                episode.title = if (MediaNameAdapter.removeEpisodeNumberCompletely(
                                         episode.title ?: ""
                                     ).isBlank()
                                 ) media.anime!!.kitsuEpisodes!![i]?.title
@@ -340,16 +365,12 @@ class AnimeWatchFragment : Fragment() {
         val changeUIVisibility: (Boolean) -> Unit = { show ->
             val activity = activity
             if (activity is MediaDetailsActivity && isAdded) {
-                val visibility = if (show) View.VISIBLE else View.GONE
-                activity.findViewById<AppBarLayout>(R.id.mediaAppBar).visibility = visibility
-                activity.findViewById<ViewPager2>(R.id.mediaViewPager).visibility = visibility
-                activity.findViewById<CardView>(R.id.mediaCover).visibility = visibility
-                activity.findViewById<CardView>(R.id.mediaClose).visibility = visibility
-
-                activity.tabLayout.setVisibility(visibility)
-
-                activity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).visibility =
-                    if (show) View.GONE else View.VISIBLE
+                activity.findViewById<AppBarLayout>(R.id.mediaAppBar).isVisible = show
+                activity.findViewById<ViewPager2>(R.id.mediaViewPager).isVisible = show
+                activity.findViewById<CardView>(R.id.mediaCover).isVisible = show
+                activity.findViewById<CardView>(R.id.mediaClose).isVisible = show
+                activity.navBar.isVisible = show
+                activity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).isGone = show
             }
         }
         var itemSelected = false
@@ -358,7 +379,7 @@ class AnimeWatchFragment : Fragment() {
             var selectedSetting = allSettings[0]
             if (allSettings.size > 1) {
                 val names =
-                    allSettings.map { LanguageMapper.mapLanguageCodeToName(it.lang) }.toTypedArray()
+                    allSettings.map { LanguageMapper.getLanguageName(it.lang) }.toTypedArray()
                 val dialog = AlertDialog.Builder(requireContext(), R.style.MyPopup)
                     .setTitle("Select a Source")
                     .setSingleChoiceItems(names, -1) { dialog, which ->
@@ -417,7 +438,29 @@ class AnimeWatchFragment : Fragment() {
     }
 
     fun onAnimeEpisodeDownloadClick(i: String) {
-        model.onEpisodeClick(media, i, requireActivity().supportFragmentManager, isDownload = true)
+        activity?.let {
+            if (!hasDirAccess(it)) {
+                (it as MediaDetailsActivity).accessAlertDialog(it.launcher) { success ->
+                    if (success) {
+                        model.onEpisodeClick(
+                            media,
+                            i,
+                            requireActivity().supportFragmentManager,
+                            isDownload = true
+                        )
+                    } else {
+                        snackString(getString(R.string.download_permission_required))
+                    }
+                }
+            } else {
+                model.onEpisodeClick(
+                    media,
+                    i,
+                    requireActivity().supportFragmentManager,
+                    isDownload = true
+                )
+            }
+        }
     }
 
     fun onAnimeEpisodeStopDownloadClick(i: String) {
@@ -435,10 +478,11 @@ class AnimeWatchFragment : Fragment() {
             DownloadedType(
                 media.mainName(),
                 i,
-                DownloadedType.Type.ANIME
+                MediaType.ANIME
             )
-        )
-        episodeAdapter.purgeDownload(i)
+        ) {
+            episodeAdapter.purgeDownload(i)
+        }
     }
 
     @OptIn(UnstableApi::class)
@@ -447,22 +491,96 @@ class AnimeWatchFragment : Fragment() {
             DownloadedType(
                 media.mainName(),
                 i,
-                DownloadedType.Type.ANIME
+                MediaType.ANIME
             )
-        )
-        val taskName = AnimeDownloaderService.AnimeDownloadTask.getTaskName(media.mainName(), i)
-        val id = PrefManager.getAnimeDownloadPreferences().getString(
-            taskName,
-            ""
-        ) ?: ""
-        PrefManager.getAnimeDownloadPreferences().edit().remove(taskName).apply()
-        DownloadService.sendRemoveDownload(
-            requireContext(),
-            ExoplayerDownloadService::class.java,
-            id,
-            true
-        )
-        episodeAdapter.deleteDownload(i)
+        ) {
+            val taskName = AnimeDownloaderService.AnimeDownloadTask.getTaskName(media.mainName(), i)
+            PrefManager.getAnimeDownloadPreferences().edit().remove(taskName).apply()
+            episodeAdapter.deleteDownload(i)
+        }
+    }
+
+    @kotlin.OptIn(DelicateCoroutinesApi::class)
+    fun fixDownload(i: String) {
+        toast(R.string.running_fixes)
+        launchIO {
+            try {
+                val context = context ?: throw Exception("Context is null")
+                val directory =
+                    getSubDirectory(context, MediaType.ANIME, false, media.mainName(), i)
+                        ?: throw Exception("Directory is null")
+                val files = directory.listFiles()
+                val videoFiles = files.filter { it.extension == "mp4" || it.extension == "mkv" }
+                if (videoFiles.size != 1) {
+                    val biggest =
+                        videoFiles.filter { it.length() > 1000 }.maxByOrNull { it.length() }
+                            ?: throw Exception("No video files found")
+                    val newName =
+                        AnimeDownloaderService.AnimeDownloadTask.getTaskName(media.mainName(), i)
+                            .findValidName() + "." + biggest.extension
+                    videoFiles.forEach {
+                        if (it != biggest) {
+                            it.delete()
+                        }
+                    }
+                    if (newName != biggest.name) {
+                        biggest.renameTo(newName)
+                    }
+                    toast(context.getString(R.string.success) + " (1)")
+                } else {
+                    val ffExtension = Injekt.get<DownloadAddonManager>().extension?.extension!!
+                    val extension = ffExtension.getFileExtension()
+                    val tempFile =
+                        directory.createFile(extension.second, "temp.${extension.first}")
+                            ?: throw Exception("Temp file is null")
+                    val tempPath = ffExtension.setDownloadPath(
+                        context,
+                        tempFile.uri
+                    )
+                    val videoPath = ffExtension.getReadPath(
+                        context,
+                        videoFiles[0].uri
+                    )
+
+                    val id = ffExtension.customFFMpeg(
+                        "1", listOf(videoPath, tempPath)
+                    ) { log ->
+                        Logger.log(log)
+                    }
+                    val timeOut = System.currentTimeMillis() + 1000 * 60 * 10
+                    while (ffExtension.getState(id) != "COMPLETED") {
+                        if (ffExtension.getState(id) == "FAILED") {
+                            Logger.log("Failed to fix download")
+                            ffExtension.getStackTrace(id)?.let {
+                                Logger.log(it)
+                            }
+                            toast(R.string.failed_to_fix)
+                            return@launchIO
+                        }
+                        if (System.currentTimeMillis() > timeOut) {
+                            Logger.log("Failed to fix download: Timeout")
+                            toast(R.string.failed_to_fix)
+                            return@launchIO
+                        }
+                    }
+                    if (ffExtension.hadError(id)) {
+                        Logger.log("Failed to fix download: ${ffExtension.getStackTrace(id)}")
+                        toast(R.string.failed_to_fix)
+                        return@launchIO
+                    }
+                    val name = videoFiles[0].name
+                    if (videoFiles[0].delete().not()) {
+                        toast(R.string.delete_fail)
+                        return@launchIO
+                    }
+                    tempFile.renameTo(name!!)
+                    toast(context.getString(R.string.success) + " (2)")
+                }
+            } catch (e: Exception) {
+                toast(getString(R.string.error_msg, e.message))
+                Logger.log(e)
+            }
+        }
     }
 
     private val downloadStatusReceiver = object : BroadcastReceiver() {
@@ -526,8 +644,8 @@ class AnimeWatchFragment : Fragment() {
         episodeAdapter.updateType(style ?: PrefManager.getVal(PrefName.AnimeDefaultView))
         episodeAdapter.notifyItemRangeInserted(0, arr.size)
         for (download in downloadManager.animeDownloadedTypes) {
-            if (download.title == media.mainName()) {
-                episodeAdapter.stopDownload(download.chapter)
+            if (media.compareName(download.titleName)) {
+                episodeAdapter.stopDownload(download.chapterName)
             }
         }
     }

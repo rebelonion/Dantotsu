@@ -30,7 +30,7 @@ class CommentNotificationTask : Task {
             withContext(Dispatchers.IO) {
                 PrefManager.init(context) //make sure prefs are initialized
                 val client = OkHttpClient()
-                CommentsAPI.fetchAuthToken(client)
+                CommentsAPI.fetchAuthToken(context, client)
                 val notificationResponse = CommentsAPI.getNotifications(client)
                 var notifications = notificationResponse?.notifications?.toMutableList()
                 //if we have at least one reply notification, we need to fetch the media titles
@@ -46,26 +46,25 @@ class CommentNotificationTask : Task {
                 )
 
                 notifications =
-                    notifications?.filter { it.type != 3 || it.notificationId > recentGlobal }
+                    notifications?.filter { !it.type.isGlobal() || it.notificationId > recentGlobal }
                         ?.toMutableList()
 
                 val newRecentGlobal =
-                    notifications?.filter { it.type == 3 }?.maxOfOrNull { it.notificationId }
+                    notifications?.filter { it.type.isGlobal() }?.maxOfOrNull { it.notificationId }
                 if (newRecentGlobal != null) {
                     PrefManager.setVal(PrefName.RecentGlobalNotification, newRecentGlobal)
                 }
                 if (notifications.isNullOrEmpty()) return@withContext
                 PrefManager.setVal(
                     PrefName.UnreadCommentNotifications,
-                    PrefManager.getVal<Int>(PrefName.UnreadCommentNotifications) + (notifications.size
-                        ?: 0)
+                    PrefManager.getVal<Int>(PrefName.UnreadCommentNotifications) + (notifications.size)
                 )
 
                 notifications.forEach {
                     val type: CommentNotificationWorker.NotificationType = when (it.type) {
                         1 -> CommentNotificationWorker.NotificationType.COMMENT_REPLY
                         2 -> CommentNotificationWorker.NotificationType.COMMENT_WARNING
-                        3 -> CommentNotificationWorker.NotificationType.APP_GLOBAL
+                        3 -> CommentNotificationWorker.NotificationType.DANTOTSU_UPDATE
                         420 -> CommentNotificationWorker.NotificationType.NO_NOTIFICATION
                         else -> CommentNotificationWorker.NotificationType.UNKNOWN
                     }
@@ -77,6 +76,7 @@ class CommentNotificationTask : Task {
                             val commentStore = CommentStore(
                                 title,
                                 message,
+                                CommentNotificationWorker.NotificationType.COMMENT_WARNING,
                                 it.mediaId,
                                 it.commentId
                             )
@@ -102,6 +102,7 @@ class CommentNotificationTask : Task {
                             val commentStore = CommentStore(
                                 title,
                                 message,
+                                CommentNotificationWorker.NotificationType.COMMENT_REPLY,
                                 it.mediaId,
                                 it.commentId
                             )
@@ -119,13 +120,14 @@ class CommentNotificationTask : Task {
                             )
                         }
 
-                        CommentNotificationWorker.NotificationType.APP_GLOBAL -> {
+                        CommentNotificationWorker.NotificationType.DANTOTSU_UPDATE -> {
                             val title = "Update from Dantotsu"
                             val message = it.content ?: "New feature available"
 
                             val commentStore = CommentStore(
                                 title,
                                 message,
+                                CommentNotificationWorker.NotificationType.DANTOTSU_UPDATE,
                                 null,
                                 null
                             )
@@ -133,7 +135,7 @@ class CommentNotificationTask : Task {
 
                             createNotification(
                                 context,
-                                CommentNotificationWorker.NotificationType.APP_GLOBAL,
+                                CommentNotificationWorker.NotificationType.DANTOTSU_UPDATE,
                                 message,
                                 title,
                                 0,
@@ -186,7 +188,7 @@ class CommentNotificationTask : Task {
             null
         ) ?: listOf()
         val newStore = notificationStore.toMutableList()
-        if (newStore.size > 10) {
+        if (newStore.size > 30) {
             newStore.remove(newStore.minByOrNull { it.time })
         }
         if (newStore.any { it.content == notification.content }) {
@@ -266,7 +268,7 @@ class CommentNotificationTask : Task {
                 builder.build()
             }
 
-            CommentNotificationWorker.NotificationType.APP_GLOBAL -> {
+            CommentNotificationWorker.NotificationType.DANTOTSU_UPDATE -> {
                 val intent = Intent(context, MainActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
@@ -293,6 +295,7 @@ class CommentNotificationTask : Task {
         return notification
     }
 
+    @Suppress("unused")
     private fun getBitmapFromVectorDrawable(context: Context, drawableId: Int): Bitmap? {
         val drawable = ContextCompat.getDrawable(context, drawableId) ?: return null
         val bitmap = Bitmap.createBitmap(
@@ -313,4 +316,6 @@ class CommentNotificationTask : Task {
             null
         }
     }
+
+    private fun Int?.isGlobal() = this == 3 || this == 420
 }

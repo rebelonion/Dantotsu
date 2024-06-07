@@ -27,7 +27,7 @@ class ProgressAdapter(private val horizontal: Boolean = true, searched: Boolean)
         return ProgressViewHolder(binding)
     }
 
-    @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
+    @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: ProgressViewHolder, position: Int) {
         val progressBar = holder.binding.root
         bar = progressBar

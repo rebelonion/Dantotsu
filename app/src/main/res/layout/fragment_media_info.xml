@@ -26,10 +26,7 @@
                 style="?android:attr/progressBarStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="32dp"
-                android:layout_marginBottom="32dp"
+                android:layout_margin="32dp"
                 android:indeterminate="true"
                 android:visibility="gone"
                 tools:visibility="gone" />
@@ -42,15 +39,12 @@
                 android:visibility="gone"
                 tools:visibility="visible">
 
-
-
                 <TableLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:paddingStart="32dp"
+                    android:paddingHorizontal="32dp"
                     android:paddingTop="16dp"
-                    android:paddingEnd="32dp"
                     android:paddingBottom="16dp">
 
                     <TableRow
@@ -304,6 +298,48 @@
                             android:textAlignment="textEnd" />
                     </TableRow>
 
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="24dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:alpha="0.58"
+                            android:text="@string/popularity"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/mediaInfoPopularity"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/poppins_bold"
+                            android:textAlignment="textEnd" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="24dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:alpha="0.58"
+                            android:text="@string/favourites"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/mediaInfoFavorites"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/poppins_bold"
+                            android:textAlignment="textEnd" />
+                    </TableRow>
+
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="16dp" />
@@ -358,8 +394,7 @@
                     android:id="@+id/mediaInfoDescriptionText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginEnd="32dp"
+                    android:layout_marginHorizontal="32dp"
                     android:fontFamily="@font/poppins_bold"
                     android:text="@string/description"
                     android:textSize="16sp" />
@@ -368,8 +403,7 @@
                     android:id="@+id/mediaInfoDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginHorizontal="16dp"
                     android:ellipsize="end"
                     android:maxLines="5"
                     android:padding="16dp"

@@ -1,8 +1,6 @@
 package ani.dantotsu.media
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -15,25 +13,25 @@ import android.widget.ImageView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
-import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
+import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import ani.dantotsu.*
+import ani.dantotsu.R
+import ani.dantotsu.blurImage
+import ani.dantotsu.currActivity
 import ani.dantotsu.databinding.ItemMediaCompactBinding
 import ani.dantotsu.databinding.ItemMediaLargeBinding
 import ani.dantotsu.databinding.ItemMediaPageBinding
 import ani.dantotsu.databinding.ItemMediaPageSmallBinding
+import ani.dantotsu.loadImage
+import ani.dantotsu.setAnimation
+import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.model.GlideUrl
-import com.bumptech.glide.request.RequestOptions
 import com.flaviofaria.kenburnsview.RandomTransitionGenerator
-import jp.wasabeef.glide.transformations.BlurTransformation
 import java.io.Serializable
 
 
@@ -85,7 +83,7 @@ class MediaAdaptor(
 
     }
 
-    @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
+    @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (type) {
             0 -> {
@@ -94,8 +92,8 @@ class MediaAdaptor(
                 val media = mediaList?.getOrNull(position)
                 if (media != null) {
                     b.itemCompactImage.loadImage(media.cover)
-                    b.itemCompactOngoing.visibility =
-                        if (media.status == currActivity()!!.getString(R.string.status_releasing)) View.VISIBLE else View.GONE
+                    b.itemCompactOngoing.isVisible =
+                        media.status == currActivity()!!.getString(R.string.status_releasing)
                     b.itemCompactTitle.text = media.userPreferredName
                     b.itemCompactScore.text =
                         ((if (media.userScore == 0) (media.meanScore
@@ -140,8 +138,8 @@ class MediaAdaptor(
                 if (media != null) {
                     b.itemCompactImage.loadImage(media.cover)
                     blurImage(b.itemCompactBanner, media.banner ?: media.cover)
-                    b.itemCompactOngoing.visibility =
-                        if (media.status == currActivity()!!.getString(R.string.status_releasing)) View.VISIBLE else View.GONE
+                    b.itemCompactOngoing.isVisible =
+                        media.status == currActivity()!!.getString(R.string.status_releasing)
                     b.itemCompactTitle.text = media.userPreferredName
                     b.itemCompactScore.text =
                         ((if (media.userScore == 0) (media.meanScore
@@ -151,25 +149,30 @@ class MediaAdaptor(
                         (if (media.userScore != 0) R.drawable.item_user_score else R.drawable.item_score)
                     )
                     if (media.anime != null) {
-                        b.itemTotal.text = " " + if ((media.anime.totalEpisodes
+                        val itemTotal = " " + if ((media.anime.totalEpisodes
                                 ?: 0) != 1
-                        ) currActivity()!!.getString(R.string.episode_plural)
-                        else currActivity()!!.getString(R.string.episode_singular)
+                        ) currActivity()!!.getString(R.string.episode_plural) else currActivity()!!.getString(
+                            R.string.episode_singular
+                        )
+                        b.itemTotal.text = itemTotal
                         b.itemCompactTotal.text =
                             if (media.anime.nextAiringEpisode != null) (media.anime.nextAiringEpisode.toString() + " / " + (media.anime.totalEpisodes
                                 ?: "??").toString()) else (media.anime.totalEpisodes
                                 ?: "??").toString()
                     } else if (media.manga != null) {
-                        b.itemTotal.text = " " + if ((media.manga.totalChapters
+                        val itemTotal = " " + if ((media.manga.totalChapters
                                 ?: 0) != 1
-                        ) currActivity()!!.getString(R.string.chapter_plural)
-                        else currActivity()!!.getString(R.string.chapter_singular)
+                        ) currActivity()!!.getString(R.string.chapter_plural) else currActivity()!!.getString(
+                            R.string.chapter_singular
+                        )
+                        b.itemTotal.text = itemTotal
                         b.itemCompactTotal.text = "${media.manga.totalChapters ?: "??"}"
                     }
-                    @SuppressLint("NotifyDataSetChanged")
                     if (position == mediaList!!.size - 2 && viewPager != null) viewPager.post {
+                        val start = mediaList.size
                         mediaList.addAll(mediaList)
-                        notifyDataSetChanged()
+                        val end = mediaList.size - start
+                        notifyItemRangeInserted(start, end)
                     }
                 }
             }
@@ -178,6 +181,7 @@ class MediaAdaptor(
                 val b = (holder as MediaPageViewHolder).binding
                 val media = mediaList?.get(position)
                 if (media != null) {
+
                     val bannerAnimations: Boolean = PrefManager.getVal(PrefName.BannerAnimations)
                     b.itemCompactImage.loadImage(media.cover)
                     if (bannerAnimations)
@@ -187,9 +191,12 @@ class MediaAdaptor(
                                 AccelerateDecelerateInterpolator()
                             )
                         )
-                    blurImage(b.itemCompactBanner, media.banner ?: media.cover)
-                    b.itemCompactOngoing.visibility =
-                        if (media.status == currActivity()!!.getString(R.string.status_releasing)) View.VISIBLE else View.GONE
+                    blurImage(
+                        if (bannerAnimations) b.itemCompactBanner else b.itemCompactBannerNoKen,
+                        media.banner ?: media.cover
+                    )
+                    b.itemCompactOngoing.isVisible =
+                        media.status == currActivity()!!.getString(R.string.status_releasing)
                     b.itemCompactTitle.text = media.userPreferredName
                     b.itemCompactScore.text =
                         ((if (media.userScore == 0) (media.meanScore
@@ -236,9 +243,12 @@ class MediaAdaptor(
                                 AccelerateDecelerateInterpolator()
                             )
                         )
-                    blurImage(b.itemCompactBanner, media.banner ?: media.cover)
-                    b.itemCompactOngoing.visibility =
-                        if (media.status == currActivity()!!.getString(R.string.status_releasing)) View.VISIBLE else View.GONE
+                    blurImage(
+                        if (bannerAnimations) b.itemCompactBanner else b.itemCompactBannerNoKen,
+                        media.banner ?: media.cover
+                    )
+                    b.itemCompactOngoing.isVisible =
+                        media.status == currActivity()!!.getString(R.string.status_releasing)
                     b.itemCompactTitle.text = media.userPreferredName
                     b.itemCompactScore.text =
                         ((if (media.userScore == 0) (media.meanScore

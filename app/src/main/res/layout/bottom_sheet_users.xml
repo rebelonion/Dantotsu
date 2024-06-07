@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/bottom_sheet_background"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/bottom_sheet_background"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
@@ -21,7 +21,7 @@
         android:layout_height="48dp"
         android:fontFamily="@font/poppins"
         android:gravity="bottom|center_horizontal"
-        android:text="Liked By"
+        android:text="@string/liked_by"
         android:textSize="20sp"
         android:textStyle="bold" />
 

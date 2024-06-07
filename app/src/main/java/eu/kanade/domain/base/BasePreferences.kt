@@ -17,7 +17,7 @@ class BasePreferences(
     fun incognitoMode() = preferenceStore.getBoolean("incognito_mode", false)
 
     fun extensionInstaller() = ExtensionInstallerPreference(context, preferenceStore)
-    
+
     fun deviceHasPip() =
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && context.packageManager.hasSystemFeature(
             PackageManager.FEATURE_PICTURE_IN_PICTURE

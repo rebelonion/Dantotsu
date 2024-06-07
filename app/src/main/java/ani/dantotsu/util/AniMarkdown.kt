@@ -1,12 +1,11 @@
 package ani.dantotsu.util
 
 import ani.dantotsu.util.ColorEditor.Companion.toCssColor
-import ani.dantotsu.util.ColorEditor.Companion.toHexColor
 
 class AniMarkdown { //istg anilist has the worst api
     companion object {
         private fun convertNestedImageToHtml(markdown: String): String {
-            val regex = """\[\!\[(.*?)\]\((.*?)\)\]\((.*?)\)""".toRegex()
+            val regex = """\[!\[(.*?)]\((.*?)\)]\((.*?)\)""".toRegex()
             return regex.replace(markdown) { matchResult ->
                 val altText = matchResult.groupValues[1]
                 val imageUrl = matchResult.groupValues[2]
@@ -16,7 +15,7 @@ class AniMarkdown { //istg anilist has the worst api
         }
 
         private fun convertImageToHtml(markdown: String): String {
-            val regex = """\!\[(.*?)\]\((.*?)\)""".toRegex()
+            val regex = """!\[(.*?)]\((.*?)\)""".toRegex()
             return regex.replace(markdown) { matchResult ->
                 val altText = matchResult.groupValues[1]
                 val imageUrl = matchResult.groupValues[2]
@@ -25,7 +24,7 @@ class AniMarkdown { //istg anilist has the worst api
         }
 
         private fun convertLinkToHtml(markdown: String): String {
-            val regex = """\[(.*?)\]\((.*?)\)""".toRegex()
+            val regex = """\[(.*?)]\((.*?)\)""".toRegex()
             return regex.replace(markdown) { matchResult ->
                 val linkText = matchResult.groupValues[1]
                 val linkUrl = matchResult.groupValues[2]
@@ -50,7 +49,7 @@ class AniMarkdown { //istg anilist has the worst api
         private fun underlineToHtml(html: String): String {
             return html.replace("(?s)___(.*?)___".toRegex(), "<br><em><strong>$1</strong></em><br>")
                 .replace("(?s)__(.*?)__".toRegex(), "<br><strong>$1</strong><br>")
-                .replace("(?s)[\\s]+_([^_]+)_[\\s]+".toRegex(), "<em>$1</em>")
+                .replace("(?s)\\s+_([^_]+)_\\s+".toRegex(), "<em>$1</em>")
         }
 
         fun getBasicAniHTML(html: String): String {

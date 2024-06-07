@@ -59,7 +59,8 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
-import java.util.*
+import java.util.Timer
+import java.util.TimerTask
 import kotlin.math.min
 import kotlin.properties.Delegates
 
@@ -291,7 +292,11 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
             applySettings()
         }
 
-        val cfi = PrefManager.getNullableCustomVal("${sanitizedBookId}_progress", null, String::class.java)
+        val cfi = PrefManager.getNullableCustomVal(
+            "${sanitizedBookId}_progress",
+            null,
+            String::class.java
+        )
 
         cfi?.let { binding.bookReader.goto(it) }
         binding.progress.visibility = View.GONE

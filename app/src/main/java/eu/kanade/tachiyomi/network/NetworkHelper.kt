@@ -11,8 +11,8 @@ import eu.kanade.tachiyomi.network.interceptor.UncaughtExceptionInterceptor
 import eu.kanade.tachiyomi.network.interceptor.UserAgentInterceptor
 import okhttp3.Cache
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.brotli.BrotliInterceptor
+import okhttp3.logging.HttpLoggingInterceptor
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -30,7 +30,7 @@ class NetworkHelper(
             .callTimeout(2, TimeUnit.MINUTES)
             .cache(
                 Cache(
-                    directory = File(context.cacheDir, "network_cache"),
+                    directory = File(context.externalCacheDir ?: context.cacheDir, "network_cache"),
                     maxSize = 5L * 1024 * 1024, // 5 MiB
                 ),
             )
@@ -89,5 +89,7 @@ class NetworkHelper(
         responseParser = Mapper
     )
 
-    fun defaultUserAgentProvider() = PrefManager.getVal<String>(PrefName.DefaultUserAgent)
+    companion object {
+        fun defaultUserAgentProvider() = PrefManager.getVal<String>(PrefName.DefaultUserAgent)
+    }
 }

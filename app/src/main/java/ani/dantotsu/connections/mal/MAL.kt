@@ -5,7 +5,6 @@ import android.content.Context
 import android.net.Uri
 import android.util.Base64
 import androidx.browser.customtabs.CustomTabsIntent
-import androidx.fragment.app.FragmentActivity
 import ani.dantotsu.R
 import ani.dantotsu.client
 import ani.dantotsu.currContext
@@ -64,7 +63,7 @@ object MAL {
     }
 
 
-    suspend fun getSavedToken(context: FragmentActivity): Boolean {
+    suspend fun getSavedToken(): Boolean {
         return tryWithSuspend(false) {
             var res: ResponseToken =
                 PrefManager.getNullableVal<ResponseToken>(PrefName.MALToken, null)
@@ -77,7 +76,7 @@ object MAL {
         } ?: false
     }
 
-    fun removeSavedToken(context: Context) {
+    fun removeSavedToken() {
         token = null
         username = null
         userid = null

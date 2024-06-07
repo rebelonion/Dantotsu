@@ -1,9 +1,10 @@
 package ani.dantotsu.media
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.R
 import ani.dantotsu.currActivity
@@ -20,23 +21,36 @@ class CharacterDetailsAdapter(private val character: Character, private val acti
         return GenreViewHolder(binding)
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: GenreViewHolder, position: Int) {
         val binding = holder.binding
         val desc =
-            (if (character.age != "null") currActivity()!!.getString(R.string.age) + " " + character.age else "") +
-                    (if (character.dateOfBirth.toString() != "") currActivity()!!.getString(R.string.birthday) + " " + character.dateOfBirth.toString() else "") +
-                    (if (character.gender != "null") currActivity()!!.getString(R.string.gender) + " " + when (character.gender) {
-                        "Male" -> currActivity()!!.getString(R.string.male)
-                        "Female" -> currActivity()!!.getString(R.string.female)
-                        else -> character.gender
-                    } else "") + "\n" + character.description
+            (if (character.age != "null") "${currActivity()!!.getString(R.string.age)} ${character.age}" else "") +
+                    (if (character.dateOfBirth.toString() != "")
+                        "${currActivity()!!.getString(R.string.birthday)} ${character.dateOfBirth.toString()}" else "") +
+                    (if (character.gender != "null")
+                        currActivity()!!.getString(R.string.gender) + " " + when (character.gender) {
+                            currActivity()!!.getString(R.string.male) -> currActivity()!!.getString(
+                                R.string.male
+                            )
+
+                            currActivity()!!.getString(R.string.female) -> currActivity()!!.getString(
+                                R.string.female
+                            )
+
+                            else -> character.gender
+                        } else "") + "\n" + character.description
 
         binding.characterDesc.isTextSelectable
         val markWon = Markwon.builder(activity).usePlugin(SoftBreakAddsNewLinePlugin.create())
             .usePlugin(SpoilerPlugin()).build()
         markWon.setMarkdown(binding.characterDesc, desc.replace("~!", "||").replace("!~", "||"))
-
+        binding.voiceActorRecycler.adapter = AuthorAdapter(character.voiceActor ?: arrayListOf())
+        binding.voiceActorRecycler.layoutManager = LinearLayoutManager(
+            activity, LinearLayoutManager.HORIZONTAL, false
+        )
+        if (binding.voiceActorRecycler.adapter!!.itemCount == 0) {
+            binding.voiceActorContainer.visibility = View.GONE
+        }
     }
 
     override fun getItemCount(): Int = 1

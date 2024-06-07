@@ -1,6 +1,5 @@
 package ani.dantotsu.media
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater
@@ -16,7 +15,7 @@ import ani.dantotsu.setAnimation
 import java.io.Serializable
 
 class AuthorAdapter(
-    private val authorList: ArrayList<Author>
+    private val authorList: ArrayList<Author>,
 ) : RecyclerView.Adapter<AuthorAdapter.AuthorViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AuthorViewHolder {
         val binding =
@@ -24,8 +23,7 @@ class AuthorAdapter(
         return AuthorViewHolder(binding)
     }
 
-    @SuppressLint("SetTextI18n")
-    override fun onBindViewHolder(holder:AuthorViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: AuthorViewHolder, position: Int) {
         val binding = holder.binding
         setAnimation(binding.root.context, holder.binding.root)
         val author = authorList[position]

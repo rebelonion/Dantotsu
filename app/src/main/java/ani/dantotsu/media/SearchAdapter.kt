@@ -13,9 +13,9 @@ import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.HORIZONTAL
@@ -28,7 +28,9 @@ import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.others.imagesearch.ImageSearchActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
-import com.google.android.material.checkbox.MaterialCheckBox.*
+import com.google.android.material.checkbox.MaterialCheckBox.STATE_CHECKED
+import com.google.android.material.checkbox.MaterialCheckBox.STATE_INDETERMINATE
+import com.google.android.material.checkbox.MaterialCheckBox.STATE_UNCHECKED
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -43,6 +45,20 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Stri
     private var textWatcher: TextWatcher? = null
     private lateinit var searchHistoryAdapter: SearchHistoryAdapter
     private lateinit var binding: ItemSearchHeaderBinding
+
+    private fun updateFilterTextViewDrawable() {
+        val filterDrawable = when (activity.result.sort) {
+            Anilist.sortBy[0] -> R.drawable.ic_round_area_chart_24
+            Anilist.sortBy[1] -> R.drawable.ic_round_filter_peak_24
+            Anilist.sortBy[2] -> R.drawable.ic_round_star_graph_24
+            Anilist.sortBy[3] -> R.drawable.ic_round_new_releases_24
+            Anilist.sortBy[4] -> R.drawable.ic_round_filter_list_24
+            Anilist.sortBy[5] -> R.drawable.ic_round_filter_list_24_reverse
+            Anilist.sortBy[6] -> R.drawable.ic_round_assist_walker_24
+            else -> R.drawable.ic_round_filter_alt_24
+        }
+        binding.filterTextView.setCompoundDrawablesWithIntrinsicBounds(filterDrawable, 0, 0, 0)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchHeaderViewHolder {
         val binding =
@@ -92,7 +108,7 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Stri
         binding.searchAdultCheck.isChecked = adult
         binding.searchList.isChecked = listOnly == true
 
-        binding.searchChipRecycler.adapter = SearchChipAdapter(activity).also {
+        binding.searchChipRecycler.adapter = SearchChipAdapter(activity, this).also {
             activity.updateChips = { it.update() }
         }
 
@@ -101,6 +117,68 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Stri
 
         binding.searchFilter.setOnClickListener {
             SearchFilterBottomDialog.newInstance().show(activity.supportFragmentManager, "dialog")
+        }
+        binding.searchFilter.setOnLongClickListener {
+            val popupMenu = PopupMenu(activity, binding.searchFilter)
+            popupMenu.menuInflater.inflate(R.menu.sortby_filter_menu, popupMenu.menu)
+            popupMenu.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.sort_by_score -> {
+                        activity.result.sort = Anilist.sortBy[0]
+                        activity.updateChips.invoke()
+                        activity.search()
+                        updateFilterTextViewDrawable()
+                    }
+
+                    R.id.sort_by_popular -> {
+                        activity.result.sort = Anilist.sortBy[1]
+                        activity.updateChips.invoke()
+                        activity.search()
+                        updateFilterTextViewDrawable()
+                    }
+
+                    R.id.sort_by_trending -> {
+                        activity.result.sort = Anilist.sortBy[2]
+                        activity.updateChips.invoke()
+                        activity.search()
+                        updateFilterTextViewDrawable()
+                    }
+
+                    R.id.sort_by_recent -> {
+                        activity.result.sort = Anilist.sortBy[3]
+                        activity.updateChips.invoke()
+                        activity.search()
+                        updateFilterTextViewDrawable()
+                    }
+
+                    R.id.sort_by_a_z -> {
+                        activity.result.sort = Anilist.sortBy[4]
+                        activity.updateChips.invoke()
+                        activity.search()
+                        updateFilterTextViewDrawable()
+                    }
+
+                    R.id.sort_by_z_a -> {
+                        activity.result.sort = Anilist.sortBy[5]
+                        activity.updateChips.invoke()
+                        activity.search()
+                        updateFilterTextViewDrawable()
+                    }
+
+                    R.id.sort_by_pure_pain -> {
+                        activity.result.sort = Anilist.sortBy[6]
+                        activity.updateChips.invoke()
+                        activity.search()
+                        updateFilterTextViewDrawable()
+                    }
+                }
+                true
+            }
+            popupMenu.show()
+            true
+        }
+        if (activity.result.type != "ANIME") {
+            binding.searchByImage.visibility = View.GONE
         }
         binding.searchByImage.setOnClickListener {
             activity.startActivity(Intent(activity, ImageSearchActivity::class.java))
@@ -230,20 +308,21 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Stri
     private fun fadeInAnimation(): Animation {
         return AlphaAnimation(0f, 1f).apply {
             duration = 150
-            fillAfter = true
         }
     }
 
     private fun fadeOutAnimation(): Animation {
         return AlphaAnimation(1f, 0f).apply {
             duration = 150
-            fillAfter = true
         }
     }
 
 
     fun addHistory() {
-        searchHistoryAdapter.add(binding.searchBarText.text.toString())
+        if (::searchHistoryAdapter.isInitialized &&
+            binding.searchBarText.text.toString().isNotBlank()
+        )
+            searchHistoryAdapter.add(binding.searchBarText.text.toString())
     }
 
     override fun getItemCount(): Int = 1
@@ -256,7 +335,10 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Stri
     }
 
 
-    class SearchChipAdapter(val activity: SearchActivity) :
+    class SearchChipAdapter(
+        val activity: SearchActivity,
+        private val searchAdapter: SearchAdapter
+    ) :
         RecyclerView.Adapter<SearchChipAdapter.SearchChipViewHolder>() {
         private var chips = activity.result.toChipList()
 
@@ -273,11 +355,12 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Stri
         override fun onBindViewHolder(holder: SearchChipViewHolder, position: Int) {
             val chip = chips[position]
             holder.binding.root.apply {
-                text = chip.text
+                text = chip.text.replace("_", " ")
                 setOnClickListener {
                     activity.result.removeChip(chip)
                     update()
                     activity.search()
+                    searchAdapter.updateFilterTextViewDrawable()
                 }
             }
         }
@@ -286,6 +369,7 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Stri
         fun update() {
             chips = activity.result.toChipList()
             notifyDataSetChanged()
+            searchAdapter.updateFilterTextViewDrawable()
         }
 
         override fun getItemCount(): Int = chips.size

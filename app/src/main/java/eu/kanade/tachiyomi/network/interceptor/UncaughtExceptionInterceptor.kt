@@ -1,8 +1,10 @@
 package eu.kanade.tachiyomi.network.interceptor
 
+import ani.dantotsu.util.Logger
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
+import java.net.SocketTimeoutException
 
 /**
  * Catches any uncaught exceptions from later in the chain and rethrows as a non-fatal
@@ -17,6 +19,9 @@ class UncaughtExceptionInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         return try {
             chain.proceed(chain.request())
+        } catch (e: SocketTimeoutException) {
+            Logger.log(e)
+            throw IOException("Request timed out")  // there's some odd behavior throwing a SocketTimeoutException
         } catch (e: Exception) {
             if (e is IOException) {
                 throw e

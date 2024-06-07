@@ -35,16 +35,40 @@
             android:textColor="?attr/colorPrimary"
             android:textSize="16sp" />
 
-        <ImageButton
-            android:id="@+id/languageselect"
-            android:layout_width="48dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="48dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:contentDescription="@string/sort_by"
-            app:srcCompat="@drawable/ic_round_translate_24"
-            app:tint="?attr/colorOnBackground" />
+            android:layout_marginHorizontal="16dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/testButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:contentDescription="@string/sort_by"
+                app:srcCompat="@drawable/ic_round_search_sources_24"
+                app:tint="?attr/colorOnBackground" />
+
+            <ImageButton
+                android:id="@+id/openSettingsButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:contentDescription="@string/sort_by"
+                app:srcCompat="@drawable/ic_github"
+                app:tint="?attr/colorOnBackground" />
+
+            <ImageButton
+                android:id="@+id/languageselect"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:contentDescription="@string/sort_by"
+                app:srcCompat="@drawable/ic_round_translate_24"
+                app:tint="?attr/colorOnBackground" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -71,17 +95,16 @@
         android:layout_height="match_parent"
         android:layout_gravity="bottom"
         android:layout_weight="1"
-        android:visibility="gone">
-    </FrameLayout>
+        android:visibility="gone"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/searchView"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="56dp"
+        android:layout_gravity="bottom"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_gravity="bottom"
         android:transitionName="@string/search"
         app:boxBackgroundColor="@color/bg"
         app:boxBackgroundMode="outline"
@@ -91,22 +114,23 @@
         app:boxCornerRadiusTopStart="28dp"
         app:endIconDrawable="@drawable/ic_round_search_24"
         app:hintAnimationEnabled="true">
-    <AutoCompleteTextView
-        android:id="@+id/searchViewText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="8dp"
-        android:paddingBottom="4dp"
-        android:fontFamily="@font/poppins_bold"
-        android:imeOptions="actionSearch"
-        android:inputType="textPersonName"
-        android:hint="@string/search"
-        android:padding="8dp"
-        android:selectAllOnFocus="true"
-        android:textSize="14sp"
-        tools:ignore="LabelFor,TextContrastCheck" />
+
+        <AutoCompleteTextView
+            android:id="@+id/searchViewText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/poppins_bold"
+            android:hint="@string/search"
+            android:imeOptions="actionSearch"
+            android:inputType="textPersonName"
+            android:padding="8dp"
+            android:paddingBottom="4dp"
+            android:selectAllOnFocus="true"
+            android:textSize="14sp"
+            tools:ignore="LabelFor,TextContrastCheck" />
     </com.google.android.material.textfield.TextInputLayout>
 
 </LinearLayout>

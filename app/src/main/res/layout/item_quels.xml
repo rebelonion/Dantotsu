@@ -5,9 +5,8 @@
     android:id="@+id/mediaInfoQuelContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginStart="24dp"
+    android:layout_marginHorizontal="24dp"
     android:layout_marginTop="8dp"
-    android:layout_marginEnd="24dp"
     android:layout_marginBottom="16dp">
 
     <com.google.android.material.card.MaterialCardView

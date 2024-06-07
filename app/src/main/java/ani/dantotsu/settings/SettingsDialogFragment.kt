@@ -4,19 +4,20 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import ani.dantotsu.BottomSheetDialogFragment
 import ani.dantotsu.MainActivity
-import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.databinding.BottomSheetSettingsBinding
 import ani.dantotsu.download.anime.OfflineAnimeFragment
 import ani.dantotsu.download.manga.OfflineMangaFragment
+import ani.dantotsu.getAppString
+import ani.dantotsu.getThemeColor
 import ani.dantotsu.home.AnimeFragment
 import ani.dantotsu.home.HomeFragment
 import ani.dantotsu.home.LoginFragment
@@ -24,13 +25,16 @@ import ani.dantotsu.home.MangaFragment
 import ani.dantotsu.home.NoInternet
 import ani.dantotsu.incognitoNotification
 import ani.dantotsu.loadImage
-import ani.dantotsu.profile.activity.NotificationActivity
 import ani.dantotsu.offline.OfflineFragment
+import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.profile.activity.FeedActivity
+import ani.dantotsu.profile.activity.NotificationActivity
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.startMainActivity
+import ani.dantotsu.util.customAlertDialog
+import eu.kanade.tachiyomi.util.system.getSerializableCompat
 import java.util.Timer
 import kotlin.concurrent.schedule
 
@@ -41,7 +45,7 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
     private lateinit var pageType: PageType
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        pageType = arguments?.getSerializable("pageType") as? PageType ?: PageType.HOME
+        pageType = arguments?.getSerializableCompat("pageType") as? PageType ?: PageType.HOME
     }
 
     override fun onCreateView(
@@ -57,10 +61,7 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         val window = dialog?.window
         window?.statusBarColor = Color.CYAN
-        val typedValue = TypedValue()
-        val theme = requireContext().theme
-        theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, typedValue, true)
-        window?.navigationBarColor = typedValue.data
+        window?.navigationBarColor = requireContext().getThemeColor(com.google.android.material.R.attr.colorSurface)
         val notificationIcon = if (Anilist.unreadNotificationCount > 0) {
             R.drawable.ic_round_notifications_active_24
         } else {
@@ -71,18 +72,16 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
         if (Anilist.token != null) {
             binding.settingsLogin.setText(R.string.logout)
             binding.settingsLogin.setOnClickListener {
-                val alertDialog = AlertDialog.Builder(requireContext(), R.style.MyPopup)
-                .setTitle("Logout")
-                .setMessage("Are you sure you want to logout?")
-                .setPositiveButton("Yes") { _, _ ->
-                    Anilist.removeSavedToken()
-                    dismiss()
-                    startMainActivity(requireActivity())
+                requireContext().customAlertDialog().apply{
+                    setTitle(R.string.logout)
+                    setMessage(R.string.logout_confirm)
+                    setPosButton(R.string.yes) {
+                        Anilist.removeSavedToken()
+                        startMainActivity(requireActivity())
+                    }
+                    setNegButton(R.string.no)
+                    show()
                 }
-                .setNegativeButton("No") { _, _ -> }
-                .create()
-                alertDialog.window?.setDimAmount(0.8f)
-                alertDialog.show()
             }
             binding.settingsUsername.text = Anilist.username
             binding.settingsUserAvatar.loadImage(Anilist.avatar)
@@ -94,9 +93,9 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
                 Anilist.loginIntent(requireActivity())
             }
         }
-        binding.settingsNotificationCount.visibility = if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
+        binding.settingsNotificationCount.isVisible = Anilist.unreadNotificationCount > 0
         binding.settingsNotificationCount.text = Anilist.unreadNotificationCount.toString()
-        binding.settingsUserAvatar.setOnClickListener{
+        binding.settingsUserAvatar.setOnClickListener {
             ContextCompat.startActivity(
                 requireContext(), Intent(requireContext(), ProfileActivity::class.java)
                     .putExtra("userId", Anilist.userid), null

@@ -1,10 +1,8 @@
 package ani.dantotsu.settings
 
-import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -221,13 +219,13 @@ class InstalledNovelExtensionsFragment : Fragment(), SearchQueryHandler {
             return ViewHolder(view)
         }
 
-        @SuppressLint("SetTextI18n")
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val extension = getItem(position)  // Use getItem() from ListAdapter
             val nsfw = ""
-            val lang = LanguageMapper.mapLanguageCodeToName("all")
+            val lang = LanguageMapper.getLanguageName("all")
             holder.extensionNameTextView.text = extension.name
-            holder.extensionVersionTextView.text = "$lang ${extension.versionName} $nsfw"
+            val versionText = "$lang ${extension.versionName} $nsfw"
+            holder.extensionVersionTextView.text = versionText
             if (!skipIcons) {
                 holder.extensionIconImageView.setImageDrawable(extension.icon)
             }

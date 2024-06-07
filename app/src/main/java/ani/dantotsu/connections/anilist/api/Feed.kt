@@ -14,7 +14,6 @@ data class FeedResponse(
         val page: ActivityPage
     ) : java.io.Serializable
 }
-
 @Serializable
 data class ActivityPage(
     @SerialName("activities")
@@ -36,7 +35,7 @@ data class Activity(
     @SerialName("type")
     val type: String,
     @SerialName("replyCount")
-    val replyCount: Int,
+    val replyCount: Int = 0,
     @SerialName("status")
     val status: String?,
     @SerialName("progress")
@@ -48,9 +47,9 @@ data class Activity(
     @SerialName("siteUrl")
     val siteUrl: String?,
     @SerialName("isLocked")
-    val isLocked: Boolean,
+    val isLocked: Boolean?,
     @SerialName("isSubscribed")
-    val isSubscribed: Boolean,
+    val isSubscribed: Boolean?,
     @SerialName("likeCount")
     var likeCount: Int?,
     @SerialName("isLiked")
@@ -76,6 +75,24 @@ data class Activity(
 ) : java.io.Serializable
 
 @Serializable
+data class ReplyResponse(
+    @SerialName("data")
+    val data: Data
+) : java.io.Serializable {
+    @Serializable
+    data class Data(
+        @SerialName("Page")
+        val page: ReplyPage
+    ) : java.io.Serializable
+}
+
+@Serializable
+data class ReplyPage(
+    @SerialName("activityReplies")
+    val activityReplies: List<ActivityReply>
+) : java.io.Serializable
+
+@Serializable
 data class ActivityReply(
     @SerialName("id")
     val id: Int,
@@ -84,9 +101,9 @@ data class ActivityReply(
     @SerialName("text")
     val text: String,
     @SerialName("likeCount")
-    val likeCount: Int,
+    var likeCount: Int,
     @SerialName("isLiked")
-    val isLiked: Boolean,
+    var isLiked: Boolean,
     @SerialName("createdAt")
     val createdAt: Int,
     @SerialName("user")

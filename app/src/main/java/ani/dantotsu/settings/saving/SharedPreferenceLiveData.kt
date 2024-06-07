@@ -10,7 +10,7 @@ abstract class SharedPreferenceLiveData<T>(
 ) : LiveData<T>() {
 
     private val preferenceChangeListener =
-        SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
+        SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
             if (key == this.key) {
                 value = getValueFromPreferences(key, defValue)
             }
@@ -78,9 +78,12 @@ class SharedPreferenceStringSetLiveData(
         sharedPrefs.getStringSet(key, defValue)?.toSet() ?: defValue
 }
 
+@Suppress("unused")
 fun SharedPreferences.intLiveData(key: String, defValue: Int): SharedPreferenceLiveData<Int> {
     return SharedPreferenceIntLiveData(this, key, defValue)
 }
+
+@Suppress("unused")
 
 fun SharedPreferences.stringLiveData(
     key: String,
@@ -89,6 +92,7 @@ fun SharedPreferences.stringLiveData(
     return SharedPreferenceStringLiveData(this, key, defValue)
 }
 
+@Suppress("unused")
 fun SharedPreferences.booleanLiveData(
     key: String,
     defValue: Boolean
@@ -96,14 +100,17 @@ fun SharedPreferences.booleanLiveData(
     return SharedPreferenceBooleanLiveData(this, key, defValue)
 }
 
+@Suppress("unused")
 fun SharedPreferences.floatLiveData(key: String, defValue: Float): SharedPreferenceLiveData<Float> {
     return SharedPreferenceFloatLiveData(this, key, defValue)
 }
 
+@Suppress("unused")
 fun SharedPreferences.longLiveData(key: String, defValue: Long): SharedPreferenceLiveData<Long> {
     return SharedPreferenceLongLiveData(this, key, defValue)
 }
 
+@Suppress("unused")
 fun SharedPreferences.stringSetLiveData(
     key: String,
     defValue: Set<String>

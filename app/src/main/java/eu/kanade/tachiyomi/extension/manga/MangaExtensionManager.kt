@@ -2,18 +2,20 @@ package eu.kanade.tachiyomi.extension.manga
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import ani.dantotsu.media.MediaType
 import ani.dantotsu.snackString
 import ani.dantotsu.util.Logger
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.extension.InstallStep
-import eu.kanade.tachiyomi.extension.manga.api.MangaExtensionGithubApi
+import eu.kanade.tachiyomi.extension.api.ExtensionGithubApi
 import eu.kanade.tachiyomi.extension.manga.model.AvailableMangaSources
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.extension.manga.model.MangaLoadResult
-import eu.kanade.tachiyomi.extension.manga.util.MangaExtensionInstallReceiver
-import eu.kanade.tachiyomi.extension.manga.util.MangaExtensionInstaller
-import eu.kanade.tachiyomi.extension.manga.util.MangaExtensionLoader
+import eu.kanade.tachiyomi.extension.util.ExtensionInstallReceiver
+import eu.kanade.tachiyomi.extension.util.ExtensionInstaller
+import eu.kanade.tachiyomi.extension.util.ExtensionLoader
 import eu.kanade.tachiyomi.util.preference.plusAssign
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -46,12 +48,12 @@ class MangaExtensionManager(
     /**
      * API where all the available extensions can be found.
      */
-    private val api = MangaExtensionGithubApi()
+    private val api = ExtensionGithubApi()
 
     /**
      * The installer which installs, updates and uninstalls the extensions.
      */
-    private val installer by lazy { MangaExtensionInstaller(context) }
+    private val installer by lazy { ExtensionInstaller(context) }
 
     private val iconMap = mutableMapOf<String, Drawable>()
 
@@ -89,14 +91,14 @@ class MangaExtensionManager(
 
     init {
         initExtensions()
-        MangaExtensionInstallReceiver(InstallationListener()).register(context)
+        ExtensionInstallReceiver().setMangaListener(InstallationListener()).register(context)
     }
 
     /**
      * Loads and registers the installed extensions.
      */
     private fun initExtensions() {
-        val extensions = MangaExtensionLoader.loadMangaExtensions(context)
+        val extensions = ExtensionLoader.loadMangaExtensions(context)
 
         _installedExtensionsFlow.value = extensions
             .filterIsInstance<MangaLoadResult.Success>()
@@ -114,7 +116,7 @@ class MangaExtensionManager(
      */
     suspend fun findAvailableExtensions() {
         val extensions: List<MangaExtension.Available> = try {
-            api.findExtensions()
+            api.findMangaExtensions()
         } catch (e: Exception) {
             Logger.log(e)
             withUIContext { snackString("Failed to get manga extensions") }
@@ -202,7 +204,10 @@ class MangaExtensionManager(
      * @param extension The extension to be installed.
      */
     fun installExtension(extension: MangaExtension.Available): Observable<InstallStep> {
-        return installer.downloadAndInstall(api.getApkUrl(extension), extension)
+        return installer.downloadAndInstall(
+            api.getMangaApkUrl(extension), extension.pkgName,
+            extension.name, MediaType.MANGA
+        )
     }
 
     /**
@@ -250,11 +255,12 @@ class MangaExtensionManager(
      *
      * @param signature The signature to whitelist.
      */
+    @OptIn(DelicateCoroutinesApi::class)
     fun trustSignature(signature: String) {
         val untrustedSignatures = _untrustedExtensionsFlow.value.map { it.signatureHash }.toSet()
         if (signature !in untrustedSignatures) return
 
-        MangaExtensionLoader.trustedSignatures += signature
+        ExtensionLoader.trustedSignaturesManga += signature
         preferences.trustedSignatures() += signature
 
         val nowTrustedExtensions =
@@ -266,7 +272,7 @@ class MangaExtensionManager(
             nowTrustedExtensions
                 .map { extension ->
                     async {
-                        MangaExtensionLoader.loadMangaExtensionFromPkgName(
+                        ExtensionLoader.loadMangaExtensionFromPkgName(
                             ctx,
                             extension.pkgName
                         )
@@ -326,7 +332,7 @@ class MangaExtensionManager(
     /**
      * Listener which receives events of the extensions being installed, updated or removed.
      */
-    private inner class InstallationListener : MangaExtensionInstallReceiver.Listener {
+    private inner class InstallationListener : ExtensionInstallReceiver.MangaListener {
 
         override fun onExtensionInstalled(extension: MangaExtension.Installed) {
             registerNewExtension(extension.withUpdateCheck())

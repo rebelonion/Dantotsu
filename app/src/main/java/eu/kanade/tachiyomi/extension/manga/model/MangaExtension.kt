@@ -47,6 +47,7 @@ sealed class MangaExtension {
         val sources: List<AvailableMangaSources>,
         val apkName: String,
         val iconUrl: String,
+        val repository: String
     ) : MangaExtension()
 
     data class Untrusted(

@@ -1,8 +1,6 @@
 package ani.dantotsu.media.manga
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,12 +14,14 @@ import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ItemChapterListBinding
 import ani.dantotsu.databinding.ItemEpisodeCompactBinding
 import ani.dantotsu.media.Media
+import ani.dantotsu.media.MediaNameAdapter
 import ani.dantotsu.setAnimation
+import ani.dantotsu.util.customAlertDialog
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class MangaChapterAdapter(
     private var type: Int,
@@ -145,8 +145,6 @@ class MangaChapterAdapter(
     inner class ChapterListViewHolder(val binding: ItemChapterListBinding) :
         RecyclerView.ViewHolder(binding.root) {
         private val activeCoroutines = mutableSetOf<String>()
-        private val typedValue1 = TypedValue()
-        private val typedValue2 = TypedValue()
         fun bind(chapterNumber: String, progress: String?) {
             if (progress != null) {
                 binding.itemChapterTitle.visibility = View.VISIBLE
@@ -201,17 +199,6 @@ class MangaChapterAdapter(
         }
 
         init {
-            val theme = currContext()?.theme
-            theme?.resolveAttribute(
-                com.google.android.material.R.attr.colorError,
-                typedValue1,
-                true
-            )
-            theme?.resolveAttribute(
-                com.google.android.material.R.attr.colorPrimary,
-                typedValue2,
-                true
-            )
             itemView.setOnClickListener {
                 if (0 <= bindingAdapterPosition && bindingAdapterPosition < arr.size)
                     fragment.onMangaChapterClick(arr[bindingAdapterPosition].number)
@@ -223,16 +210,15 @@ class MangaChapterAdapter(
                         fragment.onMangaChapterStopDownloadClick(chapterNumber)
                         return@setOnClickListener
                     } else if (downloadedChapters.contains(chapterNumber)) {
-                        val builder = AlertDialog.Builder(currContext(), R.style.MyPopup)
-                        builder.setTitle("Delete Chapter")
-                        builder.setMessage("Are you sure you want to delete ${chapterNumber}?")
-                        builder.setPositiveButton("Yes") { _, _ ->
-                            fragment.onMangaChapterRemoveDownloadClick(chapterNumber)
+                        it.context.customAlertDialog().apply {
+                            setTitle("Delete Chapter")
+                            setMessage("Are you sure you want to delete ${chapterNumber}?")
+                            setPosButton(R.string.delete) {
+                                fragment.onMangaChapterRemoveDownloadClick(chapterNumber)
+                            }
+                            setNegButton(R.string.cancel)
+                            show()
                         }
-                        builder.setNegativeButton("No") { _, _ ->
-                        }
-                        val dialog = builder.show()
-                        dialog.window?.setDimAmount(0.8f)
                         return@setOnClickListener
                     } else {
                         fragment.onMangaChapterDownloadClick(chapterNumber)
@@ -242,37 +228,36 @@ class MangaChapterAdapter(
             }
             binding.itemDownload.setOnLongClickListener {
                 //Alert dialog asking for the number of chapters to download
-                val alertDialog = AlertDialog.Builder(currContext(), R.style.MyPopup)
-                alertDialog.setTitle("Multi Chapter Downloader")
-                alertDialog.setMessage("Enter the number of chapters to download")
-                val input = NumberPicker(currContext())
-                input.minValue = 1
-                input.maxValue = itemCount - bindingAdapterPosition
-                input.value = 1
-                alertDialog.setView(input)
-                alertDialog.setPositiveButton("OK") { _, _ ->
-                    downloadNChaptersFrom(bindingAdapterPosition, input.value)
+                it.context.customAlertDialog().apply {
+                    setTitle("Multi Chapter Downloader")
+                    setMessage("Enter the number of chapters to download")
+                    val input = NumberPicker(currContext())
+                    input.minValue = 1
+                    input.maxValue = itemCount - bindingAdapterPosition
+                    input.value = 1
+                    setCustomView(input)
+                    setPosButton("OK") {
+                        downloadNChaptersFrom(bindingAdapterPosition, input.value)
+                    }
+                    setNegButton("Cancel")
+                    show()
                 }
-                alertDialog.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
-                val dialog = alertDialog.show()
-                dialog.window?.setDimAmount(0.8f)
                 true
             }
 
         }
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ChapterCompactViewHolder -> {
                 val binding = holder.binding
                 setAnimation(fragment.requireContext(), holder.binding.root)
                 val ep = arr[position]
-                val parsedNumber = MangaNameAdapter.findChapterNumber(ep.number)?.toInt()
+                val parsedNumber = MediaNameAdapter.findChapterNumber(ep.number)?.toInt()
                 binding.itemEpisodeNumber.text = parsedNumber?.toString() ?: ep.number
                 if (media.userProgress != null) {
-                    if ((MangaNameAdapter.findChapterNumber(ep.number)
+                    if ((MediaNameAdapter.findChapterNumber(ep.number)
                             ?: 9999f) <= media.userProgress!!.toFloat()
                     )
                         binding.itemEpisodeViewedCover.visibility = View.VISIBLE
@@ -281,7 +266,7 @@ class MangaChapterAdapter(
                         binding.itemEpisodeCont.setOnLongClickListener {
                             updateProgress(
                                 media,
-                                MangaNameAdapter.findChapterNumber(ep.number).toString()
+                                MediaNameAdapter.findChapterNumber(ep.number).toString()
                             )
                             true
                         }
@@ -317,7 +302,7 @@ class MangaChapterAdapter(
                 } else binding.itemChapterTitle.visibility = View.VISIBLE
 
                 if (media.userProgress != null) {
-                    if ((MangaNameAdapter.findChapterNumber(ep.number)
+                    if ((MediaNameAdapter.findChapterNumber(ep.number)
                             ?: 9999f) <= media.userProgress!!.toFloat()
                     ) {
                         binding.itemEpisodeViewedCover.visibility = View.VISIBLE
@@ -328,7 +313,7 @@ class MangaChapterAdapter(
                         binding.root.setOnLongClickListener {
                             updateProgress(
                                 media,
-                                MangaNameAdapter.findChapterNumber(ep.number).toString()
+                                MediaNameAdapter.findChapterNumber(ep.number).toString()
                             )
                             true
                         }
@@ -344,6 +329,7 @@ class MangaChapterAdapter(
     fun updateType(t: Int) {
         type = t
     }
+
     private fun formatDate(timestamp: Long?): String {
         timestamp ?: return "" // Return empty string if timestamp is null
 
@@ -367,6 +353,7 @@ class MangaChapterAdapter(
                     else -> "Just now"
                 }
             }
+
             1L -> "1 day ago"
             in 2..6 -> "$daysDifference days ago"
             else -> SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(targetDate)

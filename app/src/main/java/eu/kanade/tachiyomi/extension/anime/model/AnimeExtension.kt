@@ -47,6 +47,7 @@ sealed class AnimeExtension {
         val sources: List<AvailableAnimeSources>,
         val apkName: String,
         val iconUrl: String,
+        val repository: String
     ) : AnimeExtension()
 
     data class Untrusted(

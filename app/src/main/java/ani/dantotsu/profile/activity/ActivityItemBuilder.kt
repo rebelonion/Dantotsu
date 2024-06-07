@@ -5,6 +5,7 @@ import ani.dantotsu.connections.anilist.api.NotificationType
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+
 class ActivityItemBuilder {
 
     companion object {
@@ -83,6 +84,18 @@ class ActivityItemBuilder {
                 NotificationType.COMMENT_REPLY -> {
                     notification.context ?: "You should not see this"
                 }
+
+                NotificationType.COMMENT_WARNING -> {
+                    notification.context ?: "You should not see this"
+                }
+
+                NotificationType.DANTOTSU_UPDATE -> {
+                    notification.context ?: "You should not see this"
+                }
+
+                NotificationType.SUBSCRIPTION -> {
+                    notification.context ?: "You should not see this"
+                }
             }
         }
 
@@ -109,6 +122,7 @@ class ActivityItemBuilder {
                         else -> "Just now"
                     }
                 }
+
                 1L -> "1 day ago"
                 in 2..6 -> "$daysDifference days ago"
                 else -> SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(targetDate)

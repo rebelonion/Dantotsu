@@ -4,24 +4,30 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
+import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.core.view.updatePaddingRelative
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import ani.dantotsu.*
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.AnilistSearch
 import ani.dantotsu.connections.anilist.SearchResults
 import ani.dantotsu.databinding.ActivitySearchBinding
+import ani.dantotsu.initActivity
+import ani.dantotsu.navBarHeight
+import ani.dantotsu.px
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.Timer
+import java.util.TimerTask
 
 class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
@@ -64,11 +70,18 @@ class SearchActivity : AppCompatActivity() {
                 intent.getStringExtra("type") ?: "ANIME",
                 isAdult = if (Anilist.adult) intent.getBooleanExtra("hentai", false) else false,
                 onList = listOnly,
+                search = intent.getStringExtra("query"),
                 genres = intent.getStringExtra("genre")?.let { mutableListOf(it) },
                 tags = intent.getStringExtra("tag")?.let { mutableListOf(it) },
                 sort = intent.getStringExtra("sortBy"),
+                status = intent.getStringExtra("status"),
+                source = intent.getStringExtra("source"),
+                countryOfOrigin = intent.getStringExtra("country"),
                 season = intent.getStringExtra("season"),
-                seasonYear = intent.getStringExtra("seasonYear")?.toIntOrNull(),
+                seasonYear = if (intent.getStringExtra("type") == "ANIME") intent.getStringExtra("seasonYear")
+                    ?.toIntOrNull() else null,
+                startYear = if (intent.getStringExtra("type") == "MANGA") intent.getStringExtra("seasonYear")
+                    ?.toIntOrNull() else null,
                 results = mutableListOf(),
                 hasNextPage = false
             )
@@ -127,8 +140,12 @@ class SearchActivity : AppCompatActivity() {
                     excludedTags = it.excludedTags
                     tags = it.tags
                     season = it.season
+                    startYear = it.startYear
                     seasonYear = it.seasonYear
+                    status = it.status
+                    source = it.source
                     format = it.format
+                    countryOfOrigin = it.countryOfOrigin
                     page = it.page
                     hasNextPage = it.hasNextPage
                 }
@@ -137,7 +154,7 @@ class SearchActivity : AppCompatActivity() {
                 model.searchResults.results.addAll(it.results)
                 mediaAdaptor.notifyItemRangeInserted(prev, it.results.size)
 
-                progressAdapter.bar?.visibility = if (it.hasNextPage) View.VISIBLE else View.GONE
+                progressAdapter.bar?.isVisible = it.hasNextPage
             }
         }
 
@@ -151,7 +168,10 @@ class SearchActivity : AppCompatActivity() {
                 } else
                     headerAdaptor.requestFocus?.run()
 
-                if (intent.getBooleanExtra("search", false)) search()
+                if (intent.getBooleanExtra("search", false)) {
+                    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_UNCHANGED)
+                    search()
+                }
             }
         }
     }

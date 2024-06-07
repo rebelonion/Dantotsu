@@ -11,10 +11,8 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
-import android.util.TypedValue
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
-import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
 import androidx.core.content.getSystemService
 import androidx.core.graphics.alpha
@@ -81,19 +79,7 @@ fun Context.getResourceColor(@AttrRes resource: Int, alphaFactor: Float = 1f): I
     return color
 }
 
-@ColorInt
-fun Context.getThemeColor(attr: Int): Int {
-    val tv = TypedValue()
-    return if (this.theme.resolveAttribute(attr, tv, true)) {
-        if (tv.resourceId != 0) {
-            ContextCompat.getColor(this, tv.resourceId)
-        } else {
-            tv.data
-        }
-    } else {
-        0
-    }
-}
+
 
 val Context.powerManager: PowerManager
     get() = getSystemService()!!

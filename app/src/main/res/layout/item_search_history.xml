@@ -30,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/ic_circle_cancel"
+        android:src="@drawable/ic_round_close_24"
         android:textSize="14sp"
         app:tint="?attr/colorOnBackground"
         tools:ignore="ContentDescription" />

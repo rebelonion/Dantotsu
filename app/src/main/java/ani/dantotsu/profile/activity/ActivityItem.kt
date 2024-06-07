@@ -1,8 +1,9 @@
 package ani.dantotsu.profile.activity
 
-import android.annotation.SuppressLint
+import android.content.Intent
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
@@ -17,13 +18,9 @@ import ani.dantotsu.profile.UsersDialogFragment
 import ani.dantotsu.setAnimation
 import ani.dantotsu.snackString
 import ani.dantotsu.util.AniMarkdown.Companion.getBasicAniHTML
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.model.GlideUrl
-import com.bumptech.glide.request.RequestOptions
+import ani.dantotsu.util.MarkdownCreatorActivity
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.viewbinding.BindableItem
-import jp.wasabeef.glide.transformations.BlurTransformation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -38,7 +35,6 @@ class ActivityItem(
     private lateinit var binding: ItemActivityBinding
     private lateinit var repliesAdapter: GroupieAdapter
 
-    @SuppressLint("SetTextI18n")
     override fun bind(viewBinding: ItemActivityBinding, position: Int) {
         binding = viewBinding
         setAnimation(binding.root.context, binding.root)
@@ -58,13 +54,13 @@ class ActivityItem(
         val likeColor = ContextCompat.getColor(binding.root.context, R.color.yt_red)
         val notLikeColor = ContextCompat.getColor(binding.root.context, R.color.bg_opp)
         binding.activityLike.setColorFilter(if (activity.isLiked == true) likeColor else notLikeColor)
-        binding.commentRepliesContainer.visibility =
-            if (activity.replyCount > 0) View.VISIBLE else View.GONE
-        binding.commentRepliesContainer.setOnClickListener {
+        binding.commentTotalReplies.isVisible = activity.replyCount > 0
+        binding.dot.isVisible = activity.replyCount > 0
+        binding.commentTotalReplies.setOnClickListener {
             when (binding.activityReplies.visibility) {
                 View.GONE -> {
                     val replyItems = activity.replies?.map {
-                        ActivityReplyItem(it) { id, type ->
+                        ActivityReplyItem(it,fragActivity) { id, type ->
                             clickCallback(
                                 id,
                                 type
@@ -73,19 +69,45 @@ class ActivityItem(
                     } ?: emptyList()
                     repliesAdapter.addAll(replyItems)
                     binding.activityReplies.visibility = View.VISIBLE
-                    binding.commentTotalReplies.text = "Hide replies"
+                    binding.commentTotalReplies.setText(R.string.hide_replies)
                 }
 
                 else -> {
                     repliesAdapter.clear()
                     binding.activityReplies.visibility = View.GONE
-                    binding.commentTotalReplies.text = "View replies"
+                    binding.commentTotalReplies.setText(R.string.view_replies)
 
                 }
             }
         }
+        if (activity.isLocked != true) {
+            binding.commentReply.setOnClickListener {
+                val context = binding.root.context
+                ContextCompat.startActivity(
+                    context,
+                    Intent(context, MarkdownCreatorActivity::class.java)
+                        .putExtra("type", "replyActivity")
+                        .putExtra("parentId", activity.id),
+                    null
+                )
+            }
+        } else {
+            binding.commentReply.visibility = View.GONE
+            binding.dot.visibility = View.GONE
+        }
+        val userList = arrayListOf<User>()
+        activity.likes?.forEach { i ->
+            userList.add(User(i.id, i.name.toString(), i.avatar?.medium, i.bannerImage))
+        }
+        binding.activityLikeContainer.setOnLongClickListener {
+            UsersDialogFragment().apply {
+                userList(userList)
+                show(fragActivity.supportFragmentManager, "dialog")
+            }
+            true
+        }
         binding.activityLikeCount.text = (activity.likeCount ?: 0).toString()
-        binding.activityLike.setOnClickListener {
+        binding.activityLikeContainer.setOnClickListener {
             val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
             scope.launch {
                 val res = Anilist.query.toggleLike(activity.id, "ACTIVITY")
@@ -108,18 +130,6 @@ class ActivityItem(
             }
         }
         val context = binding.root.context
-        val userList = arrayListOf<User>()
-        activity.likes?.forEach{ i ->
-            userList.add(User(i.id, i.name.toString(), i.avatar?.medium, i.bannerImage))
-        }
-        binding.activityLike.setOnLongClickListener{
-            UsersDialogFragment().apply { userList(userList)
-                show(fragActivity.supportFragmentManager, "dialog")
-            }
-            true
-        }
-
-
         when (activity.typename) {
             "ListActivity" -> {
                 val cover = activity.media?.coverImage?.large
@@ -127,7 +137,11 @@ class ActivityItem(
                 binding.activityContent.visibility = View.GONE
                 binding.activityBannerContainer.visibility = View.VISIBLE
                 binding.activityMediaName.text = activity.media?.title?.userPreferred
-                binding.activityText.text = "${activity.user!!.name} ${activity.status} ${activity.progress ?: activity.media?.title?.userPreferred}"
+                val activityText = "${activity.user!!.name} ${activity.status} ${
+                    activity.progress
+                        ?: activity.media?.title?.userPreferred
+                }"
+                binding.activityText.text = activityText
                 binding.activityCover.loadImage(cover)
                 blurImage(binding.activityBannerImage, banner ?: cover)
                 binding.activityAvatarContainer.setOnClickListener {

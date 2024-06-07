@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.math.MathUtils.clamp
+import androidx.core.view.isGone
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.lifecycle.MutableLiveData
@@ -94,7 +95,8 @@ class CharacterDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChang
         }
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
-                character.isFav = Anilist.query.isUserFav(AnilistMutations.FavType.CHARACTER, character.id)
+                character.isFav =
+                    Anilist.query.isUserFav(AnilistMutations.FavType.CHARACTER, character.id)
             }
             withContext(Dispatchers.Main) {
                 binding.characterFav.setImageResource(
@@ -152,7 +154,7 @@ class CharacterDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChang
     }
 
     override fun onResume() {
-        binding.characterProgress.visibility = if (!loaded) View.VISIBLE else View.GONE
+        binding.characterProgress.isGone = loaded
         super.onResume()
     }
 
