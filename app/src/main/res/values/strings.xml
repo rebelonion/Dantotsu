@@ -329,6 +329,7 @@
     <string name="none">None</string>
     <string name="selected_dns">Selected DNS</string>
     <string name="dns_info">Change if your ISP blocks any source</string>
+    <string name="selected_language">Selected Language</string>
     <string name="keep_screen_on">Keep Screen On</string>
     <string name="layout">Layout</string>
     <string name="spaced_pages">Spaced Pages</string>
@@ -387,7 +388,6 @@
     <string name="faq">FAQ</string>
     <string name="accounts">Accounts</string>
     <string name="addons">Add-ons</string>
-    <string name="addons_desc">Get more features out of your app</string>
     <string name="myanimelist">MyAnimeList</string>
     <string name="login_with_anilist">Login with Anilist!</string>
     <string name="anilist">Anilist</string>
@@ -902,11 +902,13 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="unknown_track">\[%1$s\] Unknown</string>
     <string name="accounts_desc">Anilist, MAL and Discord.\nWhat more could you need?</string>
     <string name="theme_desc">Change the vibe of your app</string>
-    <string name="extensions_desc">Manage your reliable repositories</string>
     <string name="common_desc">UI and other mischievous stuff</string>
-    <string name="notifications_desc">Customise your news and updates</string>
     <string name="anime_desc">Choose how you watch</string>
     <string name="manga_desc">Choose how you read</string>
+    <string name="extensions_desc">Manage your reliable repositories</string>
+    <string name="addons_desc">Get more features out of your app</string>
+    <string name="alsettings_desc">Change your AniList settings</string>
+    <string name="notifications_desc">Customise your news and updates</string>
     <string name="about_desc">Learn more about Dantotsu</string>
     <string name="faq_desc">General questions about Dantotsu</string>
     <string name="check_app_updates_desc">Check Github for app updates</string>
@@ -958,6 +960,9 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="update_addon">Add-on update available</string>
     <string name="install_addon">Install Add-on</string>
     <string name="download_addon_not_found">Add-on not found</string>
+    <string name="restrict_messages">Follower only</string>
+    <string name="restrict_messages_desc">Restrict Messages to following</string>
+
     <string name="image">Image</string>
     <string name="failed_ext_install_conflict">Failed to install extension due to conflict</string>
     <string name="reading">READING</string>

@@ -18,6 +18,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     SearchSources(Pref(Location.General, Boolean::class, false)),
     RecentlyListOnly(Pref(Location.General, Boolean::class, false)),
     SettingsPreferDub(Pref(Location.General, Boolean::class, false)),
+    SelectedLanguage(Pref(Location.General, Int::class, 1)),
     SubscriptionCheckingNotifications(Pref(Location.General, Boolean::class, true)),
     CheckUpdate(Pref(Location.General, Boolean::class, true)),
     VerboseLogging(Pref(Location.General, Boolean::class, false)),

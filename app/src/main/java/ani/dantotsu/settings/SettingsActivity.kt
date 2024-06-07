@@ -155,6 +155,16 @@ class SettingsActivity : AppCompatActivity() {
                     ),
                     Settings(
                         type = 1,
+                        name = getString(R.string.anilist_settings),
+                        desc = getString(R.string.alsettings_desc),
+                        icon = R.drawable.ic_anilist,
+                        onClick = {
+                            startActivity(Intent(context, SettingsAnilistActivity::class.java))
+                        },
+                        isActivity = true
+                    ),
+                    Settings(
+                        type = 1,
                         name = getString(R.string.notifications),
                         desc = getString(R.string.notifications_desc),
                         icon = R.drawable.ic_round_notifications_none_24,
