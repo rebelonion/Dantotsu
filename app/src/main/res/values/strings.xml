@@ -959,6 +959,7 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="install_addon">Install Add-on</string>
     <string name="download_addon_not_found">Add-on not found</string>
     <string name="image">Image</string>
+    <string name="clear_history">Clear History</string>
     <string name="failed_ext_install_conflict">Failed to install extension due to conflict</string>
     <string name="reading">READING</string>
     <string name="watching">WATCHING</string>
