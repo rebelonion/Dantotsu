@@ -1,6 +1,5 @@
 package ani.dantotsu.connections.anilist
 
-import android.net.Uri
 import ani.dantotsu.connections.anilist.Anilist.executeQuery
 import ani.dantotsu.connections.anilist.api.FuzzyDate
 import ani.dantotsu.connections.anilist.api.Query
@@ -154,36 +153,17 @@ class AnilistMutations {
         return errors == null
     }
 
-    suspend fun uploadAvatar(avatarUri: Uri): Boolean {
-        val query = """
-        mutation (${"$"}avatar: Upload) {
-            UpdateUser(
-                avatar: ${"$"}avatar
-            ) {
-                id
-            }
+    suspend fun saveUserAvatar(base64Avatar: String): JsonObject? {
+            val query = "mutation(\$avatar: String) { SaveUserAvatar(avatar: \$avatar) { id avatar { large medium } } }"
+            val variables = """{"avatar":"$base64Avatar"}"""
+            return executeQuery(query, variables)
         }
-    """
-        val variables = mapOf("avatar" to avatarUri.toString())
-        val result = executeQuery<JsonObject>(query, variables.toString())
-        return result?.get("errors") == null && result != null
-    }
 
-    suspend fun uploadBanner(bannerUri: Uri): Boolean {
-        val query = """
-        mutation (${"$"}banner: Upload) {
-            UpdateUser(
-                banner: ${"$"}banner
-            ) {
-                id
-            }
+    suspend fun saveUserBanner(base64Banner: String): JsonObject? {
+            val query = "mutation(\$banner: String) { SaveUserBanner(banner: \$banner) { id bannerImage } }"
+            val variables = """{"banner":"$base64Banner"}"""
+            return executeQuery(query, variables)
         }
-    """
-        val variables = mapOf("banner" to bannerUri.toString())
-        val result = executeQuery<JsonObject>(query, variables.toString())
-        return result?.get("errors") == null && result != null
-    }
-
 
     private fun String.stringSanitizer(): String {
         val sb = StringBuilder()

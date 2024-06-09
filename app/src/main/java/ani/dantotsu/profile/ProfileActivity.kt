@@ -3,12 +3,17 @@ package ani.dantotsu.profile
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.content.res.Configuration
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.util.Base64
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupMenu
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -23,7 +28,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import ani.dantotsu.R
 import ani.dantotsu.blurImage
 import ani.dantotsu.connections.anilist.Anilist
-import ani.dantotsu.connections.anilist.AnilistMutations
+import ani.dantotsu.connections.anilist.Anilist.executeQuery
 import ani.dantotsu.connections.anilist.api.Query
 import ani.dantotsu.databinding.ActivityProfileBinding
 import ani.dantotsu.databinding.ItemProfileAppBarBinding
@@ -42,10 +47,15 @@ import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.toast
 import com.google.android.material.appbar.AppBarLayout
+import com.google.gson.JsonObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import nl.joery.animatedbottombar.AnimatedBottomBar
+import java.io.ByteArrayOutputStream
 import kotlin.math.abs
 
 
@@ -132,7 +142,7 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                         openMediaPickerForBanner()
                     }
                     binding.apply {
-                        editProfileSave?.setOnClickListener { onSaveButtonClick() }
+                        editProfileSave?.setOnClickListener { saveProfileImages() }
                     }
 
                     followButton.isGone =
@@ -294,59 +304,82 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
         }
     }
 
-    private var avatarUri: Uri? = null
     private val avatarPicker =
-        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-            uri?.let { avatarUri ->
-                uploadAvatar(avatarUri)
+        registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri: Uri? ->
+            if (uri != null) {
+                val bitmap = getBitmapFromUri(uri)
+                uploadAvatar(bitmap)
             }
         }
 
     private val bannerPicker =
-        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-            uri?.let { bannerUri ->
-                uploadBanner(bannerUri)
+        registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri: Uri? ->
+            if (uri != null) {
+                val bitmap = getBitmapFromUri(uri)
+                uploadBanner(bitmap)
             }
         }
 
     private fun openMediaPickerForAvatar() {
-        avatarPicker.launch("image/*")
+        avatarPicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
 
     private fun openMediaPickerForBanner() {
-        bannerPicker.launch("image/*")
+        bannerPicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
 
-    private fun uploadAvatar(avatarUri: Uri) {
-        this.avatarUri = avatarUri
-        bindingProfileAppBar.profileUserAvatar.setImageURI(avatarUri)
+    private fun getBitmapFromUri(uri: Uri): Bitmap {
+        val parcelFileDescriptor = contentResolver.openFileDescriptor(uri, "r")
+        val fileDescriptor = parcelFileDescriptor?.fileDescriptor
+        val image = BitmapFactory.decodeFileDescriptor(fileDescriptor)
+        parcelFileDescriptor?.close()
+        return image
+    }
 
-        lifecycleScope.launch {
-            try {
-                val success = AnilistMutations().uploadAvatar(avatarUri)
-                if (success) {
-                    toast("Avatar uploaded successfully")
-                } else {
-                    toast("Failed to upload avatar")
-                }
-            } catch (e: Exception) {
-                toast("Error uploading avatar: ${e.message}")
+    private fun uploadAvatar(bitmap: Bitmap) {
+        bindingProfileAppBar.profileUserAvatar.setImageBitmap(bitmap)
+        val base64Avatar = bitmapToBase64(bitmap)
+        lifecycleScope.launch(Dispatchers.IO) {
+            val response = Anilist.mutation.saveUserAvatar(base64Avatar)
+            withContext(Dispatchers.Main) {
+                handleApiResponse(response, "Avatar")
             }
         }
     }
 
-
-    private fun uploadBanner(bannerUri: Uri) {
-        // Logic incoming
-        bindingProfileAppBar.profileBannerImage.setImageURI(bannerUri)
+    private fun uploadBanner(bitmap: Bitmap) {
+        bindingProfileAppBar.profileBannerImage.setImageBitmap(bitmap)
+        val base64Banner = bitmapToBase64(bitmap)
+        lifecycleScope.launch(Dispatchers.IO) {
+            val response = Anilist.mutation.saveUserBanner(base64Banner)
+            withContext(Dispatchers.Main) {
+                handleApiResponse(response, "Banner")
+            }
+        }
     }
 
-    private fun onSaveButtonClick() {
-        val currentAvatarUri = avatarUri
-        if (currentAvatarUri != null) {
-            uploadAvatar(currentAvatarUri)
-        }
+    private fun saveProfileImages() {
+        val avatarBitmap = (bindingProfileAppBar.profileUserAvatar.drawable as BitmapDrawable).bitmap
+        val bannerBitmap = (bindingProfileAppBar.profileBannerImage.drawable as BitmapDrawable).bitmap
+        uploadAvatar(avatarBitmap)
+        uploadBanner(bannerBitmap)
         toast("Uploading avatar and banner images...")
+    }
+
+    private fun handleApiResponse(response: kotlinx.serialization.json.JsonObject?, type: String) {
+        val errors = response?.get("errors")?.jsonArray
+        if (!errors.isNullOrEmpty()) {
+            val errorMessage = errors.joinToString(separator = "\n") { it.jsonObject["message"]?.jsonPrimitive?.content ?: "Unknown error" }
+            toast("Error uploading $type: $errorMessage")
+        } else {
+            toast("$type uploaded successfully")
+        }
+    }
+
+    private fun bitmapToBase64(bitmap: Bitmap): String {
+        val outputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+        return Base64.encodeToString(outputStream.toByteArray(), Base64.NO_WRAP)
     }
 
 
