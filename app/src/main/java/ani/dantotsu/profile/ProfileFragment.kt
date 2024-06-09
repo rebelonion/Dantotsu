@@ -104,7 +104,7 @@ class ProfileFragment : Fragment() {
         }
 
         binding.userInfoContainer.isVisible = user.about != null
-
+        binding.imageStatsContainer.visibility = View.GONE
 
         binding.statsEpisodesWatched.text = user.statistics.anime.episodesWatched.toString()
         binding.statsDaysWatched.text =

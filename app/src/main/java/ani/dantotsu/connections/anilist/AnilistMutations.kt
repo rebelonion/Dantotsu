@@ -1,5 +1,6 @@
 package ani.dantotsu.connections.anilist
 
+import android.net.Uri
 import ani.dantotsu.connections.anilist.Anilist.executeQuery
 import ani.dantotsu.connections.anilist.api.FuzzyDate
 import ani.dantotsu.connections.anilist.api.Query
@@ -151,6 +152,36 @@ class AnilistMutations {
         val result = executeQuery<JsonObject>(query)
         val errors = result?.get("errors")
         return errors == null
+    }
+
+    suspend fun uploadAvatar(avatarUri: Uri): Boolean {
+        val query = """
+        mutation (${"$"}avatar: Upload) {
+            UpdateUser(
+                avatar: ${"$"}avatar
+            ) {
+                id
+            }
+        }
+    """
+        val variables = mapOf("avatar" to avatarUri.toString())
+        val result = executeQuery<JsonObject>(query, variables.toString())
+        return result?.get("errors") == null && result != null
+    }
+
+    suspend fun uploadBanner(bannerUri: Uri): Boolean {
+        val query = """
+        mutation (${"$"}banner: Upload) {
+            UpdateUser(
+                banner: ${"$"}banner
+            ) {
+                id
+            }
+        }
+    """
+        val variables = mapOf("banner" to bannerUri.toString())
+        val result = executeQuery<JsonObject>(query, variables.toString())
+        return result?.get("errors") == null && result != null
     }
 
 

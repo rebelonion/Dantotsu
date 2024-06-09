@@ -3,11 +3,13 @@ package ani.dantotsu.profile
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.content.res.Configuration
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupMenu
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
@@ -21,6 +23,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import ani.dantotsu.R
 import ani.dantotsu.blurImage
 import ani.dantotsu.connections.anilist.Anilist
+import ani.dantotsu.connections.anilist.AnilistMutations
 import ani.dantotsu.connections.anilist.api.Query
 import ani.dantotsu.databinding.ActivityProfileBinding
 import ani.dantotsu.databinding.ItemProfileAppBarBinding
@@ -80,6 +83,8 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
         navBar.visibility = View.GONE
         binding.profileViewPager.isUserInputEnabled = false
 
+        bindingProfileAppBar = ItemProfileAppBarBinding.bind(binding.root)
+
         lifecycleScope.launch(Dispatchers.IO) {
             val userid = intent.getIntExtra("userId", -1)
             val username = intent.getStringExtra("username") ?: ""
@@ -117,6 +122,19 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
 
                 bindingProfileAppBar = ItemProfileAppBarBinding.bind(binding.root).apply {
                     binding.profileProgressBar.visibility = View.GONE
+                    editProfileAvatar.visibility = View.GONE
+                    editProfileBanner.visibility = View.GONE
+
+                    bindingProfileAppBar.editProfileAvatar.setOnClickListener {
+                        openMediaPickerForAvatar()
+                    }
+                    bindingProfileAppBar.editProfileBanner.setOnClickListener {
+                        openMediaPickerForBanner()
+                    }
+                    binding.apply {
+                        editProfileSave?.setOnClickListener { onSaveButtonClick() }
+                    }
+
                     followButton.isGone =
                         user.id == Anilist.userid || Anilist.userid == null
 
@@ -149,14 +167,21 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                     profileMenuButton.setOnClickListener {
                         val popup = PopupMenu(context, profileMenuButton)
                         popup.menuInflater.inflate(R.menu.menu_profile, popup.menu)
+
+                        if (user.id != Anilist.userid) {
+                            popup.menu.findItem(R.id.action_edit_profile)?.isVisible = false
+                        }
+
                         popup.setOnMenuItemClickListener { item ->
                             when (item.itemId) {
                                 R.id.action_view_on_anilist -> {
                                     openLinkInBrowser("https://anilist.co/user/${user.name}")
                                     true
                                 }
-
-
+                                R.id.action_edit_profile -> {
+                                    toggleEditProfile()
+                                    true
+                                }
                                 else -> false
                             }
                         }
@@ -247,7 +272,84 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
         }
     }
 
-    //Collapsing UI Stuff
+    private fun toggleEditProfile() {
+        val viewIds = arrayOf(
+            R.id.profileNavBar,
+            R.id.profileButtonContainer,
+            R.id.userStatsContainer,
+            R.id.profileFavAnimeContainer,
+            R.id.profileFavMangaContainer,
+            R.id.profileFavCharactersContainer,
+            //R.id.profileFavStaffContainer
+            R.id.imageStatsContainer,
+            R.id.editProfileAvatar,
+            R.id.editProfileBanner,
+            R.id.editProfileSave,
+        )
+
+        viewIds.forEach { viewId ->
+            findViewById<View>(viewId).apply {
+                visibility = if (visibility == View.VISIBLE) View.GONE else View.VISIBLE
+            }
+        }
+    }
+
+    private var avatarUri: Uri? = null
+    private val avatarPicker =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            uri?.let { avatarUri ->
+                uploadAvatar(avatarUri)
+            }
+        }
+
+    private val bannerPicker =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            uri?.let { bannerUri ->
+                uploadBanner(bannerUri)
+            }
+        }
+
+    private fun openMediaPickerForAvatar() {
+        avatarPicker.launch("image/*")
+    }
+
+    private fun openMediaPickerForBanner() {
+        bannerPicker.launch("image/*")
+    }
+
+    private fun uploadAvatar(avatarUri: Uri) {
+        this.avatarUri = avatarUri
+        bindingProfileAppBar.profileUserAvatar.setImageURI(avatarUri)
+
+        lifecycleScope.launch {
+            try {
+                val success = AnilistMutations().uploadAvatar(avatarUri)
+                if (success) {
+                    toast("Avatar uploaded successfully")
+                } else {
+                    toast("Failed to upload avatar")
+                }
+            } catch (e: Exception) {
+                toast("Error uploading avatar: ${e.message}")
+            }
+        }
+    }
+
+
+    private fun uploadBanner(bannerUri: Uri) {
+        // Logic incoming
+        bindingProfileAppBar.profileBannerImage.setImageURI(bannerUri)
+    }
+
+    private fun onSaveButtonClick() {
+        val currentAvatarUri = avatarUri
+        if (currentAvatarUri != null) {
+            uploadAvatar(currentAvatarUri)
+        }
+        toast("Uploading avatar and banner images...")
+    }
+
+
     private var isCollapsed = false
     private val percent = 65
     private var mMaxScrollSize = 0
