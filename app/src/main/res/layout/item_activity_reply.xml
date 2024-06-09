@@ -129,6 +129,11 @@
             android:textSize="12sp"
             tools:visibility="visible"
             tools:ignore="HardcodedText" />
+        
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
         <TextView
             android:id="@+id/activityDelete"
@@ -157,5 +162,4 @@
             android:visibility="gone"
             tools:visibility="visible"
             tools:ignore="HardcodedText" />
-    </LinearLayout>
 </LinearLayout>
