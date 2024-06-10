@@ -48,6 +48,7 @@ import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.util.Logger
+import eu.kanade.tachiyomi.util.launcher.ResumableShortcuts
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -496,6 +497,11 @@ class HomeFragment : Fragment() {
                                 containers[i].visibility = View.GONE
                             }
                         }
+                        ResumableShortcuts.updateShortcuts(
+                            context,
+                            model.getAnimeContinue().value,
+                            model.getMangaContinue().value
+                        )
                         model.empty.postValue(empty)
                     }
                     live.postValue(false)
