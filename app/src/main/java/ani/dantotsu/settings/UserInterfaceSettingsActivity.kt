@@ -14,6 +14,7 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.util.customAlertDialog
 
 class UserInterfaceSettingsActivity : AppCompatActivity() {
     lateinit var binding: ActivityUserInterfaceSettingsBinding
@@ -38,20 +39,21 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
         binding.uiSettingsHomeLayout.setOnClickListener {
             val set = PrefManager.getVal<List<Boolean>>(PrefName.HomeLayout).toMutableList()
             val views = resources.getStringArray(R.array.home_layouts)
-            val dialog = AlertDialog.Builder(this, R.style.MyPopup)
-                .setTitle(getString(R.string.home_layout_show)).apply {
-                    setMultiChoiceItems(
-                        views,
-                        PrefManager.getVal<List<Boolean>>(PrefName.HomeLayout).toBooleanArray()
-                    ) { _, i, value ->
-                        set[i] = value
+            customAlertDialog()
+                .setTitle(getString(R.string.home_layout_show))
+                .multiChoiceItems(
+                    items = views,
+                    checkedItems = PrefManager.getVal<List<Boolean>>(PrefName.HomeLayout).toBooleanArray()
+                ) { selectedItems ->
+                    for (i in selectedItems.indices) {
+                        set[i] = selectedItems[i]
                     }
-                    setPositiveButton("Done") { _, _ ->
-                        PrefManager.setVal(PrefName.HomeLayout, set)
-                        restartApp()
-                    }
-                }.show()
-            dialog.window?.setDimAmount(0.8f)
+                }
+                .setPosButton("Done") {
+                    PrefManager.setVal(PrefName.HomeLayout, set)
+                    restartApp()
+                }
+                .show()
         }
 
         binding.uiSettingsSmallView.isChecked = PrefManager.getVal(PrefName.SmallView)

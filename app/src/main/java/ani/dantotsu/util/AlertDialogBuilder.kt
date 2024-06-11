@@ -1,5 +1,6 @@
 package ani.dantotsu.util
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.view.View
@@ -21,6 +22,8 @@ class AlertDialogBuilder(private val context: Context) {
     private var onItemSelected: ((Int) -> Unit)? = null
     private var customView: View? = null
     private var attach: ((dialog: AlertDialog) -> Unit)? = null
+    private var onDismiss: (() -> Unit)? = null
+
     fun setTitle(title: String?): AlertDialogBuilder {
         this.title = title
         return this
@@ -52,11 +55,7 @@ class AlertDialogBuilder(private val context: Context) {
         return this
     }
 
-    fun setPosButton(
-        int: Int,
-        formatArgs: Int? = null,
-        onClick: (() -> Unit)? = null
-    ): AlertDialogBuilder {
+    fun setPosButton(int: Int, formatArgs: Int? = null, onClick: (() -> Unit)? = null): AlertDialogBuilder {
         this.posButtonTitle = context.getString(int, formatArgs)
         this.onPositiveButtonClick = onClick
         return this
@@ -68,11 +67,7 @@ class AlertDialogBuilder(private val context: Context) {
         return this
     }
 
-    fun setNegButton(
-        int: Int,
-        formatArgs: Int? = null,
-        onClick: (() -> Unit)? = null
-    ): AlertDialogBuilder {
+    fun setNegButton(int: Int, formatArgs: Int? = null, onClick: (() -> Unit)? = null): AlertDialogBuilder {
         this.negButtonTitle = context.getString(int, formatArgs)
         this.onNegativeButtonClick = onClick
         return this
@@ -84,11 +79,7 @@ class AlertDialogBuilder(private val context: Context) {
         return this
     }
 
-    fun setNeutralButton(
-        int: Int,
-        formatArgs: Int? = null,
-        onClick: (() -> Unit)? = null
-    ): AlertDialogBuilder {
+    fun setNeutralButton(int: Int, formatArgs: Int? = null, onClick: (() -> Unit)? = null): AlertDialogBuilder {
         this.neutralButtonTitle = context.getString(int, formatArgs)
         this.onNeutralButtonClick = onClick
         return this
@@ -99,22 +90,19 @@ class AlertDialogBuilder(private val context: Context) {
         return this
     }
 
-    fun singleChoiceItems(
-        items: Array<String>,
-        selectedItemIndex: Int = -1,
-        onItemSelected: (Int) -> Unit
-    ): AlertDialogBuilder {
+    fun onDismiss(onDismiss: (() -> Unit)? = null): AlertDialogBuilder {
+        this.onDismiss = onDismiss
+        return this
+    }
+
+    fun singleChoiceItems(items: Array<String>, selectedItemIndex: Int = -1, onItemSelected: (Int) -> Unit): AlertDialogBuilder {
         this.items = items
         this.selectedItemIndex = selectedItemIndex
         this.onItemSelected = onItemSelected
         return this
     }
 
-    fun multiChoiceItems(
-        items: Array<String>,
-        checkedItems: BooleanArray? = null,
-        onItemsSelected: (BooleanArray) -> Unit
-    ): AlertDialogBuilder {
+    fun multiChoiceItems(items: Array<String>, checkedItems: BooleanArray? = null, onItemsSelected: (BooleanArray) -> Unit): AlertDialogBuilder {
         this.items = items
         this.checkedItems = checkedItems ?: BooleanArray(items.size) { false }
         this.onItemsSelected = onItemsSelected
@@ -122,6 +110,8 @@ class AlertDialogBuilder(private val context: Context) {
     }
 
     fun show() {
+        if (context is Activity && context.isFinishing) return // Ensure context is valid
+
         val builder = AlertDialog.Builder(context, R.style.MyPopup)
         if (title != null) builder.setTitle(title)
         if (message != null) builder.setMessage(message)
@@ -160,10 +150,12 @@ class AlertDialogBuilder(private val context: Context) {
         builder.setCancelable(false)
         val dialog = builder.create()
         attach?.invoke(dialog)
+        dialog.setOnDismissListener {
+            onDismiss?.invoke()
+        }
         dialog.window?.setDimAmount(0.8f)
         dialog.show()
     }
-
 }
 
 fun Context.customAlertDialog(): AlertDialogBuilder {

@@ -48,9 +48,11 @@ class ActivityFragment : Fragment() {
             userId = it.getInt("userId")
             activityId = it.getInt("activityId")
         }
-        binding.titleBar.visibility = if (type == ActivityType.OTHER_USER) View.VISIBLE else View.GONE
-        binding.titleText.text = if (userId == Anilist.userid) getString(R.string.create_new_activity) else getString(R.string.write_a_message)
-        binding.titleImage.setOnClickListener{handleTitleImageClick() }
+        binding.titleBar.visibility =
+            if (type == ActivityType.OTHER_USER) View.VISIBLE else View.GONE
+        binding.titleText.text =
+            if (userId == Anilist.userid) getString(R.string.create_new_activity) else getString(R.string.write_a_message)
+        binding.titleImage.setOnClickListener { handleTitleImageClick() }
         binding.listRecyclerView.adapter = adapter
         binding.listRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.listProgressBar.isVisible = true
@@ -88,6 +90,7 @@ class ActivityFragment : Fragment() {
             }
         })
     }
+
     private fun handleTitleImageClick() {
         val intent = Intent(context, ActivityMarkdownCreator::class.java).apply {
             putExtra("type", if (userId == Anilist.userid) "activity" else "message")
@@ -103,14 +106,14 @@ class ActivityFragment : Fragment() {
             ActivityType.OTHER_USER -> getActivities(userId = userId)
             ActivityType.ONE -> getActivities(activityId = activityId)
         }
-        adapter.addAll(list.map { ActivityItem(it, ::onActivityClick, adapter ,requireActivity()) })
+        adapter.addAll(list.map { ActivityItem(it, adapter, ::onActivityClick) })
     }
 
     private suspend fun getActivities(
         global: Boolean = false,
         userId: Int? = null,
         activityId: Int? = null,
-        filter:Boolean = false
+        filter: Boolean = false
     ): List<Activity> {
         val res = Anilist.query.getFeed(userId, global, page, activityId)?.data?.page?.activities
         page += 1
@@ -133,7 +136,11 @@ class ActivityFragment : Fragment() {
     private fun onActivityClick(id: Int, type: String) {
         val intent = when (type) {
             "USER" -> Intent(requireContext(), ProfileActivity::class.java).putExtra("userId", id)
-            "MEDIA" -> Intent(requireContext(), MediaDetailsActivity::class.java).putExtra("mediaId", id)
+            "MEDIA" -> Intent(
+                requireContext(),
+                MediaDetailsActivity::class.java
+            ).putExtra("mediaId", id)
+
             else -> return
         }
         ContextCompat.startActivity(requireContext(), intent, null)
@@ -149,7 +156,11 @@ class ActivityFragment : Fragment() {
     companion object {
         enum class ActivityType { GLOBAL, USER, OTHER_USER, ONE }
 
-        fun newInstance(type: ActivityType, userId: Int? = null, activityId: Int? = null): ActivityFragment {
+        fun newInstance(
+            type: ActivityType,
+            userId: Int? = null,
+            activityId: Int? = null
+        ): ActivityFragment {
             return ActivityFragment().apply {
                 arguments = Bundle().apply {
                     putSerializable("type", type)
