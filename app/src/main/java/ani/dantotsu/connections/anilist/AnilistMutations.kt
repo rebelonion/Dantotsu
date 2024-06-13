@@ -154,16 +154,29 @@ class AnilistMutations {
     }
 
     suspend fun saveUserAvatar(base64Avatar: String): JsonObject? {
-            val query = "mutation(\$avatar: String) { SaveUserAvatar(avatar: \$avatar) { id avatar { large medium } } }"
-            val variables = """{"avatar":"$base64Avatar"}"""
-            return executeQuery(query, variables)
-        }
+        val imageFormat = getImageFormat(base64Avatar)
+        val base64WithPrefix = "data:image/$imageFormat;base64,${base64Avatar.removePrefix("data:image/$imageFormat;base64,")}"
+        val query = "mutation(\$avatar: String) { SaveUserAvatar(avatar: \$avatar) { id avatar { large medium } } }"
+        val variables = """{"avatar":"$base64WithPrefix"}"""
+        return executeQuery(query, variables)
+    }
 
     suspend fun saveUserBanner(base64Banner: String): JsonObject? {
-            val query = "mutation(\$banner: String) { SaveUserBanner(banner: \$banner) { id bannerImage } }"
-            val variables = """{"banner":"$base64Banner"}"""
-            return executeQuery(query, variables)
+        val imageFormat = getImageFormat(base64Banner)
+        val base64WithPrefix = "data:image/$imageFormat;base64,${base64Banner.removePrefix("data:image/$imageFormat;base64,")}"
+        val query = "mutation(\$banner: String) { SaveUserBanner(banner: \$banner) { id bannerImage } }"
+        val variables = """{"banner":"$base64WithPrefix"}"""
+        return executeQuery(query, variables)
+    }
+
+    private fun getImageFormat(base64String: String): String {
+        val prefix = base64String.substringBefore(",").substringAfterLast(":")
+        return when (prefix) {
+            "jpeg" -> "jpeg"
+            "png" -> "png"
+            else -> "jpeg"
         }
+    }
 
     private fun String.stringSanitizer(): String {
         val sb = StringBuilder()

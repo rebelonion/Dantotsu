@@ -28,7 +28,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import ani.dantotsu.R
 import ani.dantotsu.blurImage
 import ani.dantotsu.connections.anilist.Anilist
-import ani.dantotsu.connections.anilist.Anilist.executeQuery
 import ani.dantotsu.connections.anilist.api.Query
 import ani.dantotsu.databinding.ActivityProfileBinding
 import ani.dantotsu.databinding.ItemProfileAppBarBinding
@@ -47,7 +46,6 @@ import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.toast
 import com.google.android.material.appbar.AppBarLayout
-import com.google.gson.JsonObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -308,7 +306,7 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri: Uri? ->
             if (uri != null) {
                 val bitmap = getBitmapFromUri(uri)
-                uploadAvatar(bitmap)
+                bindingProfileAppBar.profileUserAvatar.setImageBitmap(bitmap)
             }
         }
 
@@ -316,7 +314,7 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri: Uri? ->
             if (uri != null) {
                 val bitmap = getBitmapFromUri(uri)
-                uploadBanner(bitmap)
+                bindingProfileAppBar.profileBannerImage.setImageBitmap(bitmap)
             }
         }
 
@@ -336,8 +334,19 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
         return image
     }
 
+    private fun saveProfileImages() {
+        val avatarBitmap = (bindingProfileAppBar.profileUserAvatar.drawable as? BitmapDrawable)?.bitmap
+        val bannerBitmap = (bindingProfileAppBar.profileBannerImage.drawable as? BitmapDrawable)?.bitmap
+
+        if (avatarBitmap != null && bannerBitmap != null) {
+            uploadAvatar(avatarBitmap)
+            uploadBanner(bannerBitmap)
+        } else {
+            toast("Please select both avatar and banner images")
+        }
+    }
+
     private fun uploadAvatar(bitmap: Bitmap) {
-        bindingProfileAppBar.profileUserAvatar.setImageBitmap(bitmap)
         val base64Avatar = bitmapToBase64(bitmap)
         lifecycleScope.launch(Dispatchers.IO) {
             val response = Anilist.mutation.saveUserAvatar(base64Avatar)
@@ -348,7 +357,6 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
     }
 
     private fun uploadBanner(bitmap: Bitmap) {
-        bindingProfileAppBar.profileBannerImage.setImageBitmap(bitmap)
         val base64Banner = bitmapToBase64(bitmap)
         lifecycleScope.launch(Dispatchers.IO) {
             val response = Anilist.mutation.saveUserBanner(base64Banner)
@@ -358,12 +366,17 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
         }
     }
 
-    private fun saveProfileImages() {
-        val avatarBitmap = (bindingProfileAppBar.profileUserAvatar.drawable as BitmapDrawable).bitmap
-        val bannerBitmap = (bindingProfileAppBar.profileBannerImage.drawable as BitmapDrawable).bitmap
-        uploadAvatar(avatarBitmap)
-        uploadBanner(bannerBitmap)
-        toast("Uploading avatar and banner images...")
+    private fun bitmapToBase64(bitmap: Bitmap): String {
+        val outputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+        val base64 = Base64.encodeToString(outputStream.toByteArray(), Base64.NO_WRAP)
+        val imageFormat = when (bitmap.config) {
+            Bitmap.Config.ARGB_8888 -> "png"
+            Bitmap.Config.RGB_565 -> "png"
+            Bitmap.Config.ALPHA_8 -> "png"
+            else -> "jpeg"
+        }
+        return "data:image/$imageFormat;base64,$base64"
     }
 
     private fun handleApiResponse(response: kotlinx.serialization.json.JsonObject?, type: String) {
@@ -375,13 +388,6 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
             toast("$type uploaded successfully")
         }
     }
-
-    private fun bitmapToBase64(bitmap: Bitmap): String {
-        val outputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-        return Base64.encodeToString(outputStream.toByteArray(), Base64.NO_WRAP)
-    }
-
 
     private var isCollapsed = false
     private val percent = 65
