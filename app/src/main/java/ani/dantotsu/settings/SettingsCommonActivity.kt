@@ -374,6 +374,17 @@ class SettingsCommonActivity : AppCompatActivity() {
                     ),
                     Settings(
                         type = 2,
+                        name = getString(R.string.hide_private),
+                        desc = getString(R.string.hide_private_desc),
+                        icon = R.drawable.ic_round_remove_red_eye_24,
+                        isChecked = PrefManager.getVal(PrefName.HidePrivate),
+                        switch = { isChecked, _ ->
+                            PrefManager.setVal(PrefName.HidePrivate, isChecked)
+                            restartApp()
+                        }
+                    ),
+                    Settings(
+                        type = 2,
                         name = getString(R.string.search_source_list),
                         desc = getString(R.string.search_source_list_desc),
                         icon = R.drawable.ic_round_search_sources_24,

@@ -479,6 +479,7 @@ class AnilistQueries {
 
     suspend fun initHomePage(): Map<String, ArrayList<*>> {
         val removeList = PrefManager.getCustomVal("removeList", setOf<Int>())
+        val hidePrivate = PrefManager.getVal<Boolean>(PrefName.HidePrivate)
         val removedMedia = ArrayList<Media>()
         val toShow: List<Boolean> =
             PrefManager.getVal(PrefName.HomeLayout) // anime continue, anime fav, anime planned, manga continue, manga fav, manga planned, recommendations
@@ -528,7 +529,7 @@ class AnilistQueries {
             current?.lists?.forEach { li ->
                 li.entries?.reversed()?.forEach {
                     val m = Media(it)
-                    if (m.id !in removeList) {
+                    if (m.id !in removeList && if (hidePrivate) !m.isListPrivate else true) {
                         m.cameFromContinue = true
                         subMap[m.id] = m
                     } else {
@@ -540,7 +541,7 @@ class AnilistQueries {
             repeating?.lists?.forEach { li ->
                 li.entries?.reversed()?.forEach {
                     val m = Media(it)
-                    if (m.id !in removeList) {
+                    if (m.id !in removeList && if (hidePrivate) !m.isListPrivate else true) {
                         m.cameFromContinue = true
                         subMap[m.id] = m
                     } else {
@@ -579,7 +580,7 @@ class AnilistQueries {
             current?.lists?.forEach { li ->
                 li.entries?.reversed()?.forEach {
                     val m = Media(it)
-                    if (m.id !in removeList) {
+                    if (m.id !in removeList && if (hidePrivate) !m.isListPrivate else true) {
                         m.cameFromContinue = true
                         subMap[m.id] = m
                     } else {
@@ -612,7 +613,7 @@ class AnilistQueries {
             apiMediaList?.edges?.forEach {
                 it.node?.let { i ->
                     val m = Media(i).apply { isFav = true }
-                    if (m.id !in removeList) {
+                    if (m.id !in removeList && if (hidePrivate) !m.isListPrivate else true) {
                         returnArray.add(m)
                     } else {
                         removedMedia.add(m)
