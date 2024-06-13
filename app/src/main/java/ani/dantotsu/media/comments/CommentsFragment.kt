@@ -25,6 +25,7 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.comments.Comment
 import ani.dantotsu.connections.comments.CommentResponse
 import ani.dantotsu.connections.comments.CommentsAPI
+import ani.dantotsu.databinding.DialogEdittextBinding
 import ani.dantotsu.databinding.FragmentCommentsBinding
 import ani.dantotsu.loadImage
 import ani.dantotsu.media.MediaDetailsActivity
@@ -34,6 +35,7 @@ import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.toast
 import ani.dantotsu.util.Logger
+import ani.dantotsu.util.customAlertDialog
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.Section
 import io.noties.markwon.editor.MarkwonEditor
@@ -162,33 +164,26 @@ class CommentsFragment : Fragment() {
         }
 
         binding.commentFilter.setOnClickListener {
-            val alertDialog = AlertDialog.Builder(activity, R.style.MyPopup)
-                .setTitle("Enter a chapter/episode number tag")
-                .setView(R.layout.dialog_edittext)
-                .setPositiveButton("OK") { dialog, _ ->
-                    val editText =
-                        (dialog as AlertDialog).findViewById<EditText>(R.id.dialogEditText)
-                    val text = editText?.text.toString()
+            activity.customAlertDialog().apply {
+                val customView = DialogEdittextBinding.inflate(layoutInflater)
+                setTitle("Enter a chapter/episode number tag")
+                setCustomView(customView.root)
+                setPosButton("OK") {
+                    val text = customView.dialogEditText.text.toString()
                     filterTag = text.toIntOrNull()
                     lifecycleScope.launch {
                         loadAndDisplayComments()
                     }
-
-                    dialog.dismiss()
                 }
-                .setNeutralButton("Clear") { dialog, _ ->
+                setNeutralButton("Clear") {
                     filterTag = null
                     lifecycleScope.launch {
                         loadAndDisplayComments()
                     }
-                    dialog.dismiss()
                 }
-                .setNegativeButton("Cancel") { dialog, _ ->
-                    filterTag = null
-                    dialog.dismiss()
-                }
-            val dialog = alertDialog.show()
-            dialog?.window?.setDimAmount(0.8f)
+                setNegButton("Cancel") { filterTag = null }
+                show()
+            }
         }
 
         var isFetching = false
@@ -303,13 +298,12 @@ class CommentsFragment : Fragment() {
 
             activity.binding.commentLabel.setOnClickListener {
                 //alert dialog to enter a number, with a cancel and ok button
-                val alertDialog = AlertDialog.Builder(activity, R.style.MyPopup)
-                    .setTitle("Enter a chapter/episode number tag")
-                    .setView(R.layout.dialog_edittext)
-                    .setPositiveButton("OK") { dialog, _ ->
-                        val editText =
-                            (dialog as AlertDialog).findViewById<EditText>(R.id.dialogEditText)
-                        val text = editText?.text.toString()
+                activity.customAlertDialog().apply {
+                    val customView = DialogEdittextBinding.inflate(layoutInflater)
+                    setTitle("Enter a chapter/episode number tag")
+                    setCustomView(customView.root)
+                    setPosButton("OK") {
+                        val text = customView.dialogEditText.text.toString()
                         tag = text.toIntOrNull()
                         if (tag == null) {
                             activity.binding.commentLabel.background = ResourcesCompat.getDrawable(
@@ -324,28 +318,25 @@ class CommentsFragment : Fragment() {
                                 null
                             )
                         }
-                        dialog.dismiss()
                     }
-                    .setNeutralButton("Clear") { dialog, _ ->
+                    setNeutralButton("Clear") {
                         tag = null
                         activity.binding.commentLabel.background = ResourcesCompat.getDrawable(
                             resources,
                             R.drawable.ic_label_off_24,
                             null
                         )
-                        dialog.dismiss()
                     }
-                    .setNegativeButton("Cancel") { dialog, _ ->
+                    setNegButton("Cancel") {
                         tag = null
                         activity.binding.commentLabel.background = ResourcesCompat.getDrawable(
                             resources,
                             R.drawable.ic_label_off_24,
                             null
                         )
-                        dialog.dismiss()
                     }
-                val dialog = alertDialog.show()
-                dialog?.window?.setDimAmount(0.8f)
+                    show()
+                }
             }
         }
 
@@ -362,12 +353,6 @@ class CommentsFragment : Fragment() {
             }
         }
     }
-
-    @SuppressLint("NotifyDataSetChanged")
-    override fun onStart() {
-        super.onStart()
-    }
-
     @SuppressLint("NotifyDataSetChanged")
     override fun onResume() {
         super.onResume()
@@ -579,9 +564,9 @@ class CommentsFragment : Fragment() {
      * Called when the user tries to comment for the first time
      */
     private fun showCommentRulesDialog() {
-        val alertDialog = AlertDialog.Builder(activity, R.style.MyPopup)
-            .setTitle("Commenting Rules")
-            .setMessage(
+        activity.customAlertDialog().apply{
+            setTitle("Commenting Rules")
+            setMessage(
                 "I WILL BAN YOU WITHOUT HESITATION\n" +
                         "1. No racism\n" +
                         "2. No hate speech\n" +
@@ -594,16 +579,13 @@ class CommentsFragment : Fragment() {
                         "10. No illegal content\n" +
                         "11. Anything you know you shouldn't comment\n"
             )
-            .setPositiveButton("I Understand") { dialog, _ ->
-                dialog.dismiss()
+            setPosButton("I Understand") {
                 PrefManager.setVal(PrefName.FirstComment, false)
                 processComment()
             }
-            .setNegativeButton("Cancel") { dialog, _ ->
-                dialog.dismiss()
-            }
-        val dialog = alertDialog.show()
-        dialog?.window?.setDimAmount(0.8f)
+            setNegButton(R.string.cancel)
+            show()
+        }
     }
 
     private fun processComment() {

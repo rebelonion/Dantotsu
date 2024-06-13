@@ -61,6 +61,7 @@ import ani.dantotsu.settings.saving.internal.PreferenceKeystore
 import ani.dantotsu.settings.saving.internal.PreferencePackager
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.util.Logger
+import ani.dantotsu.util.customAlertDialog
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
@@ -494,35 +495,28 @@ class MainActivity : AppCompatActivity() {
         val password = CharArray(16).apply { fill('0') }
 
         // Inflate the dialog layout
-        val dialogView = DialogUserAgentBinding.inflate(layoutInflater)
-        dialogView.userAgentTextBox.hint = "Password"
-        dialogView.subtitle.visibility = View.VISIBLE
-        dialogView.subtitle.text = getString(R.string.enter_password_to_decrypt_file)
-
-        val dialog = AlertDialog.Builder(this, R.style.MyPopup)
-            .setTitle("Enter Password")
-            .setView(dialogView.root)
-            .setPositiveButton("OK", null)
-            .setNegativeButton("Cancel") { dialog, _ ->
+        val dialogView = DialogUserAgentBinding.inflate(layoutInflater).apply {
+            userAgentTextBox.hint = "Password"
+            subtitle.visibility = View.VISIBLE
+            subtitle.text = getString(R.string.enter_password_to_decrypt_file)
+        }
+        customAlertDialog().apply {
+            setTitle("Enter Password")
+            setCustomView(dialogView.root)
+            setPosButton(R.string.yes) {
+                val editText = dialogView.userAgentTextBox
+                if (editText.text?.isNotBlank() == true) {
+                    editText.text?.toString()?.trim()?.toCharArray(password)
+                    callback(password)
+                } else {
+                    toast("Password cannot be empty")
+                }
+            }
+            setNegButton(R.string.cancel) {
                 password.fill('0')
-                dialog.dismiss()
                 callback(null)
             }
-            .create()
-
-        dialog.window?.setDimAmount(0.8f)
-        dialog.show()
-
-        // Override the positive button here
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-            val editText = dialog.findViewById<TextInputEditText>(R.id.userAgentTextBox)
-            if (editText?.text?.isNotBlank() == true) {
-                editText.text?.toString()?.trim()?.toCharArray(password)
-                dialog.dismiss()
-                callback(password)
-            } else {
-                toast("Password cannot be empty")
-            }
+            show()
         }
     }
 

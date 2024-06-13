@@ -444,15 +444,12 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                 if (subtitles.isNotEmpty()) {
                     val subtitleNames = subtitles.map { it.language }
                     var subtitleToDownload: Subtitle? = null
-                    val alertDialog = AlertDialog.Builder(context, R.style.MyPopup)
-                        .setTitle(R.string.download_subtitle)
-                        .setSingleChoiceItems(
-                            subtitleNames.toTypedArray(),
-                            -1
-                        ) { _, which ->
+                    requireActivity().customAlertDialog().apply {
+                        setTitle(R.string.download_subtitle)
+                        singleChoiceItems(subtitleNames.toTypedArray()) {which ->
                             subtitleToDownload = subtitles[which]
                         }
-                        .setPositiveButton(R.string.download) { dialog, _ ->
+                        setPosButton(R.string.download) {
                             scope.launch {
                                 if (subtitleToDownload != null) {
                                     SubtitleDownloader.downloadSubtitle(
@@ -466,13 +463,9 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                                     )
                                 }
                             }
-                            dialog.dismiss()
                         }
-                        .setNegativeButton(R.string.cancel) { dialog, _ ->
-                            dialog.dismiss()
-                        }
-                        .show()
-                    alertDialog.window?.setDimAmount(0.8f)
+                        setNegButton(R.string.cancel) {}
+                    }.show()
                 } else {
                     snackString(R.string.no_subtitles_available)
                 }
@@ -576,65 +569,63 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                         if (audioTracks.isNotEmpty()) {
                             val audioNamesArray = audioTracks.toTypedArray()
                             val checkedItems = BooleanArray(audioNamesArray.size) { false }
-                            val alertDialog = AlertDialog.Builder(currContext, R.style.MyPopup)
-                                .setTitle(R.string.download_audio_tracks)
-                                .setMultiChoiceItems(audioNamesArray, checkedItems) { _, which, isChecked ->
-                                    val audioPair = Pair(extractor.audioTracks[which].url, extractor.audioTracks[which].lang)
-                                    if (isChecked) {
-                                        selectedAudioTracks.add(audioPair)
-                                    } else {
-                                        selectedAudioTracks.remove(audioPair)
+
+                            currContext.customAlertDialog().apply{ // ToTest
+                                setTitle(R.string.download_audio_tracks)
+                                multiChoiceItems(audioNamesArray, checkedItems) {
+                                    it.forEachIndexed { index, isChecked ->
+                                        val audioPair = Pair(extractor.audioTracks[index].url, extractor.audioTracks[index].lang)
+                                        if (isChecked) {
+                                            selectedAudioTracks.add(audioPair)
+                                        } else {
+                                            selectedAudioTracks.remove(audioPair)
+                                        }
                                     }
                                 }
-                                .setPositiveButton(R.string.download) { _, _ ->
-                                    dialog?.dismiss()
+                                setPosButton(R.string.download) {
                                     go()
                                 }
-                                .setNegativeButton(R.string.skip) { dialog, _ ->
+                                setNegButton(R.string.skip) {
                                     selectedAudioTracks = mutableListOf()
                                     go()
-                                    dialog.dismiss()
                                 }
-                                .setNeutralButton(R.string.cancel) { dialog, _ ->
+                                setNeutralButton(R.string.cancel) {
                                     selectedAudioTracks = mutableListOf()
-                                    dialog.dismiss()
                                 }
-                                .show()
-                            alertDialog.window?.setDimAmount(0.8f)
+                                show()
+                            }
                         } else {
                             go()
                         }
                     }
-                    if (subtitles.isNotEmpty()) {
+                    if (subtitles.isNotEmpty()) { // ToTest
                         val subtitleNamesArray = subtitleNames.toTypedArray()
                         val checkedItems = BooleanArray(subtitleNamesArray.size) { false }
 
-                        val alertDialog = AlertDialog.Builder(currContext, R.style.MyPopup)
-                            .setTitle(R.string.download_subtitle)
-                            .setMultiChoiceItems(subtitleNamesArray, checkedItems) { _, which, isChecked ->
-                                val subtitlePair = Pair(subtitles[which].file.url, subtitles[which].language)
-                                if (isChecked) {
-                                    selectedSubtitles.add(subtitlePair)
-                                } else {
-                                    selectedSubtitles.remove(subtitlePair)
+                        currContext.customAlertDialog().apply {
+                            setTitle(R.string.download_subtitle)
+                            multiChoiceItems(subtitleNamesArray, checkedItems) {
+                                it.forEachIndexed { index, isChecked ->
+                                    val subtitlePair = Pair(subtitles[index].file.url, subtitles[index].language)
+                                    if (isChecked) {
+                                        selectedSubtitles.add(subtitlePair)
+                                    } else {
+                                        selectedSubtitles.remove(subtitlePair)
+                                    }
                                 }
                             }
-                            .setPositiveButton(R.string.download) { _, _ ->
-                                dialog?.dismiss()
+                            setPosButton(R.string.download) {
                                 checkAudioTracks()
                             }
-                            .setNegativeButton(R.string.skip) { dialog, _ ->
+                            setNegButton(R.string.skip) {
                                 selectedSubtitles = mutableListOf()
                                 checkAudioTracks()
-                                dialog.dismiss()
                             }
-                            .setNeutralButton(R.string.cancel) { dialog, _ ->
+                            setNeutralButton(R.string.cancel) {
                                 selectedSubtitles = mutableListOf()
-                                dialog.dismiss()
                             }
-                            .show()
-                        alertDialog.window?.setDimAmount(0.8f)
-
+                            show()
+                        }
                     } else {
                         checkAudioTracks()
                     }

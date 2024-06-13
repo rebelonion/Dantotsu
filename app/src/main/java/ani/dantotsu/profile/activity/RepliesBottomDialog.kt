@@ -1,4 +1,4 @@
-package ani.dantotsu.home.status
+package ani.dantotsu.profile.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -14,7 +14,6 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.ActivityReply
 import ani.dantotsu.databinding.BottomSheetRecyclerBinding
 import ani.dantotsu.profile.ProfileActivity
-import ani.dantotsu.profile.activity.ActivityReplyItem
 import ani.dantotsu.snackString
 import ani.dantotsu.util.ActivityMarkdownCreator
 import com.xwray.groupie.GroupieAdapter
@@ -72,14 +71,10 @@ class RepliesBottomDialog : BottomSheetDialogFragment() {
                 adapter.update(
                     replies.map {
                         ActivityReplyItem(
-                            it,
-                            activityId,
-                            requireActivity(),
-                            adapter,
-                            clickCallback = { int, _ ->
-                                onClick(int)
-                            }
-                        )
+                            it, activityId, requireActivity(), adapter,
+                        ) { i, _ ->
+                            onClick(i)
+                        }
                     }
                 )
             } else {

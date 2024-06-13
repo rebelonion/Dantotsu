@@ -120,12 +120,11 @@ class ActivityMarkdownCreator : AppCompatActivity() {
                 toast(getString(R.string.cannot_be_empty))
                 return@setOnClickListener
             }
-            AlertDialog.Builder(this, R.style.MyPopup).apply {
+            customAlertDialog().apply {
                 setTitle(R.string.warning)
                 setMessage(R.string.post_to_anilist_warning)
-                setPositiveButton(R.string.ok) { _, _ ->
+                setPosButton(R.string.ok) {
                     launchIO {
-
                         val isEdit = editId != -1
                         val success = when (type) {
                             "activity" -> if (isEdit) {
@@ -139,7 +138,6 @@ class ActivityMarkdownCreator : AppCompatActivity() {
                             } else {
                                 Anilist.mutation.postReply(parentId, text)
                             }
-
                             "message" -> if (isEdit) {
                                 Anilist.mutation.postMessage(userId, text, editId)
                             } else {
@@ -152,11 +150,12 @@ class ActivityMarkdownCreator : AppCompatActivity() {
                         finish()
                     }
                 }
-                setNeutralButton(R.string.open_rules) { _, _ ->
+                setNeutralButton(R.string.open_rules) {
                     openLinkInBrowser("https://anilist.co/forum/thread/14")
                 }
-                setNegativeButton(R.string.cancel, null)
-            }.show()
+                setNegButton(R.string.cancel)
+                show()
+            }
         }
 
         binding.previewCheckbox.setOnClickListener {

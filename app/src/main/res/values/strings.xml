@@ -948,6 +948,8 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="use_unique_theme_for_each_item_desc">Use color from media\'s banner</string>
     <string name="use_custom_theme_desc">Use your own color for the theme</string>
     <string name="color_picker_desc">Choose a color</string>
+    <string name="hide_private">Hide private Media from home screen</string>
+    <string name="hide_private_desc">Long click "Continue Watching" to access</string>
     <string name="torrent_addon">Torrent Add-on</string>
     <string name="enable_torrent">Enable Torrent</string>
     <string name="anime_downloader_addon">Anime Downloader Add-on</string>

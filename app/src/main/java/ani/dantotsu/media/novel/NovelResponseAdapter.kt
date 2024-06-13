@@ -13,6 +13,7 @@ import ani.dantotsu.parsers.ShowResponse
 import ani.dantotsu.setAnimation
 import ani.dantotsu.snackString
 import ani.dantotsu.util.Logger
+import ani.dantotsu.util.customAlertDialog
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
 
@@ -93,27 +94,22 @@ class NovelResponseAdapter(
         }
 
         binding.root.setOnLongClickListener {
-            val builder = androidx.appcompat.app.AlertDialog.Builder(
-                fragment.requireContext(),
-                R.style.MyPopup
-            )
-            builder.setTitle("Delete ${novel.name}?")
-            builder.setMessage("Are you sure you want to delete ${novel.name}?")
-            builder.setPositiveButton("Yes") { _, _ ->
-                downloadedCheckCallback.deleteDownload(novel)
-                deleteDownload(novel.link)
-                snackString("Deleted ${novel.name}")
-                if (binding.itemEpisodeFiller.text.toString()
-                        .contains("Download", ignoreCase = true)
-                ) {
-                    binding.itemEpisodeFiller.text = ""
+            it.context.customAlertDialog().apply {
+                setTitle("Delete ${novel.name}?")
+                setMessage("Are you sure you want to delete ${novel.name}?")
+                setPosButton(R.string.yes) {
+                    downloadedCheckCallback.deleteDownload(novel)
+                    deleteDownload(novel.link)
+                    snackString("Deleted ${novel.name}")
+                    if (binding.itemEpisodeFiller.text.toString()
+                            .contains("Download", ignoreCase = true)
+                    ) {
+                        binding.itemEpisodeFiller.text = ""
+                    }
                 }
+                setNegButton(R.string.no)
+                show()
             }
-            builder.setNegativeButton("No") { _, _ ->
-                // Do nothing
-            }
-            val dialog = builder.show()
-            dialog.window?.setDimAmount(0.8f)
             true
         }
     }

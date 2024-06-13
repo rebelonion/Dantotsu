@@ -39,9 +39,9 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
         binding.uiSettingsHomeLayout.setOnClickListener {
             val set = PrefManager.getVal<List<Boolean>>(PrefName.HomeLayout).toMutableList()
             val views = resources.getStringArray(R.array.home_layouts)
-            customAlertDialog()
-                .setTitle(getString(R.string.home_layout_show))
-                .multiChoiceItems(
+            customAlertDialog().apply {
+                setTitle(getString(R.string.home_layout_show))
+                multiChoiceItems(
                     items = views,
                     checkedItems = PrefManager.getVal<List<Boolean>>(PrefName.HomeLayout).toBooleanArray()
                 ) { selectedItems ->
@@ -49,11 +49,13 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                         set[i] = selectedItems[i]
                     }
                 }
-                .setPosButton("Done") {
+                setPosButton(R.string.ok) {
                     PrefManager.setVal(PrefName.HomeLayout, set)
                     restartApp()
                 }
-                .show()
+                show()
+            }
+
         }
 
         binding.uiSettingsSmallView.isChecked = PrefManager.getVal(PrefName.SmallView)

@@ -60,6 +60,7 @@ import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.util.StoragePermissions.Companion.accessAlertDialog
 import ani.dantotsu.util.StoragePermissions.Companion.hasDirAccess
+import ani.dantotsu.util.customAlertDialog
 import com.google.android.material.appbar.AppBarLayout
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.source.ConfigurableSource
@@ -386,32 +387,30 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
             if (allSettings.size > 1) {
                 val names =
                     allSettings.map { LanguageMapper.getLanguageName(it.lang) }.toTypedArray()
-                val dialog = AlertDialog.Builder(requireContext(), R.style.MyPopup)
-                    .setTitle("Select a Source")
-                    .setSingleChoiceItems(names, -1) { dialog, which ->
+                requireContext().customAlertDialog().apply {
+                    setTitle("Select a Source")
+                    singleChoiceItems(names) { which ->
                         selectedSetting = allSettings[which]
                         itemSelected = true
-                        dialog.dismiss()
 
-                        // Move the fragment transaction here
-                        val fragment =
-                            MangaSourcePreferencesFragment().getInstance(selectedSetting.id) {
-                                changeUIVisibility(true)
-                                loadChapters(media.selected!!.sourceIndex, true)
-                            }
+                        val fragment = MangaSourcePreferencesFragment().getInstance(selectedSetting.id) {
+                            changeUIVisibility(true)
+                            loadChapters(media.selected!!.sourceIndex, true)
+                        }
                         parentFragmentManager.beginTransaction()
                             .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
                             .replace(R.id.fragmentExtensionsContainer, fragment)
                             .addToBackStack(null)
                             .commit()
                     }
-                    .setOnDismissListener {
+                    onDismiss{
                         if (!itemSelected) {
                             changeUIVisibility(true)
                         }
                     }
-                    .show()
-                dialog.window?.setDimAmount(0.8f)
+                    show()
+
+                }
             } else {
                 // If there's only one setting, proceed with the fragment transaction
                 val fragment = MangaSourcePreferencesFragment().getInstance(selectedSetting.id) {

@@ -63,6 +63,7 @@ import ani.dantotsu.toast
 import ani.dantotsu.util.Logger
 import ani.dantotsu.util.StoragePermissions.Companion.accessAlertDialog
 import ani.dantotsu.util.StoragePermissions.Companion.hasDirAccess
+import ani.dantotsu.util.customAlertDialog
 import com.anggrayudi.storage.file.extension
 import com.google.android.material.appbar.AppBarLayout
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
@@ -396,20 +397,18 @@ class AnimeWatchFragment : Fragment() {
             if (allSettings.size > 1) {
                 val names =
                     allSettings.map { LanguageMapper.getLanguageName(it.lang) }.toTypedArray()
-                val dialog = AlertDialog.Builder(requireContext(), R.style.MyPopup)
-                    .setTitle("Select a Source")
-                    .setSingleChoiceItems(names, -1) { dialog, which ->
+                requireContext()
+                    .customAlertDialog()
+                    .apply {
+                    setTitle("Select a Source")
+                    singleChoiceItems(names) { which ->
                         selectedSetting = allSettings[which]
                         itemSelected = true
-                        dialog.dismiss()
-
-                        // Move the fragment transaction here
                         requireActivity().runOnUiThread {
-                            val fragment =
-                                AnimeSourcePreferencesFragment().getInstance(selectedSetting.id) {
-                                    changeUIVisibility(true)
-                                    loadEpisodes(media.selected!!.sourceIndex, true)
-                                }
+                            val fragment = AnimeSourcePreferencesFragment().getInstance(selectedSetting.id) {
+                                changeUIVisibility(true)
+                                loadEpisodes(media.selected!!.sourceIndex, true)
+                            }
                             parentFragmentManager.beginTransaction()
                                 .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
                                 .replace(R.id.fragmentExtensionsContainer, fragment)
@@ -417,13 +416,13 @@ class AnimeWatchFragment : Fragment() {
                                 .commit()
                         }
                     }
-                    .setOnDismissListener {
+                    onDismiss {
                         if (!itemSelected) {
                             changeUIVisibility(true)
                         }
                     }
-                    .show()
-                dialog.window?.setDimAmount(0.8f)
+                    show()
+                }
             } else {
                 // If there's only one setting, proceed with the fragment transaction
                 requireActivity().runOnUiThread {
@@ -432,11 +431,12 @@ class AnimeWatchFragment : Fragment() {
                             changeUIVisibility(true)
                             loadEpisodes(media.selected!!.sourceIndex, true)
                         }
-                    parentFragmentManager.beginTransaction()
-                        .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
-                        .replace(R.id.fragmentExtensionsContainer, fragment)
-                        .addToBackStack(null)
-                        .commit()
+                    parentFragmentManager.beginTransaction().apply {
+                        setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
+                        replace(R.id.fragmentExtensionsContainer, fragment)
+                        addToBackStack(null)
+                        commit()
+                    }
                 }
             }
 

@@ -46,6 +46,7 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.util.Logger
+import ani.dantotsu.util.customAlertDialog
 import com.anggrayudi.storage.file.openInputStream
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.imageview.ShapeableImageView
@@ -201,19 +202,15 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
                     MediaType.NOVEL
                 }
             // Alert dialog to confirm deletion
-            val builder =
-                androidx.appcompat.app.AlertDialog.Builder(requireContext(), R.style.MyPopup)
-            builder.setTitle("Delete ${item.title}?")
-            builder.setMessage("Are you sure you want to delete ${item.title}?")
-            builder.setPositiveButton("Yes") { _, _ ->
-                downloadManager.removeMedia(item.title, type)
-                getDownloads()
-            }
-            builder.setNegativeButton("No") { _, _ ->
-                // Do nothing
-            }
-            val dialog = builder.show()
-            dialog.window?.setDimAmount(0.8f)
+            requireContext().customAlertDialog().apply {
+                setTitle("Delete ${item.title}?")
+                setMessage("Are you sure you want to delete ${item.title}?")
+                setPosButton(R.string.yes) {
+                    downloadManager.removeMedia(item.title, type)
+                    getDownloads()
+                }
+                setNegButton(R.string.no)
+            }.show()
             true
         }
     }

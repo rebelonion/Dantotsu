@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.R
 import ani.dantotsu.currActivity
 import ani.dantotsu.currContext
+import ani.dantotsu.databinding.CustomDialogLayoutBinding
 import ani.dantotsu.databinding.DialogLayoutBinding
 import ani.dantotsu.databinding.ItemAnimeWatchBinding
 import ani.dantotsu.databinding.ItemChipBinding
@@ -40,6 +41,7 @@ import ani.dantotsu.settings.FAQActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.toast
+import ani.dantotsu.util.customAlertDialog
 import com.google.android.material.chip.Chip
 import eu.kanade.tachiyomi.data.notification.Notifications.CHANNEL_SUBSCRIPTION_CHECK
 import eu.kanade.tachiyomi.source.online.HttpSource
@@ -64,8 +66,6 @@ class MangaReadAdapter(
         val bind = ItemAnimeWatchBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(bind)
     }
-
-    private var nestedDialog: AlertDialog? = null
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val binding = holder.binding
@@ -171,194 +171,179 @@ class MangaReadAdapter(
         }
 
         binding.animeNestedButton.setOnClickListener {
-
-            val dialogView =
-                LayoutInflater.from(fragment.requireContext()).inflate(R.layout.dialog_layout, null)
-            val dialogBinding = DialogLayoutBinding.bind(dialogView)
+            val dialogBinding = DialogLayoutBinding.inflate(fragment.layoutInflater)
             var refresh = false
             var run = false
             var reversed = media.selected!!.recyclerReversed
             var style =
                 media.selected!!.recyclerStyle ?: PrefManager.getVal(PrefName.MangaDefaultView)
-            dialogBinding.animeSourceTop.rotation = if (reversed) -90f else 90f
-            dialogBinding.sortText.text = if (reversed) "Down to Up" else "Up to Down"
-            dialogBinding.animeSourceTop.setOnClickListener {
-                reversed = !reversed
-                dialogBinding.animeSourceTop.rotation = if (reversed) -90f else 90f
-                dialogBinding.sortText.text = if (reversed) "Down to Up" else "Up to Down"
-                run = true
-            }
+            dialogBinding.apply {
+                animeSourceTop.rotation = if (reversed) -90f else 90f
+                sortText.text = if (reversed) "Down to Up" else "Up to Down"
+                animeSourceTop.setOnClickListener {
+                    reversed = !reversed
+                    animeSourceTop.rotation = if (reversed) -90f else 90f
+                    sortText.text = if (reversed) "Down to Up" else "Up to Down"
+                    run = true
+                }
 
-            //Grids
-            dialogBinding.animeSourceGrid.visibility = View.GONE
-            var selected = when (style) {
-                0 -> dialogBinding.animeSourceList
-                1 -> dialogBinding.animeSourceCompact
-                else -> dialogBinding.animeSourceList
-            }
-            when (style) {
-                0 -> dialogBinding.layoutText.setText(R.string.list)
-                1 -> dialogBinding.layoutText.setText(R.string.compact)
-                else -> dialogBinding.animeSourceList
-            }
-            selected.alpha = 1f
-            fun selected(it: ImageButton) {
-                selected.alpha = 0.33f
-                selected = it
+                //Grids
+                animeSourceGrid.visibility = View.GONE
+                var selected = when (style) {
+                    0 -> animeSourceList
+                    1 -> animeSourceCompact
+                    else -> animeSourceList
+                }
+                when (style) {
+                    0 -> layoutText.setText(R.string.list)
+                    1 -> layoutText.setText(R.string.compact)
+                    else -> animeSourceList
+                }
                 selected.alpha = 1f
-            }
-            dialogBinding.animeSourceList.setOnClickListener {
-                selected(it as ImageButton)
-                style = 0
-                dialogBinding.layoutText.setText(R.string.list)
-                run = true
-            }
-            dialogBinding.animeSourceCompact.setOnClickListener {
-                selected(it as ImageButton)
-                style = 1
-                dialogBinding.layoutText.setText(R.string.compact)
-                run = true
-            }
-            dialogBinding.animeWebviewContainer.setOnClickListener {
-                if (!WebViewUtil.supportsWebView(fragment.requireContext())) {
-                    toast(R.string.webview_not_installed)
+                fun selected(it: ImageButton) {
+                    selected.alpha = 0.33f
+                    selected = it
+                    selected.alpha = 1f
                 }
-                //start CookieCatcher activity
-                if (mangaReadSources.names.isNotEmpty() && source in 0 until mangaReadSources.names.size) {
-                    val sourceAHH = mangaReadSources[source] as? DynamicMangaParser
-                    val sourceHttp = sourceAHH?.extension?.sources?.firstOrNull() as? HttpSource
-                    val url = sourceHttp?.baseUrl
-                    url?.let {
-                        refresh = true
-                        val intent = Intent(fragment.requireContext(), CookieCatcher::class.java)
-                            .putExtra("url", url)
-                        startActivity(fragment.requireContext(), intent, null)
+                animeSourceList.setOnClickListener {
+                    selected(it as ImageButton)
+                    style = 0
+                    layoutText.setText(R.string.list)
+                    run = true
+                }
+                animeSourceCompact.setOnClickListener {
+                    selected(it as ImageButton)
+                    style = 1
+                    layoutText.setText(R.string.compact)
+                    run = true
+                }
+                animeWebviewContainer.setOnClickListener {
+                    if (!WebViewUtil.supportsWebView(fragment.requireContext())) {
+                        toast(R.string.webview_not_installed)
                     }
-                }
-            }
-
-            //Multi download
-            dialogBinding.downloadNo.text = "0"
-            dialogBinding.animeDownloadTop.setOnClickListener {
-                //Alert dialog asking for the number of chapters to download
-                val alertDialog = AlertDialog.Builder(currContext(), R.style.MyPopup)
-                alertDialog.setTitle("Multi Chapter Downloader")
-                alertDialog.setMessage("Enter the number of chapters to download")
-                val input = NumberPicker(currContext())
-                input.minValue = 1
-                input.maxValue = 20
-                input.value = 1
-                alertDialog.setView(input)
-                alertDialog.setPositiveButton("OK") { _, _ ->
-                    dialogBinding.downloadNo.text = "${input.value}"
-                }
-                alertDialog.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
-                val dialog = alertDialog.show()
-                dialog.window?.setDimAmount(0.8f)
-            }
-
-            //Scanlator
-            dialogBinding.animeScanlatorContainer.isVisible = options.count() > 1
-            dialogBinding.scanlatorNo.text = "${options.count()}"
-            dialogBinding.animeScanlatorTop.setOnClickListener {
-                val dialogView2 =
-                    LayoutInflater.from(currContext()).inflate(R.layout.custom_dialog_layout, null)
-                val checkboxContainer =
-                    dialogView2.findViewById<LinearLayout>(R.id.checkboxContainer)
-                val tickAllButton = dialogView2.findViewById<ImageButton>(R.id.toggleButton)
-
-                // Function to get the right image resource for the toggle button
-                fun getToggleImageResource(container: ViewGroup): Int {
-                    var allChecked = true
-                    var allUnchecked = true
-
-                    for (i in 0 until container.childCount) {
-                        val checkBox = container.getChildAt(i) as CheckBox
-                        if (!checkBox.isChecked) {
-                            allChecked = false
-                        } else {
-                            allUnchecked = false
+                    //start CookieCatcher activity
+                    if (mangaReadSources.names.isNotEmpty() && source in 0 until mangaReadSources.names.size) {
+                        val sourceAHH = mangaReadSources[source] as? DynamicMangaParser
+                        val sourceHttp = sourceAHH?.extension?.sources?.firstOrNull() as? HttpSource
+                        val url = sourceHttp?.baseUrl
+                        url?.let {
+                            refresh = true
+                            val intent =
+                                Intent(fragment.requireContext(), CookieCatcher::class.java)
+                                    .putExtra("url", url)
+                            startActivity(fragment.requireContext(), intent, null)
                         }
                     }
-                    return when {
-                        allChecked -> R.drawable.untick_all_boxes
-                        allUnchecked -> R.drawable.tick_all_boxes
-                        else -> R.drawable.invert_all_boxes
-                    }
                 }
 
-                // Dynamically add checkboxes
-                options.forEach { option ->
-                    val checkBox = CheckBox(currContext()).apply {
-                        text = option
-                        setOnCheckedChangeListener { _, _ ->
-                            // Update image resource when you change a checkbox
-                            tickAllButton.setImageResource(getToggleImageResource(checkboxContainer))
+                //Multi download
+                downloadNo.text = "0"
+                animeDownloadTop.setOnClickListener {
+                    //Alert dialog asking for the number of chapters to download
+                    fragment.requireContext().customAlertDialog().apply {
+                        setTitle("Multi Chapter Downloader")
+                        setMessage("Enter the number of chapters to download")
+                        val input = NumberPicker(currContext())
+                        input.minValue = 1
+                        input.maxValue = 20
+                        input.value = 1
+                        setCustomView(input)
+                        setPosButton(R.string.ok) {
+                            downloadNo.text = "${input.value}"
                         }
+                        setNegButton(R.string.cancel)
+                        show()
                     }
-
-                    // Set checked if its already selected
-                    if (media.selected!!.scanlators != null) {
-                        checkBox.isChecked = media.selected!!.scanlators?.contains(option) != true
-                        scanlatorSelectionListener?.onScanlatorsSelected()
-                    } else {
-                        checkBox.isChecked = true
-                    }
-                    checkboxContainer.addView(checkBox)
                 }
 
-                // Create AlertDialog
-                val dialog = AlertDialog.Builder(currContext(), R.style.MyPopup)
-                    .setView(dialogView2)
-                    .setPositiveButton("OK") { _, _ ->
-                        hiddenScanlators.clear()
-                        for (i in 0 until checkboxContainer.childCount) {
-                            val checkBox = checkboxContainer.getChildAt(i) as CheckBox
+                //Scanlator
+                animeScanlatorContainer.isVisible = options.count() > 1
+                scanlatorNo.text = "${options.count()}"
+                animeScanlatorTop.setOnClickListener {
+                    CustomDialogLayoutBinding.inflate(fragment.layoutInflater)
+                    val dialogView = CustomDialogLayoutBinding.inflate(fragment.layoutInflater)
+                    val checkboxContainer = dialogView.checkboxContainer
+                    val tickAllButton = dialogView.toggleButton
+
+                    fun getToggleImageResource(container: ViewGroup): Int {
+                        var allChecked = true
+                        var allUnchecked = true
+
+                        for (i in 0 until container.childCount) {
+                            val checkBox = container.getChildAt(i) as CheckBox
                             if (!checkBox.isChecked) {
-                                hiddenScanlators.add(checkBox.text.toString())
+                                allChecked = false
+                            } else {
+                                allUnchecked = false
                             }
                         }
-                        fragment.onScanlatorChange(hiddenScanlators)
-                        scanlatorSelectionListener?.onScanlatorsSelected()
-                    }
-                    .setNegativeButton("Cancel", null)
-                    .show()
-                dialog.window?.setDimAmount(0.8f)
-
-                // Standard image resource
-                tickAllButton.setImageResource(getToggleImageResource(checkboxContainer))
-
-                // Listens to ticked checkboxes and changes image resource accordingly
-                tickAllButton.setOnClickListener {
-                    // Toggle checkboxes
-                    for (i in 0 until checkboxContainer.childCount) {
-                        val checkBox = checkboxContainer.getChildAt(i) as CheckBox
-                        checkBox.isChecked = !checkBox.isChecked
+                        return when {
+                            allChecked -> R.drawable.untick_all_boxes
+                            allUnchecked -> R.drawable.tick_all_boxes
+                            else -> R.drawable.invert_all_boxes
+                        }
                     }
 
-                    // Update image resource
+                    options.forEach { option ->
+                        val checkBox = CheckBox(currContext()).apply {
+                            text = option
+                            setOnCheckedChangeListener { _, _ ->
+                                tickAllButton.setImageResource(getToggleImageResource(checkboxContainer))
+                            }
+                        }
+
+                        if (media.selected!!.scanlators != null) {
+                            checkBox.isChecked = media.selected!!.scanlators?.contains(option) != true
+                            scanlatorSelectionListener?.onScanlatorsSelected()
+                        } else {
+                            checkBox.isChecked = true
+                        }
+                        checkboxContainer.addView(checkBox)
+                    }
+
+                    fragment.requireContext().customAlertDialog().apply {
+                        setCustomView(dialogView.root)
+                        setPosButton("OK") {
+                            hiddenScanlators.clear()
+                            for (i in 0 until checkboxContainer.childCount) {
+                                val checkBox = checkboxContainer.getChildAt(i) as CheckBox
+                                if (!checkBox.isChecked) {
+                                    hiddenScanlators.add(checkBox.text.toString())
+                                }
+                            }
+                            fragment.onScanlatorChange(hiddenScanlators)
+                            scanlatorSelectionListener?.onScanlatorsSelected()
+                        }
+                        setNegButton("Cancel")
+                    }.show()
+
                     tickAllButton.setImageResource(getToggleImageResource(checkboxContainer))
+
+                    tickAllButton.setOnClickListener {
+                        for (i in 0 until checkboxContainer.childCount) {
+                            val checkBox = checkboxContainer.getChildAt(i) as CheckBox
+                            checkBox.isChecked = !checkBox.isChecked
+                        }
+                        tickAllButton.setImageResource(getToggleImageResource(checkboxContainer))
+                    }
+                }
+
+                fragment.requireContext().customAlertDialog().apply {
+                    setTitle("Options")
+                    setCustomView(root)
+                    setPosButton("OK") {
+                        if (run) fragment.onIconPressed(style, reversed)
+                        if (downloadNo.text != "0") {
+                            fragment.multiDownload(downloadNo.text.toString().toInt())
+                        }
+                        if (refresh) fragment.loadChapters(source, true)
+                    }
+                    setNegButton("Cancel") {
+                        if (refresh) fragment.loadChapters(source, true)
+                    }
+                    show()
                 }
             }
-
-            nestedDialog = AlertDialog.Builder(fragment.requireContext(), R.style.MyPopup)
-                .setTitle("Options")
-                .setView(dialogView)
-                .setPositiveButton("OK") { _, _ ->
-                    if (run) fragment.onIconPressed(style, reversed)
-                    if (dialogBinding.downloadNo.text != "0") {
-                        fragment.multiDownload(dialogBinding.downloadNo.text.toString().toInt())
-                    }
-                    if (refresh) fragment.loadChapters(source, true)
-                }
-                .setNegativeButton("Cancel") { _, _ ->
-                    if (refresh) fragment.loadChapters(source, true)
-                }
-                .setOnCancelListener {
-                    if (refresh) fragment.loadChapters(source, true)
-                }
-                .create()
-            nestedDialog?.show()
         }
         //Chapter Handling
         handleChapters()

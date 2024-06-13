@@ -39,6 +39,7 @@ import ani.dantotsu.settings.FAQActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.toast
+import ani.dantotsu.util.customAlertDialog
 import com.google.android.material.chip.Chip
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.notification.Notifications.CHANNEL_SUBSCRIPTION_CHECK
@@ -60,9 +61,6 @@ class AnimeWatchAdapter(
         val bind = ItemAnimeWatchBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(bind)
     }
-
-    private var nestedDialog: AlertDialog? = null
-
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val binding = holder.binding
@@ -201,104 +199,102 @@ class AnimeWatchAdapter(
 
         //Nested Button
         binding.animeNestedButton.setOnClickListener {
-            val dialogView =
-                LayoutInflater.from(fragment.requireContext()).inflate(R.layout.dialog_layout, null)
-            val dialogBinding = DialogLayoutBinding.bind(dialogView)
-            var refresh = false
-            var run = false
-            var reversed = media.selected!!.recyclerReversed
-            var style =
-                media.selected!!.recyclerStyle ?: PrefManager.getVal(PrefName.AnimeDefaultView)
-            dialogBinding.animeSourceTop.rotation = if (reversed) -90f else 90f
-            dialogBinding.sortText.text = if (reversed) "Down to Up" else "Up to Down"
-            dialogBinding.animeSourceTop.setOnClickListener {
-                reversed = !reversed
-                dialogBinding.animeSourceTop.rotation = if (reversed) -90f else 90f
-                dialogBinding.sortText.text = if (reversed) "Down to Up" else "Up to Down"
-                run = true
-            }
-            //Grids
-            var selected = when (style) {
-                0 -> dialogBinding.animeSourceList
-                1 -> dialogBinding.animeSourceGrid
-                2 -> dialogBinding.animeSourceCompact
-                else -> dialogBinding.animeSourceList
-            }
-            when (style) {
-                0 -> dialogBinding.layoutText.setText(R.string.list)
-                1 -> dialogBinding.layoutText.setText(R.string.grid)
-                2 -> dialogBinding.layoutText.setText(R.string.compact)
-                else -> dialogBinding.animeSourceList
-            }
-            selected.alpha = 1f
-            fun selected(it: ImageButton) {
-                selected.alpha = 0.33f
-                selected = it
-                selected.alpha = 1f
-            }
-            dialogBinding.animeSourceList.setOnClickListener {
-                selected(it as ImageButton)
-                style = 0
-                dialogBinding.layoutText.setText(R.string.list)
-                run = true
-            }
-            dialogBinding.animeSourceGrid.setOnClickListener {
-                selected(it as ImageButton)
-                style = 1
-                dialogBinding.layoutText.setText(R.string.grid)
-                run = true
-            }
-            dialogBinding.animeSourceCompact.setOnClickListener {
-                selected(it as ImageButton)
-                style = 2
-                dialogBinding.layoutText.setText(R.string.compact)
-                run = true
-            }
-            dialogBinding.animeWebviewContainer.setOnClickListener {
-                if (!WebViewUtil.supportsWebView(fragment.requireContext())) {
-                    toast(R.string.webview_not_installed)
+            val dialogBinding = DialogLayoutBinding.inflate(fragment.layoutInflater)
+            dialogBinding.apply {
+                var refresh = false
+                var run = false
+                var reversed = media.selected!!.recyclerReversed
+                var style =
+                    media.selected!!.recyclerStyle ?: PrefManager.getVal(PrefName.AnimeDefaultView)
+
+                animeSourceTop.rotation = if (reversed) -90f else 90f
+                sortText.text = if (reversed) "Down to Up" else "Up to Down"
+                animeSourceTop.setOnClickListener {
+                    reversed = !reversed
+                    animeSourceTop.rotation = if (reversed) -90f else 90f
+                    sortText.text = if (reversed) "Down to Up" else "Up to Down"
+                    run = true
                 }
-                //start CookieCatcher activity
-                if (watchSources.names.isNotEmpty() && source in 0 until watchSources.names.size) {
-                    val sourceAHH = watchSources[source] as? DynamicAnimeParser
-                    val sourceHttp =
-                        sourceAHH?.extension?.sources?.firstOrNull() as? AnimeHttpSource
-                    val url = sourceHttp?.baseUrl
-                    url?.let {
-                        refresh = true
-                        val headersMap = try {
-                            sourceHttp.headers.toMultimap()
-                                .mapValues { it.value.getOrNull(0) ?: "" }
-                        } catch (e: Exception) {
-                            emptyMap()
+                //Grids
+                var selected = when (style) {
+                    0 -> animeSourceList
+                    1 -> animeSourceGrid
+                    2 -> animeSourceCompact
+                    else -> animeSourceList
+                }
+                when (style) {
+                    0 -> layoutText.setText(R.string.list)
+                    1 -> layoutText.setText(R.string.grid)
+                    2 -> layoutText.setText(R.string.compact)
+                    else -> animeSourceList
+                }
+                selected.alpha = 1f
+                fun selected(it: ImageButton) {
+                    selected.alpha = 0.33f
+                    selected = it
+                    selected.alpha = 1f
+                }
+                animeSourceList.setOnClickListener {
+                    selected(it as ImageButton)
+                    style = 0
+                    layoutText.setText(R.string.list)
+                    run = true
+                }
+                animeSourceGrid.setOnClickListener {
+                    selected(it as ImageButton)
+                    style = 1
+                    layoutText.setText(R.string.grid)
+                    run = true
+                }
+                animeSourceCompact.setOnClickListener {
+                    selected(it as ImageButton)
+                    style = 2
+                    layoutText.setText(R.string.compact)
+                    run = true
+                }
+                animeWebviewContainer.setOnClickListener {
+                    if (!WebViewUtil.supportsWebView(fragment.requireContext())) {
+                        toast(R.string.webview_not_installed)
+                    }
+                    //start CookieCatcher activity
+                    if (watchSources.names.isNotEmpty() && source in 0 until watchSources.names.size) {
+                        val sourceAHH = watchSources[source] as? DynamicAnimeParser
+                        val sourceHttp =
+                            sourceAHH?.extension?.sources?.firstOrNull() as? AnimeHttpSource
+                        val url = sourceHttp?.baseUrl
+                        url?.let {
+                            refresh = true
+                            val headersMap = try {
+                                sourceHttp.headers.toMultimap()
+                                    .mapValues { it.value.getOrNull(0) ?: "" }
+                            } catch (e: Exception) {
+                                emptyMap()
+                            }
+                            val intent =
+                                Intent(fragment.requireContext(), CookieCatcher::class.java)
+                                    .putExtra("url", url)
+                                    .putExtra("headers", headersMap as HashMap<String, String>)
+                            startActivity(fragment.requireContext(), intent, null)
                         }
-                        val intent = Intent(fragment.requireContext(), CookieCatcher::class.java)
-                            .putExtra("url", url)
-                            .putExtra("headers", headersMap as HashMap<String, String>)
-                        startActivity(fragment.requireContext(), intent, null)
                     }
                 }
+
+                //hidden
+                animeScanlatorContainer.visibility = View.GONE
+                animeDownloadContainer.visibility = View.GONE
+                fragment.requireContext().customAlertDialog().apply {
+                    setTitle("Options")
+                    setCustomView(dialogBinding.root)
+                    setPosButton("OK") {
+                        if (run) fragment.onIconPressed(style, reversed)
+                        if (refresh) fragment.loadEpisodes(source, true)
+                    }
+                    setNegButton("Cancel") {
+                        if (refresh) fragment.loadEpisodes(source, true)
+                    }
+                    show()
+                }
             }
-
-            //hidden
-            dialogBinding.animeScanlatorContainer.visibility = View.GONE
-            dialogBinding.animeDownloadContainer.visibility = View.GONE
-
-            nestedDialog = AlertDialog.Builder(fragment.requireContext(), R.style.MyPopup)
-                .setTitle("Options")
-                .setView(dialogView)
-                .setPositiveButton("OK") { _, _ ->
-                    if (run) fragment.onIconPressed(style, reversed)
-                    if (refresh) fragment.loadEpisodes(source, true)
-                }
-                .setNegativeButton("Cancel") { _, _ ->
-                    if (refresh) fragment.loadEpisodes(source, true)
-                }
-                .setOnCancelListener {
-                    if (refresh) fragment.loadEpisodes(source, true)
-                }
-                .create()
-            nestedDialog?.show()
         }
         //Episode Handling
         handleEpisodes()
