@@ -837,6 +837,8 @@
     <string name="use_unique_theme_for_each_item_desc">Medyanın afişindeki rengi kullan</string>
     <string name="use_custom_theme_desc">Tema olarak senin kendi rengini kullan</string>
     <string name="color_picker_desc">Bi̇r renk seç</string>
+    <string name="hide_private">Hide private Media from home screen</string>
+    <string name="hide_private_desc">Long click \"Continue Watching\" to access</string>
     <string name="torrent_addon">Torrent Eklentisi</string>
     <string name="enable_torrent">Torrente izin ver</string>
     <string name="anime_downloader_addon">Anime İndirme Eklentisi</string>
@@ -848,6 +850,7 @@
     <string name="install_addon">Eklentiyi Kur</string>
     <string name="download_addon_not_found">Eklenti bulunamadı</string>
     <string name="image">Görsel</string>
+    <string name="clear_history">Clear History</string>
     <string name="failed_ext_install_conflict">Çakışma nedeniyle uzantı yüklenemedi</string>
     <string name="reading">OKUNUYOR</string>
     <string name="watching">İZLENİYOR</string>
