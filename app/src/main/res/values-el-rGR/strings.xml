@@ -840,6 +840,8 @@
     <string name="use_unique_theme_for_each_item_desc">Χρησιμοποιήστε χρώμα από το banner των πολυμέσων</string>
     <string name="use_custom_theme_desc">Χρησιμοποιήστε το δικό σας χρώμα για το θέμα</string>
     <string name="color_picker_desc">Επιλέξτε ένα χρώμα</string>
+    <string name="hide_private">Hide private Media from home screen</string>
+    <string name="hide_private_desc">Long click \"Continue Watching\" to access</string>
     <string name="torrent_addon">Πρόσθετο Torrent</string>
     <string name="enable_torrent">Ενεργοποίηση Torrent</string>
     <string name="anime_downloader_addon">Πρόσθετο Λήψης Anime</string>
@@ -851,6 +853,7 @@
     <string name="install_addon">Εγκατάσταση πρόσθετου</string>
     <string name="download_addon_not_found">Το πρόσθετο δεν βρέθηκε</string>
     <string name="image">Εικόνα</string>
+    <string name="clear_history">Clear History</string>
     <string name="failed_ext_install_conflict">Η εγκατάσταση της επέκτασης απέτυχε λόγω σύγκρουσης</string>
     <string name="reading">Ανάγνωση</string>
     <string name="watching">Παρακολούθηση</string>
