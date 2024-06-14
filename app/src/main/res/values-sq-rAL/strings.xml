@@ -840,6 +840,8 @@
     <string name="use_unique_theme_for_each_item_desc">Përdorni ngjyrën nga baneri i medias</string>
     <string name="use_custom_theme_desc">Përdorni ngjyrën tuaj të preferuar për temën</string>
     <string name="color_picker_desc">Zgjidhni një ngjyrë</string>
+    <string name="hide_private">Hide private Media from home screen</string>
+    <string name="hide_private_desc">Long click \"Continue Watching\" to access</string>
     <string name="torrent_addon">Shtesë Torrent</string>
     <string name="enable_torrent">Aktivizoni Torrent-in</string>
     <string name="anime_downloader_addon">Shtesë Shkarkues Anime</string>
@@ -851,6 +853,7 @@
     <string name="install_addon">Instalo Shtesën</string>
     <string name="download_addon_not_found">Shtesë nuk u gjet</string>
     <string name="image">Imazh</string>
+    <string name="clear_history">Clear History</string>
     <string name="failed_ext_install_conflict">Dështoi instalimi i shtesës për shkak të konfliktit</string>
     <string name="reading">LEXIM</string>
     <string name="watching">DUKUR</string>
