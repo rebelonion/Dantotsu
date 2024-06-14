@@ -833,6 +833,8 @@
     <string name="use_unique_theme_for_each_item_desc">استخدم اللون من خلفية الوسائط</string>
     <string name="use_custom_theme_desc">استخدم اللون الخاص بك لمظهر التطبيق</string>
     <string name="color_picker_desc">اختر اللون</string>
+    <string name="hide_private">Hide private Media from home screen</string>
+    <string name="hide_private_desc">Long click \"Continue Watching\" to access</string>
     <string name="torrent_addon">إضافة التورنت</string>
     <string name="enable_torrent">تفعيل التورنت</string>
     <string name="anime_downloader_addon">تطبيق إضافي لتنزيل الأنمي</string>
@@ -844,6 +846,7 @@
     <string name="install_addon">تثبيت التطبيق الإضافي</string>
     <string name="download_addon_not_found">التطبيق الإضافي غير موجود</string>
     <string name="image">صوره</string>
+    <string name="clear_history">Clear History</string>
     <string name="failed_ext_install_conflict">فشل تثبيت الامتداد بسبب تعارض</string>
     <string name="reading">جاري القراءة</string>
     <string name="watching">جاري المشاهدة</string>
