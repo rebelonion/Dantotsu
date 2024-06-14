@@ -837,6 +837,8 @@
     <string name="use_unique_theme_for_each_item_desc">মিডিয়াৰ বেনাৰৰ পৰা ৰং ব্যৱহাৰ কৰক</string>
     <string name="use_custom_theme_desc">থোৱাৰ বাবে আপোনাৰ নিজৰ ৰং ব্যৱহাৰ কৰক</string>
     <string name="color_picker_desc">এটি ৰং বাছনি কৰক</string>
+    <string name="hide_private">Hide private Media from home screen</string>
+    <string name="hide_private_desc">Long click \"Continue Watching\" to access</string>
     <string name="torrent_addon">তৰেণ্ট এড্ড-অন</string>
     <string name="enable_torrent">তৰেণ্ট অণ কৰক</string>
     <string name="anime_downloader_addon">এনিমে ডাউনলোডাৰ এড্ড-অন</string>
@@ -848,6 +850,7 @@
     <string name="install_addon">এড-অন ইনষ্টল কৰক</string>
     <string name="download_addon_not_found">এড-অন পোৱা নাই</string>
     <string name="image">চিত্ৰ</string>
+    <string name="clear_history">Clear History</string>
     <string name="failed_ext_install_conflict">এক্সটেনছন ইনষ্টল কৰিবলৈ বিঘটনা হৈছে</string>
     <string name="reading">পড়া</string>
     <string name="watching">দেখা</string>
