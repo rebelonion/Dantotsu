@@ -837,6 +837,8 @@
     <string name="use_unique_theme_for_each_item_desc">मीडिया के बैनर से रंग का उपयोग करें</string>
     <string name="use_custom_theme_desc">थीम के लिए अपने रंग का उपयोग करें</string>
     <string name="color_picker_desc">एक रंग चुनें</string>
+    <string name="hide_private">Hide private Media from home screen</string>
+    <string name="hide_private_desc">Long click \"Continue Watching\" to access</string>
     <string name="torrent_addon">टोरेंट एड-ऑन</string>
     <string name="enable_torrent">टोरेंट सक्रिय करें</string>
     <string name="anime_downloader_addon">एनिमे डाउनलोडर एड-ऑन</string>
@@ -848,6 +850,7 @@
     <string name="install_addon">एड-ऑन इंस्टॉल करें</string>
     <string name="download_addon_not_found">एड-ऑन नहीं मिला</string>
     <string name="image">इमेज</string>
+    <string name="clear_history">Clear History</string>
     <string name="failed_ext_install_conflict">टकराव के कारण एक्सटेंशन को स्थापित करने में विफल</string>
     <string name="reading">रीडिंग</string>
     <string name="watching">देखना</string>
