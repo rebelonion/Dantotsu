@@ -834,6 +834,8 @@
     <string name="use_unique_theme_for_each_item_desc">使用媒体横幅中的颜色</string>
     <string name="use_custom_theme_desc">使用您自己的主题颜色</string>
     <string name="color_picker_desc">选择颜色</string>
+    <string name="hide_private">Hide private Media from home screen</string>
+    <string name="hide_private_desc">Long click \"Continue Watching\" to access</string>
     <string name="torrent_addon">Torrent 插件</string>
     <string name="enable_torrent">启用 Torrent</string>
     <string name="anime_downloader_addon">动漫下载器插件</string>
@@ -845,6 +847,7 @@
     <string name="install_addon">安装插件</string>
     <string name="download_addon_not_found">未找到插件</string>
     <string name="image">图片</string>
+    <string name="clear_history">Clear History</string>
     <string name="failed_ext_install_conflict">由于冲突，扩展安装失败</string>
     <string name="reading">阅读</string>
     <string name="watching">观看</string>
