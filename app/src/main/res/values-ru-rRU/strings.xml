@@ -840,6 +840,8 @@
     <string name="use_unique_theme_for_each_item_desc">Используйте цвет из баннера медиа</string>
     <string name="use_custom_theme_desc">Используйте свой собственный цвет для темы</string>
     <string name="color_picker_desc">Выберите цвет</string>
+    <string name="hide_private">Hide private Media from home screen</string>
+    <string name="hide_private_desc">Long click \"Continue Watching\" to access</string>
     <string name="torrent_addon">Дополнение Torrent</string>
     <string name="enable_torrent">Включить Torrent</string>
     <string name="anime_downloader_addon">Дополнение для загрузки аниме</string>
@@ -851,6 +853,7 @@
     <string name="install_addon">Установить дополнение</string>
     <string name="download_addon_not_found">Дополнение не найдено</string>
     <string name="image">Изображение</string>
+    <string name="clear_history">Clear History</string>
     <string name="failed_ext_install_conflict">Не удалось установить расширение из-за конфликта</string>
     <string name="reading">ЧТЕНИЕ</string>
     <string name="watching">ПРОСМОТР</string>
