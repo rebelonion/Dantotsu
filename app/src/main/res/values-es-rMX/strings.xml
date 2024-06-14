@@ -838,6 +838,8 @@
     <string name="use_unique_theme_for_each_item_desc">Utilice el color del banner del show</string>
     <string name="use_custom_theme_desc">Usa tu propio color para el tema</string>
     <string name="color_picker_desc">Elige un color</string>
+    <string name="hide_private">Hide private Media from home screen</string>
+    <string name="hide_private_desc">Long click \"Continue Watching\" to access</string>
     <string name="torrent_addon">Complemento Torrent</string>
     <string name="enable_torrent">Habilitar Torrent</string>
     <string name="anime_downloader_addon">Complemento de Descargador de Anime</string>
@@ -849,6 +851,7 @@
     <string name="install_addon">Instalar complemento</string>
     <string name="download_addon_not_found">Complemento no encontrado</string>
     <string name="image">Imagen</string>
+    <string name="clear_history">Clear History</string>
     <string name="failed_ext_install_conflict">No se pudo instalar la extensión debido a un conflicto</string>
     <string name="reading">LEYENDO</string>
     <string name="watching">VIENDO</string>
