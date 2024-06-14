@@ -840,6 +840,8 @@
     <string name="use_unique_theme_for_each_item_desc">メディアのバナーから色を使用します</string>
     <string name="use_custom_theme_desc">テーマのために独自の色を使用します</string>
     <string name="color_picker_desc">色を選択します</string>
+    <string name="hide_private">Hide private Media from home screen</string>
+    <string name="hide_private_desc">Long click \"Continue Watching\" to access</string>
     <string name="torrent_addon">トレントアドオン</string>
     <string name="enable_torrent">トレントを有効にする</string>
     <string name="anime_downloader_addon">アニメダウンローダーアドオン</string>
@@ -851,6 +853,7 @@
     <string name="install_addon">アドオンをインストール</string>
     <string name="download_addon_not_found">アドオンが見つかりません</string>
     <string name="image">画像</string>
+    <string name="clear_history">Clear History</string>
     <string name="failed_ext_install_conflict">拡張機能のインストールに失敗しました（競合）</string>
     <string name="reading">読み込み中</string>
     <string name="watching">視聴中</string>
