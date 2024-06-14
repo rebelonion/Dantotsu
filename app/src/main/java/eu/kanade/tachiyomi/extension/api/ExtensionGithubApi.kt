@@ -66,6 +66,8 @@ internal class ExtensionGithubApi {
                 PrefManager.getVal<Set<String>>(PrefName.AnimeExtensionRepos).toMutableList()
             if (repos.isEmpty()) {
                 repos.add("https://raw.githubusercontent.com/aniyomiorg/aniyomi-extensions/repo")
+                repos.add("https://raw.githubusercontent.com/usyboi/aniyomi-extensions/repo/")
+                
                 PrefManager.setVal(PrefName.AnimeExtensionRepos, repos.toSet())
             }
 
