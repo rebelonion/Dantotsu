@@ -838,6 +838,8 @@
     <string name="use_unique_theme_for_each_item_desc">Gebruik de kleur van de banner van de media</string>
     <string name="use_custom_theme_desc">Gebruik je eigen kleur voor het thema</string>
     <string name="color_picker_desc">Kies een kleur</string>
+    <string name="hide_private">Hide private Media from home screen</string>
+    <string name="hide_private_desc">Long click \"Continue Watching\" to access</string>
     <string name="torrent_addon">Torrent Add-on</string>
     <string name="enable_torrent">Torrent inschakelen</string>
     <string name="anime_downloader_addon">Anime Downloader Add-on</string>
@@ -849,6 +851,7 @@
     <string name="install_addon">Add-on installeren</string>
     <string name="download_addon_not_found">Add-on niet gevonden</string>
     <string name="image">Afbeelding</string>
+    <string name="clear_history">Clear History</string>
     <string name="failed_ext_install_conflict">Installatie van de extensie is mislukt vanwege een conflict</string>
     <string name="reading">AAN HET LEZEN</string>
     <string name="watching">AAN HET KIJKEN</string>
