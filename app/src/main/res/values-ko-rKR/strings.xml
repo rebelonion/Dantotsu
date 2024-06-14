@@ -841,6 +841,8 @@
     <string name="use_unique_theme_for_each_item_desc">미디어의 배너에서 색상 사용</string>
     <string name="use_custom_theme_desc">사용자 정의 색상 사용</string>
     <string name="color_picker_desc">색상 선택</string>
+    <string name="hide_private">Hide private Media from home screen</string>
+    <string name="hide_private_desc">Long click \"Continue Watching\" to access</string>
     <string name="torrent_addon">토렌트 애드온</string>
     <string name="enable_torrent">토렌트 활성화</string>
     <string name="anime_downloader_addon">애니메이션 다운로더 애드온</string>
@@ -852,6 +854,7 @@
     <string name="install_addon">애드온 설치</string>
     <string name="download_addon_not_found">애드온을 찾을 수 없습니다</string>
     <string name="image">이미지</string>
+    <string name="clear_history">Clear History</string>
     <string name="failed_ext_install_conflict">충돌로 인해 확장 기능 설치 실패</string>
     <string name="reading">읽는 중</string>
     <string name="watching">시청 중</string>
