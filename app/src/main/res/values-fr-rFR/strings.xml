@@ -841,6 +841,8 @@
     <string name="use_unique_theme_for_each_item_desc">Utilise la couleur de la bannière du média</string>
     <string name="use_custom_theme_desc">Utilise la couleur que vous choisissez pour le thème</string>
     <string name="color_picker_desc">Choisissez une couleur</string>
+    <string name="hide_private">Hide private Media from home screen</string>
+    <string name="hide_private_desc">Long click \"Continue Watching\" to access</string>
     <string name="torrent_addon">Add-on pour les Torrents</string>
     <string name="enable_torrent">Activer les torrents</string>
     <string name="anime_downloader_addon">Add-on pour le téléchargement d\'anime</string>
@@ -852,6 +854,7 @@
     <string name="install_addon">Installer l\'add-on</string>
     <string name="download_addon_not_found">Add-on pas trouvé</string>
     <string name="image">Image</string>
+    <string name="clear_history">Clear History</string>
     <string name="failed_ext_install_conflict">Échec de l\'installation de l\'extension à cause d\'un conflit</string>
     <string name="reading">LECTURE</string>
     <string name="watching">VISIONNAGE</string>
