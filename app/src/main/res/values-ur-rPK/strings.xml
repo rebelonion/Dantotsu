@@ -840,6 +840,8 @@
     <string name="use_unique_theme_for_each_item_desc">Use color from media\'s banner</string>
     <string name="use_custom_theme_desc">Use your own color for the theme</string>
     <string name="color_picker_desc">Choose a color</string>
+    <string name="hide_private">Hide private Media from home screen</string>
+    <string name="hide_private_desc">Long click \"Continue Watching\" to access</string>
     <string name="torrent_addon">Torrent Add-on</string>
     <string name="enable_torrent">Enable Torrent</string>
     <string name="anime_downloader_addon">Anime Downloader Add-on</string>
@@ -851,6 +853,7 @@
     <string name="install_addon">Install Add-on</string>
     <string name="download_addon_not_found">Add-on not found</string>
     <string name="image">Image</string>
+    <string name="clear_history">Clear History</string>
     <string name="failed_ext_install_conflict">Failed to install extension due to conflict</string>
     <string name="reading">READING</string>
     <string name="watching">WATCHING</string>
