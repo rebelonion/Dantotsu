@@ -840,6 +840,8 @@
     <string name="use_unique_theme_for_each_item_desc">Usa il colore del banner del media</string>
     <string name="use_custom_theme_desc">Usa il tuo colore per il tema</string>
     <string name="color_picker_desc">Scegli un colore</string>
+    <string name="hide_private">Hide private Media from home screen</string>
+    <string name="hide_private_desc">Long click \"Continue Watching\" to access</string>
     <string name="torrent_addon">Componente aggiuntivo torrent</string>
     <string name="enable_torrent">Abilita Torrent</string>
     <string name="anime_downloader_addon">Componente aggiuntivo per il download di Anime</string>
@@ -851,6 +853,7 @@
     <string name="install_addon">Installa componente aggiuntivo</string>
     <string name="download_addon_not_found">Componente aggiuntivo non trovato</string>
     <string name="image">Immagine</string>
+    <string name="clear_history">Clear History</string>
     <string name="failed_ext_install_conflict">Impossibile installare l\'estensione a causa di un conflitto</string>
     <string name="reading">LETTURA</string>
     <string name="watching">VISIONE</string>
