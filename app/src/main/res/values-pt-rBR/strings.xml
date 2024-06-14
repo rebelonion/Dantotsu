@@ -840,6 +840,8 @@
     <string name="use_unique_theme_for_each_item_desc">Usar cor do banner da mídia</string>
     <string name="use_custom_theme_desc">Use sua própria cor para o tema</string>
     <string name="color_picker_desc">Escolha uma cor</string>
+    <string name="hide_private">Hide private Media from home screen</string>
+    <string name="hide_private_desc">Long click \"Continue Watching\" to access</string>
     <string name="torrent_addon">Add-on de Torrent</string>
     <string name="enable_torrent">Ativar Torrent</string>
     <string name="anime_downloader_addon">Add-on de Downloads de Anime</string>
@@ -851,6 +853,7 @@
     <string name="install_addon">Instalar Add-on</string>
     <string name="download_addon_not_found">Add-on não encontrado</string>
     <string name="image">Imagem</string>
+    <string name="clear_history">Clear History</string>
     <string name="failed_ext_install_conflict">Erro ao instalar extensão devido a um conflito</string>
     <string name="reading">LENDO</string>
     <string name="watching">ASSISTINDO</string>
