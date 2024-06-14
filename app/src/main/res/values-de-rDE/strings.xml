@@ -841,6 +841,8 @@
     <string name="use_unique_theme_for_each_item_desc">Verwende die Farbe vom Banner des Mediums</string>
     <string name="use_custom_theme_desc">Benutze deine eigene Farbe für das Farbschema</string>
     <string name="color_picker_desc">Wähle eine Farbe</string>
+    <string name="hide_private">Hide private Media from home screen</string>
+    <string name="hide_private_desc">Long click \"Continue Watching\" to access</string>
     <string name="torrent_addon">Torrent-Erweiterung</string>
     <string name="enable_torrent">Torrent aktivieren</string>
     <string name="anime_downloader_addon">Anime-Downloader-Erweiterung</string>
@@ -852,6 +854,7 @@
     <string name="install_addon">Erweiterung installieren</string>
     <string name="download_addon_not_found">Erweiterung nicht gefunden</string>
     <string name="image">Bild</string>
+    <string name="clear_history">Clear History</string>
     <string name="failed_ext_install_conflict">Fehler bei der Installation der Erweiterung aufgrund von Konflikten</string>
     <string name="reading">AM LESEN</string>
     <string name="watching">AM SCHAUEN</string>
