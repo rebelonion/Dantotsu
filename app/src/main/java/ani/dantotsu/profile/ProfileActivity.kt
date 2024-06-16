@@ -1,6 +1,9 @@
 package ani.dantotsu.profile
 
 import android.animation.ObjectAnimator
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
@@ -8,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupMenu
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
@@ -152,11 +156,24 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                         popup.setOnMenuItemClickListener { item ->
                             when (item.itemId) {
                                 R.id.action_view_on_anilist -> {
-                                    openLinkInBrowser("https://anilist.co/user/${user.name}")
+                                    openLinkInBrowser(getString(R.string.anilist_link, user.name))
                                     true
                                 }
-
-
+                                R.id.action_share_profile -> {
+                                    val shareIntent = Intent(Intent.ACTION_SEND)
+                                    shareIntent.type = "text/plain"
+                                    shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.anilist_link, user.name))
+                                    startActivity(Intent.createChooser(shareIntent, "Share Profile"))
+                                    true
+                                }
+                                R.id.action_copy_user_id -> {
+                                    val userId = user.id.toString()
+                                    val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                                    val clipData = ClipData.newPlainText("User ID", userId)
+                                    clipboardManager.setPrimaryClip(clipData)
+                                    toast(getString(R.string.copied_text, userId))
+                                    true
+                                }
                                 else -> false
                             }
                         }
@@ -169,6 +186,13 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                         user.avatar?.medium ?: ""
                     )
                     profileUserName.text = user.name
+                    val profileUserName = findViewById<TextView>(R.id.profileUserName)
+                    profileUserName.setOnClickListener {
+                        val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                        val clipData = ClipData.newPlainText("Username", profileUserName.text)
+                        clipboardManager.setPrimaryClip(clipData)
+                        toast(getString(R.string.copied_to_clipboard))
+                    }
                     val bannerAnimations: ImageView =
                         if (PrefManager.getVal(PrefName.BannerAnimations)) profileBannerImage else profileBannerImageNoKen
 

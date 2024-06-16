@@ -797,6 +797,8 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="blur">Blur</string>
     <string name="hide_scroll_bar">Hide Scroll Bar</string>
     <string name="view_on_anilist" translatable="false">View on AniList</string>
+    <string name="share_profile">Share Profile</string>
+    <string name="copy_user_id" >Copy user ID</string>
     <string name="anilist_notification_filters">Filter Notifications</string>
     <string name="anilist_notifications_checking_time">Anilist notifications update frequency : %1$s</string>
     <string name="comment_notification_checking_time">Comment notifications update frequency : %1$s</string>
