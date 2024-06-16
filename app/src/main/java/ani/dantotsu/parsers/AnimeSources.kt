@@ -39,7 +39,7 @@ object AnimeSources : WatchSources() {
     }
 
     fun performReorderAnimeSources() {
-        //remove the downloaded source from the list to avoid duplicates
+        // Remove the downloaded source from the list to avoid duplicates
         list = list.filter { it.name != "Downloaded" }
         list = sortPinnedAnimeSources(list, pinnedAnimeSources) + Lazier(
             { OfflineAnimeParser() },
