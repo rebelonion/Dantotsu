@@ -122,8 +122,11 @@
     <string name="chaps">Bölüm</string>
     <string name="chap">Bölüm</string>
     <string name="wrong"><u>Başlık Yanlış mı?</u></string>
-    <string name="source_not_found">        Hiçbir şey bulunamadı X( \n
-        Başka bir kaynak deneyin.
+    <string name="source_not_found">        Hmm, nothing came up from this source.\n
+        Let\'s look elsewhere :)
+    </string>
+    <string name="download_not_found">        Your downloads are feeling a bit lonely…\n
+        Nothing here yet :(
     </string>
     <string name="not_supported">%1$s desteklenmiyor!</string>
     <string name="server_selector">Sunucu Seç</string>
