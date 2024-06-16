@@ -122,9 +122,12 @@
     <string name="chaps">अध्याय</string>
     <string name="chap">अध्याय</string>
     <string name="wrong"><u>गलत शीर्षक?</u></string>
-    <string name="source_not_found">            कुछ नहीं मिला X( \n
-            एक और स्रोत की कोशिश करें।
-        </string>
+    <string name="source_not_found">        Hmm, nothing came up from this source.\n
+        Let\'s look elsewhere :)
+    </string>
+    <string name="download_not_found">        Your downloads are feeling a bit lonely…\n
+        Nothing here yet :(
+    </string>
     <string name="not_supported">%1$s समर्थित नहीं है!</string>
     <string name="server_selector">सर्वर का चयन करें</string>
     <string name="auto_select_server">स्वचालित रूप से सर्वर का चयन किया जा रहा है</string>
