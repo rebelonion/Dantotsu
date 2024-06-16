@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
 import ani.dantotsu.currContext
-import ani.dantotsu.databinding.FragmentAnimeWatchBinding
+import ani.dantotsu.databinding.FragmentMediaSourceBinding
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.novel.NovelDownloaderService
@@ -47,7 +47,7 @@ class NovelReadFragment : Fragment(),
     DownloadTriggerCallback,
     DownloadedCheckCallback {
 
-    private var _binding: FragmentAnimeWatchBinding? = null
+    private var _binding: FragmentMediaSourceBinding? = null
     private val binding get() = _binding!!
     private val model: MediaDetailsViewModel by activityViewModels()
 
@@ -214,11 +214,11 @@ class NovelReadFragment : Fragment(),
             ContextCompat.RECEIVER_EXPORTED
         )
 
-        binding.animeSourceRecycler.updatePadding(bottom = binding.animeSourceRecycler.paddingBottom + navBarHeight)
+        binding.mediaSourceRecycler.updatePadding(bottom = binding.mediaSourceRecycler.paddingBottom + navBarHeight)
 
-        binding.animeSourceRecycler.layoutManager = LinearLayoutManager(requireContext())
+        binding.mediaSourceRecycler.layoutManager = LinearLayoutManager(requireContext())
         model.scrolledToTop.observe(viewLifecycleOwner) {
-            if (it) binding.animeSourceRecycler.scrollToPosition(0)
+            if (it) binding.mediaSourceRecycler.scrollToPosition(0)
         }
 
         continueEp = model.continueMedia ?: false
@@ -237,7 +237,7 @@ class NovelReadFragment : Fragment(),
                         this,
                         this
                     )  // probably a better way to do this but it works
-                    binding.animeSourceRecycler.adapter =
+                    binding.mediaSourceRecycler.adapter =
                         ConcatAdapter(headerAdapter, novelResponseAdapter)
                     loaded = true
                     Handler(Looper.getMainLooper()).postDelayed({
@@ -290,7 +290,7 @@ class NovelReadFragment : Fragment(),
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentAnimeWatchBinding.inflate(inflater, container, false)
+        _binding = FragmentMediaSourceBinding.inflate(inflater, container, false)
         return _binding?.root
     }
 
@@ -304,12 +304,12 @@ class NovelReadFragment : Fragment(),
     override fun onResume() {
         super.onResume()
         binding.mediaInfoProgressBar.visibility = progress
-        binding.animeSourceRecycler.layoutManager?.onRestoreInstanceState(state)
+        binding.mediaSourceRecycler.layoutManager?.onRestoreInstanceState(state)
     }
 
     override fun onPause() {
         super.onPause()
-        state = binding.animeSourceRecycler.layoutManager?.onSaveInstanceState()
+        state = binding.mediaSourceRecycler.layoutManager?.onSaveInstanceState()
     }
 
     companion object {

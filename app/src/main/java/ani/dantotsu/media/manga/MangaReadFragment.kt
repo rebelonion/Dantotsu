@@ -2,7 +2,6 @@ package ani.dantotsu.media.manga
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -31,7 +30,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.R
-import ani.dantotsu.databinding.FragmentAnimeWatchBinding
+import ani.dantotsu.databinding.FragmentMediaSourceBinding
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.DownloadsManager.Companion.compareName
@@ -75,7 +74,7 @@ import kotlin.math.max
 import kotlin.math.roundToInt
 
 open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
-    private var _binding: FragmentAnimeWatchBinding? = null
+    private var _binding: FragmentMediaSourceBinding? = null
     private val binding get() = _binding!!
     private val model: MediaDetailsViewModel by activityViewModels()
 
@@ -102,7 +101,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentAnimeWatchBinding.inflate(inflater, container, false)
+        _binding = FragmentMediaSourceBinding.inflate(inflater, container, false)
         return _binding?.root
     }
 
@@ -122,7 +121,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
             ContextCompat.RECEIVER_EXPORTED
         )
 
-        binding.animeSourceRecycler.updatePadding(bottom = binding.animeSourceRecycler.paddingBottom + navBarHeight)
+        binding.mediaSourceRecycler.updatePadding(bottom = binding.mediaSourceRecycler.paddingBottom + navBarHeight)
         screenWidth = resources.displayMetrics.widthPixels.dp
 
         var maxGridSize = (screenWidth / 100f).roundToInt()
@@ -145,13 +144,13 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
             }
         }
 
-        binding.animeSourceRecycler.layoutManager = gridLayoutManager
+        binding.mediaSourceRecycler.layoutManager = gridLayoutManager
 
         binding.ScrollTop.setOnClickListener {
-            binding.animeSourceRecycler.scrollToPosition(10)
-            binding.animeSourceRecycler.smoothScrollToPosition(0)
+            binding.mediaSourceRecycler.scrollToPosition(10)
+            binding.mediaSourceRecycler.smoothScrollToPosition(0)
         }
-        binding.animeSourceRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.mediaSourceRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
@@ -165,7 +164,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
             }
         })
         model.scrolledToTop.observe(viewLifecycleOwner) {
-            if (it) binding.animeSourceRecycler.scrollToPosition(0)
+            if (it) binding.mediaSourceRecycler.scrollToPosition(0)
         }
 
         continueEp = model.continueMedia ?: false
@@ -200,7 +199,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
                             }
                         }
 
-                        binding.animeSourceRecycler.adapter =
+                        binding.mediaSourceRecycler.adapter =
                             ConcatAdapter(headerAdapter, chapterAdapter)
 
                         lifecycleScope.launch(Dispatchers.IO) {
@@ -215,8 +214,8 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
                         reload()
                     }
                 } else {
-                    binding.animeNotSupported.visibility = View.VISIBLE
-                    binding.animeNotSupported.text =
+                    binding.mediaNotSupported.visibility = View.VISIBLE
+                    binding.mediaNotSupported.text =
                         getString(R.string.not_supported, media.format ?: "")
                 }
             }
@@ -232,10 +231,10 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
     }
 
     fun multiDownload(n: Int) {
-        //get last viewed chapter
+        // Get last viewed chapter
         val selected = media.userProgress
         val chapters = media.manga?.chapters?.values?.toList()
-        //filter by selected language
+        // Filter by selected language
         val progressChapterIndex = (chapters?.indexOfFirst {
             MediaNameAdapter.findChapterNumber(it.number)?.toInt() == selected
         } ?: 0) + 1
@@ -245,7 +244,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
         // Calculate the end index
         val endIndex = minOf(progressChapterIndex + n, chapters.size)
 
-        //make sure there are enough chapters
+        // Make sure there are enough chapters
         val chaptersToDownload = chapters.subList(progressChapterIndex, endIndex)
 
 
@@ -583,7 +582,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
     private fun reload() {
         val selected = model.loadSelected(media)
 
-        //Find latest chapter for subscription
+        // Find latest chapter for subscription
         selected.latest =
             media.manga?.chapters?.values?.maxOfOrNull { it.number.toFloatOrNull() ?: 0f } ?: 0f
         selected.latest =
@@ -617,14 +616,14 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
     override fun onResume() {
         super.onResume()
         binding.mediaInfoProgressBar.visibility = progress
-        binding.animeSourceRecycler.layoutManager?.onRestoreInstanceState(state)
+        binding.mediaSourceRecycler.layoutManager?.onRestoreInstanceState(state)
 
         requireActivity().setNavigationTheme()
     }
 
     override fun onPause() {
         super.onPause()
-        state = binding.animeSourceRecycler.layoutManager?.onSaveInstanceState()
+        state = binding.mediaSourceRecycler.layoutManager?.onSaveInstanceState()
     }
 
     companion object {
