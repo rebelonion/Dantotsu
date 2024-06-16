@@ -122,8 +122,11 @@
     <string name="chaps">অধ্যায়</string>
     <string name="chap">অধ্যায়</string>
     <string name="wrong"><u>ভুল শিরোনাম?</u></string>
-    <string name="source_not_found">        কিছুই পাওয়া যায়নি X( \n
-        অন্য একটি উৎস চেষ্টা করুন।
+    <string name="source_not_found">        Hmm, nothing came up from this source.\n
+        Let\'s look elsewhere :)
+    </string>
+    <string name="download_not_found">        Your downloads are feeling a bit lonely…\n
+        Nothing here yet :(
     </string>
     <string name="not_supported">%1$s সমর্থন করা হয়নি!</string>
     <string name="server_selector">সার্ভার নির্বাচক</string>
