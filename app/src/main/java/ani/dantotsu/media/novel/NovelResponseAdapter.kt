@@ -39,7 +39,7 @@ class NovelResponseAdapter(
         val binding = holder.binding
         val novel = list[position]
         setAnimation(fragment.requireContext(), holder.binding.root)
-        binding.itemEpisodeImage.loadImage(novel.coverUrl, 400, 0)
+        binding.itemMediaImage.loadImage(novel.coverUrl, 400, 0)
 
         val color =fragment.requireContext().getThemeColor(com.google.android.material.R.attr.colorOnBackground)
         binding.itemEpisodeTitle.text = novel.name

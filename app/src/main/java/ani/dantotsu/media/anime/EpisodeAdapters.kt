@@ -107,8 +107,8 @@ class EpisodeAdapter(
 
                 val thumb =
                     ep.thumb?.let { if (it.url.isNotEmpty()) GlideUrl(it.url) { it.headers } else null }
-                Glide.with(binding.itemEpisodeImage).load(thumb ?: media.cover).override(400, 0)
-                    .into(binding.itemEpisodeImage)
+                Glide.with(binding.itemMediaImage).load(thumb ?: media.cover).override(400, 0)
+                    .into(binding.itemMediaImage)
                 binding.itemEpisodeNumber.text = ep.number
                 binding.itemEpisodeTitle.text = if (ep.number == title) "Episode $title" else title
 
@@ -141,9 +141,9 @@ class EpisodeAdapter(
                 }
 
                 handleProgress(
-                    binding.itemEpisodeProgressCont,
-                    binding.itemEpisodeProgress,
-                    binding.itemEpisodeProgressEmpty,
+                    binding.itemMediaProgressCont,
+                    binding.itemMediaProgress,
+                    binding.itemMediaProgressEmpty,
                     media.id,
                     ep.number
                 )
@@ -155,8 +155,8 @@ class EpisodeAdapter(
 
                 val thumb =
                     ep.thumb?.let { if (it.url.isNotEmpty()) GlideUrl(it.url) { it.headers } else null }
-                Glide.with(binding.itemEpisodeImage).load(thumb ?: media.cover).override(400, 0)
-                    .into(binding.itemEpisodeImage)
+                Glide.with(binding.itemMediaImage).load(thumb ?: media.cover).override(400, 0)
+                    .into(binding.itemMediaImage)
 
                 binding.itemEpisodeNumber.text = ep.number
                 binding.itemEpisodeTitle.text = title
@@ -184,9 +184,9 @@ class EpisodeAdapter(
                     binding.itemEpisodeViewed.visibility = View.GONE
                 }
                 handleProgress(
-                    binding.itemEpisodeProgressCont,
-                    binding.itemEpisodeProgress,
-                    binding.itemEpisodeProgressEmpty,
+                    binding.itemMediaProgressCont,
+                    binding.itemMediaProgress,
+                    binding.itemMediaProgressEmpty,
                     media.id,
                     ep.number
                 )
@@ -209,9 +209,9 @@ class EpisodeAdapter(
                     }
                 }
                 handleProgress(
-                    binding.itemEpisodeProgressCont,
-                    binding.itemEpisodeProgress,
-                    binding.itemEpisodeProgressEmpty,
+                    binding.itemMediaProgressCont,
+                    binding.itemMediaProgress,
+                    binding.itemMediaProgressEmpty,
                     media.id,
                     ep.number
                 )
