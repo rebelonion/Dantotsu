@@ -122,8 +122,11 @@
     <string name="chaps">Κεφάλαια</string>
     <string name="chap">Κεφάλαιο</string>
     <string name="wrong"><u>Λάθος Τίτλος?</u></string>
-    <string name="source_not_found">        Δεν βρέθηκε τίποτα Χ( \n
-        Προσπάθησε άλλη πηγή.
+    <string name="source_not_found">        Hmm, nothing came up from this source.\n
+        Let\'s look elsewhere :)
+    </string>
+    <string name="download_not_found">        Your downloads are feeling a bit lonely…\n
+        Nothing here yet :(
     </string>
     <string name="not_supported">%1$s δεν υποστηρίζετε!</string>
     <string name="server_selector">Επέλεξε Διακομιστή</string>
