@@ -122,8 +122,11 @@
     <string name="chaps">챕터</string>
     <string name="chap">챕터</string>
     <string name="wrong"><u>잘못된 제목?</u></string>
-    <string name="source_not_found">        아무것도 찾을 수 없습니다 X( \n
-        다른 소스를 시도해보세요.
+    <string name="source_not_found">        Hmm, nothing came up from this source.\n
+        Let\'s look elsewhere :)
+    </string>
+    <string name="download_not_found">        Your downloads are feeling a bit lonely…\n
+        Nothing here yet :(
     </string>
     <string name="not_supported">%1$s은(는) 지원되지 않습니다!</string>
     <string name="server_selector">서버 선택</string>
