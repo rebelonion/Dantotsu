@@ -122,8 +122,11 @@
     <string name="chaps">Главы</string>
     <string name="chap">Глава</string>
     <string name="wrong"><u>Неправильное название?</u></string>
-    <string name="source_not_found">        Ничего не найдено X( \n
-        Попробуйте другой источник.
+    <string name="source_not_found">        Hmm, nothing came up from this source.\n
+        Let\'s look elsewhere :)
+    </string>
+    <string name="download_not_found">        Your downloads are feeling a bit lonely…\n
+        Nothing here yet :(
     </string>
     <string name="not_supported">%1$s не поддерживается!</string>
     <string name="server_selector">Выбрать сервер</string>
