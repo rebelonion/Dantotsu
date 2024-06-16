@@ -122,8 +122,11 @@
     <string name="chaps">章节</string>
     <string name="chap">章</string>
     <string name="wrong"><u>错误的标题？</u></string>
-    <string name="source_not_found">        找不到任何内容 X( \n
-        请尝试其他来源。
+    <string name="source_not_found">        Hmm, nothing came up from this source.\n
+        Let\'s look elsewhere :)
+    </string>
+    <string name="download_not_found">        Your downloads are feeling a bit lonely…\n
+        Nothing here yet :(
     </string>
     <string name="not_supported">%1$s 不支持！</string>
     <string name="server_selector">选择服务器</string>
