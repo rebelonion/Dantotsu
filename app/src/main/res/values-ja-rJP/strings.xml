@@ -122,8 +122,11 @@
     <string name="chaps">章</string>
     <string name="chap">章</string>
     <string name="wrong"><u>間違ったタイトル？</u></string>
-    <string name="source_not_found">        何も見つかりませんでした X( \n
-        別のソースをお試しください。
+    <string name="source_not_found">        Hmm, nothing came up from this source.\n
+        Let\'s look elsewhere :)
+    </string>
+    <string name="download_not_found">        Your downloads are feeling a bit lonely…\n
+        Nothing here yet :(
     </string>
     <string name="not_supported">%1$sはサポートされていません！</string>
     <string name="server_selector">サーバーを選択</string>
