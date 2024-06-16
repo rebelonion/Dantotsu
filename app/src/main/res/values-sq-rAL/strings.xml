@@ -122,8 +122,11 @@
     <string name="chaps">Kapituj</string>
     <string name="chap">Kapitulli</string>
     <string name="wrong"><u>Titull i Gabuar?</u></string>
-    <string name="source_not_found">        S’u gjet asgjë X( \n
-        Provoni një burim tjetër.
+    <string name="source_not_found">        Hmm, nothing came up from this source.\n
+        Let\'s look elsewhere :)
+    </string>
+    <string name="download_not_found">        Your downloads are feeling a bit lonely…\n
+        Nothing here yet :(
     </string>
     <string name="not_supported">%1$s nuk është i mbështetur!</string>
     <string name="server_selector">Zgjidh Serverin</string>
