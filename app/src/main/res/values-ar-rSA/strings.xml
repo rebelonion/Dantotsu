@@ -122,8 +122,11 @@
     <string name="chaps">الفصول</string>
     <string name="chap">الفصل</string>
     <string name="wrong"><u>عنوان خطأ؟</u></string>
-    <string name="source_not_found">        لا يمكن العثور علي شيء:( \n
-        حاول مع مصدر آخر.
+    <string name="source_not_found">        Hmm, nothing came up from this source.\n
+        Let\'s look elsewhere :)
+    </string>
+    <string name="download_not_found">        Your downloads are feeling a bit lonely…\n
+        Nothing here yet :(
     </string>
     <string name="not_supported">%1$s غير مدعوم!</string>
     <string name="server_selector">حدد السيرفر</string>
