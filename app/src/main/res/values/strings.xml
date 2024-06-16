@@ -156,8 +156,12 @@
     <string name="chap">Chapter</string>
     <string name="wrong"><u>Wrong Title?</u></string>
     <string name="source_not_found">
-        Couldn\'t find anything X( \n
-        Try another source.
+        Hmm, nothing came up from this source.\n
+        Let\'s look elsewhere :)
+    </string>
+    <string name="download_not_found">
+        Your downloads are feeling a bit lonely…\n
+        Nothing here yet :(
     </string>
     <string name="not_supported">%1$s is not supported!</string>
     <string name="server_selector">Select Server</string>
