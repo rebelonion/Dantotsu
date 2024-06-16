@@ -122,7 +122,12 @@
     <string name="chaps">Hoofdstukken</string>
     <string name="chap">Hoofdstuk</string>
     <string name="wrong"><u>Verkeerde Titel?</u></string>
-    <string name="source_not_found">Kon niets vinden X( \nProbeer een andere bron.</string>
+    <string name="source_not_found">        Hmm, nothing came up from this source.\n
+        Let\'s look elsewhere :)
+    </string>
+    <string name="download_not_found">        Your downloads are feeling a bit lonely…\n
+        Nothing here yet :(
+    </string>
     <string name="not_supported">%1$s wordt niet ondersteund!</string>
     <string name="server_selector">Selecteer Server</string>
     <string name="auto_select_server">Automatisch Server Selecteren</string>
