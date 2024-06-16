@@ -482,13 +482,12 @@ class HomeFragment : Fragment() {
                         CoroutineScope(Dispatchers.IO).launch {
                             model.setListImages()
                         }
-                        CoroutineScope(Dispatchers.IO).launch {
-                            model.initUserStatus()
-                        }
+
                         var empty = true
                         val homeLayoutShow: List<Boolean> =
                             PrefManager.getVal(PrefName.HomeLayout)
                         model.initHomePage()
+                        model.initUserStatus()
                         (array.indices).forEach { i ->
                             if (homeLayoutShow.elementAt(i)) {
                                 empty = false

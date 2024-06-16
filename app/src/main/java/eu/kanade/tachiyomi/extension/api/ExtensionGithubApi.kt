@@ -64,10 +64,6 @@ internal class ExtensionGithubApi {
 
             val repos =
                 PrefManager.getVal<Set<String>>(PrefName.AnimeExtensionRepos).toMutableList()
-            if (repos.isEmpty()) {
-                repos.add("https://raw.githubusercontent.com/aniyomiorg/aniyomi-extensions/repo")
-                PrefManager.setVal(PrefName.AnimeExtensionRepos, repos.toSet())
-            }
 
             repos.forEach {
                 try {
@@ -157,10 +153,6 @@ internal class ExtensionGithubApi {
 
             val repos =
                 PrefManager.getVal<Set<String>>(PrefName.MangaExtensionRepos).toMutableList()
-            if (repos.isEmpty()) {
-                repos.add("https://raw.githubusercontent.com/keiyoushi/extensions/main")
-                PrefManager.setVal(PrefName.MangaExtensionRepos, repos.toSet())
-            }
 
             repos.forEach {
                 try {

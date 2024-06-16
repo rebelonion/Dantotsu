@@ -305,10 +305,10 @@ class SettingsCommonActivity : AppCompatActivity() {
                         desc = getString(R.string.change_download_location_desc),
                         icon = R.drawable.ic_round_source_24,
                         onClick = {
-                            val dialog = AlertDialog.Builder(context, R.style.MyPopup)
-                                .setTitle(R.string.change_download_location)
-                                .setMessage(R.string.download_location_msg)
-                                .setPositiveButton(R.string.ok) { dialog, _ ->
+                            context.customAlertDialog().apply{
+                                setTitle(R.string.change_download_location)
+                                setMessage(R.string.download_location_msg)
+                                setPosButton(R.string.ok){
                                     val oldUri = PrefManager.getVal<String>(PrefName.DownloadsDir)
                                     launcher.registerForCallback { success ->
                                         if (success) {
@@ -331,12 +331,10 @@ class SettingsCommonActivity : AppCompatActivity() {
                                         }
                                     }
                                     launcher.launch()
-                                    dialog.dismiss()
-                                }.setNeutralButton(R.string.cancel) { dialog, _ ->
-                                    dialog.dismiss()
-                                }.create()
-                            dialog.window?.setDimAmount(0.8f)
-                            dialog.show()
+                                }
+                                setNegButton(R.string.cancel)
+                                show()
+                            }
                         }
                     ),
                     Settings(
