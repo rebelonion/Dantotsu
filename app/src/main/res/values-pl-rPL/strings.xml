@@ -122,8 +122,11 @@
     <string name="chaps">Rozdziały</string>
     <string name="chap">Rozdział</string>
     <string name="wrong"><u>Zły tytuł?</u></string>
-    <string name="source_not_found">        Nie udało się niczego znaleźć X( \n
-        Spróbuj innego źródła.
+    <string name="source_not_found">        Hmm, nothing came up from this source.\n
+        Let\'s look elsewhere :)
+    </string>
+    <string name="download_not_found">        Your downloads are feeling a bit lonely…\n
+        Nothing here yet :(
     </string>
     <string name="not_supported">%1$s nie jest obsługiwane!</string>
     <string name="server_selector">Wybierz serwer</string>
