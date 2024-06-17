@@ -26,44 +26,59 @@ class OtherDetailsViewModel : ViewModel() {
         if (author.value == null) author.postValue(Anilist.query.getAuthorDetails(m))
     }
 
+    private var cachedAllCalendarData: Map<String, MutableList<Media>>? = null
+    private var cachedLibraryCalendarData: Map<String, MutableList<Media>>? = null
     private val calendar: MutableLiveData<Map<String, MutableList<Media>>> = MutableLiveData(null)
     fun getCalendar(): LiveData<Map<String, MutableList<Media>>> = calendar
     suspend fun loadCalendar(showOnlyLibrary: Boolean = false) {
-        val curr = System.currentTimeMillis() / 1000
-        val res = Anilist.query.recentlyUpdated(curr - 86400, curr + (86400 * 6))
-        val df = DateFormat.getDateInstance(DateFormat.FULL)
-        val map = mutableMapOf<String, MutableList<Media>>()
-        val idMap = mutableMapOf<String, MutableList<Int>>()
+        val cacheToUse = if (showOnlyLibrary) cachedLibraryCalendarData else cachedAllCalendarData
 
-        if (showOnlyLibrary) {
-            val userId = Anilist.userid ?: 0
-            val userLibrary = Anilist.query.getMediaLists(true, userId)
-            val libraryMediaIds = userLibrary.flatMap { it.value }.map { it.id }
+        if (cacheToUse == null) {
+            val curr = System.currentTimeMillis() / 1000
+            val res = Anilist.query.recentlyUpdated(curr - 86400, curr + (86400 * 6))
+            val df = DateFormat.getDateInstance(DateFormat.FULL)
+            val map = mutableMapOf<String, MutableList<Media>>()
+            val idMap = mutableMapOf<String, MutableList<Int>>()
 
-            res.forEach {
-                val v = it.relation?.split(",")?.map { i -> i.toLong() }!!
-                val dateInfo = df.format(Date(v[1] * 1000))
-                val list = map.getOrPut(dateInfo) { mutableListOf() }
-                val idList = idMap.getOrPut(dateInfo) { mutableListOf() }
-                it.relation = "Episode ${v[0]}"
-                if (!idList.contains(it.id) && libraryMediaIds.contains(it.id)) {
-                    idList.add(it.id)
-                    list.add(it)
+            if (showOnlyLibrary) {
+                val userId = Anilist.userid ?: 0
+                val userLibrary = Anilist.query.getMediaLists(true, userId)
+                val libraryMediaIds = userLibrary.flatMap { it.value }.map { it.id }
+
+                res.forEach {
+                    val v = it.relation?.split(",")?.map { i -> i.toLong() }!!
+                    val dateInfo = df.format(Date(v[1] * 1000))
+                    val list = map.getOrPut(dateInfo) { mutableListOf() }
+                    val idList = idMap.getOrPut(dateInfo) { mutableListOf() }
+                    it.relation = "Episode ${v[0]}"
+                    if (!idList.contains(it.id) && libraryMediaIds.contains(it.id)) {
+                        idList.add(it.id)
+                        list.add(it)
+                    }
+                }
+            } else {
+                res.forEach {
+                    val v = it.relation?.split(",")?.map { i -> i.toLong() }!!
+                    val dateInfo = df.format(Date(v[1] * 1000))
+                    val list = map.getOrPut(dateInfo) { mutableListOf() }
+                    val idList = idMap.getOrPut(dateInfo) { mutableListOf() }
+                    it.relation = "Episode ${v[0]}"
+                    if (!idList.contains(it.id)) {
+                        idList.add(it.id)
+                        list.add(it)
+                    }
                 }
             }
+
+            if (showOnlyLibrary) {
+                cachedLibraryCalendarData = map
+            } else {
+                cachedAllCalendarData = map
+            }
+
+            calendar.postValue(map)
         } else {
-            res.forEach {
-                val v = it.relation?.split(",")?.map { i -> i.toLong() }!!
-                val dateInfo = df.format(Date(v[1] * 1000))
-                val list = map.getOrPut(dateInfo) { mutableListOf() }
-                val idList = idMap.getOrPut(dateInfo) { mutableListOf() }
-                it.relation = "Episode ${v[0]}"
-                if (!idList.contains(it.id)) {
-                    idList.add(it.id)
-                    list.add(it)
-                }
-            }
+            calendar.postValue(cacheToUse)
         }
-        calendar.postValue(map)
     }
 }
