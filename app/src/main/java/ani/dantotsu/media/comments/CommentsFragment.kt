@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.animation.doOnEnd
 import androidx.core.content.res.ResourcesCompat
@@ -108,6 +109,10 @@ class CommentsFragment : Fragment() {
                 binding.commentsRefresh.isRefreshing = false
             }
             activity.binding.commentReplyToContainer.visibility = View.GONE
+        }
+
+        lifecycleScope.launch {
+            binding.commentCounter.text = commentCounter(mediaId)
         }
 
         binding.commentsList.adapter = adapter
@@ -587,6 +592,30 @@ class CommentsFragment : Fragment() {
             show()
         }
     }
+
+
+    private suspend fun commentCounter(mediaId: Int): String {
+        var totalComments = 0
+        var currentPage = 1
+
+        while (true) {
+            val response = CommentsAPI.getCommentsForId(mediaId, page = currentPage, tag = null, sort = null)
+            totalPages = response?.totalPages ?: 1
+            totalComments += response?.comments?.size ?: 0
+
+            if (currentPage >= totalPages) {
+                break
+            }
+            currentPage++
+        }
+
+        return if (totalComments > 0) {
+            resources.getString(R.string.comments_counter, totalComments.toString())
+        } else {
+            resources.getString(R.string.no_comments_found)
+        }
+    }
+
 
     private fun processComment() {
         val commentText = activity.binding.commentInput.text.toString()

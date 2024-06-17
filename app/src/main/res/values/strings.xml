@@ -735,6 +735,8 @@
     <string name="try_internal_cast_experimental">Try Internal Cast (Experimental)</string>
 
     <string name="comments">Comments</string>
+    <string name="comments_counter">%1$s Comments</string>
+    <string name="no_comments_found">No Comments found</string>
     <string name="newest">Newest</string>
     <string name="oldest">Oldest</string>
     <string name="highest_rated">Highest rated</string>
