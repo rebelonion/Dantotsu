@@ -47,6 +47,7 @@ class ListActivity : AppCompatActivity() {
 
         window.statusBarColor = primaryColor
         window.navigationBarColor = primaryColor
+        binding.listed.visibility = View.GONE
         binding.listTabLayout.setBackgroundColor(primaryColor)
         binding.listAppBar.setBackgroundColor(primaryColor)
         binding.listTitle.setTextColor(primaryTextColor)

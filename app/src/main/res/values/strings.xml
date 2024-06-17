@@ -715,6 +715,7 @@
     <string name="installed_manga">Installed Manga</string>
     <string name="color_picker">Color Picker</string>
     <string name="random_selection">Random Selection</string>
+    <string name="listed_in_library">Listed in Library</string>
     <string name="incognito_mode">Incognito Mode</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="configure">Configure</string>
