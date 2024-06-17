@@ -83,7 +83,7 @@ class CommentsFragment : Fragment() {
             activity.binding.commentInputLayout
         )
 
-        //get the media id from the intent
+        // Get the media id from the intent
         val mediaId = arguments?.getInt("mediaId") ?: -1
         mediaName = arguments?.getString("mediaName") ?: "unknown"
         if (mediaId == -1) {
@@ -106,6 +106,7 @@ class CommentsFragment : Fragment() {
         binding.commentsRefresh.setOnRefreshListener {
             lifecycleScope.launch {
                 loadAndDisplayComments()
+                binding.commentCounter.text = commentCounter(mediaId)
                 binding.commentsRefresh.isRefreshing = false
             }
             activity.binding.commentReplyToContainer.visibility = View.GONE
@@ -241,7 +242,7 @@ class CommentsFragment : Fragment() {
                     }
                 }
 
-                //adds additional comments to the section
+                // Adds additional comments to the section
                 private suspend fun updateUIWithComment(comment: Comment) {
                     withContext(Dispatchers.Main) {
                         section.add(
@@ -302,7 +303,7 @@ class CommentsFragment : Fragment() {
             }
 
             activity.binding.commentLabel.setOnClickListener {
-                //alert dialog to enter a number, with a cancel and ok button
+                // Alert dialog to enter a number, with a cancel and ok button
                 activity.customAlertDialog().apply {
                     val customView = DialogEdittextBinding.inflate(layoutInflater)
                     setTitle("Enter a chapter/episode number tag")
