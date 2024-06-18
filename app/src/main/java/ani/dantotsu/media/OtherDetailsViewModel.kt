@@ -31,54 +31,45 @@ class OtherDetailsViewModel : ViewModel() {
     private val calendar: MutableLiveData<Map<String, MutableList<Media>>> = MutableLiveData(null)
     fun getCalendar(): LiveData<Map<String, MutableList<Media>>> = calendar
     suspend fun loadCalendar(showOnlyLibrary: Boolean = false) {
-        val cacheToUse = if (showOnlyLibrary) cachedLibraryCalendarData else cachedAllCalendarData
-
-        if (cacheToUse == null) {
+        if (cachedAllCalendarData == null || cachedLibraryCalendarData == null) {
             val curr = System.currentTimeMillis() / 1000
             val res = Anilist.query.recentlyUpdated(curr - 86400, curr + (86400 * 6))
             val df = DateFormat.getDateInstance(DateFormat.FULL)
-            val map = mutableMapOf<String, MutableList<Media>>()
+            val allMap = mutableMapOf<String, MutableList<Media>>()
+            val libraryMap = mutableMapOf<String, MutableList<Media>>()
             val idMap = mutableMapOf<String, MutableList<Int>>()
 
-            if (showOnlyLibrary) {
-                val userId = Anilist.userid ?: 0
-                val userLibrary = Anilist.query.getMediaLists(true, userId)
-                val libraryMediaIds = userLibrary.flatMap { it.value }.map { it.id }
+            val userId = Anilist.userid ?: 0
+            val userLibrary = Anilist.query.getMediaLists(true, userId)
+            val libraryMediaIds = userLibrary.flatMap { it.value }.map { it.id }
 
-                res.forEach {
-                    val v = it.relation?.split(",")?.map { i -> i.toLong() }!!
-                    val dateInfo = df.format(Date(v[1] * 1000))
-                    val list = map.getOrPut(dateInfo) { mutableListOf() }
-                    val idList = idMap.getOrPut(dateInfo) { mutableListOf() }
-                    it.relation = "Episode ${v[0]}"
-                    if (!idList.contains(it.id) && libraryMediaIds.contains(it.id)) {
-                        idList.add(it.id)
-                        list.add(it)
-                    }
+            res.forEach {
+                val v = it.relation?.split(",")?.map { i -> i.toLong() }!!
+                val dateInfo = df.format(Date(v[1] * 1000))
+                val list = allMap.getOrPut(dateInfo) { mutableListOf() }
+                val libraryList = if (libraryMediaIds.contains(it.id)) {
+                    libraryMap.getOrPut(dateInfo) { mutableListOf() }
+                } else {
+                    null
                 }
-            } else {
-                res.forEach {
-                    val v = it.relation?.split(",")?.map { i -> i.toLong() }!!
-                    val dateInfo = df.format(Date(v[1] * 1000))
-                    val list = map.getOrPut(dateInfo) { mutableListOf() }
-                    val idList = idMap.getOrPut(dateInfo) { mutableListOf() }
-                    it.relation = "Episode ${v[0]}"
-                    if (!idList.contains(it.id)) {
-                        idList.add(it.id)
-                        list.add(it)
-                    }
+                val idList = idMap.getOrPut(dateInfo) { mutableListOf() }
+                it.relation = "Episode ${v[0]}"
+                if (!idList.contains(it.id)) {
+                    idList.add(it.id)
+                    list.add(it)
+                    libraryList?.add(it)
                 }
             }
 
-            if (showOnlyLibrary) {
-                cachedLibraryCalendarData = map
-            } else {
-                cachedAllCalendarData = map
-            }
-
-            calendar.postValue(map)
-        } else {
-            calendar.postValue(cacheToUse)
+            cachedAllCalendarData = allMap
+            cachedLibraryCalendarData = libraryMap
         }
+
+        val cacheToUse: Map<String, MutableList<Media>> = if (showOnlyLibrary) {
+            cachedLibraryCalendarData ?: emptyMap()
+        } else {
+            cachedAllCalendarData ?: emptyMap()
+        }
+        calendar.postValue(cacheToUse)
     }
 }
