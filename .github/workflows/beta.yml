@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: true
+      SKIP_BUILD: true
 
     steps:
     - name: Checkout repo
@@ -40,6 +41,9 @@ jobs:
         echo "Commits since $LAST_SHA:"
         # Accumulate commit logs in a shell variable
         COMMIT_LOGS=$(git log $LAST_SHA..HEAD --pretty=format:"● %s ~%an")
+        # Debugging: Print the raw commit logs
+        echo "Raw commit logs:"
+        echo "$COMMIT_LOGS"
         # URL-encode the newline characters for GitHub Actions
         COMMIT_LOGS="${COMMIT_LOGS//'%'/'%25'}"
         COMMIT_LOGS="${COMMIT_LOGS//$'\n'/'%0A'}"
@@ -71,20 +75,20 @@ jobs:
         distribution: 'temurin'
         java-version: 17
         cache: gradle
-  
-    - name: Decode Keystore File
-      run: echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > $GITHUB_WORKSPACE/key.keystore
-  
+
     - name: List files in the directory
       run: ls -l
-      
+
     - name: Make gradlew executable
+      if: ${{ env.SKIP_BUILD != 'true' }}
       run: chmod +x ./gradlew
   
     - name: Build with Gradle
-      run: ./gradlew assembleGoogleAlpha -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/key.keystore -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
+      if: ${{ env.SKIP_BUILD != 'true' }}
+      run: ./gradlew assembleGoogleAlpha
 
     - name: Upload a Build Artifact
+      if: ${{ env.SKIP_BUILD != 'true' }}
       uses: actions/upload-artifact@v4
       with:
           name: Dantotsu
@@ -93,24 +97,51 @@ jobs:
           path: "app/build/outputs/apk/google/alpha/app-google-alpha.apk"
             
     - name: Upload APK to Discord and Telegram
-      if: ${{ github.repository == 'rebelonion/Dantotsu' }}
       shell: bash
       run: |
         #Discord
         commit_messages=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g; s/^/\n/')
-        #  Truncate commit messages if they are too long
-        max_length=1900 # Adjust this value as needed
+        max_length=1000
         if [ ${#commit_messages} -gt $max_length ]; then
           commit_messages="${commit_messages:0:$max_length}... (truncated)"
         fi
-        contentbody=$( jq -nc --arg msg "Alpha-Build: <@&1225347048321191996> **$VERSION**:" --arg commits "$commit_messages" '{"content": ($msg + "\n" + $commits)}' )
-        curl -F "payload_json=${contentbody}" -F "dantotsu_debug=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" ${{ secrets.DISCORD_WEBHOOK }}
+        discord_data=$(jq -nc \
+                      --arg field_value "$commit_messages" \
+                      --arg footer_text "Version $VERSION" \
+                      --arg timestamp "$(date -u +%Y-%m-%dT%H:%M:%S.000Z)" \
+                      --arg thumbnail_url "https://avatars.githubusercontent.com/u/41344259?v=4" \
+                      '{
+                        "content": "everyone",
+                        "embeds": [
+                          {
+                            "title": "New Alpha-Build dropped",
+                            "color": 15532323,
+                            "fields": [
+                              {
+                                "name": "Commits:",
+                                "value": $field_value,
+                                "inline": true
+                              }
+                            ],
+                            "footer": {
+                              "text": $footer_text
+                            },
+                            "timestamp": $timestamp,
+                            "thumbnail": {
+                              "url": $thumbnail_url
+                            }
+                          }
+                        ],
+                        "attachments": []
+                      }')
+        echo "$discord_data"
+        curl -H "Content-Type: application/json" \
+             -d "$discord_data" \
+             ${{ secrets.DISCORD_WEBHOOK }}
+        echo "$response_headers"
         
-        #Telegram
-        curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
-          -F "document=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" \
-          -F "caption=Alpha-Build: ${VERSION}: ${commit_messages}" \
-         https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
+        curl -F "dantotsu_debug=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" \
+             ${{ secrets.DISCORD_WEBHOOK }}
 
       env:
         COMMIT_LOG: ${{ env.COMMIT_LOG }}
