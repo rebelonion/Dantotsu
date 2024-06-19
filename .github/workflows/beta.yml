@@ -46,7 +46,7 @@ jobs:
         echo "Raw commit logs:"
         echo "$COMMIT_LOGS"
         # Replace commit messages with pull request links
-        COMMIT_LOGS=$(echo "$COMMIT_LOGS" | sed -E 's/#([0-9]+)/[#\1](https:\/\/github.com\/rebelonion\/Dantotsu\/pull\/\1)/g')
+        COMMIT_LOGS=$(echo "$COMMIT_LOGS" | sed -E 's/\(#([0-9]+)\)/[#\2](https:\/\/github.com\/rebelonion\/Dantotsu\/pull\/\2)/g')
         # Debugging: Print the processed commit logs
         echo "Processed commit logs:"
         echo "$COMMIT_LOGS"
