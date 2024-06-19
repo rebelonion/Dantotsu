@@ -37,11 +37,11 @@ jobs:
           LAST_SHA=$(cat last_sha.txt)
         else
           # Fallback to first commit if no previous SHA available
-          LAST_SHA=$(git rev-list --max-parents=10 HEAD)
+          LAST_SHA=$(git rev-parse HEAD~10)
         fi
         echo "Commits since $LAST_SHA:"
         # Accumulate commit logs in a shell variable
-        COMMIT_LOGS=$(git log $LAST_SHA..HEAD --pretty=format:"● %s ~%an")
+        COMMIT_LOGS=$(git log $LAST_SHA..HEAD --pretty=format:"● %s ~%an" -n 10)
         # Debugging: Print the raw commit logs
         echo "Raw commit logs:"
         echo "$COMMIT_LOGS"
@@ -117,7 +117,7 @@ jobs:
                       --arg timestamp "$(date -u +%Y-%m-%dT%H:%M:%S.000Z)" \
                       --arg thumbnail_url "https://avatars.githubusercontent.com/u/41344259?v=4" \
                       '{
-                        "content": "@everyone",
+                        "content": "@here",
                         "embeds": [
                           {
                             "title": "New Alpha-Build dropped",
