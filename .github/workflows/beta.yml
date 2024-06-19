@@ -37,11 +37,11 @@ jobs:
           LAST_SHA=$(cat last_sha.txt)
         else
           # Fallback to first commit if no previous SHA available
-          LAST_SHA=$(git rev-parse HEAD~10)
+          LAST_SHA=$(git rev-list --max-parents=10 HEAD)
         fi
         echo "Commits since $LAST_SHA:"
         # Accumulate commit logs in a shell variable
-        COMMIT_LOGS=$(git log $LAST_SHA..HEAD --pretty=format:"● %s ~%an" -n 10)
+        COMMIT_LOGS=$(git log $LAST_SHA..HEAD --pretty=format:"● %s ~%an")
         # Debugging: Print the raw commit logs
         echo "Raw commit logs:"
         echo "$COMMIT_LOGS"
