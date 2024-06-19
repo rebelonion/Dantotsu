@@ -45,6 +45,11 @@ jobs:
         # Debugging: Print the raw commit logs
         echo "Raw commit logs:"
         echo "$COMMIT_LOGS"
+        # Replace commit messages with pull request links
+        COMMIT_LOGS=$(echo "$COMMIT_LOGS" | sed -E 's/\((#[0-9]+)\)/[\1](<https:\/\/github.com\/rebelonion\/Dantotsu\/pull\/\2>)/g')
+        # Debugging: Print the processed commit logs
+        echo "Processed commit logs:"
+        echo "$COMMIT_LOGS"
         # URL-encode the newline characters for GitHub Actions
         COMMIT_LOGS="${COMMIT_LOGS//'%'/'%25'}"
         COMMIT_LOGS="${COMMIT_LOGS//$'\n'/'%0A'}"
