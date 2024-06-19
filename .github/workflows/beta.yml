@@ -1,6 +1,7 @@
 name: Build APK and Notify Discord
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - dev
@@ -22,6 +23,7 @@ jobs:
 
         
     - name: Download last SHA artifact
+      if: ${{ env.SKIP_BUILD != 'true' }}
       uses: dawidd6/action-download-artifact@v3
       with:
         workflow: beta.yml
