@@ -27,7 +27,6 @@ jobs:
         workflow: beta.yml
         name: last-sha
         path: .
-      
       continue-on-error: true
 
     - name: Get Commits Since Last Run
