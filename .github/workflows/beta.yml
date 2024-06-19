@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: true
-      SKIP_BUILD: true
+      SKIP_BUILD: false
 
     steps:
     - name: Checkout repo
@@ -37,7 +37,7 @@ jobs:
           LAST_SHA=$(cat last_sha.txt)
         else
           # Fallback to first commit if no previous SHA available
-          LAST_SHA=$(git rev-list --max-parents=10 HEAD)
+          LAST_SHA=$(git rev-list --max-parents=0 HEAD)
         fi
         echo "Commits since $LAST_SHA:"
         # Accumulate commit logs in a shell variable
