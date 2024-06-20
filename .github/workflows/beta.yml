@@ -12,7 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: true
-      SKIP_BUILD: true
 
     steps:
     - name: Checkout repo
@@ -41,8 +40,6 @@ jobs:
         echo "Commits since $LAST_SHA:"
         # Accumulate commit logs in a shell variable
         COMMIT_LOGS=$(git log $LAST_SHA..HEAD --pretty=format:"● %s ~%an")
-        # Replace commit messages with pull request links
-        COMMIT_LOGS=$(echo "$COMMIT_LOGS" | sed -E 's/#([0-9]+)/[#\1](https:\/\/github.com\/rebelonion\/Dantotsu\/pull\/\1)/g')
         # URL-encode the newline characters for GitHub Actions
         COMMIT_LOGS="${COMMIT_LOGS//'%'/'%25'}"
         COMMIT_LOGS="${COMMIT_LOGS//$'\n'/'%0A'}"
@@ -82,7 +79,6 @@ jobs:
       run: chmod +x ./gradlew
   
     - name: Build with Gradle
-      if: ${{ env.SKIP_BUILD != 'true' }}
       run: ./gradlew assembleGoogleAlpha
 
     - name: Upload a Build Artifact
@@ -98,55 +94,12 @@ jobs:
       run: |
         #Discord
         commit_messages=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g; s/^/\n/')
-        max_length=1000
+        #  Truncate commit messages if they are too long
+        max_length=1900 # Adjust this value as needed
         if [ ${#commit_messages} -gt $max_length ]; then
           commit_messages="${commit_messages:0:$max_length}... (truncated)"
         fi
-        authors=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g' | grep -oP '~\K[^\n]+' | sort -u | sed 's/^/◗ **/' | sed 's/$/**/' | paste -sd '\n' -)
-        echo "$authors"
-        max_authors_length=500
-        if [ ${#authors} -gt $max_authors_length ]; then
-          authors="${authors:0:$max_authors_length}... (and more)"
-        fi
-        discord_data=$(jq -nc \
-                      --arg field_value "$commit_messages" \
-                      --arg footer_text "Version $VERSION" \
-                      --arg timestamp "$(date -u +%Y-%m-%dT%H:%M:%S.000Z)" \
-                      --arg thumbnail_url "https://avatars.githubusercontent.com/u/41344259?v=4" \
-                      '{
-                        "content": "@here",
-                        "embeds": [
-                          {
-                            "title": "New Alpha-Build dropped",
-                            "color": 15532323,
-                            "fields": [
-                              {
-                                "name": "Commits:",
-                                "value": $field_value,
-                                "inline": true
-                              },
-                              {
-                                "name": "Developers:",
-                                "value": $author_value,
-                                "inline": false
-                              }
-                            ],
-                            "footer": {
-                              "text": $footer_text
-                            },
-                            "timestamp": $timestamp,
-                            "thumbnail": {
-                              "url": $thumbnail_url
-                            }
-                          }
-                        ],
-                        "attachments": []
-                      }')
-        echo "$discord_data"
-        curl -H "Content-Type: application/json" \
-             -d "$discord_data" \
-             ${{ secrets.DISCORD_WEBHOOK }}
-        echo "$response_headers"
+        contentbody=$( jq -nc --arg msg "Alpha-Build: <@&1225347048321191996> **$VERSION**:" --arg commits "$commit_messages" '{"content": ($msg + "\n" + $commits)}' )
         curl -F "payload_json=${contentbody}" -F "dantotsu_debug=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" ${{ secrets.DISCORD_WEBHOOK }}
         
         #Telegram
