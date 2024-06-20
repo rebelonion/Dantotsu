@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: true
+      SKIP_BUILD: true
 
     steps:
     - name: Checkout repo
@@ -81,6 +82,7 @@ jobs:
       run: chmod +x ./gradlew
   
     - name: Build with Gradle
+      if: ${{ env.SKIP_BUILD != 'true' }}
       run: ./gradlew assembleGoogleAlpha
 
     - name: Upload a Build Artifact
