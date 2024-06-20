@@ -122,11 +122,11 @@
     <string name="chaps">章</string>
     <string name="chap">章</string>
     <string name="wrong"><u>間違ったタイトル？</u></string>
-    <string name="source_not_found">        Hmm, nothing came up from this source.\n
-        Let\'s look elsewhere :)
+    <string name="source_not_found">        Nothing came up from this source.\n
+        Let\'s look elsewhere.
     </string>
     <string name="download_not_found">        Your downloads are feeling a bit lonely…\n
-        Nothing here yet :(
+        Try downloading something.
     </string>
     <string name="not_supported">%1$sはサポートされていません！</string>
     <string name="server_selector">サーバーを選択</string>
@@ -566,13 +566,7 @@
     <string name="question_6">なぜ私の統計情報が更新されないのですか？</string>
     <string name="answer_6">これは、自動的に48時間ごとに更新されます（Anilistによる）。統計情報を本当に更新する必要がある場合は、この[link](https://anilist.co/settings/lists)に移動して統計情報を強制的に更新することができます。</string>
     <string name="question_7">アニメをダウンロードする方法</string>
-    <string name="answer_7">現在、ダウンロードする方法は2つあります。1つは内部、もう1つは外部です。内部でダウンロードする場合、アプリ内で表示されますが、そのエピソードを開くのはアプリだけで、移動したり共有したりはできません。他のオプションは、外部ダウンロードを使用することです。ダウンロードマネージャーが必要で、別のビデオプレーヤーで視聴する必要があります。外部ダウンロードは共有できますが、Dantotsuアプリ内で表示することはできません。\n\n•内部ダウンロードするには：\n\n1. ダウンロードボタンをタップします。\n2. サーバーとビデオの品質を選択します。\n3. 利益。\n\n•外部ダウンロードするには：\n\n 1. Google Play Storeから1DMまたはADMをダウンロードします。
-            \n2. アプリに入り、ストレージアクセスを許可し、設定（ダウンロード速度、ダウンロードパスなど（オプション））を設定します。
-            \n3. 今度は、`Dantotsu &gt; Settings &gt; Common &gt; Download Managers`に移動し、さきほど設定したダウンロードマネージャーを選択します。
-            \n4. 好きなエピソードに移動し、任意のサーバーのダウンロードアイコンを押します。再度設定をするためのポップアップが表示される場合がありますが、「ダウンロード」を押して指示されたパスに保存されます。
-    
-            \n\n注意：ダイレクトダウンロードはマネージャーなしでも可能ですが、推奨されません。
-    \n\nネットウヨメメモ：内部的にダウンロードされたエピソードは、`Android/data/ani.dantotsu.*/files/Anime_Downloads`に保存されます。\nそれらのファイルは`.exo`形式であり、数百のピースに分割されて暗号化されているため、再生することはできません。</string>
+    <string name="answer_7">There are two methods of downloading. Internal and external. If you download internally, then it can be viewed within the app and tracking will work normally for it. The other option is to use external downloader. It requires a download manager to download and a separate video player to watch. External downloads cannot be viewed within the Dantotsu app.\n\n•To download internally:\n\n1. Tap the download button.\n2. For the first time, it will ask you to set a download location. All your downloads will be stored there.\n3. Pick the server and the video quality.\n4. Profit.\n\n•To download externally:\n\n 1. Download 1DM or ADM from Google Play Store.\n2. Enter the app, give storage access and set your preferences (downloading speed, downloading path etc(optional))\n3. Now go to \`Dantotsu &gt; Settings &gt; Common &gt; Download Managers\` and choose the download manager you just set up.\n4. Go to your desired episode and press on the download icon of any server. There may be a popup to set your preferences again, just press on \"Download\" and it will be saved in the directed path.\n\nNote: External downloads are also possible without a manager but it\'s not recommended.\n\nNerd Note: Internally downloaded episodes are stored in \`{your set location}/Dantotsu/Anime/*`\nYou can change your download location in settings but your previous downloaded episodes will not show up in the app anymore.</string>
     <string name="question_9">NSFWコンテンツを有効にする方法は？</string>
     <string name="answer_9">この[link](https://anilist.co/settings/media)から18+コンテンツを有効にすることで、NSFWコンテンツを有効にできます。また、\`Settings &gt; Extensions &gt; NSFW extensions\`でNSFW拡張機能を有効にする必要もあります。</string>
     <string name="question_10">MAL/KitsuリストをAnilistにインポートする方法は？</string>
@@ -591,6 +585,10 @@
     <string name="answer_16">いくつかの基本的な修正方法は次のとおりです：\n\n• すべての拡張機能を更新します。\n• Webビューを開き、読み込まれるのを待ちます。読み込みが完了したら、戻ります。（Webビューに404エラーまたは類似のエラーが表示される場合、ソースがダウンしている可能性があります）\n• 設定から別のDNSを使用します。できれば、Libre。\n• 信頼できるVPNを試してみてください。（これを行った後はステップ1を繰り返す必要があります）\n\n上記の手順のいずれも機能しない場合は、異なるソースを使用するか、助けを求めるために[discord](https://discord.gg/invite/4HPZ5nAWwM)に参加してください。</string>
     <string name="question_17">便利なヒントとトリック</string>
     <string name="answer_17">以下は、おそらく知っているかもしれない、または知らないかもしれないヒントとトリックを示しています - \n \n \n - 設定のDantotsuロゴを長押しすると、手動で新しい更新があるかどうかを確認できます。\n \n - エラーメッセージ/タグ/同義語またはタイトルを長押しすると、コピーされます。\n \n - エピソードを他のアプリで開くには、そのエピソードの任意のサーバーを長押しします。これにより、他のビデオプレーヤーを使用してエピソードをストリーミングしたり、ダウンロードマネージャーを使用してエピソードをダウンロードしたりできます。\n \n - この[link](https://anilist.co/settings/lists)を使用してカスタムリストを設定できます。（サインインする必要があります）\n \n - エピソード/チャプターが自動的に進行しない場合は、そのアニメ/マンガのステータスバー（計画/繰り返し/視聴ボタン）を長押しします。次に、チャプターを開始したりエピソードを終了したりすると、ポップアップが表示されます。そこで「はい」を押します。</string>
+    <string name="question_18">I can\'t login to Anilist.</string>
+    <string name="answer_18">The reason this happens is probably because you\'re not using the default browser.\n\n&gt;You have to set Chrome as your default browser to login to Anilist.\n\n&gt;It takes a few seconds for the login button to display changes.\n\nIf it doesn\'t work then you could possibly be IP banned from Anilist or your ISP banned Anilist themselves. We believe that this is highly unlikely so open [Anilist](https://anilist.co) in your browser to see if that\`s the case.</string>
+    <string name="question_19">What is torrent? How do I use it?</string>
+    <string name="answer_19">Torrent or formally known as BitTorrent is an internet communication protocol for peer\-to\-peer file sharing. A torrent network doesn\'t use a centralised server to host files. It shares files in a decentralised manner. A torrent network has two types of peers. Seeders &amp; Leachers.\n\n• Seeders : These are peers who completed downloading and has the full file. And now they are sharing this file to other peers which is called seeding. A torrent cannot work without at least one seeder. The more seeder a torrent has, the better.\n\n• Leachers : These are peers who are currently downloading the file. If they currently have 40&#37; downloaded then they will share the 40&#37; to any other peers who requests it.\n\nUnlike a centralised server, torrents have no bandwidth limit. You can get your files from hundreds of seeders at the highest possible speed your internet can offer. But many ISP throttle torrent to slow them down because it\'s demanding on their infrastructure. Use a VPN to circumvent this.\n\n• How to use torrents :\n\n1. Install the Torrent Add-on from \`Dantotsu &gt; Settings &gt; Add-ons &gt; Torrent Add-on.\` \n2. Get a source that provides torrents.\n3. USE A VPN. Using VPN while torrenting only has upsides. Without a VPN your IP address will be exposed, your ISP will throttle your network and you could possibly be fined if you live in a country first world country. DO NOT USE IT WITHOUT A VPN IF YOU DON\'T KNOW WHAT YOU\'RE DOING.\n4. Now use that source to start torrenting.</string>
     <string name="subscribed_notification">登録しました！新しいエピソードが%1$sでリリースされると通知を受け取ります。</string>
     <string name="unsubscribed_notification">登録解除しました。通知は受け取れません。</string>
     <string name="episode_plural">エピソード</string>
