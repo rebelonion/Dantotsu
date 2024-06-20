@@ -92,7 +92,7 @@ jobs:
     - name: Upload APK to Discord and Telegram
       shell: bash
       run: |
-        #Discord
+        # Discord
         commit_messages=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g; s/^/\n/')
         #  Truncate commit messages if they are too long
         max_length=1900 # Adjust this value as needed
