@@ -102,7 +102,12 @@ jobs:
         if [ ${#commit_messages} -gt $max_length ]; then
           commit_messages="${commit_messages:0:$max_length}... (truncated)"
         fi
-        authors=$(echo "$COMMIT_LOG" | grep -oP '~\K[^\n]+' | sort -u | sed 's/^/◗ **/' | sed 's/$/**/' | paste -sd '\n' -)
+        authors=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g' | grep -oP '~\K[^\n]+' | sort -u | sed 's/^/◗ **/' | sed 's/$/**/' | paste -sd '\n' -)
+        echo "$authors"
+        max_authors_length=500
+        if [ ${#authors} -gt $max_authors_length ]; then
+          authors="${authors:0:$max_authors_length}... (and more)"
+        fi
         discord_data=$(jq -nc \
                       --arg field_value "$commit_messages" \
                       --arg footer_text "Version $VERSION" \
