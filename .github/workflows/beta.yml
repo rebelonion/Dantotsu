@@ -26,7 +26,6 @@ jobs:
         workflow: beta.yml
         name: last-sha
         path: .
-      
       continue-on-error: true
 
     - name: Get Commits Since Last Run
@@ -40,6 +39,8 @@ jobs:
         echo "Commits since $LAST_SHA:"
         # Accumulate commit logs in a shell variable
         COMMIT_LOGS=$(git log $LAST_SHA..HEAD --pretty=format:"● %s ~%an")
+        # Replace commit messages with pull request links
+        COMMIT_LOGS=$(echo "$COMMIT_LOGS" | sed -E 's/#([0-9]+)/[#\1](https:\/\/github.com\/rebelonion\/Dantotsu\/pull\/\1)/g')
         # URL-encode the newline characters for GitHub Actions
         COMMIT_LOGS="${COMMIT_LOGS//'%'/'%25'}"
         COMMIT_LOGS="${COMMIT_LOGS//$'\n'/'%0A'}"
@@ -74,13 +75,13 @@ jobs:
   
     - name: Decode Keystore File
       run: echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > $GITHUB_WORKSPACE/key.keystore
-  
+
     - name: List files in the directory
       run: ls -l
-      
+
     - name: Make gradlew executable
       run: chmod +x ./gradlew
-  
+
     - name: Build with Gradle
       run: ./gradlew assembleGoogleAlpha -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/key.keystore -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
 
@@ -96,22 +97,121 @@ jobs:
       if: ${{ github.repository == 'rebelonion/Dantotsu' }}
       shell: bash
       run: |
-        #Discord
+        # Prepare Discord embed
+        fetch_user_details() {
+          local login=$1
+          user_details=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                         "https://api.github.com/users/$login")
+          name=$(echo "$user_details" | jq -r '.name // .login')
+          avatar_url=$(echo "$user_details" | jq -r '.avatar_url')
+          echo "$name|$login|$avatar_url"
+        }
+        # Additional information for the goats
+        declare -A additional_info
+        additional_info["ibo"]=" Discord: <@951737931159187457>\n AniList: [takarealist112](<https://anilist.co/user/takarealist112/>)"
+        additional_info["aayush262"]=" Discord: <@918825160654598224>\n AniList: [aayush262](<https://anilist.co/user/aayush262/>)"
+        additional_info["rebelonion"]=" Discord: <@714249925248024617>\n AniList: [rebelonion](<https://anilist.co/user/rebelonion/>)\n PornHub: [rebelonion](<https://www.cornhub.com/model/rebelonion>)" 
+        # Extract contributor names from commit log and make unique list
+        committers=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g' | grep -oP '(?<=~)[^%]*')
+        committers=$(echo "$committers" | sort | uniq)
+        # Fetch contributors from GitHub
+        contributors=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                       "https://api.github.com/repos/rebelonion/Dantotsu/contributors")
+        # Initialize needed variables
+        developers=""
+        committers_count=0
+        thumbnail_url="https://i.imgur.com/5o3Y9Jb.gif"
+        # Process contributors and filter by committers
+        while read -r login commits; do
+          user_info=$(fetch_user_details "$login")
+          name=$(echo "$user_info" | cut -d'|' -f1)
+          login=$(echo "$user_info" | cut -d'|' -f2)
+          avatar_url=$(echo "$user_info" | cut -d'|' -f3)
+          if echo "$committers" | grep -qw "$name"; then
+            extra_info="${additional_info[$name]}"
+            if [ -n "$extra_info" ]; then
+              extra_info=$(echo -e "$extra_info" | sed 's/^/- /')
+            fi
+            developers="${developers}◗ **${name}**
+          ${extra_info}
+        - Github: [${login}](https://github.com/${login})
+        - Commits: ${commits}
+        "
+            committers_count=$((committers_count + 1))
+            if [ $committers_count -eq 1 ]; then
+              thumbnail_url="$avatar_url"
+            else
+              thumbnail_url="https://i.imgur.com/5o3Y9Jb.gif"
+            fi
+          fi
+        done < <(echo "$contributors" | jq -r '.[] | "\(.login) \(.contributions)"')
+
+
+        # Remove trailing newline
+        developers=$(echo "$developers" | sed '$ s/$//')
         commit_messages=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g; s/^/\n/')
-        #  Truncate commit messages if they are too long
-        max_length=1900 # Adjust this value as needed
+
+        # Truncate field values
+        max_length=1000
+        if [ ${#developers} -gt $max_length ]; then
+          developers="${developers:0:$max_length}... (truncated)"
+        fi
         if [ ${#commit_messages} -gt $max_length ]; then
           commit_messages="${commit_messages:0:$max_length}... (truncated)"
         fi
-        contentbody=$( jq -nc --arg msg "Alpha-Build: <@&1225347048321191996> **$VERSION**:" --arg commits "$commit_messages" '{"content": ($msg + "\n" + $commits)}' )
-        curl -F "payload_json=${contentbody}" -F "dantotsu_debug=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" ${{ secrets.DISCORD_WEBHOOK }}
+
+        # Construct Discord payload
+        discord_data=$(jq -nc \
+                      --arg field_value "$commit_messages" \
+                      --arg author_value "$developers" \
+                      --arg footer_text "Version $VERSION" \
+                      --arg timestamp "$(date -u +%Y-%m-%dT%H:%M:%S.000Z)" \
+                      --arg thumbnail_url "$thumbnail_url" \
+                      '{
+                        "content": "@here",
+                        "embeds": [
+                          {
+                            "title": "New Alpha-Build dropped",
+                            "color": 15532323,
+                            "fields": [
+                              {
+                                "name": "Commits:",
+                                "value": $field_value,
+                                "inline": true
+                              },
+                              {
+                                "name": "Developers:",
+                                "value": $author_value,
+                                "inline": false
+                              }
+                            ],
+                            "footer": {
+                              "text": $footer_text
+                            },
+                            "timestamp": $timestamp,
+                            "thumbnail": {
+                              "url": $thumbnail_url
+                            }
+                          }
+                        ],
+                        "attachments": []
+                      }')
+        # Send Discord message
+        curl -H "Content-Type: application/json" \
+             -d "$discord_data" \
+             ${{ secrets.DISCORD_WEBHOOK }}
         
-        #Telegram
+        # Upload APK to Discord
+        curl -F "payload_json=${contentbody}" \
+             -F "dantotsu_debug=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" \
+             ${{ secrets.DISCORD_WEBHOOK }}
+        
+        # Send Telegram message and upload APK
         curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
           -F "document=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" \
           -F "caption=Alpha-Build: ${VERSION}: ${commit_messages}" \
          https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
-
+    
       env:
         COMMIT_LOG: ${{ env.COMMIT_LOG }}
         VERSION: ${{ env.VERSION }}
