@@ -12,7 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: true
-      SKIP_BUILD: false
 
     steps:
     - name: Checkout repo
@@ -82,7 +81,6 @@ jobs:
       run: chmod +x ./gradlew
   
     - name: Build with Gradle
-      if: ${{ env.SKIP_BUILD != 'true' }}
       run: ./gradlew assembleGoogleAlpha
 
     - name: Upload a Build Artifact
@@ -99,13 +97,13 @@ jobs:
         # Function to fetch user details
         fetch_user_details() {
           local login=$1
-          user_details=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          user_details=$(curl -s -H "Authorization: token ${{ secrets.GH_TOKEN }}" \
                          "https://api.github.com/users/$login")
           name=$(echo "$user_details" | jq -r '.name // .login')
           echo "$name|$login"
         }
         # Fetch contributors
-        contributors=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+        contributors=$(curl -s -H "Authorization: token ${{ secrets.GH_TOKEN }}" \
                        "https://api.github.com/repos/rebelonion/Dantotsu/contributors")
         # Process contributors
         developers=""
