@@ -1,9 +1,6 @@
 package ani.dantotsu.profile
 
 import android.animation.ObjectAnimator
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
@@ -11,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupMenu
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
@@ -26,6 +22,7 @@ import ani.dantotsu.R
 import ani.dantotsu.blurImage
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.Query
+import ani.dantotsu.copyToClipboard
 import ani.dantotsu.databinding.ActivityProfileBinding
 import ani.dantotsu.databinding.ItemProfileAppBarBinding
 import ani.dantotsu.initActivity
@@ -167,11 +164,7 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                                     true
                                 }
                                 R.id.action_copy_user_id -> {
-                                    val userId = user.id.toString()
-                                    val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                                    val clipData = ClipData.newPlainText("User ID", userId)
-                                    clipboardManager.setPrimaryClip(clipData)
-                                    toast(getString(R.string.copied_text, userId))
+                                    copyToClipboard(user.id.toString(), true)
                                     true
                                 }
                                 else -> false
@@ -186,12 +179,8 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                         user.avatar?.medium ?: ""
                     )
                     profileUserName.text = user.name
-                    val profileUserName = findViewById<TextView>(R.id.profileUserName)
                     profileUserName.setOnClickListener {
-                        val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                        val clipData = ClipData.newPlainText("Username", profileUserName.text)
-                        clipboardManager.setPrimaryClip(clipData)
-                        toast(getString(R.string.copied_to_clipboard))
+                        copyToClipboard(profileUserName.text.toString(), true)
                     }
                     val bannerAnimations: ImageView =
                         if (PrefManager.getVal(PrefName.BannerAnimations)) profileBannerImage else profileBannerImageNoKen
