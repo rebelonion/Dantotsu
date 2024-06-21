@@ -630,6 +630,7 @@
     <string name="installed_manga">تم تحميل المناجا</string>
     <string name="color_picker">محدد الألوان</string>
     <string name="random_selection">التحديد العشوائي</string>
+    <string name="listed_in_library">Listed in Library</string>
     <string name="incognito_mode">الوضع المخفي</string>
     <string name="appwidget_text">مثال</string>
     <string name="configure">تعديل</string>
