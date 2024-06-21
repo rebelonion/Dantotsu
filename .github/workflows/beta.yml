@@ -73,14 +73,17 @@ jobs:
         java-version: 17
         cache: gradle
   
+    - name: Decode Keystore File
+      run: echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > $GITHUB_WORKSPACE/key.keystore
+
     - name: List files in the directory
       run: ls -l
-      
+
     - name: Make gradlew executable
       run: chmod +x ./gradlew
-  
+
     - name: Build with Gradle
-      run: ./gradlew assembleGoogleAlpha
+      run: ./gradlew assembleGoogleAlpha -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/key.keystore -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v4
@@ -91,6 +94,7 @@ jobs:
           path: "app/build/outputs/apk/google/alpha/app-google-alpha.apk"
             
     - name: Upload APK to Discord and Telegram
+      if: ${{ github.repository == 'rebelonion/Dantotsu' }}
       shell: bash
       run: |
         # Prepare Discord embed
@@ -163,7 +167,7 @@ jobs:
                       --arg timestamp "$(date -u +%Y-%m-%dT%H:%M:%S.000Z)" \
                       --arg thumbnail_url "$thumbnail_url" \
                       '{
-                        "content": "<@&1209682006376710185>",
+                        "content": "<@&1225347048321191996>",
                         "embeds": [
                           {
                             "title": "New Alpha-Build dropped",

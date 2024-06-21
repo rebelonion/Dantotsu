@@ -52,6 +52,11 @@ class FAQActivity : AppCompatActivity() {
             ),
             Triple(
                 R.drawable.ic_anilist,
+                currContext()?.getString(R.string.question_18) ?: "",
+                currContext()?.getString(R.string.answer_18) ?: ""
+            ),
+            Triple(
+                R.drawable.ic_anilist,
                 currContext()?.getString(R.string.question_6) ?: "",
                 currContext()?.getString(R.string.answer_6) ?: ""
             ),
@@ -59,6 +64,11 @@ class FAQActivity : AppCompatActivity() {
                 R.drawable.ic_round_movie_filter_24,
                 currContext()?.getString(R.string.question_7) ?: "",
                 currContext()?.getString(R.string.answer_7) ?: ""
+            ),
+            Triple(
+                R.drawable.ic_round_magnet_24,
+                currContext()?.getString(R.string.question_19) ?: "",
+                currContext()?.getString(R.string.answer_19) ?: ""
             ),
             Triple(
                 R.drawable.ic_round_lock_open_24,
