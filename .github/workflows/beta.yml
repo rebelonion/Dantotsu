@@ -96,6 +96,7 @@ jobs:
     - name: Upload APK to Discord and Telegram
       shell: bash
       run: |
+        set -x
         # Function to fetch user details
         fetch_user_details() {
           local login=$1
@@ -106,12 +107,16 @@ jobs:
         }
         # Extract unique authors from commit log
         authors=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g' | grep -oP '~\K[^\n]+' | sort -u)
+        echo "Extracted authors: $authors"
         # Fetch contributors
         contributors=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
                        "https://api.github.com/repos/rebelonion/Dantotsu/contributors")
+        echo "Contributors response:"
+        echo "$contributors" | jq '.'
         # Process contributors
         developers=""
         while read -r author; do
+          echo "Processing author: $author"
           contributor=$(echo "$contributors" | jq -r ".[] | select(.login|ascii_downcase == \"$author\"|ascii_downcase)")
           if [ ! -z "$contributor" ]; then
             login=$(echo "$contributor" | jq -r '.login')
@@ -123,10 +128,14 @@ jobs:
         - Commits: ${commits}
         
         "
+          else
+            echo "No contributor found for author: $author"
           fi
         done <<< "$authors"
         # Remove trailing newline
         developers=$(echo "$developers" | sed '$ s/\n$//')
+        echo "Developers string:"
+        echo "$developers"
         # Truncate developers if too long
         max_length=1000
         if [ ${#developers} -gt $max_length ]; then
@@ -137,6 +146,8 @@ jobs:
         if [ ${#commit_messages} -gt $max_length ]; then
           commit_messages="${commit_messages:0:$max_length}... (truncated)"
         fi
+        echo "Commit messages:"
+        echo "$commit_messages"
         # Construct Discord payload
         discord_data=$(jq -nc \
                       --arg field_value "$commit_messages" \
@@ -173,21 +184,27 @@ jobs:
                         ],
                         "attachments": []
                       }')
+        echo "Discord payload:"
+        echo "$discord_data" | jq '.'
+        
         # Send Discord message
-        curl -H "Content-Type: application/json" \
+        response=$(curl -H "Content-Type: application/json" \
              -d "$discord_data" \
-             ${{ secrets.DISCORD_WEBHOOK }}
+             ${{ secrets.DISCORD_WEBHOOK }})
+        echo "Discord response: $response"
         
         # Upload APK to Discord
-        curl -F "payload_json=${contentbody}" \
+        response=$(curl -F "payload_json=${contentbody}" \
              -F "dantotsu_debug=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" \
-             ${{ secrets.DISCORD_WEBHOOK }}
+             ${{ secrets.DISCORD_WEBHOOK }})
+        echo "Discord APK upload response: $response"
         
         # Send Telegram message and upload APK
-        curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
+        response=$(curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
           -F "document=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" \
           -F "caption=Alpha-Build: ${VERSION}: ${commit_messages}" \
-         https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
+         https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument)
+        echo "Telegram response: $response"
     
       env:
         COMMIT_LOG: ${{ env.COMMIT_LOG }}
