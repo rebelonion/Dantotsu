@@ -631,6 +631,7 @@
     <string name="installed_manga">インストール済みのマンガ</string>
     <string name="color_picker">カラーピッカー</string>
     <string name="random_selection">ランダム選択</string>
+    <string name="listed_in_library">Listed in Library</string>
     <string name="incognito_mode">インコグニートモード</string>
     <string name="appwidget_text">例</string>
     <string name="configure">設定</string>
