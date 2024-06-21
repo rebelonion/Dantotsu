@@ -103,20 +103,20 @@ jobs:
           avatar_url=$(echo "$user_details" | jq -r '.avatar_url')
           echo "$name|$login|$avatar_url"
         }
-
+        # Additional information for the goats
+        declare -A additional_info
+        additional_info["ibo"]="\n- Discord: <@951737931159187457>\n- AniList: [takarealist112](https://anilist.co/user/takarealist112/)"
+        additional_info["aayush262"]="\n- Discord: <@918825160654598224>"
         # Extract contributor names from commit log and make unique list
         committers=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g' | grep -oP '(?<=~)[^%]*')
         committers=$(echo "$committers" | sort | uniq)
-
         # Fetch contributors from GitHub
         contributors=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
                        "https://api.github.com/repos/rebelonion/Dantotsu/contributors")
-
         # Initialize needed variables
         developers=""
         committers_count=0
         thumbnail_url="https://i.imgur.com/5o3Y9Jb.gif"
-
         # Process contributors and filter by committers
         while read -r login commits; do
           user_info=$(fetch_user_details "$login")
@@ -124,7 +124,9 @@ jobs:
           login=$(echo "$user_info" | cut -d'|' -f2)
           avatar_url=$(echo "$user_info" | cut -d'|' -f3)
           if echo "$committers" | grep -qw "$name"; then
+            extra_info="${additional_info[$name]}"
             developers="${developers}◗ **${name}**
+        ${extra_info}
         - Github: [${login}](https://github.com/${login})
         - Commits: ${commits}
         "
@@ -138,6 +140,7 @@ jobs:
             fi
           fi
         done < <(echo "$contributors" | jq -r '.[] | "\(.login) \(.contributions)"')
+
 
         # Remove trailing newline
         developers=$(echo "$developers" | sed '$ s/$//')
