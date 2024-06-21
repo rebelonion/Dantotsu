@@ -631,6 +631,7 @@
     <string name="installed_manga">Установленная манга</string>
     <string name="color_picker">Выбор цвета</string>
     <string name="random_selection">Случайный выбор</string>
+    <string name="listed_in_library">Listed in Library</string>
     <string name="incognito_mode">Режим инкогнито</string>
     <string name="appwidget_text">ПРИМЕР</string>
     <string name="configure">Настройка</string>
