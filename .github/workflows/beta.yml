@@ -113,11 +113,16 @@ jobs:
                        "https://api.github.com/repos/rebelonion/Dantotsu/contributors")
         echo "Contributors response:"
         echo "$contributors" | jq '.'
+        # Validate contributors JSON
+        if ! echo "$contributors" | jq empty; then
+          echo "Error: Invalid JSON in contributors response"
+          exit 1
+        fi
         # Process contributors
         developers=""
         while read -r author; do
           echo "Processing author: $author"
-          contributor=$(echo "$contributors" | jq -r ".[] | select(.login|ascii_downcase == \"$author\"|ascii_downcase)")
+          ccontributor=$(echo "$contributors" | jq -r ".[] | select(.login | ascii_downcase == \"$(echo $author | tr '[:upper:]' '[:lower:])\")")
           if [ ! -z "$contributor" ]; then
             login=$(echo "$contributor" | jq -r '.login')
             commits=$(echo "$contributor" | jq -r '.contributions')
