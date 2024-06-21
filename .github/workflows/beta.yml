@@ -116,7 +116,6 @@ jobs:
           developers="${developers}◗ **${name}**
         - Github: [${login}](https://github.com/${login})
         - Commits: ${commits}
-
         "
         done < <(echo "$contributors" | jq -r '.[] | "\(.login) \(.contributions)"')
         # Remove trailing newline
