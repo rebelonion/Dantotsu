@@ -631,6 +631,7 @@
     <string name="installed_manga">स्थापित मंगा</string>
     <string name="color_picker">रंग चुनें</string>
     <string name="random_selection">रैंडम चयन</string>
+    <string name="listed_in_library">Listed in Library</string>
     <string name="incognito_mode">गुप्त मोड</string>
     <string name="appwidget_text">ऐपविजेट_टेक्स्ट</string>
     <string name="configure">कॉन्फ़िगर करें</string>
