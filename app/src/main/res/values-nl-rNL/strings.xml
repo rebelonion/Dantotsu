@@ -631,6 +631,7 @@
     <string name="installed_manga">Geïnstalleerde Manga</string>
     <string name="color_picker">Kleurkiezer</string>
     <string name="random_selection">Willekeurige Selectie</string>
+    <string name="listed_in_library">Listed in Library</string>
     <string name="incognito_mode">Incognitomodus</string>
     <string name="appwidget_text">VOORBEELD</string>
     <string name="configure">Configureren</string>
