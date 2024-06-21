@@ -127,6 +127,7 @@ jobs:
             extra_info="${additional_info[$name]}"
             if [ -n "$extra_info" ]; then
               extra_info=$(echo -e "$extra_info" | sed 's/^/- /')
+              extra_info=$(echo "$extra_info" | sed 's/  -/-/')
             fi
             developers="${developers}◗ **${name}**
           ${extra_info}
