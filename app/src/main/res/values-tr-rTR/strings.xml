@@ -631,6 +631,7 @@
     <string name="installed_manga">Kurulu Mangalar</string>
     <string name="color_picker">Renk Seçici</string>
     <string name="random_selection">Rastgele Seçme</string>
+    <string name="listed_in_library">Listed in Library</string>
     <string name="incognito_mode">Gizli Mod</string>
     <string name="appwidget_text">ÖRNEK</string>
     <string name="configure">Yapılandır</string>
