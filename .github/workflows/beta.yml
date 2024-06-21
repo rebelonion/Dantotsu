@@ -168,7 +168,7 @@ jobs:
                       --arg timestamp "$(date -u +%Y-%m-%dT%H:%M:%S.000Z)" \
                       --arg thumbnail_url "$thumbnail_url" \
                       '{
-                        "content": "@&1225347048321191996",
+                        "content": "<@&1225347048321191996>",
                         "embeds": [
                           {
                             "title": "New Alpha-Build dropped",
