@@ -97,32 +97,47 @@ jobs:
         # Function to fetch user details
         fetch_user_details() {
           local login=$1
-          user_details=$(curl -s -H "Authorization: token ${{ secrets.GH_TOKEN }}" \
+          user_details=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
                          "https://api.github.com/users/$login")
           name=$(echo "$user_details" | jq -r '.name // .login')
           echo "$name|$login"
         }
-        # Fetch contributors
-        contributors=$(curl -s -H "Authorization: token ${{ secrets.GH_TOKEN }}" \
+
+        # Extract contributor names from commit log
+        committers=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g' | grep -oP '(?<=~)[^%]*')
+
+        # Get unique list of committers
+        committers=$(echo "$committers" | sort | uniq)
+
+        # Fetch contributors from GitHub
+        contributors=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
                        "https://api.github.com/repos/rebelonion/Dantotsu/contributors")
-        # Process contributors
+
+        # Initialize developers variable
         developers=""
+
+        # Process contributors and filter by committers
         while read -r login commits; do
           user_info=$(fetch_user_details "$login")
           name=$(echo "$user_info" | cut -d'|' -f1)
           login=$(echo "$user_info" | cut -d'|' -f2)
-          developers="${developers}◗ **${name}**
+          if echo "$committers" | grep -qw "$name"; then
+            developers="${developers}◗ **${name}**
         - Github: [${login}](https://github.com/${login})
         - Commits: ${commits}
         "
+          fi
         done < <(echo "$contributors" | jq -r '.[] | "\(.login) \(.contributions)"')
+
         # Remove trailing newline
         developers=$(echo "$developers" | sed '$ s/$//')
+
         # Truncate developers if too long
         max_length=1000
         if [ ${#developers} -gt $max_length ]; then
           developers="${developers:0:$max_length}... (truncated)"
         fi
+
         # Process commit messages
         commit_messages=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g; s/^/\n/')
         if [ ${#commit_messages} -gt $max_length ]; then
