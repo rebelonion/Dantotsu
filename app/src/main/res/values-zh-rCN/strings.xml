@@ -631,6 +631,7 @@
     <string name="installed_manga">已安装的漫画</string>
     <string name="color_picker">颜色选择器</string>
     <string name="random_selection">随机选择</string>
+    <string name="listed_in_library">Listed in Library</string>
     <string name="incognito_mode">隐身模式</string>
     <string name="appwidget_text">示例</string>
     <string name="configure">配置</string>
