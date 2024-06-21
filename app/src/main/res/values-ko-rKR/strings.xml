@@ -632,6 +632,7 @@
     <string name="installed_manga">설치된 만화</string>
     <string name="color_picker">색상 선택기</string>
     <string name="random_selection">랜덤 선택</string>
+    <string name="listed_in_library">Listed in Library</string>
     <string name="incognito_mode">시크릿 모드</string>
     <string name="appwidget_text">예시</string>
     <string name="configure">구성</string>
