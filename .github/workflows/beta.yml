@@ -135,7 +135,7 @@ jobs:
         # Truncate developers if too long
         max_length=1000
         if [ ${#developers} -gt $max_length ]; then
-          developers="${developers:0:$max_length}... (truncated)"
+          developers="${developers:0:$max_length}... (and more)"
         fi
 
         # Process commit messages
