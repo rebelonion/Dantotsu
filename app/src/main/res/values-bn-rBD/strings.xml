@@ -639,6 +639,7 @@
     <string name="installed_manga">ইনস্টলড ম্যাঙ্গা</string>
     <string name="color_picker">কালার পিকার</string>
     <string name="random_selection">এলোমেলো নির্বাচন</string>
+    <string name="listed_in_library">Listed in Library</string>
     <string name="incognito_mode">বিজ্ঞাপন মোড</string>
     <string name="appwidget_text">উদাহরণ</string>
     <string name="configure">কনফিগার করুন</string>
