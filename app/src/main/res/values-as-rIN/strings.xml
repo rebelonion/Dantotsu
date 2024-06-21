@@ -631,6 +631,7 @@
     <string name="installed_manga">ইনষ্টল কৰা মাঙ্গাসমূহ</string>
     <string name="color_picker">ৰং বাছক</string>
     <string name="random_selection">যিকোনো বাছনি</string>
+    <string name="listed_in_library">Listed in Library</string>
     <string name="incognito_mode">অগ্ৰগতিৰ নিমিত্তে</string>
     <string name="appwidget_text">উদাহৰণ</string>
     <string name="configure">কনফিগাৰ কৰক</string>
