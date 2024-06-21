@@ -73,17 +73,14 @@ jobs:
         java-version: 17
         cache: gradle
   
-    - name: Decode Keystore File
-      run: echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > $GITHUB_WORKSPACE/key.keystore
-
     - name: List files in the directory
       run: ls -l
-
+      
     - name: Make gradlew executable
       run: chmod +x ./gradlew
-
+  
     - name: Build with Gradle
-      run: ./gradlew assembleGoogleAlpha -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/key.keystore -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
+      run: ./gradlew assembleGoogleAlpha
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v4
@@ -94,7 +91,6 @@ jobs:
           path: "app/build/outputs/apk/google/alpha/app-google-alpha.apk"
             
     - name: Upload APK to Discord and Telegram
-      if: ${{ github.repository == 'rebelonion/Dantotsu' }}
       shell: bash
       run: |
         # Prepare Discord embed
@@ -108,7 +104,6 @@ jobs:
         }
         # Additional information for the goats
         declare -A additional_info
-        additional_info["ibo"]=" Discord: <@951737931159187457>\n AniList: [takarealist112](<https://anilist.co/user/takarealist112/>)"
         additional_info["aayush262"]=" Discord: <@918825160654598224>\n AniList: [aayush262](<https://anilist.co/user/aayush262/>)"
         additional_info["rebelonion"]=" Discord: <@714249925248024617>\n AniList: [rebelonion](<https://anilist.co/user/rebelonion/>)\n PornHub: [rebelonion](<https://www.cornhub.com/model/rebelonion>)" 
         # Extract contributor names from commit log and make unique list
@@ -133,8 +128,7 @@ jobs:
               extra_info=$(echo -e "$extra_info" | sed 's/^/- /')
             fi
             developers="${developers}◗ **${name}**
-          ${extra_info}
-        - Github: [${login}](https://github.com/${login})
+          ${extra_info}- Github: [${login}](https://github.com/${login})
         - Commits: ${commits}
         "
             committers_count=$((committers_count + 1))
@@ -168,7 +162,7 @@ jobs:
                       --arg timestamp "$(date -u +%Y-%m-%dT%H:%M:%S.000Z)" \
                       --arg thumbnail_url "$thumbnail_url" \
                       '{
-                        "content": "@here",
+                        "content": "<@&1209682006376710185>",
                         "embeds": [
                           {
                             "title": "New Alpha-Build dropped",
