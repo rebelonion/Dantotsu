@@ -129,7 +129,7 @@ jobs:
               extra_info=$(echo -e "$extra_info" | sed 's/^/- /')
             fi
             developers="${developers}◗ **${name}**
-          ${extra_info}- Github: [${login}](https://github.com/${login})
+          ${extra_info} Github: [${login}](https://github.com/${login})
         - Commits: ${commits}
         "
             committers_count=$((committers_count + 1))
