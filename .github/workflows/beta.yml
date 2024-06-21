@@ -104,17 +104,29 @@ jobs:
           name=$(echo "$user_details" | jq -r '.name // .login')
           echo "$name|$login"
         }
+        # Extract unique authors from commit log
+        authors=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g' | grep -oP '~\K[^\n]+' | sort -u)
         # Fetch contributors
         contributors=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
                        "https://api.github.com/repos/rebelonion/Dantotsu/contributors")
         # Process contributors
         developers=""
-        while read -r login commits; do
-          user_info=$(fetch_user_details "$login")
-          name=$(echo "$user_info" | cut -d'|' -f1)
-          login=$(echo "$user_info" | cut -d'|' -f2)
-          developers="${developers}◗ **${name}**\n- Github: [${login}](https://github.com/${login})\n- Commits: ${commits}\n\n"
-        done < <(echo "$contributors" | jq -r '.[] | "\(.login) \(.contributions)"')
+        while read -r author; do
+          contributor=$(echo "$contributors" | jq -r ".[] | select(.login|ascii_downcase == \"$author\"|ascii_downcase)")
+          if [ ! -z "$contributor" ]; then
+            login=$(echo "$contributor" | jq -r '.login')
+            commits=$(echo "$contributor" | jq -r '.contributions')
+            user_info=$(fetch_user_details "$login")
+            name=$(echo "$user_info" | cut -d'|' -f1)
+            developers="${developers}◗ **${name}**
+        - Github: [${login}](https://github.com/${login})
+        - Commits: ${commits}
+        
+        "
+          fi
+        done <<< "$authors"
+        # Remove trailing newline
+        developers=$(echo "$developers" | sed '$ s/\n$//')
         # Truncate developers if too long
         max_length=1000
         if [ ${#developers} -gt $max_length ]; then
