@@ -56,6 +56,15 @@
                     app:tint="?attr/colorOnBackground" />
 
                 <ImageButton
+                    android:id="@+id/listed"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/listed_in_library"
+                    app:srcCompat="@drawable/ic_round_library_books_24"
+                    app:tint="?attr/colorOnBackground" />
+
+                <ImageButton
                     android:id="@+id/random"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
