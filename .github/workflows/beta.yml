@@ -39,7 +39,7 @@ jobs:
         fi
         echo "Commits since $LAST_SHA:"
         # Accumulate commit logs in a shell variable
-        COMMIT_LOGS=$(git log $LAST_SHA..HEAD --pretty=format:"[⚆](https://github.com/${{ github.repository }}/commit/%H) %s ~%an")
+        COMMIT_LOGS=$(git log $LAST_SHA..HEAD --pretty=format:"● %s ~%an [֍](https://github.com/${{ github.repository }}/commit/%H)")
         # Replace commit messages with pull request links
         COMMIT_LOGS=$(echo "$COMMIT_LOGS" | sed -E 's/#([0-9]+)/[#\1](https:\/\/github.com\/rebelonion\/Dantotsu\/pull\/\1)/g')
         # URL-encode the newline characters for GitHub Actions
@@ -96,6 +96,7 @@ jobs:
     - name: Upload APK to Discord and Telegram
       shell: bash
       run: |
+        run: |
         # Prepare Discord embed
         fetch_user_details() {
           local login=$1
@@ -110,18 +111,41 @@ jobs:
         additional_info["ibo"]=" Discord: <@951737931159187457>\n AniList: [takarealist112](<https://anilist.co/user/takarealist112/>)\n"
         additional_info["aayush262"]=" Discord: <@918825160654598224>\n AniList: [aayush262](<https://anilist.co/user/aayush262/>)\n"
         additional_info["rebelonion"]=" Discord: <@714249925248024617>\n AniList: [rebelonion](<https://anilist.co/user/rebelonion/>)\n PornHub: [rebelonion](<https://www.cornhub.com/model/rebelonion>)\n" 
+
+        # Base commit counts for specific authors
+        declare -A base_commit_counts
+        base_commit_counts["ibo"]=100
+        base_commit_counts["aayush262"]=150
+        base_commit_counts["rebelonion"]=200
+
         # Extract contributor names from commit log and make unique list
         committers=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g' | grep -oP '(?<=~)[^%]*')
         committers=$(echo "$committers" | sort | uniq)
         # Fetch contributors from GitHub
         contributors=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
                        "https://api.github.com/repos/rebelonion/Dantotsu/contributors")
+        
+        # Initialize an associative array to store manual commit counts
+        declare -A manual_commit_counts
+
+        # Count commits for each author from the commit messages
+        while IFS= read -r line; do
+          author=$(echo "$line" | grep -oP '(?<=~)[^[]*' | xargs)
+          if [[ -n "$author" ]]; then
+            if [[ -v "manual_commit_counts[$author]" ]]; then
+              ((manual_commit_counts[$author]++))
+            else
+              manual_commit_counts[$author]=1
+            fi
+          fi
+        done <<< "$COMMIT_LOG"
+
         # Initialize needed variables
         developers=""
         committers_count=0
         thumbnail_url="https://i.imgur.com/5o3Y9Jb.gif"
         # Process contributors and filter by committers
-        while read -r login commits; do
+        while read -r login api_commits; do
           user_info=$(fetch_user_details "$login")
           name=$(echo "$user_info" | cut -d'|' -f1)
           login=$(echo "$user_info" | cut -d'|' -f2)
@@ -131,9 +155,27 @@ jobs:
             if [ -n "$extra_info" ]; then
               extra_info=$(echo -e "$extra_info" | sed 's/^/- /')
             fi
+            
+            # Use manual count if available, add base count if set, otherwise fallback to API count
+            if [[ -v "manual_commit_counts[$name]" ]]; then
+              commit_count=${manual_commit_counts[$name]}
+            else
+              commit_count=0
+            fi
+            
+            # Add base commit count if set
+            if [[ -v "base_commit_counts[$name]" ]]; then
+              commit_count=$((commit_count + base_commit_counts[$name]))
+            fi
+            
+            # Use API count as fallback if no commits counted
+            if [ $commit_count -eq 0 ]; then
+              commit_count=$api_commits
+            fi
+            
             developers="${developers}◗ **${name}**
           ${extra_info} Github: [${login}](https://github.com/${login})
-        - Commits: ${commits}
+        - Commits: ${commit_count}
         "
             committers_count=$((committers_count + 1))
             if [ $committers_count -eq 1 ]; then
@@ -143,7 +185,6 @@ jobs:
             fi
           fi
         done < <(echo "$contributors" | jq -r '.[] | "\(.login) \(.contributions)"')
-
 
         # Remove trailing newline
         developers=$(echo "$developers" | sed '$ s/$//')
