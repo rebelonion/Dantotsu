@@ -122,12 +122,10 @@
     <string name="chaps">Kapituj</string>
     <string name="chap">Kapitulli</string>
     <string name="wrong"><u>Titull i Gabuar?</u></string>
-    <string name="source_not_found">        Nothing came up from this source.\n
-        Let\'s look elsewhere.
-    </string>
-    <string name="download_not_found">        Your downloads are feeling a bit lonely…\n
-        Try downloading something.
-    </string>
+    <string name="source_not_found">Asgjë nuk doli nga ky burim.\n
+Le të kërkojmë diku tjetër.</string>
+    <string name="download_not_found">Shkarkimet tuaja janë ndjerë paksa vetëm…\n
+Ende asgjë këtu :(</string>
     <string name="not_supported">%1$s nuk është i mbështetur!</string>
     <string name="server_selector">Zgjidh Serverin</string>
     <string name="auto_select_server">Zgjidhja Automatike e Serverit</string>
@@ -585,9 +583,9 @@
     <string name="answer_16">Disa rregullime bazike do të ishin : \n\n• Përditësoni zgjerimet tuaja nëse ka.\n• Hapni Shfletuesin Web dhe prisni që të ngarkohet. Pasi të jetë ngarkuar, ktheheni mbrapa. (Nëse Shfletuesi Web tregon gabimin 404 ose diçka të ngjashme, ka gjasa që burimi juaj është poshtë)\n• Përdorni një DNS tjetër nga cilësimet tuaja, idealisht, Libre. \n• Provoni një VPN të besueshëm. (Do të duhet të përsëritni hapin 1 pas kësaj) \n\nNëse asnjë nga hapat e mësipërm nuk funksionon atëherë përdorni një burim tjetër ose bashkohuni në [discord](https://discord.gg/invite/4HPZ5nAWwM) tonë për ndihmë.</string>
     <string name="question_17">Disa këshilla dhe truke të dobishme</string>
     <string name="answer_17">Më poshtë paraqiten disa këshilla dhe truke që mund t\'i dini ose jo - \n \n \n - Duke mbajtur shtypur logon e Dantotsu në cilësimet, mund të kontrolloni nëse ka ndonjë përditësim të ri manualisht. \n \n - Duke mbajtur shtypur një mesazh/etiketë/gabim ose titull do t\'ju kopjojë. \n \n - Mund të hapni një episod me aplikacione të tjera duke mbajtur shtypur cilindo server për atë episod. Kjo ndihmon në transmetimin e episodit duke përdorur lojtarë video të tjerë ose duke shkarkuar episodin duke përdorur menaxherë shkarkimesh. \n \n - Mund të konfiguroni listat e personalizuara duke përdorur këtë [lidhje](https://anilist.co/settings/lists). (duhet të jeni të regjistruar) \n \n - Nëse episodi/kapitulli juaj nuk po progreson automatikisht pasi të keni përfunduar ta shikoni/lexoni, atëherë mbani shtypur shiritin e statusit (planifikimi/përsëritja/butoni shikoj) të asaj anime/manga. Herën tjetër që filloni një kapitull/përfundoni një episod, do të përballeni me një popup. Shtypni po atje.</string>
-    <string name="question_18">I can\'t login to Anilist.</string>
+    <string name="question_18">Nuk mund të kyçem në Anilist.</string>
     <string name="answer_18">The reason this happens is probably because you\'re not using the default browser.\n\n&gt;You have to set Chrome as your default browser to login to Anilist.\n\n&gt;It takes a few seconds for the login button to display changes.\n\nIf it doesn\'t work then you could possibly be IP banned from Anilist or your ISP banned Anilist themselves. We believe that this is highly unlikely so open [Anilist](https://anilist.co) in your browser to see if that\`s the case.</string>
-    <string name="question_19">What is torrent? How do I use it?</string>
+    <string name="question_19">Çfarë është torrent? Si ta përdor atë?</string>
     <string name="answer_19">Torrent or formally known as BitTorrent is an internet communication protocol for peer\-to\-peer file sharing. A torrent network doesn\'t use a centralised server to host files. It shares files in a decentralised manner. A torrent network has two types of peers. Seeders &amp; Leachers.\n\n• Seeders : These are peers who completed downloading and has the full file. And now they are sharing this file to other peers which is called seeding. A torrent cannot work without at least one seeder. The more seeder a torrent has, the better.\n\n• Leachers : These are peers who are currently downloading the file. If they currently have 40&#37; downloaded then they will share the 40&#37; to any other peers who requests it.\n\nUnlike a centralised server, torrents have no bandwidth limit. You can get your files from hundreds of seeders at the highest possible speed your internet can offer. But many ISP throttle torrent to slow them down because it\'s demanding on their infrastructure. Use a VPN to circumvent this.\n\n• How to use torrents :\n\n1. Install the Torrent Add-on from \`Dantotsu &gt; Settings &gt; Add-ons &gt; Torrent Add-on.\` \n2. Get a source that provides torrents.\n3. USE A VPN. Using VPN while torrenting only has upsides. Without a VPN your IP address will be exposed, your ISP will throttle your network and you could possibly be fined if you live in a country first world country. DO NOT USE IT WITHOUT A VPN IF YOU DON\'T KNOW WHAT YOU\'RE DOING.\n4. Now use that source to start torrenting.</string>
     <string name="subscribed_notification">E abonuar! Më në fund, po merrni njoftime, kur dalin epizodet e reja në %1$s.</string>
     <string name="unsubscribed_notification">I anuluar abonimi, nuk do të merrni asnjë njoftim.</string>
@@ -842,7 +840,7 @@
     <string name="use_unique_theme_for_each_item_desc">Përdorni ngjyrën nga baneri i medias</string>
     <string name="use_custom_theme_desc">Përdorni ngjyrën tuaj të preferuar për temën</string>
     <string name="color_picker_desc">Zgjidhni një ngjyrë</string>
-    <string name="hide_private">Hide private Media from home screen</string>
+    <string name="hide_private">Fshihni median private nga ekrani kryesor</string>
     <string name="hide_private_desc">Long click \"Continue Watching\" to access</string>
     <string name="torrent_addon">Shtesë Torrent</string>
     <string name="enable_torrent">Aktivizoni Torrent-in</string>
