@@ -122,11 +122,11 @@
     <string name="chaps">Capítulos</string>
     <string name="chap">Capítulo</string>
     <string name="wrong"><u>¿Título incorrecto?</u></string>
-    <string name="source_not_found">        Nothing came up from this source.\n
-        Let\'s look elsewhere.
+    <string name="source_not_found">        Nada foi encontrado desta fonte.\n
+        Vamos procurar em outro lugar.
     </string>
-    <string name="download_not_found">        Your downloads are feeling a bit lonely…\n
-        Try downloading something.
+    <string name="download_not_found">        Seus downloads estão se sentindo um pouco solitários…\n
+        Tente baixar algo.
     </string>
     <string name="not_supported">¡%1$s no es compatible!</string>
     <string name="server_selector">Seleccionar servidor</string>
@@ -388,7 +388,7 @@
     <string name="error_message">Error: %1$s</string>
     <string name="install_step">Pasó: %1$s</string>
     <string name="review">Revisar</string>
-    <string name="reviews">Reviews</string>
+    <string name="reviews">Avaliações</string>
     <string name="discord_nothing_button">Mostrar solo el primer botón</string>
     <string name="discord_dantotsu_button">Mostrar dantotsu en el segundo botón</string>
     <string name="discord_anilist_button">Mostrar tu perfil de AniList</string>
@@ -583,7 +583,7 @@
     <string name="answer_16">Algunas soluciones básicas serían: \n\n• Actualiza tus extensiones si las hay. \n• Abre la Vista Web y espera a que cargue. Después de que haya terminado de cargar, regresa. (Si la Vista Web muestra error 404 o algo similar, es probable que tu fuente esté caída)\n• Utiliza un DNS diferente de tus ajustes, preferiblemente, Libre. \n• Prueba una VPN confiable. (Tendrás que repetir el paso 1 después de esto) \n\nSi ninguno de los pasos anteriores funciona, entonces utiliza una fuente diferente o únete a nuestro [discord](https://discord.gg/invite/4HPZ5nAWwM) para obtener ayuda.</string>
     <string name="question_17">Algunos consejos y trucos útiles</string>
     <string name="answer_17">Lo siguiente presenta algunos consejos y trucos que quizás conozcas o no: \n\n- Al mantener presionado el logo de Dantotsu en la configuración, puedes verificar si hay nuevas actualizaciones manualmente. \n\n- Al mantener presionado un mensaje de error/etiqueta/sinónimo o título, lo copiarás. \n\n- Puedes abrir un episodio con otras aplicaciones manteniendo presionado cualquier servidor para ese episodio. Esto ayuda a transmitir el episodio usando otros reproductores de video o descargar el episodio usando gestores de descargas. \n\n- Puedes configurar listas personalizadas usando este [enlace](https://anilist.co/settings/lists). (necesitas estar registrado) \n\n- Si tu episodio/capítulo no avanza automáticamente después de que termines de ver/leerlo, entonces mantén presionada la barra de estado (botón de planificación/repetición/visualización) de ese anime/manga. La próxima vez que comiences un capítulo/termines un episodio, te encontrarás con un mensaje emergente. Presiona sí allí.</string>
-    <string name="question_18">I can\'t login to Anilist.</string>
+    <string name="question_18">Não consigo fazer login no Anilist.</string>
     <string name="answer_18">The reason this happens is probably because you\'re not using the default browser.\n\n&gt;You have to set Chrome as your default browser to login to Anilist.\n\n&gt;It takes a few seconds for the login button to display changes.\n\nIf it doesn\'t work then you could possibly be IP banned from Anilist or your ISP banned Anilist themselves. We believe that this is highly unlikely so open [Anilist](https://anilist.co) in your browser to see if that\`s the case.</string>
     <string name="question_19">What is torrent? How do I use it?</string>
     <string name="answer_19">Torrent or formally known as BitTorrent is an internet communication protocol for peer\-to\-peer file sharing. A torrent network doesn\'t use a centralised server to host files. It shares files in a decentralised manner. A torrent network has two types of peers. Seeders &amp; Leachers.\n\n• Seeders : These are peers who completed downloading and has the full file. And now they are sharing this file to other peers which is called seeding. A torrent cannot work without at least one seeder. The more seeder a torrent has, the better.\n\n• Leachers : These are peers who are currently downloading the file. If they currently have 40&#37; downloaded then they will share the 40&#37; to any other peers who requests it.\n\nUnlike a centralised server, torrents have no bandwidth limit. You can get your files from hundreds of seeders at the highest possible speed your internet can offer. But many ISP throttle torrent to slow them down because it\'s demanding on their infrastructure. Use a VPN to circumvent this.\n\n• How to use torrents :\n\n1. Install the Torrent Add-on from \`Dantotsu &gt; Settings &gt; Add-ons &gt; Torrent Add-on.\` \n2. Get a source that provides torrents.\n3. USE A VPN. Using VPN while torrenting only has upsides. Without a VPN your IP address will be exposed, your ISP will throttle your network and you could possibly be fined if you live in a country first world country. DO NOT USE IT WITHOUT A VPN IF YOU DON\'T KNOW WHAT YOU\'RE DOING.\n4. Now use that source to start torrenting.</string>
@@ -644,9 +644,9 @@
     <string name="requires_android_12">Requiere Android 12+</string>
     <string name="share_username_in_crash_reports">Compartir nombre de usuario en informes de errores</string>
     <string name="pinned_sources">Fuentes fijadas</string>
-    <string name="backup_restore">Respaldo y restauración</string>
-    <string name="restore_settings">Importar configuración</string>
-    <string name="restore_settings_underline"><u>Restaurar ajustes</u></string>
+    <string name="backup_restore">Backup e restauração</string>
+    <string name="restore_settings">Importar configurações</string>
+    <string name="restore_settings_underline"><u>Importar configurações</u></string>
     <string name="try_internal_cast_experimental">Intentar transmitir internamente (Experimental)</string>
     <string name="comments">Comentarios</string>
     <string name="newest">Más reciente</string>
@@ -717,7 +717,7 @@
     <string name="you_cursed">youwu han sido cuwsed :pwayge:</string>
     <string name="purge_confirm">¿Estás seguro de que quieres purgar todas las descargas de %1$s?</string>
     <string name="delete_fail_reason">Error al borrar debido a... %1$s</string>
-    <string name="delete_fail">Failed to delete</string>
+    <string name="delete_fail">Falha ao excluir</string>
     <string name="hide_replies">Ocultar respuestas</string>
     <string name="view_reply">Ver respuesta</string>
     <string name="view_replies">Ver las respuestas</string>
@@ -875,7 +875,7 @@
     <string name="would_you_like_to_install">¿Desea instalarlo?</string>
     <string name="torrent_addon_not_available">Complemento de torrent no disponible</string>
     <string name="download_subtitle">Descargar subtítulos</string>
-    <string name="download_audio_tracks">Download Audio Tracks</string>
+    <string name="download_audio_tracks">Baixar faixas de áudio</string>
     <string name="no_video_selected">No se ha seleccionado ningún vídeo</string>
     <string name="no_subtitles_available">No hay subtítulos disponibles</string>
     <string name="vote_out_of_total">(%1$s de %2$s les gustó esta reseña)</string>
