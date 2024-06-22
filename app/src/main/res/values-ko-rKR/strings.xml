@@ -122,11 +122,9 @@
     <string name="chaps">챕터</string>
     <string name="chap">챕터</string>
     <string name="wrong"><u>잘못된 제목?</u></string>
-    <string name="source_not_found">        Nothing came up from this source.\n
-        Let\'s look elsewhere.
+    <string name="source_not_found">        이 소스에서는 아무 것도 나오지 않았습니다.\n        다른 곳을 찾아봅시다.
     </string>
-    <string name="download_not_found">        Your downloads are feeling a bit lonely…\n
-        Try downloading something.
+    <string name="download_not_found">        다운로드 항목이 조금 외로워 보입니다…\n        무언가를 다운로드해보세요.
     </string>
     <string name="not_supported">%1$s은(는) 지원되지 않습니다!</string>
     <string name="server_selector">서버 선택</string>
@@ -390,7 +388,7 @@
     <string name="error_message">Error: %1$s</string>
     <string name="install_step">Step: %1$s</string>
     <string name="review">Review</string>
-    <string name="reviews">Reviews</string>
+    <string name="reviews">리뷰</string>
     <string name="discord_nothing_button">Display only the first button</string>
     <string name="discord_dantotsu_button">Display dantotsu in the second button</string>
     <string name="discord_anilist_button">Display your AniList profile instead</string>
@@ -586,7 +584,7 @@
     <string name="answer_16">일부 기본 수정 사항은 다음과 같습니다. \n\n• 확장 기능이 있는 경우 확장 기능을 업데이트하십시오. \n• 웹 뷰를 열고 로드를 기다린 후 뒤로 이동하십시오. 로드가 완료되면 되돌아갑니다. (웹 뷰가 404 오류 또는 유사한 오류를 표시하면 소스가 다운되었을 가능성이 있습니다.) \n• 설정에서 다른 DNS를 사용하십시오. 가능하면 Libre를 사용하십시오. \n• 신뢰할 수있는 VPN을 사용하십시오. (이후 단계 1을 반복해야합니다.) \n\n위의 단계 중 하나도 작동하지 않으면 다른 소스를 사용하거나 도움을 받으려면 [디스코드](https://discord.gg/invite/4HPZ5nAWwM)에 가입하십시오.</string>
     <string name="question_17">일부 유용한 팁과 트릭</string>
     <string name="answer_17">다음은 알고 있을지도 모르는 몇 가지 팁과 트릭입니다 -\n \n \n- 설정에서 Dantotsu 로고를 길게 누르면 수동으로 새로운 업데이트가 있는지 확인할 수 있습니다. \n \n- 오류 메시지/태그/동의어 또는 제목을 길게 누르면 복사됩니다. \n \n- 에피소드를 다른 앱으로 열려면 해당 에피소드의 서버를 길게 누르십시오. 이렇게하면 다른 비디오 플레이어를 사용하여 에피소드를 스트리밍하거나 다운로드 할 수 있습니다.\n \n- 사용자 지정 목록을 설정할 수 있습니다. 이 [링크](https://anilist.co/settings/lists)를 사용하여 사용자 지정 목록을 설정할 수 있습니다. (로그인해야 함) \n \n- 에피소드/챕터가 자동으로 진행되지 않으면 해당 애니메이션/만화의 상태 표시 줄(계획/반복/보는 중 버튼)을 길게 누르세요. 다음 번에 챕터를 시작하거나 에피소드를 보고 나면 팝업이 표시됩니다. 거기서 \"예\"를 누릅니다.</string>
-    <string name="question_18">I can\'t login to Anilist.</string>
+    <string name="question_18">Anilist에 로그인할 수 없습니다.</string>
     <string name="answer_18">The reason this happens is probably because you\'re not using the default browser.\n\n&gt;You have to set Chrome as your default browser to login to Anilist.\n\n&gt;It takes a few seconds for the login button to display changes.\n\nIf it doesn\'t work then you could possibly be IP banned from Anilist or your ISP banned Anilist themselves. We believe that this is highly unlikely so open [Anilist](https://anilist.co) in your browser to see if that\`s the case.</string>
     <string name="question_19">What is torrent? How do I use it?</string>
     <string name="answer_19">Torrent or formally known as BitTorrent is an internet communication protocol for peer\-to\-peer file sharing. A torrent network doesn\'t use a centralised server to host files. It shares files in a decentralised manner. A torrent network has two types of peers. Seeders &amp; Leachers.\n\n• Seeders : These are peers who completed downloading and has the full file. And now they are sharing this file to other peers which is called seeding. A torrent cannot work without at least one seeder. The more seeder a torrent has, the better.\n\n• Leachers : These are peers who are currently downloading the file. If they currently have 40&#37; downloaded then they will share the 40&#37; to any other peers who requests it.\n\nUnlike a centralised server, torrents have no bandwidth limit. You can get your files from hundreds of seeders at the highest possible speed your internet can offer. But many ISP throttle torrent to slow them down because it\'s demanding on their infrastructure. Use a VPN to circumvent this.\n\n• How to use torrents :\n\n1. Install the Torrent Add-on from \`Dantotsu &gt; Settings &gt; Add-ons &gt; Torrent Add-on.\` \n2. Get a source that provides torrents.\n3. USE A VPN. Using VPN while torrenting only has upsides. Without a VPN your IP address will be exposed, your ISP will throttle your network and you could possibly be fined if you live in a country first world country. DO NOT USE IT WITHOUT A VPN IF YOU DON\'T KNOW WHAT YOU\'RE DOING.\n4. Now use that source to start torrenting.</string>
@@ -647,9 +645,9 @@
     <string name="requires_android_12">Android 12 이상 필요</string>
     <string name="share_username_in_crash_reports">충돌 보고서에서 사용자 이름 공유</string>
     <string name="pinned_sources">고정된 소스</string>
-    <string name="backup_restore">Backup and Restore</string>
-    <string name="restore_settings">Import Settings</string>
-    <string name="restore_settings_underline"><u>Restore Settings</u></string>
+    <string name="backup_restore">백업 및 복원</string>
+    <string name="restore_settings">설정 가져오기</string>
+    <string name="restore_settings_underline"><u>설정 복원</u></string>
     <string name="try_internal_cast_experimental">내부 캐스트 시도(실험적)</string>
     <string name="comments">댓글</string>
     <string name="newest">최신</string>
@@ -720,7 +718,7 @@
     <string name="you_cursed">너는 저주받았어요 :pwayge:</string>
     <string name="purge_confirm">%1$s 다운로드를 모두 삭제하시겠습니까?</string>
     <string name="delete_fail_reason">삭제에 실패했습니다… %1$s</string>
-    <string name="delete_fail">Failed to delete</string>
+    <string name="delete_fail">삭제 실패</string>
     <string name="hide_replies">답글 숨기기</string>
     <string name="view_reply">답글 보기</string>
     <string name="view_replies">답글 보기</string>
@@ -878,7 +876,7 @@
     <string name="would_you_like_to_install">설치하시겠습니까?</string>
     <string name="torrent_addon_not_available">토렌트 애드온을 사용할 수 없습니다</string>
     <string name="download_subtitle">자막 다운로드</string>
-    <string name="download_audio_tracks">Download Audio Tracks</string>
+    <string name="download_audio_tracks">오디오 트랙 다운로드</string>
     <string name="no_video_selected">선택된 비디오가 없습니다</string>
     <string name="no_subtitles_available">사용 가능한 자막이 없습니다</string>
     <string name="vote_out_of_total">(%2$s 중 %1$s이(가) 이 리뷰를 좋아합니다)</string>
