@@ -122,11 +122,11 @@
     <string name="chaps">Главы</string>
     <string name="chap">Глава</string>
     <string name="wrong"><u>Неправильное название?</u></string>
-    <string name="source_not_found">        Nothing came up from this source.\n
-        Let\'s look elsewhere.
+    <string name="source_not_found">        Ничего не найдено из этого источника.\n
+        Давайте поищем где-то еще.
     </string>
-    <string name="download_not_found">        Your downloads are feeling a bit lonely…\n
-        Try downloading something.
+    <string name="download_not_found">        Ваши загрузки немного одиноки…\n
+        Попробуйте что-то скачать.
     </string>
     <string name="not_supported">%1$s не поддерживается!</string>
     <string name="server_selector">Выбрать сервер</string>
@@ -390,7 +390,7 @@
     <string name="error_message">Error: %1$s</string>
     <string name="install_step">Step: %1$s</string>
     <string name="review">Review</string>
-    <string name="reviews">Reviews</string>
+    <string name="reviews">Отзывы</string>
     <string name="discord_nothing_button">Display only the first button</string>
     <string name="discord_dantotsu_button">Display dantotsu in the second button</string>
     <string name="discord_anilist_button">Display your AniList profile instead</string>
@@ -585,7 +585,7 @@
     <string name="answer_16">Несколько базовых решений:\n\n• Обновите свои расширения, если они есть. \n• Откройте веб-просмотр и дождитесь загрузки. После завершения загрузки вернитесь назад. (Если веб-просмотр показывает ошибку 404 или что-то подобное, вероятно, ваш источник недоступен)\n• Используйте другой DNS из настроек, желательно, Libre. \n• Попробуйте надежный VPN. (После этого вам придется повторить шаг 1) \n\nЕсли ни один из вышеперечисленных шагов не сработал, то используйте другой источник или присоединитесь к нашему [discord](https://discord.gg/invite/4HPZ5nAWwM) для помощи.</string>
     <string name="question_17">Несколько полезных советов и хитростей</string>
     <string name="answer_17">Ниже приведены некоторые полезные советы и хитрости, о которых вы могли или не могли знать - \n \n \n - Удерживая нажатой логотип Dantotsu в настройках, вы можете проверить наличие новых обновлений вручную. \n \n - Удерживание нажатой любой ошибки/тега/синонима или названия скопирует его. \n \n - Вы можете открыть эпизод с помощью других приложений, удерживая нажатием любой сервер для этого эпизода. Это поможет в воспроизведении эпизода с использованием других видеоплееров или загрузке эпизода с помощью менеджеров загрузок. \n \n - Вы можете настроить пользовательские списки, используя эту [ссылку](https://anilist.co/settings/lists). (вам нужно войти в систему) \n \n - Если ваш эпизод/глава не продвигается автоматически после того, как вы закончили смотреть/читать его, то удерживайте нажатием строку состояния (планирование/повторение/просмотр кнопка) этого аниме/манги. В следующий раз, когда вы начнете главу/закончите эпизод, вы столкнетесь с всплывающим окном. Нажмите на \"да\" там.</string>
-    <string name="question_18">I can\'t login to Anilist.</string>
+    <string name="question_18">Я не могу войти в Anilist.</string>
     <string name="answer_18">The reason this happens is probably because you\'re not using the default browser.\n\n&gt;You have to set Chrome as your default browser to login to Anilist.\n\n&gt;It takes a few seconds for the login button to display changes.\n\nIf it doesn\'t work then you could possibly be IP banned from Anilist or your ISP banned Anilist themselves. We believe that this is highly unlikely so open [Anilist](https://anilist.co) in your browser to see if that\`s the case.</string>
     <string name="question_19">What is torrent? How do I use it?</string>
     <string name="answer_19">Torrent or formally known as BitTorrent is an internet communication protocol for peer\-to\-peer file sharing. A torrent network doesn\'t use a centralised server to host files. It shares files in a decentralised manner. A torrent network has two types of peers. Seeders &amp; Leachers.\n\n• Seeders : These are peers who completed downloading and has the full file. And now they are sharing this file to other peers which is called seeding. A torrent cannot work without at least one seeder. The more seeder a torrent has, the better.\n\n• Leachers : These are peers who are currently downloading the file. If they currently have 40&#37; downloaded then they will share the 40&#37; to any other peers who requests it.\n\nUnlike a centralised server, torrents have no bandwidth limit. You can get your files from hundreds of seeders at the highest possible speed your internet can offer. But many ISP throttle torrent to slow them down because it\'s demanding on their infrastructure. Use a VPN to circumvent this.\n\n• How to use torrents :\n\n1. Install the Torrent Add-on from \`Dantotsu &gt; Settings &gt; Add-ons &gt; Torrent Add-on.\` \n2. Get a source that provides torrents.\n3. USE A VPN. Using VPN while torrenting only has upsides. Without a VPN your IP address will be exposed, your ISP will throttle your network and you could possibly be fined if you live in a country first world country. DO NOT USE IT WITHOUT A VPN IF YOU DON\'T KNOW WHAT YOU\'RE DOING.\n4. Now use that source to start torrenting.</string>
@@ -646,9 +646,9 @@
     <string name="requires_android_12">Требуется Android 12+</string>
     <string name="share_username_in_crash_reports">Поделиться именем пользователя в отчетах об ошибках</string>
     <string name="pinned_sources">Закрепленные источники</string>
-    <string name="backup_restore">Backup and Restore</string>
-    <string name="restore_settings">Import Settings</string>
-    <string name="restore_settings_underline"><u>Restore Settings</u></string>
+    <string name="backup_restore">Резервное копирование и восстановление</string>
+    <string name="restore_settings">Импорт настроек</string>
+    <string name="restore_settings_underline"><u>Импорт настроек</u></string>
     <string name="try_internal_cast_experimental">Попробуйте внутренний метач (экспериментальный)</string>
     <string name="comments">Комментарии</string>
     <string name="newest">Новые</string>
@@ -719,7 +719,7 @@
     <string name="you_cursed">Вы были прокляты :pwayge:</string>
     <string name="purge_confirm">Вы уверены, что хотите удалить все загрузки (%1$s)?</string>
     <string name="delete_fail_reason">Не удалось удалить из-за… %1$s</string>
-    <string name="delete_fail">Failed to delete</string>
+    <string name="delete_fail">Не удалось удалить</string>
     <string name="hide_replies">Скрыть ответы</string>
     <string name="view_reply">Посмотреть ответ</string>
     <string name="view_replies">Посмотреть ответы</string>
@@ -877,7 +877,7 @@
     <string name="would_you_like_to_install">Хотите установить его?</string>
     <string name="torrent_addon_not_available">Дополнение для торрента недоступно</string>
     <string name="download_subtitle">Скачать субтитры</string>
-    <string name="download_audio_tracks">Download Audio Tracks</string>
+    <string name="download_audio_tracks">Загрузить аудиодорожки</string>
     <string name="no_video_selected">Видео не выбрано</string>
     <string name="no_subtitles_available">Субтитры недоступны</string>
     <string name="vote_out_of_total">(%1$s из %2$s понравился этот обзор)</string>
