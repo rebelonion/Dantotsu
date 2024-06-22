@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: true
+      SKIP_BUILD: true
 
     steps:
     - name: Checkout repo
@@ -72,9 +73,6 @@ jobs:
         distribution: 'temurin'
         java-version: 17
         cache: gradle
-  
-    - name: Decode Keystore File
-      run: echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > $GITHUB_WORKSPACE/key.keystore
 
     - name: List files in the directory
       run: ls -l
@@ -83,9 +81,11 @@ jobs:
       run: chmod +x ./gradlew
 
     - name: Build with Gradle
-      run: ./gradlew assembleGoogleAlpha -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/key.keystore -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
+      if: ${{ env.SKIP_BUILD != 'true' }}
+      run: ./gradlew assembleGoogleAlpha
 
     - name: Upload a Build Artifact
+      if: ${{ env.SKIP_BUILD != 'true' }}
       uses: actions/upload-artifact@v4
       with:
           name: Dantotsu
@@ -94,7 +94,6 @@ jobs:
           path: "app/build/outputs/apk/google/alpha/app-google-alpha.apk"
             
     - name: Upload APK to Discord and Telegram
-      if: ${{ github.repository == 'rebelonion/Dantotsu' }}
       shell: bash
       run: |
         # Prepare Discord embed
@@ -201,15 +200,15 @@ jobs:
              ${{ secrets.DISCORD_WEBHOOK }}
         
         # Upload APK to Discord
-        curl -F "payload_json=${contentbody}" \
-             -F "dantotsu_debug=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" \
-             ${{ secrets.DISCORD_WEBHOOK }}
+        # curl -F "payload_json=${contentbody}" \
+        #      -F "dantotsu_debug=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" \
+        #      ${{ secrets.DISCORD_WEBHOOK }}
         
         # Send Telegram message and upload APK
-        curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
-          -F "document=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" \
-          -F "caption=Alpha-Build: ${VERSION}: ${commit_messages}" \
-         https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
+        # curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
+        #   -F "document=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" \
+        #   -F "caption=Alpha-Build: ${VERSION}: ${commit_messages}" \
+        #  https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
     
       env:
         COMMIT_LOG: ${{ env.COMMIT_LOG }}
