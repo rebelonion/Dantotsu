@@ -585,7 +585,7 @@
     <string name="answer_16">Niektóre podstawowe sposoby naprawy to: \n\n• Zaktualizuj swoje rozszerzenia, jeśli takowe są. \n• Otwórz Web-View i poczekaj, aż się załaduje. Po załadowaniu wróć. (Jeśli Widok sieciowy pokazuje błąd 404 lub coś podobnego, istnieje duże prawdopodobieństwo, że twoje źródło jest niedostępne)\n• Użyj innego DNS z ustawień, najlepiej Libre. \n• Wypróbuj wiarygodny VPN. (Po tym będziesz musiał powtórzyć krok 1) \n\nJeśli żaden z powyższych kroków nie zadziała, użyj innego źródła lub dołącz do naszego [discorda](https://discord.gg/invite/4HPZ5nAWwM) po pomoc.</string>
     <string name="question_17">Niekiedy przydatne wskazówki i tricki</string>
     <string name="answer_17">Poniżej kilka wskazówek i trików, których możesz nie znać - \n \n \n - Przytrzymując logo Dantotsu w ustawieniach, możesz sprawdzić, czy są jakieś nowe aktualizacje. \n \n - Przytrzymanie komunikatu o błędzie/tagu/synonimie lub tytule skopiuje go. \n \n - Możesz otworzyć odcinek w innych aplikacjach, przytrzymując dowolne źródło dla tego odcinka. Pomaga to w streamowaniu odcinka za pomocą innych odtwarzaczy wideo lub pobraniu odcinka za pomocą menedżerów pobierania. \n \n - Możesz skonfigurować listy niestandardowe za pomocą tego [linku](https://anilist.co/settings/lists). (musisz być zalogowany) \n \n - Jeśli twój odcinek/rozdział nie jest automatycznie oznaczany jako obejrzany/przeczytany po jego zakończeniu, przytrzymaj pasek stanu (planowane/powtarzane/przycisk oglądania) tego anime/mangi. Następnym razem, gdy rozpoczniesz rozdział/zakończysz odcinek, natkniesz się na okno dialogowe. Naciśnij tam tak.</string>
-    <string name="question_18">I can\'t login to Anilist.</string>
+    <string name="question_18">Nie mogę zalogować się do AniList.</string>
     <string name="answer_18">The reason this happens is probably because you\'re not using the default browser.\n\n&gt;You have to set Chrome as your default browser to login to Anilist.\n\n&gt;It takes a few seconds for the login button to display changes.\n\nIf it doesn\'t work then you could possibly be IP banned from Anilist or your ISP banned Anilist themselves. We believe that this is highly unlikely so open [Anilist](https://anilist.co) in your browser to see if that\`s the case.</string>
     <string name="question_19">What is torrent? How do I use it?</string>
     <string name="answer_19">Torrent or formally known as BitTorrent is an internet communication protocol for peer\-to\-peer file sharing. A torrent network doesn\'t use a centralised server to host files. It shares files in a decentralised manner. A torrent network has two types of peers. Seeders &amp; Leachers.\n\n• Seeders : These are peers who completed downloading and has the full file. And now they are sharing this file to other peers which is called seeding. A torrent cannot work without at least one seeder. The more seeder a torrent has, the better.\n\n• Leachers : These are peers who are currently downloading the file. If they currently have 40&#37; downloaded then they will share the 40&#37; to any other peers who requests it.\n\nUnlike a centralised server, torrents have no bandwidth limit. You can get your files from hundreds of seeders at the highest possible speed your internet can offer. But many ISP throttle torrent to slow them down because it\'s demanding on their infrastructure. Use a VPN to circumvent this.\n\n• How to use torrents :\n\n1. Install the Torrent Add-on from \`Dantotsu &gt; Settings &gt; Add-ons &gt; Torrent Add-on.\` \n2. Get a source that provides torrents.\n3. USE A VPN. Using VPN while torrenting only has upsides. Without a VPN your IP address will be exposed, your ISP will throttle your network and you could possibly be fined if you live in a country first world country. DO NOT USE IT WITHOUT A VPN IF YOU DON\'T KNOW WHAT YOU\'RE DOING.\n4. Now use that source to start torrenting.</string>
@@ -631,7 +631,7 @@
     <string name="installed_manga">Zainstalowane (Manga)</string>
     <string name="color_picker">Wybór koloru</string>
     <string name="random_selection">Losowy wybór</string>
-    <string name="listed_in_library">Listed in Library</string>
+    <string name="listed_in_library">Zapisano w bibliotece</string>
     <string name="incognito_mode">Tryb incognito</string>
     <string name="appwidget_text">PRZYKŁAD</string>
     <string name="configure">Konfiguruj</string>
@@ -842,8 +842,8 @@
     <string name="use_unique_theme_for_each_item_desc">Użyj koloru z baneru treści</string>
     <string name="use_custom_theme_desc">Użyj własnego koloru dla motywu</string>
     <string name="color_picker_desc">Wybierz kolor</string>
-    <string name="hide_private">Hide private Media from home screen</string>
-    <string name="hide_private_desc">Long click \"Continue Watching\" to access</string>
+    <string name="hide_private">Ukryj prywatne Wpisy na ekranie głównym</string>
+    <string name="hide_private_desc">Przytrzymaj \"Kontynuuj oglądanie\" aby uzyskać dostęp</string>
     <string name="torrent_addon">Dodatek Torrent</string>
     <string name="enable_torrent">Włącz Torrent</string>
     <string name="anime_downloader_addon">Dodatek Pobierania Anime</string>
@@ -855,7 +855,7 @@
     <string name="install_addon">Zainstaluj dodatek</string>
     <string name="download_addon_not_found">Nie znaleziono dodatku</string>
     <string name="image">Obraz</string>
-    <string name="clear_history">Clear History</string>
+    <string name="clear_history">Wyczyść historię</string>
     <string name="failed_ext_install_conflict">Nie udało się zainstalować rozszerzenia z powodu konfliktu</string>
     <string name="reading">CZYTANE</string>
     <string name="watching">OGLĄDANE</string>
