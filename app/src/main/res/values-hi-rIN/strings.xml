@@ -122,11 +122,9 @@
     <string name="chaps">अध्याय</string>
     <string name="chap">अध्याय</string>
     <string name="wrong"><u>गलत शीर्षक?</u></string>
-    <string name="source_not_found">        Nothing came up from this source.\n
-        Let\'s look elsewhere.
+    <string name="source_not_found">        इस स्रोत से कुछ नहीं आया।\n        चलो कहीं और देखते हैं।
     </string>
-    <string name="download_not_found">        Your downloads are feeling a bit lonely…\n
-        Try downloading something.
+    <string name="download_not_found">        आपके डाउनलोड में थोड़ी सी अकेलापन महसूस हो रहा है…\n        कुछ डाउनलोड करने की कोशिश करें।
     </string>
     <string name="not_supported">%1$s समर्थित नहीं है!</string>
     <string name="server_selector">सर्वर का चयन करें</string>
@@ -390,7 +388,7 @@
     <string name="error_message">त्रुटि: %1$s</string>
     <string name="install_step">चरण: %1$s</string>
     <string name="review">समीक्षा</string>
-    <string name="reviews">Reviews</string>
+    <string name="reviews">समीक्षाएँ</string>
     <string name="discord_nothing_button">केवल पहला बटन प्रदर्शित करें</string>
     <string name="discord_dantotsu_button">दूसरे बटन में डेनटोटसू प्रदर्शित करें</string>
     <string name="discord_anilist_button">इसके बजाय अपनी एनिलिस्ट प्रोफ़ाइल प्रदर्शित करें</string>
@@ -585,7 +583,7 @@
     <string name="answer_16">कुछ मौलिक सुधार हो सकते हैं : \n\n• अगर कोई विस्तार है, तो अपनी एक्सटेंशन को अपडेट करें। \n• वेब व्यू को खोलें और इसे लोड होने का इंतजार करें। जब लोडिंग पूरी हो जाए, तो पिछले पेज पर जाएं। (अगर वेब व्यू में त्रुटि 404 या कुछ समान दिखाता है, तो आपका स्रोत नीचे है) \n• अपनी सेटिंग्स से एक अलग DNS का उपयोग करें, पसंदीदा, Libre। \n• विश्वसनीय VPN का प्रयोग करें। (इसके बाद आपको कदम 1 को दोहराना होगा) \n\nयदि ऊपर के कोई भी कदम काम नहीं करते हैं, तो कोई अलग स्रोत का उपयोग करें या हमारे [discord](https://discord.gg/invite/4HPZ5nAWwM) में मदद के लिए शामिल हों।</string>
     <string name="question_17">कुछ उपयोगी टिप्स और ट्रिक्स</string>
     <string name="answer_17">निम्नलिखित कुछ टिप्स और ट्रिक्स आपको पता हो सकते हैं - \n \n \n - सेटिंग्स में Dantotsu लोगो को होल्ड करके, आप मैन्युअल रूप से क्या नया अपडेट है देख सकते हैं। \n \n - किसी त्रुटि संदेश/टैग/पर्यायवाची या शीर्षक को होल्ड करने से यह कॉपी हो जाएगा। \n \n - एक एपिसोड को अन्य ऐप्स के साथ खोल सकते हैं, उस एपिसोड के लिए किसी भी सर्वर को होल्ड करके। इससे आप एपिसोड को अन्य वीडियो प्लेयर का उपयोग करके स्ट्रीम करने में मदद मिलती है या एपिसोड को डाउनलोड मैनेजर का उपयोग करके डाउनलोड कर सकते हैं। \n \n - आप इस [लिंक](https://anilist.co/settings/lists) का उपयोग करके कस्टम सूचियाँ सेट अप कर सकते हैं। (आपको साइन इन करना होगा) \n \n - अगर आपका एपिसोड/अध्याय स्वचालित रूप से प्रगति कर रहा है, तो आपको उस एनिमे/मंगा के स्थिति संबंधित बार (प्लानिंग/दोहराना/देखना बटन) को होल्ड करें। अगली बार जब आप एक अध्याय/एपिसोड शुरू करेंगे/समाप्त करेंगे, तो आपको एक पॉपअप मिलेगा। वहाँ हां दबाएं।</string>
-    <string name="question_18">I can\'t login to Anilist.</string>
+    <string name="question_18">मुझे Anilist में लॉगिन नहीं करने देता।</string>
     <string name="answer_18">The reason this happens is probably because you\'re not using the default browser.\n\n&gt;You have to set Chrome as your default browser to login to Anilist.\n\n&gt;It takes a few seconds for the login button to display changes.\n\nIf it doesn\'t work then you could possibly be IP banned from Anilist or your ISP banned Anilist themselves. We believe that this is highly unlikely so open [Anilist](https://anilist.co) in your browser to see if that\`s the case.</string>
     <string name="question_19">What is torrent? How do I use it?</string>
     <string name="answer_19">Torrent or formally known as BitTorrent is an internet communication protocol for peer\-to\-peer file sharing. A torrent network doesn\'t use a centralised server to host files. It shares files in a decentralised manner. A torrent network has two types of peers. Seeders &amp; Leachers.\n\n• Seeders : These are peers who completed downloading and has the full file. And now they are sharing this file to other peers which is called seeding. A torrent cannot work without at least one seeder. The more seeder a torrent has, the better.\n\n• Leachers : These are peers who are currently downloading the file. If they currently have 40&#37; downloaded then they will share the 40&#37; to any other peers who requests it.\n\nUnlike a centralised server, torrents have no bandwidth limit. You can get your files from hundreds of seeders at the highest possible speed your internet can offer. But many ISP throttle torrent to slow them down because it\'s demanding on their infrastructure. Use a VPN to circumvent this.\n\n• How to use torrents :\n\n1. Install the Torrent Add-on from \`Dantotsu &gt; Settings &gt; Add-ons &gt; Torrent Add-on.\` \n2. Get a source that provides torrents.\n3. USE A VPN. Using VPN while torrenting only has upsides. Without a VPN your IP address will be exposed, your ISP will throttle your network and you could possibly be fined if you live in a country first world country. DO NOT USE IT WITHOUT A VPN IF YOU DON\'T KNOW WHAT YOU\'RE DOING.\n4. Now use that source to start torrenting.</string>
@@ -646,9 +644,9 @@
     <string name="requires_android_12">Android 12+ की आवश्यकता है</string>
     <string name="share_username_in_crash_reports">क्रैश रिपोर्ट्स में उपयोगकर्ता नाम साझा करें</string>
     <string name="pinned_sources">पिन की गई स्रोत</string>
-    <string name="backup_restore">Backup and Restore</string>
-    <string name="restore_settings">Import Settings</string>
-    <string name="restore_settings_underline"><u>Restore Settings</u></string>
+    <string name="backup_restore">बैकअप और पुनर्स्थापन</string>
+    <string name="restore_settings">सेटिंग्स आयात करें</string>
+    <string name="restore_settings_underline"><u>सेटिंग्स पुनर्स्थापित करें</u></string>
     <string name="try_internal_cast_experimental">आंतरिक कास्ट का प्रयास करें (प्रयोगशील)</string>
     <string name="comments">टिप्पणियाँ</string>
     <string name="newest">नवीनतम</string>
@@ -719,7 +717,7 @@
     <string name="you_cursed">आपको शाप लगा गया है :pwayge:</string>
     <string name="purge_confirm">क्या आप वाकई सभी %1$s डाउनलोड को साफ़ करना चाहते हैं?</string>
     <string name="delete_fail_reason">हटाने में विफल :… %1$s</string>
-    <string name="delete_fail">Failed to delete</string>
+    <string name="delete_fail">हटाने में विफल</string>
     <string name="hide_replies">उत्तरों को छुपाएं</string>
     <string name="view_reply">उत्तर देखें</string>
     <string name="view_replies">उत्तर देखें</string>
@@ -877,7 +875,7 @@
     <string name="would_you_like_to_install">क्या आप इसे स्थापित करना चाहेंगे?</string>
     <string name="torrent_addon_not_available">टॉरेंट एड-ऑन उपलब्ध नहीं है</string>
     <string name="download_subtitle">उपशीर्षक डाउनलोड करें</string>
-    <string name="download_audio_tracks">Download Audio Tracks</string>
+    <string name="download_audio_tracks">ऑडियो ट्रैक्स डाउनलोड करें</string>
     <string name="no_video_selected">कोई वीडियो चयनित नहीं है</string>
     <string name="no_subtitles_available">कोई उपशीर्षक उपलब्ध नहीं हैं</string>
     <string name="vote_out_of_total">(%1$s की %2$s ने इस समीक्षा को पसंद किया)</string>
