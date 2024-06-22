@@ -122,11 +122,9 @@
     <string name="chaps">Hoofdstukken</string>
     <string name="chap">Hoofdstuk</string>
     <string name="wrong"><u>Verkeerde Titel?</u></string>
-    <string name="source_not_found">        Nothing came up from this source.\n
-        Let\'s look elsewhere.
+    <string name="source_not_found">        Er kwam niets uit deze bron.\n        Laten we ergens anders kijken.
     </string>
-    <string name="download_not_found">        Your downloads are feeling a bit lonely…\n
-        Try downloading something.
+    <string name="download_not_found">        Jouw downloads voelen zich een beetje eenzaam…\n        Probeer iets te downloaden.
     </string>
     <string name="not_supported">%1$s wordt niet ondersteund!</string>
     <string name="server_selector">Selecteer Server</string>
@@ -390,7 +388,7 @@
     <string name="error_message">Fout: %1$s</string>
     <string name="install_step">Stap: %1$s</string>
     <string name="review">Beoordelen</string>
-    <string name="reviews">Reviews</string>
+    <string name="reviews">Recensies</string>
     <string name="discord_nothing_button">Alleen de eerste knop weergeven</string>
     <string name="discord_dantotsu_button">Toon Dantotsu in de tweede knop</string>
     <string name="discord_anilist_button">Toon je AniList-profiel in plaats daarvan</string>
@@ -585,7 +583,7 @@
     <string name="answer_16">Enkele basisoplossingen zijn: \n\n• Werk je extensies bij als dat nodig is. \n• Open Web View en wacht tot het is geladen. Nadat het laden is voltooid, ga terug. (Als Web View een foutmelding 404 of iets dergelijks laat zien, is de kans groot dat je bron niet werkt)\n• Gebruik een ander DNS uit je instellingen, bij voorkeur, Libre. \n• Probeer een betrouwbare VPN. (Je moet stap 1 herhalen na dit) \n\nAls geen van de bovenstaande stappen werkt, gebruik dan een andere bron of kom bij onze [discord](https://discord.gg/invite/4HPZ5nAWwM) voor hulp.</string>
     <string name="question_17">Enkele nuttige tips en trucs</string>
     <string name="answer_17">Hier volgen enkele tips en trucs die je misschien wel of niet kent - \n \n \n - Door lang op het Dantotsu-logo in de instellingen te drukken, kun je handmatig controleren of er nieuwe updates zijn. \n \n - Door lang op een foutmelding/tag/synoniem of titel te drukken, wordt deze gekopieerd. \n \n - Je kunt een aflevering openen met andere apps door lang op een server voor die aflevering te drukken. Dit helpt bij het streamen van de aflevering met andere videospelers of het downloaden van de aflevering met downloadbeheerders. \n \n - Je kunt aangepaste lijsten instellen via deze [link](https://anilist.co/settings/lists). (je moet ingelogd zijn) \n \n - Als je episode/hoofdstuk niet automatisch wordt voortgezet nadat je klaar bent met kijken/lezen, houd dan de statusbalk (plannen/herhalen/kijken-knop) van die anime/manga ingedrukt. De volgende keer dat je een hoofdstuk/aflevering start of eindigt, stuit je op een pop-up. Druk daar op ja.</string>
-    <string name="question_18">I can\'t login to Anilist.</string>
+    <string name="question_18">Ik kan niet inloggen op Anilist.</string>
     <string name="answer_18">The reason this happens is probably because you\'re not using the default browser.\n\n&gt;You have to set Chrome as your default browser to login to Anilist.\n\n&gt;It takes a few seconds for the login button to display changes.\n\nIf it doesn\'t work then you could possibly be IP banned from Anilist or your ISP banned Anilist themselves. We believe that this is highly unlikely so open [Anilist](https://anilist.co) in your browser to see if that\`s the case.</string>
     <string name="question_19">What is torrent? How do I use it?</string>
     <string name="answer_19">Torrent or formally known as BitTorrent is an internet communication protocol for peer\-to\-peer file sharing. A torrent network doesn\'t use a centralised server to host files. It shares files in a decentralised manner. A torrent network has two types of peers. Seeders &amp; Leachers.\n\n• Seeders : These are peers who completed downloading and has the full file. And now they are sharing this file to other peers which is called seeding. A torrent cannot work without at least one seeder. The more seeder a torrent has, the better.\n\n• Leachers : These are peers who are currently downloading the file. If they currently have 40&#37; downloaded then they will share the 40&#37; to any other peers who requests it.\n\nUnlike a centralised server, torrents have no bandwidth limit. You can get your files from hundreds of seeders at the highest possible speed your internet can offer. But many ISP throttle torrent to slow them down because it\'s demanding on their infrastructure. Use a VPN to circumvent this.\n\n• How to use torrents :\n\n1. Install the Torrent Add-on from \`Dantotsu &gt; Settings &gt; Add-ons &gt; Torrent Add-on.\` \n2. Get a source that provides torrents.\n3. USE A VPN. Using VPN while torrenting only has upsides. Without a VPN your IP address will be exposed, your ISP will throttle your network and you could possibly be fined if you live in a country first world country. DO NOT USE IT WITHOUT A VPN IF YOU DON\'T KNOW WHAT YOU\'RE DOING.\n4. Now use that source to start torrenting.</string>
@@ -647,8 +645,8 @@
     <string name="share_username_in_crash_reports">Gebruikersnaam delen</string>
     <string name="pinned_sources">Vastgezette Bronnen</string>
     <string name="backup_restore">Back-up en Herstel</string>
-    <string name="restore_settings">Instellingen importeren</string>
-    <string name="restore_settings_underline"><u>Instellingen herstellen</u></string>
+    <string name="restore_settings">Instellingen Importeren</string>
+    <string name="restore_settings_underline"><u>Instellingen Herstellen</u></string>
     <string name="try_internal_cast_experimental">Probeer Interne Cast (Experimenteel)</string>
     <string name="comments">Reacties</string>
     <string name="newest">Nieuwste</string>
@@ -719,7 +717,7 @@
     <string name="you_cursed">youwu zijn vervloekt :pwayge:</string>
     <string name="purge_confirm">Weet u zeker dat u alle %1$s downloads wilt verwijderen?</string>
     <string name="delete_fail_reason">Verwijderen is mislukt vanwege… %1$s</string>
-    <string name="delete_fail">Failed to delete</string>
+    <string name="delete_fail">Verwijderen mislukt</string>
     <string name="hide_replies">Reacties verbergen</string>
     <string name="view_reply">Reactie bekijken</string>
     <string name="view_replies">Reacties bekijken</string>
@@ -877,7 +875,7 @@
     <string name="would_you_like_to_install">Wilt u het installeren?</string>
     <string name="torrent_addon_not_available">Torrent Add-on niet beschikbaar</string>
     <string name="download_subtitle">Ondertitel downloaden</string>
-    <string name="download_audio_tracks">Download Audio Tracks</string>
+    <string name="download_audio_tracks">Audiotracks Downloaden</string>
     <string name="no_video_selected">Geen video geselecteerd</string>
     <string name="no_subtitles_available">Geen ondertitels beschikbaar</string>
     <string name="vote_out_of_total">(%1$s van de %2$s vond deze recensie leuk)</string>
