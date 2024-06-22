@@ -96,7 +96,6 @@ jobs:
     - name: Upload APK to Discord and Telegram
       shell: bash
       run: |
-        run: |
         # Prepare Discord embed
         fetch_user_details() {
           local login=$1
