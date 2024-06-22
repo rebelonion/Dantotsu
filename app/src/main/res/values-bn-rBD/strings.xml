@@ -122,11 +122,11 @@
     <string name="chaps">অধ্যায়</string>
     <string name="chap">অধ্যায়</string>
     <string name="wrong"><u>ভুল শিরোনাম?</u></string>
-    <string name="source_not_found">        Nothing came up from this source.\n
-        Let\'s look elsewhere.
+    <string name="source_not_found">        এই উৎস থেকে কিছুই আসে নি।\n
+        আমরা অন্যত্র দেখতে চাই।
     </string>
-    <string name="download_not_found">        Your downloads are feeling a bit lonely…\n
-        Try downloading something.
+    <string name="download_not_found">        আপনার ডাউনলোড কিছুই নেই...\n
+        কিছু ডাউনলোড করার চেষ্টা করুন।
     </string>
     <string name="not_supported">%1$s সমর্থন করা হয়নি!</string>
     <string name="server_selector">সার্ভার নির্বাচক</string>
@@ -391,7 +391,7 @@
     <string name="error_message">ভূল %1$s</string>
     <string name="install_step">ধাপ %1$s</string>
     <string name="review">পুনরায় দেখুন</string>
-    <string name="reviews">রিভিও</string>
+    <string name="reviews">পর্যালোচনা</string>
     <string name="discord_nothing_button">শুধুমাত্র প্রথম বাটনটি দেখাবেন</string>
     <string name="discord_dantotsu_button">দান্ততসু কে দ্বিতিয় বাটন এ দেখাও</string>
     <string name="discord_anilist_button">আমার আনিলিস্ত প্রফাইল টি এর বিপরিতে দেখাও</string>
@@ -593,7 +593,7 @@
     <string name="question_17">কিছু কাজের পরামর্শ এবং ট্রিকস</string>
     <string name="answer_17">নিম্নলিখিতটি আপনি যে কিছু পরামর্শ এবং ট্রিকস জানতে পারেন - \n \n \n - সেটিংসে ড্যান্টোটসু লোগোটি ধরে রাখলে, আপনি যদি কোনও নতুন আপডেট থাকে তা চেক করতে পারেন নিজস্বভাবে। \n \n - একটি ত্রুটি মেসেজ/ট্যাগ/সমনাম/শিরোনামকে ধরে রাখলে, আপনি এটি কপি করতে পারেন। \n \n - আপনি একটি পর্ব অন্য অ্যাপস দিয়ে খুলতে পারেন যেটি অন্য ভিডিও প্লেয়ার বা ডাউনলোড ম্যানেজার ব্যবহার করে পর্ব স্ট্রীমিং করার সাহায্যে বা পর্ব ডাউনলোড করার সাহায্যে এটি থেকে বোঝায়। \n \n - আপনি এই [লিঙ্ক](https://anilist.co/settings/lists) ব্যবহার করে কাস্টম তালিকা সেট আপ করতে পারেন। (আপনাকে সাইন ইন করা প্রয়োজন) \n \n - আপনার পর্ব/অধ্যায়টি স্বয়ংক্রিয়ভাবে সামগ্রীয়ের পরিচালনা না করার পরে যদি এটি প্রগ্রেস হয় না তবে সেটির স্ট্যাটাস বার (পরিকল্পনা/পুনরাবৃত্তি/দেখছি বোতাম) ধরে রাখুন। পরবর্তী পরবর্তী পর্ব/অধ্যায় শুরু করতে যখন আপনি একটি পর্ব শেষ করেন/প্রয়োজন হয়, তখন আপনি একটি পপআপ পেয়ে যাবেন। সেখানে হ্যাঁ চাপুন।
     </string>
-    <string name="question_18">I can\'t login to Anilist.</string>
+    <string name="question_18">আমি Anilist-এ লগইন করতে পারি না।</string>
     <string name="answer_18">The reason this happens is probably because you\'re not using the default browser.\n\n&gt;You have to set Chrome as your default browser to login to Anilist.\n\n&gt;It takes a few seconds for the login button to display changes.\n\nIf it doesn\'t work then you could possibly be IP banned from Anilist or your ISP banned Anilist themselves. We believe that this is highly unlikely so open [Anilist](https://anilist.co) in your browser to see if that\`s the case.</string>
     <string name="question_19">What is torrent? How do I use it?</string>
     <string name="answer_19">Torrent or formally known as BitTorrent is an internet communication protocol for peer\-to\-peer file sharing. A torrent network doesn\'t use a centralised server to host files. It shares files in a decentralised manner. A torrent network has two types of peers. Seeders &amp; Leachers.\n\n• Seeders : These are peers who completed downloading and has the full file. And now they are sharing this file to other peers which is called seeding. A torrent cannot work without at least one seeder. The more seeder a torrent has, the better.\n\n• Leachers : These are peers who are currently downloading the file. If they currently have 40&#37; downloaded then they will share the 40&#37; to any other peers who requests it.\n\nUnlike a centralised server, torrents have no bandwidth limit. You can get your files from hundreds of seeders at the highest possible speed your internet can offer. But many ISP throttle torrent to slow them down because it\'s demanding on their infrastructure. Use a VPN to circumvent this.\n\n• How to use torrents :\n\n1. Install the Torrent Add-on from \`Dantotsu &gt; Settings &gt; Add-ons &gt; Torrent Add-on.\` \n2. Get a source that provides torrents.\n3. USE A VPN. Using VPN while torrenting only has upsides. Without a VPN your IP address will be exposed, your ISP will throttle your network and you could possibly be fined if you live in a country first world country. DO NOT USE IT WITHOUT A VPN IF YOU DON\'T KNOW WHAT YOU\'RE DOING.\n4. Now use that source to start torrenting.</string>
@@ -639,7 +639,7 @@
     <string name="installed_manga">ইনস্টলড ম্যাঙ্গা</string>
     <string name="color_picker">কালার পিকার</string>
     <string name="random_selection">এলোমেলো নির্বাচন</string>
-    <string name="listed_in_library">Listed in Library</string>
+    <string name="listed_in_library">লাইব্রেরিতে তালিকাভুক্ত</string>
     <string name="incognito_mode">বিজ্ঞাপন মোড</string>
     <string name="appwidget_text">উদাহরণ</string>
     <string name="configure">কনফিগার করুন</string>
@@ -654,9 +654,9 @@
     <string name="requires_android_12">এ্যান্ড্রয়েড 12+ প্রয়োজন</string>
     <string name="share_username_in_crash_reports">ক্র্যাশ রিপোর্টসমূহে ব্যবহারকারীর নাম শেয়ার করুন</string>
     <string name="pinned_sources">পিন্ড উত্স</string>
-    <string name="backup_restore">ব্যাকয়াপ এবং রিস্টর</string>
-    <string name="restore_settings">সেটিংস আমদানি</string>
-    <string name="restore_settings_underline"><u>রিস্টর সেটিংস</u></string>
+    <string name="backup_restore">ব্যাকআপ এবং পুনরুদ্ধার</string>
+    <string name="restore_settings">সেটিংস আমদানি করুন</string>
+    <string name="restore_settings_underline"><u>সেটিংস আমদানি করুন</u></string>
     <string name="try_internal_cast_experimental">আন্তরিক কাস্ট চেষ্টা করুন (পরীক্ষামূলক)</string>
     <string name="comments">মন্তব্য</string>
     <string name="newest">নতুন</string>
@@ -727,7 +727,7 @@
     <string name="you_cursed">আপনী অবিষপ্ত ওয়েছেন :pwayge:</string>
     <string name="purge_confirm">আপনি কি সব ডাউনলোড %1$s মুছতে চান?</string>
     <string name="delete_fail_reason">মুছে ব্যর্থ কারণ %1$s</string>
-    <string name="delete_fail">Failed to delete</string>
+    <string name="delete_fail">মুছে ফেলা ব্যর্থ হয়েছে</string>
     <string name="hide_replies">রিপ্লাই লুকান</string>
     <string name="view_reply">রিপ্লাই দেখুন</string>
     <string name="view_replies">রিপ্লাই দেখুন</string>
@@ -850,8 +850,8 @@
     <string name="use_unique_theme_for_each_item_desc">মিডিয়ার ব্যানার থেকে রং ব্যবহার করুন</string>
     <string name="use_custom_theme_desc">থিমে নিজের রং ব্যবহার করুন</string>
     <string name="color_picker_desc">একটি রং নির্বাচন করুন</string>
-    <string name="hide_private">Hide private Media from home screen</string>
-    <string name="hide_private_desc">Long click \"Continue Watching\" to access</string>
+    <string name="hide_private">হোম স্ক্রিন থেকে ব্যক্তিগত মিডিয়া লুকান</string>
+    <string name="hide_private_desc">\"দেখার চালিত রাখুন\" এ দীর্ঘ ক্লিক করুন প্রবেশ করতে</string>
     <string name="torrent_addon">টরেন্ট অ্যাড-অন</string>
     <string name="enable_torrent">টরেন্ট চালু করুন</string>
     <string name="anime_downloader_addon">অ্যানিমে ডাউনলোডার অ্যাড-অন</string>
@@ -863,7 +863,7 @@
     <string name="install_addon">অ্যাড-অন ইনস্টল করুন</string>
     <string name="download_addon_not_found">অ্যাড-অন পাওয়া যায়নি</string>
     <string name="image">ছবি</string>
-    <string name="clear_history">Clear History</string>
+    <string name="clear_history">ইতিহাস মুছুন</string>
     <string name="failed_ext_install_conflict">সংঘর্ষের কারণে এক্সটেনশন ইনস্টল করা ব্যর্থ হয়েছে</string>
     <string name="reading">পড়া</string>
     <string name="watching">দেখা</string>
