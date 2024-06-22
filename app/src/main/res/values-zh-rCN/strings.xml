@@ -122,12 +122,8 @@
     <string name="chaps">章节</string>
     <string name="chap">章</string>
     <string name="wrong"><u>错误的标题？</u></string>
-    <string name="source_not_found">        Nothing came up from this source.\n
-        Let\'s look elsewhere.
-    </string>
-    <string name="download_not_found">        Your downloads are feeling a bit lonely…\n
-        Try downloading something.
-    </string>
+    <string name="source_not_found">        未从此来源找到任何内容。\n        让我们换个地方看看。</string>
+    <string name="download_not_found">        您的下载似乎有点孤单…\n        尝试下载一些东西。</string>
     <string name="not_supported">%1$s 不支持！</string>
     <string name="server_selector">选择服务器</string>
     <string name="auto_select_server">自动选择服务器</string>
@@ -390,7 +386,7 @@
     <string name="error_message">出错了%1$s</string>
     <string name="install_step">步骤%1$s</string>
     <string name="review">评论</string>
-    <string name="reviews">Reviews</string>
+    <string name="reviews">评论</string>
     <string name="discord_nothing_button">仅显示第一个按钮</string>
     <string name="discord_dantotsu_button">在第二个按钮中显示dantotsu</string>
     <string name="discord_anilist_button">改为显示AniList配置文件</string>
@@ -585,7 +581,7 @@
     <string name="answer_16">一些基本的修复方法是：\n\n• 如果有的话，请更新您的扩展。\n• 打开 Web View 并等待加载完成。加载完成后，返回。（如果 Web View 显示错误 404 或类似的错误，那么您的来源可能已关闭）\n• 使用您设置的不同 DNS，最好是 Libre。\n• 尝试可信赖的 VPN。（之后您需要重复步骤 1）\n\n如果以上步骤都不起作用，请使用其他来源或加入我们的 [discord](https://discord.gg/invite/4HPZ5nAWwM) 寻求帮助。</string>
     <string name="question_17">一些有用的技巧和诀窍</string>
     <string name="answer_17">以下是一些您可能已经知道或者不知道的技巧和诀窍 - \n \n \n- 通过长按设置中的 Dantotsu 徽标，您可以手动检查是否有新更新。\n \n- 长按错误消息/标签/同义词或标题将复制它。\n \n- 您可以通过长按任何剧集的任何服务器来使用其他应用程序打开剧集。这有助于使用其他视频播放器流式传输剧集或使用下载管理器下载剧集。\n \n- 您可以使用此 [链接](https://anilist.co/settings/lists) 设置自定义列表（您需要登录）\n \n- 如果您的剧集/章节在您完成观看/阅读后仍然没有自动进行，那么长按该动画/漫画的状态栏（计划/重复/观看按钮）。下次您开始章节/完成剧集时，您将遇到一个弹出窗口。在那里按是。</string>
-    <string name="question_18">I can\'t login to Anilist.</string>
+    <string name="question_18">我无法登录到 Anilist。</string>
     <string name="answer_18">The reason this happens is probably because you\'re not using the default browser.\n\n&gt;You have to set Chrome as your default browser to login to Anilist.\n\n&gt;It takes a few seconds for the login button to display changes.\n\nIf it doesn\'t work then you could possibly be IP banned from Anilist or your ISP banned Anilist themselves. We believe that this is highly unlikely so open [Anilist](https://anilist.co) in your browser to see if that\`s the case.</string>
     <string name="question_19">What is torrent? How do I use it?</string>
     <string name="answer_19">Torrent or formally known as BitTorrent is an internet communication protocol for peer\-to\-peer file sharing. A torrent network doesn\'t use a centralised server to host files. It shares files in a decentralised manner. A torrent network has two types of peers. Seeders &amp; Leachers.\n\n• Seeders : These are peers who completed downloading and has the full file. And now they are sharing this file to other peers which is called seeding. A torrent cannot work without at least one seeder. The more seeder a torrent has, the better.\n\n• Leachers : These are peers who are currently downloading the file. If they currently have 40&#37; downloaded then they will share the 40&#37; to any other peers who requests it.\n\nUnlike a centralised server, torrents have no bandwidth limit. You can get your files from hundreds of seeders at the highest possible speed your internet can offer. But many ISP throttle torrent to slow them down because it\'s demanding on their infrastructure. Use a VPN to circumvent this.\n\n• How to use torrents :\n\n1. Install the Torrent Add-on from \`Dantotsu &gt; Settings &gt; Add-ons &gt; Torrent Add-on.\` \n2. Get a source that provides torrents.\n3. USE A VPN. Using VPN while torrenting only has upsides. Without a VPN your IP address will be exposed, your ISP will throttle your network and you could possibly be fined if you live in a country first world country. DO NOT USE IT WITHOUT A VPN IF YOU DON\'T KNOW WHAT YOU\'RE DOING.\n4. Now use that source to start torrenting.</string>
@@ -646,9 +642,9 @@
     <string name="requires_android_12">需要 Android 12+</string>
     <string name="share_username_in_crash_reports">在崩溃报告中分享用户名</string>
     <string name="pinned_sources">固定的来源</string>
-    <string name="backup_restore">Backup and Restore</string>
-    <string name="restore_settings">Import Settings</string>
-    <string name="restore_settings_underline"><u>Restore Settings</u></string>
+    <string name="backup_restore">备份和恢复</string>
+    <string name="restore_settings">导入设置</string>
+    <string name="restore_settings_underline"><u>导入设置</u></string>
     <string name="try_internal_cast_experimental">尝试内部投射（实验性）</string>
     <string name="comments">评论</string>
     <string name="newest">最新</string>
@@ -719,7 +715,7 @@
     <string name="you_cursed">你被诅咒了 :pwayge:</string>
     <string name="purge_confirm">您确定要清除所有 %1$s 的下载吗？</string>
     <string name="delete_fail_reason">删除失败，原因是：%1$s</string>
-    <string name="delete_fail">Failed to delete</string>
+    <string name="delete_fail">删除失败</string>
     <string name="hide_replies">隐藏回复</string>
     <string name="view_reply">查看回复</string>
     <string name="view_replies">查看回复</string>
@@ -877,7 +873,7 @@
     <string name="would_you_like_to_install">您想要安装它吗?</string>
     <string name="torrent_addon_not_available">种子附加组件不可用</string>
     <string name="download_subtitle">下载字幕</string>
-    <string name="download_audio_tracks">Download Audio Tracks</string>
+    <string name="download_audio_tracks">下载音轨</string>
     <string name="no_video_selected">未选择视频</string>
     <string name="no_subtitles_available">无可用字幕</string>
     <string name="vote_out_of_total">（%1$s中有%2$s喜欢此评论）</string>
