@@ -96,10 +96,6 @@ jobs:
     - name: Upload APK to Discord and Telegram
       shell: bash
       run: |
-        # Debugging: Print the COMMIT_LOG
-        echo "COMMIT_LOG contents:"
-        echo "$COMMIT_LOG"
-
         # Prepare Discord embed
         fetch_user_details() {
           local login=$1
@@ -110,36 +106,48 @@ jobs:
           avatar_url=$(echo "$user_details" | jq -r '.avatar_url')
           echo "$name|$login|$avatar_url"
         }
+        
         # Additional information for the goats
         declare -A additional_info
         additional_info["ibo"]="\n Discord: <@951737931159187457>\n AniList: [takarealist112](<https://anilist.co/user/takarealist112/>)"
         additional_info["aayush262"]="\n Discord: <@918825160654598224>\nAniList: [aayush262](<https://anilist.co/user/aayush262/>)"
         additional_info["rebelonion"]="\n Discord: <@714249925248024617>\nAniList: [rebelonion](<https://anilist.co/user/rebelonion/>)\nPornHub: [rebelonion](<https://www.cornhub.com/model/rebelonion>)" 
         
-        # Extract contributor names from commit log and make unique list
-        committers=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g' | grep -oP '(?<=~)[^%]*')
-        committers=$(echo "$committers" | sort | uniq)
+        # Count recent commits and create an associative array
+        declare -A recent_commit_counts
+        while read -r count name; do
+            recent_commit_counts["$name"]=$count
+        done < <(echo "$COMMIT_LOG" | sed 's/%0A/\n/g' | grep -oP '(?<=~)[^[]*' | sort | uniq -c | sort -rn)
         
         # Fetch contributors from GitHub
         contributors=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
                        "https://api.github.com/repos/rebelonion/Dantotsu/contributors")
+        
+        # Create a sorted list of contributors based on recent commit counts
+        sorted_contributors=$(for login in $(echo "$contributors" | jq -r '.[].login'); do
+            user_info=$(fetch_user_details "$login")
+            name=$(echo "$user_info" | cut -d'|' -f1)
+            count=${recent_commit_counts["$name"]:-0}
+            echo "$count|$login"
+        done | sort -rn | cut -d'|' -f2)
         
         # Initialize needed variables
         developers=""
         committers_count=0
         thumbnail_url="https://i.imgur.com/5o3Y9Jb.gif"
         
-        # Process contributors and filter by committers
+        # Process contributors in the new order
         while read -r login; do
           user_info=$(fetch_user_details "$login")
           name=$(echo "$user_info" | cut -d'|' -f1)
           login=$(echo "$user_info" | cut -d'|' -f2)
           avatar_url=$(echo "$user_info" | cut -d'|' -f3)
           
-          # Get commit count for this contributor on the dev branch
-          commit_count=$(git rev-list --count dev --author="$login")
-          
-          if echo "$committers" | grep -qw "$name"; then
+          # Only process if they have recent commits
+          if [ "${recent_commit_counts["$name"]:-0}" -gt 0 ]; then
+            # Get commit count for this contributor on the dev branch
+            commit_count=$(git rev-list --count dev --author="$login")
+            
             extra_info="${additional_info[$name]}"
             if [ -n "$extra_info" ]; then
               extra_info=$(echo "$extra_info" | sed 's/\\n/\n- /g')
@@ -154,10 +162,10 @@ jobs:
               thumbnail_url="https://i.imgur.com/5o3Y9Jb.gif"
             fi
           fi
-        done < <(echo "$contributors" | jq -r '.[].login')
+        done <<< "$sorted_contributors"
 
-        # Remove trailing newline
-        developers=$(echo "$developers" | sed '$ s/$//')
+        # Remove trailing newline and spaces
+        developers=$(echo "$developers" | sed '$ s/[[:space:]]*$//')
         commit_messages=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g; s/^/\n/')
 
         # Truncate field values
