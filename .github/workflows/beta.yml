@@ -191,7 +191,7 @@ jobs:
         fi
         
         commit_messages=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g; s/^/\n/')
-
+        commit_messages=$(echo "$COMMIT_LOG" | sed -e 's/ *\[.*)//g')
         # Truncate field values
         max_length=1000
         if [ ${#developers} -gt $max_length ]; then
