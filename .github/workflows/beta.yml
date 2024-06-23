@@ -190,7 +190,7 @@ jobs:
           thumbnail_url="https://i.imgur.com/5o3Y9Jb.gif"
         fi
 
-        commit_messages=$(echo "$COMMIT_LOG" | sed -E 's/ \[֍\]\(https?:\/\/[^)]+\)//g'
+        commit_messages=$(echo "$COMMIT_LOG" | sed -E 's/ \[֍\]\(https?:\/\/[^)]+\)//g')
         commit_messages=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g; s/^/\n/')
         
         # Truncate field values
