@@ -106,11 +106,11 @@ jobs:
           avatar_url=$(echo "$user_details" | jq -r '.avatar_url')
           echo "$name|$login|$avatar_url"
         }
-        # Additional information for the goatss
+        # Additional information for the goats
         declare -A additional_info
         additional_info["ibo"]="\n Discord: <@951737931159187457>\n AniList: [takarealist112](<https://anilist.co/user/takarealist112/>)"
-        additional_info["aayush262"]="\n Discord: <@918825160654598224>\nAniList: [aayush262](<https://anilist.co/user/aayush262/>)"
-        additional_info["rebelonion"]="\n Discord: <@714249925248024617>\nAniList: [rebelonion](<https://anilist.co/user/rebelonion/>)\nPornHub: [rebelonion](<https://www.cornhub.com/model/rebelonion>)" 
+        additional_info["aayush262"]="\n Discord: <@918825160654598224>\n AniList: [aayush262](<https://anilist.co/user/aayush262/>)"
+        additional_info["rebelonion"]="\n Discord: <@714249925248024617>\n AniList: [rebelonion](<https://anilist.co/user/rebelonion/>)\n PornHub: [rebelonion](<https://www.cornhub.com/model/rebelonion>)" 
         
         # Count recent commits and create an associative array
         declare -A recent_commit_counts
@@ -133,7 +133,10 @@ jobs:
         # Initialize needed variables
         developers=""
         committers_count=0
-        thumbnail_url="https://i.imgur.com/5o3Y9Jb.gif"
+        max_commits=0
+        top_contributor=""
+        top_contributor_count=0
+        top_contributor_avatar=""
         
         # Process contributors in the new order
         while read -r login; do
@@ -143,11 +146,22 @@ jobs:
           avatar_url=$(echo "$user_info" | cut -d'|' -f3)
           
           # Only process if they have recent commits
-          if [ "${recent_commit_counts["$name"]:-0}" -gt 0 ]; then
-            # Get commit count for this contributor on the dev branch
-            commit_count=$(git rev-list --count dev --author="$login")
+          commit_count=${recent_commit_counts["$name"]:-0}
+          if [ $commit_count -gt 0 ]; then
+            # Update top contributor information
+            if [ $commit_count -gt $max_commits ]; then
+              max_commits=$commit_count
+              top_contributor="$login"
+              top_contributor_count=1
+              top_contributor_avatar="$avatar_url"
+            elif [ $commit_count -eq $max_commits ]; then
+              top_contributor_count=$((top_contributor_count + 1))
+            fi
             
-            extra_info="${additional_info[$name]}"
+            # Get commit count for this contributor on the dev branch
+            branch_commit_count=$(git rev-list --count dev --author="$login")
+            
+            extra_info="${additional_info[$login]}"
             if [ -n "$extra_info" ]; then
               extra_info=$(echo "$extra_info" | sed 's/\\n/\n- /g')
             fi
@@ -155,7 +169,7 @@ jobs:
             # Construct the developer entry
             developer_entry="◗ **${name}** ${extra_info}
         - Github: [${login}](https://github.com/${login})
-        - Commits: ${commit_count}"
+        - Commits: ${branch_commit_count}"
 
             # Add the entry to developers, with a newline if it's not the first entry
             if [ -n "$developers" ]; then
@@ -166,13 +180,16 @@ jobs:
             fi
 
             committers_count=$((committers_count + 1))
-            if [ $committers_count -eq 1 ]; then
-              thumbnail_url="$avatar_url"
-            else
-              thumbnail_url="https://i.imgur.com/5o3Y9Jb.gif"
-            fi
           fi
         done <<< "$sorted_contributors"
+        
+        # Set the thumbnail URL based on top contributor(s)
+        if [ $top_contributor_count -eq 1 ]; then
+          thumbnail_url="$top_contributor_avatar"
+        else
+          thumbnail_url="https://i.imgur.com/5o3Y9Jb.gif"
+        fi
+        
         commit_messages=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g; s/^/\n/')
 
         # Truncate field values
@@ -227,16 +244,16 @@ jobs:
              ${{ secrets.DISCORD_WEBHOOK }}
         
         # Upload APK to Discord
-        curl -F "payload_json=${contentbody}" \
-             -F "dantotsu_debug=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" \
-             ${{ secrets.DISCORD_WEBHOOK }}
+        # curl -F "payload_json=${contentbody}" \
+        #      -F "dantotsu_debug=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" \
+        #      ${{ secrets.DISCORD_WEBHOOK }}
         
         # Send Telegram message without uploading APK
-        commit_messages=$(echo "$COMMIT_LOG" | sed 's/[ ]*\[.*$//')
-        curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
-          -F "document=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" \
-          -F "caption=Alpha-Build: ${VERSION}: ${commit_messages}" \
-         https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
+        # commit_messages=$(echo "$COMMIT_LOG" | sed 's/[ ]*\[.*$//')
+        # curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
+        #   -F "document=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" \
+        #   -F "caption=Alpha-Build: ${VERSION}: ${commit_messages}" \
+        #  https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
     
       env:
         COMMIT_LOG: ${{ env.COMMIT_LOG }}
