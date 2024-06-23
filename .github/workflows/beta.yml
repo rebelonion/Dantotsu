@@ -144,7 +144,8 @@ jobs:
             if [ -n "$extra_info" ]; then
               extra_info=$(echo -e "$extra_info" | sed 's/^/\n- /')
             fi
-            developers="${developers}◗ **${name}**${extra_info}
+            developers="${developers}◗ **${name}**
+            ${extra_info}
         - Github: [${login}](https://github.com/${login})
         - Commits: ${commit_count}"
             committers_count=$((committers_count + 1))
