@@ -200,7 +200,11 @@ jobs:
           commit_messages="${commit_messages:0:$max_length}... (truncated)"
         fi
 
-        commit_messages=$(echo "$COMMIT_LOG" | sed -E 's/ \[֍\]\(https?:\/\/[^)]+\)//g')
+        commit_messages=$(echo "$COMMIT_LOG" | 
+                            sed -E 's/%0A/\n/g' | 
+                            sed -E 's/ \[֍\]\(https?:\/\/[^)]+\)//g' |
+                            tr '\n' '\r' | 
+                            sed -E 's/\r/\\n/g')
         
         # Construct Discord payload
         discord_data=$(jq -nc \
