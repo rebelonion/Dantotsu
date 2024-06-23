@@ -199,12 +199,6 @@ jobs:
         if [ ${#commit_messages} -gt $max_length ]; then
           commit_messages="${commit_messages:0:$max_length}... (truncated)"
         fi
-
-        commit_messages=$(echo "$COMMIT_LOG" | 
-                  sed -E 's/%0A/\n/g' | 
-                  sed -E 's/ \[֍\]\(https?:\/\/[^)]+\)//g' |
-                  sed -E ':a;N;$!ba;s/\n/\\n/g' |
-                  sed -E 's/\\\\/\\/g')
         
         # Construct Discord payload
         discord_data=$(jq -nc \
@@ -259,7 +253,7 @@ jobs:
         
         # Send Telegram message with APK upload
         if [ "$SKIP_BUILDING_APK" != "true" ]; then
-          commit_messages=$(echo "$COMMIT_LOG" | sed -E 's/ \[֍\]\(https?:\/\/[^)]+\)//g')
+          commit_messages=$(echo "$COMMIT_LOG" | sed 's/[ ]*\[.*$//')
           curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
             -F "document=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" \
             -F "caption=Alpha-Build: ${VERSION}: ${commit_messages}" \
