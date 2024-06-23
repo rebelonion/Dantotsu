@@ -161,7 +161,7 @@ jobs:
             # Get commit count for this contributor on the dev branch
             branch_commit_count=$(git rev-list --count dev --author="$login")
             
-            extra_info="${additional_info[$login]}"
+            extra_info="${additional_info[$name]}"
             if [ -n "$extra_info" ]; then
               extra_info=$(echo "$extra_info" | sed 's/\\n/\n- /g')
             fi
