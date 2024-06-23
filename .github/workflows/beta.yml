@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: true
-      SKIP_BUILD: true
+      SKIP_APK: false
 
     steps:
     - name: Checkout repo
@@ -81,11 +81,11 @@ jobs:
       run: chmod +x ./gradlew
 
     - name: Build with Gradle
-      if: ${{ env.SKIP_BUILD != 'true' }}
+      if: ${{ env.SKIP_APK != 'true' }}
       run: ./gradlew assembleGoogleAlpha
 
     - name: Upload a Build Artifact
-      if: ${{ env.SKIP_BUILD != 'true' }}
+      if: ${{ env.SKIP_APK != 'true' }}
       uses: actions/upload-artifact@v4
       with:
           name: Dantotsu
@@ -191,7 +191,6 @@ jobs:
         fi
         
         commit_messages=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g; s/^/\n/')
-        commit_messages=$(echo "$COMMIT_LOG" | sed -E 's/ \[֍\]\(https?:\/\/[^)]+\)//g')
         
         # Truncate field values
         max_length=1000
@@ -245,23 +244,23 @@ jobs:
              ${{ secrets.DISCORD_WEBHOOK }}
         
         # Upload APK to Discord
-        if [ "$SKIP_BUILD" != "true" ]; then
+        if [ "$SKIP_APK" != "true" ]; then
           curl -F "payload_json=${contentbody}" \
                -F "dantotsu_debug=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" \
                ${{ secrets.DISCORD_WEBHOOK }}
         else
-          echo "Skipping APK upload to Discord due to SKIP_BUILD being set to true"
+          echo "Skipping APK upload to Discord due to SKIP_APK being set to true"
         fi
         
         # Send Telegram message with APK upload
-        if [ "$SKIP_BUILD" != "true" ]; then
+        if [ "$SKIP_APK" != "true" ]; then
           commit_messages=$(echo "$COMMIT_LOG" | sed -E 's/ \[֍\]\(https?:\/\/[^)]+\)//g')
           curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
             -F "document=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" \
             -F "caption=Alpha-Build: ${VERSION}: ${commit_messages}" \
             https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
         else
-          echo "Skipping Telegram message and APK upload due to SKIP_BUILD being set to true"
+          echo "Skipping Telegram message and APK upload due to SKIP_APK being set to true"
         fi
     
       env:
