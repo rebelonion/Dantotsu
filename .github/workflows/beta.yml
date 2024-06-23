@@ -142,7 +142,7 @@ jobs:
           if echo "$committers" | grep -qw "$name"; then
             extra_info="${additional_info[$name]}"
             if [ -n "$extra_info" ]; then
-              extra_info=$(echo -e "$extra_info" | sed 's/^/\n- /')
+              extra_info=$(echo "$extra_info" | sed 's/\\n/\n- /g')
             fi
             developers="${developers}◗ **${name}** ${extra_info}
         - Github: [${login}](https://github.com/${login})
