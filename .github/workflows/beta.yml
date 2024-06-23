@@ -227,9 +227,9 @@ jobs:
              ${{ secrets.DISCORD_WEBHOOK }}
         
         # Upload APK to Discord
-        # curl -F "payload_json=${contentbody}" \
-        #      -F "dantotsu_debug=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" \
-        #      ${{ secrets.DISCORD_WEBHOOK }}
+        curl -F "payload_json=${contentbody}" \
+             -F "dantotsu_debug=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" \
+             ${{ secrets.DISCORD_WEBHOOK }}
         
         # Send Telegram message without uploading APK
         commit_messages=$(echo "$COMMIT_LOG" | sed 's/[ ]*\[.*$//')
