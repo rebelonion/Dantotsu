@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: true
-      SKIP_BUILD: false
+      SKIP_BUILD: true
 
     steps:
     - name: Checkout repo
@@ -244,16 +244,24 @@ jobs:
              ${{ secrets.DISCORD_WEBHOOK }}
         
         # Upload APK to Discord
-        curl -F "payload_json=${contentbody}" \
-             -F "dantotsu_debug=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" \
-             ${{ secrets.DISCORD_WEBHOOK }}
+        if [ "$SKIP_BUILD" != "true" ]; then
+          curl -F "payload_json=${contentbody}" \
+               -F "dantotsu_debug=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" \
+               ${{ secrets.DISCORD_WEBHOOK }}
+        else
+          echo "Skipping APK upload to Discord due to SKIP_BUILD being set to true"
+        fi
         
-        # Send Telegram message without uploading APK
-        commit_messages=$(echo "$COMMIT_LOG" | sed 's/ *\[.*\) *//g')
-        curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
-          -F "document=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" \
-          -F "caption=Alpha-Build: ${VERSION}: ${commit_messages}" \
-         https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
+        # Send Telegram message with APK upload
+        if [ "$SKIP_BUILD" != "true" ]; then
+          commit_messages=$(echo "$COMMIT_LOG" | sed 's/[ ]*\[.*$//')
+          curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
+            -F "document=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" \
+            -F "caption=Alpha-Build: ${VERSION}: ${commit_messages}" \
+            https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
+        else
+          echo "Skipping Telegram message and APK upload due to SKIP_BUILD being set to true"
+        fi
     
       env:
         COMMIT_LOG: ${{ env.COMMIT_LOG }}
