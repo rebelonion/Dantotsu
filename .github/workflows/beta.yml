@@ -189,18 +189,18 @@ jobs:
         else
           thumbnail_url="https://i.imgur.com/5o3Y9Jb.gif"
         fi
-
-        commit_messages=$(echo "$COMMIT_LOG" | sed -E 's/ \[֍\]\(https?:\/\/[^)]+\)//g')
-        commit_messages=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g; s/^/\n/')
         
         # Truncate field values
         max_length=1000
+        commit_messages=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g; s/^/\n/')
         if [ ${#developers} -gt $max_length ]; then
           developers="${developers:0:$max_length}... (truncated)"
         fi
         if [ ${#commit_messages} -gt $max_length ]; then
           commit_messages="${commit_messages:0:$max_length}... (truncated)"
         fi
+
+        commit_messages=$(echo "$COMMIT_LOG" | sed -E 's/ \[֍\]\(https?:\/\/[^)]+\)//g')
         
         # Construct Discord payload
         discord_data=$(jq -nc \
