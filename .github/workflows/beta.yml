@@ -112,9 +112,9 @@ jobs:
         }
         # Additional information for the goats
         declare -A additional_info
-        additional_info["sneazy-ibo"]=" Discord: <@951737931159187457>\n AniList: [takarealist112](<https://anilist.co/user/takarealist112/>)\n"
-        additional_info["aayush262"]=" Discord: <@918825160654598224>\n AniList: [aayush262](<https://anilist.co/user/aayush262/>)\n"
-        additional_info["rebelonion"]=" Discord: <@714249925248024617>\n AniList: [rebelonion](<https://anilist.co/user/rebelonion/>)\n PornHub: [rebelonion](<https://www.cornhub.com/model/rebelonion>)\n" 
+        additional_info["ibo"]="\n Discord: <@951737931159187457>\n AniList: [takarealist112](<https://anilist.co/user/takarealist112/>)"
+        additional_info["aayush262"]="\n Discord: <@918825160654598224>\n AniList: [aayush262](<https://anilist.co/user/aayush262/>)"
+        additional_info["rebelonion"]="\n Discord: <@714249925248024617>\n AniList: [rebelonion](<https://anilist.co/user/rebelonion/>)\n PornHub: [rebelonion](<https://www.cornhub.com/model/rebelonion>)" 
         
         # Extract contributor names from commit log and make unique list
         committers=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g' | grep -oP '(?<=~)[^%]*')
@@ -140,14 +140,13 @@ jobs:
           commit_count=$(git rev-list --count dev --author="$login")
           
           if echo "$committers" | grep -qw "$name"; then
-            extra_info="${additional_info[$login]}"
+            extra_info="${additional_info[$name]}"
             if [ -n "$extra_info" ]; then
               extra_info=$(echo -e "$extra_info" | sed 's/^/- /')
             fi
-            developers="${developers}◗ **${name}**
-          ${extra_info} - Github: [${login}](https://github.com/${login})
-        - Commits: ${commit_count}
-        "
+            developers="${developers}◗ **${name}**${extra_info}
+        - Github: [${login}](https://github.com/${login})
+        - Commits: ${commit_count}"
             committers_count=$((committers_count + 1))
             if [ $committers_count -eq 1 ]; then
               thumbnail_url="$avatar_url"
