@@ -203,7 +203,8 @@ jobs:
         commit_messages=$(echo "$COMMIT_LOG" | 
                   sed -E 's/%0A/\n/g' | 
                   sed -E 's/ \[֍\]\(https?:\/\/[^)]+\)//g' |
-                  sed -E ':a;N;$!ba;s/\n/\\n/g')
+                  sed -E ':a;N;$!ba;s/\n/\\n/g' |
+                  sed -E 's/\\\\/\\/g')
         
         # Construct Discord payload
         discord_data=$(jq -nc \
