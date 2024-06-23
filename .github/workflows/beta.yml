@@ -121,7 +121,7 @@ jobs:
         
         # Fetch contributors from GitHub
         contributors=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-                       "https://api.github.com/repos/Dantotsu-inc/FUCKYML/contributors")
+                       "https://api.github.com/repos/{{ github.repository }}/contributors")
         
         # Create a sorted list of contributors based on recent commit counts
         sorted_contributors=$(for login in $(echo "$contributors" | jq -r '.[].login'); do
