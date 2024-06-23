@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: true
-      SKIP_BUILDING_APK: true
+      SKIP_BUILDING_APK: false
 
     steps:
     - name: Checkout repo
