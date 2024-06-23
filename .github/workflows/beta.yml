@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: true
-      SKIP_BUILD: true
+      SKIP_BUILD: false
 
     steps:
     - name: Checkout repo
@@ -233,10 +233,10 @@ jobs:
         
         # Send Telegram message without uploading APK
         commit_messages=$(echo "$COMMIT_LOG" | sed 's/[ ]*\[.*$//')
-        curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
-             -d "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
-             -d "text=Alpha-Build: ${VERSION}: ${commit_messages}"
-
+        curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
+          -F "document=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" \
+          -F "caption=Alpha-Build: ${VERSION}: ${commit_messages}" \
+         https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
     
       env:
         COMMIT_LOG: ${{ env.COMMIT_LOG }}
