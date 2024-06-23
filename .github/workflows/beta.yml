@@ -250,6 +250,12 @@ jobs:
         else
           echo "Skipping APK upload to Discord due to SKIP_BUILDING_APK being set to true"
         fi
+
+        # Format commit messages for Telegram (HTML format with quote)
+        telegram_commit_messages=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g' | while read -r line; do
+          message=$(echo "$line" | sed -E 's/● (.*) ~(.*) \[֍\]\((.*)\)/● \1 ~\2 <a href="\3">֍<\/a>/')
+          echo "$message"
+        done)
         
         # Wrap commit messages in a blockquote for proper quote effect
         telegram_commit_messages="<blockquote>${telegram_commit_messages}</blockquote>"
