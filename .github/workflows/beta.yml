@@ -117,12 +117,12 @@ jobs:
         additional_info["rebelonion"]=" Discord: <@714249925248024617>\n AniList: [rebelonion](<https://anilist.co/user/rebelonion/>)\n PornHub: [rebelonion](<https://www.cornhub.com/model/rebelonion>)\n" 
         
         # Extract contributor names from commit log and make unique list
-        # This regex looks for content between '~' and ' [', which should capture just the author name
-        committers=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g' | grep -oP '(?<=~).*?(?= \[)' | sort | uniq)
+        committers=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g' | grep -oP '(?<=~)[^%]*')
+        committers=$(echo "$committers" | sort | uniq)
         
-        # Debugging: Print extracted committers
-        echo "Extracted committers:"
-        echo "$committers"
+        # Fetch contributors from GitHub
+        contributors=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                       "https://api.github.com/repos/rebelonion/Dantotsu/contributors")
         
         # Initialize needed variables
         developers=""
@@ -130,33 +130,20 @@ jobs:
         thumbnail_url="https://i.imgur.com/5o3Y9Jb.gif"
         
         # Process contributors and filter by committers
-        while read -r committer; do
-          echo "Processing committer: $committer"
-          
-          # Fetch user details
-          user_info=$(fetch_user_details "$committer")
-          echo "User info: $user_info"
-          
+        while read -r login; do
+          user_info=$(fetch_user_details "$login")
           name=$(echo "$user_info" | cut -d'|' -f1)
           login=$(echo "$user_info" | cut -d'|' -f2)
           avatar_url=$(echo "$user_info" | cut -d'|' -f3)
           
-          echo "Name: $name, Login: $login, Avatar URL: $avatar_url"
-          
-          # Get commit count for this committer on the dev branch using login
+          # Get commit count for this contributor on the dev branch
           commit_count=$(git rev-list --count dev --author="$login")
-          echo "Commit count for $login: $commit_count"
           
-          # Only proceed if the committer has commits on the dev branch
-          if [ "$commit_count" -gt 0 ]; then
+          if echo "$committers" | grep -qw "$name"; then
             extra_info="${additional_info[$login]}"
             if [ -n "$extra_info" ]; then
               extra_info=$(echo -e "$extra_info" | sed 's/^/- /')
-              echo "Extra info found for $login"
-            else
-              echo "No extra info found for $login"
             fi
-            
             developers="${developers}◗ **${name}**
           ${extra_info} Github: [${login}](https://github.com/${login})
         - Commits: ${commit_count}
@@ -167,17 +154,8 @@ jobs:
             else
               thumbnail_url="https://i.imgur.com/5o3Y9Jb.gif"
             fi
-            
-            echo "Current developers string:"
-            echo "$developers"
-          else
-            echo "Skipping $login (no commits on dev branch)"
           fi
-        done < <(echo "$committers")
-
-        # Debugging: Print final developers string
-        echo "Final developers string:"
-        echo "$developers"
+        done < <(echo "$contributors" | jq -r '.[].login')
 
         # Remove trailing newline
         developers=$(echo "$developers" | sed '$ s/$//')
