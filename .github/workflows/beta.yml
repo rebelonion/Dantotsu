@@ -106,6 +106,7 @@ jobs:
           user_details=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
                          "https://api.github.com/users/$login")
           name=$(echo "$user_details" | jq -r '.name // .login')
+          login=$(echo "$user_details" | jq -r '.login')
           avatar_url=$(echo "$user_details" | jq -r '.avatar_url')
           echo "$name|$login|$avatar_url"
         }
@@ -115,8 +116,9 @@ jobs:
         additional_info["aayush262"]=" Discord: <@918825160654598224>\n AniList: [aayush262](<https://anilist.co/user/aayush262/>)\n"
         additional_info["rebelonion"]=" Discord: <@714249925248024617>\n AniList: [rebelonion](<https://anilist.co/user/rebelonion/>)\n PornHub: [rebelonion](<https://www.cornhub.com/model/rebelonion>)\n" 
         
-        # Extract contributor logins from commit log and make unique list
-        committers=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g' | grep -oP '(?<=~)[^%]*' | sort | uniq)
+        # Extract contributor names from commit log and make unique list
+        # This regex looks for content between '~' and ' [', which should capture just the author name
+        committers=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g' | grep -oP '(?<=~).*?(?= \[)' | sort | uniq)
         
         # Debugging: Print extracted committers
         echo "Extracted committers:"
@@ -131,7 +133,7 @@ jobs:
         while read -r committer; do
           echo "Processing committer: $committer"
           
-          # Fetch user details first to get the login
+          # Fetch user details
           user_info=$(fetch_user_details "$committer")
           echo "User info: $user_info"
           
