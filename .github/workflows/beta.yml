@@ -232,7 +232,7 @@ jobs:
         #      ${{ secrets.DISCORD_WEBHOOK }}
         
         # Send Telegram message without uploading APK
-        commit_messages=$(echo "$COMMIT_LOG" | sed 's/[ ]*\[.*$//' message)
+        commit_messages=$(echo "$COMMIT_LOG" | sed 's/[ ]*\[.*$//')
         curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
              -d "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
              -d "text=Alpha-Build: ${VERSION}: ${commit_messages}"
