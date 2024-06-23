@@ -251,12 +251,36 @@ jobs:
           echo "Skipping APK upload to Discord due to SKIP_BUILDING_APK being set to true"
         fi
         
+        # Format commit messages for Telegram (HTML format)
+        telegram_commit_messages=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g' | while read -r line; do
+          message=$(echo "$line" | sed -E 's/● (.*) ~(.*) \[֍\]\((.*)\)/● \1 ~\2 <a href="\3">֍<\/a>/')
+          echo "$message"
+        done)
+
         # Send Telegram message with APK upload
         if [ "$SKIP_BUILDING_APK" != "true" ]; then
-          curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
-            -F "document=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" \
-            -F "caption=Alpha-Build: ${VERSION}: ${commit_messages}" \
-            https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
+          APK_PATH="app/build/outputs/apk/google/alpha/app-google-alpha.apk"
+          if [ -f "$APK_PATH" ]; then
+            response=$(curl -sS -f -X POST \
+              "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument" \
+              -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
+              -F "document=@$APK_PATH" \
+              -F "caption=Alpha-Build: ${VERSION}:
+        ${telegram_commit_messages}" \
+              -F "parse_mode=HTML")
+            
+            if [ $? -eq 0 ]; then
+              echo "Successfully uploaded APK to Telegram"
+              echo "Response: $response"
+            else
+              echo "Failed to upload APK to Telegram"
+              echo "Response: $response"
+              exit 1
+            fi
+          else
+            echo "APK file not found at $APK_PATH"
+            exit 1
+          fi
         else
           echo "Skipping Telegram message and APK upload due to SKIP_BUILDING_APK being set to true"
         fi
