@@ -251,11 +251,14 @@ jobs:
           echo "Skipping APK upload to Discord due to SKIP_BUILDING_APK being set to true"
         fi
         
-        # Format commit messages for Telegram (HTML format)
+        # Format commit messages for Telegram (HTML format with quote)
         telegram_commit_messages=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g' | while read -r line; do
           message=$(echo "$line" | sed -E 's/● (.*) ~(.*) \[֍\]\((.*)\)/● \1 ~\2 <a href="\3">֍<\/a>/')
           echo "$message"
         done)
+        
+        # Wrap commit messages in a pre tag for quote effect
+        telegram_commit_messages="<pre>${telegram_commit_messages}</pre>"
 
         # Send Telegram message with APK upload
         if [ "$SKIP_BUILDING_APK" != "true" ]; then
@@ -265,7 +268,8 @@ jobs:
               "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument" \
               -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
               -F "document=@$APK_PATH" \
-              -F "caption=Alpha-Build: ${VERSION}:
+              -F "caption=Alpha-Build: ${VERSION}
+
         ${telegram_commit_messages}" \
               -F "parse_mode=HTML")
             
