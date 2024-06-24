@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: true
-      SKIP_BUILDING_APK: false
+      SKIP_BUILD: true
 
     steps:
     - name: Checkout repo
@@ -75,20 +75,22 @@ jobs:
         cache: gradle
 
     - name: Decode Keystore File
+      if: ${{ env.SKIP_BUILD != 'true' }}
       run: echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > $GITHUB_WORKSPACE/key.keystore
 
     - name: List files in the directory
       run: ls -l
 
     - name: Make gradlew executable
+      if: ${{ env.SKIP_BUILD != 'true' }}
       run: chmod +x ./gradlew
 
     - name: Build with Gradle
-      if: ${{ env.SKIP_BUILDING_APK != 'true' }}
+      if: ${{ env.SKIP_BUILD != 'true' }}
       run: ./gradlew assembleGoogleAlpha -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/key.keystore -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
 
     - name: Upload a Build Artifact
-      if: ${{ env.SKIP_BUILDING_APK != 'true' }}
+      if: ${{ env.SKIP_BUILD != 'true' }}
       uses: actions/upload-artifact@v4
       with:
           name: Dantotsu
@@ -97,7 +99,7 @@ jobs:
           path: "app/build/outputs/apk/google/alpha/app-google-alpha.apk"
             
     - name: Upload APK to Discord and Telegram
-      if: ${{ github.repository == 'rebelonion/Dantotsu' }}
+      if: ${{ github.repository == 'rebelonion/Dantotsu' && env.SKIP_BUILD == 'false' }}
       shell: bash
       run: |
         # Prepare Discord embed
@@ -123,7 +125,7 @@ jobs:
         done < <(echo "$COMMIT_LOG" | sed 's/%0A/\n/g' | grep -oP '(?<=~)[^[]*' | sort | uniq -c | sort -rn)
         # Fetch contributors from GitHub
         contributors=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-                       "https://api.github.com/repos/rebelonion/Dantotsu/contributors")
+                       "https://api.github.com/repos/${{ github.repository }}/contributors")
         
         # Create a sorted list of contributors based on recent commit counts
         sorted_contributors=$(for login in $(echo "$contributors" | jq -r '.[].login'); do
@@ -246,12 +248,12 @@ jobs:
              ${{ secrets.DISCORD_WEBHOOK }}
         
         # Upload APK to Discord
-        if [ "$SKIP_BUILDING_APK" != "true" ]; then
+        if [ "$SKIP_BUILD" != "true" ]; then
           curl -F "payload_json=${contentbody}" \
                -F "dantotsu_debug=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" \
                ${{ secrets.DISCORD_WEBHOOK }}
         else
-          echo "Skipping APK upload to Discord due to SKIP_BUILDING_APK being set to true"
+          echo "Skipping APK upload to Discord due to SKIP_BUILD being set to true"
         fi
 
         # Format commit messages for Telegram
@@ -263,7 +265,7 @@ jobs:
         telegram_commit_messages="<blockquote>${telegram_commit_messages}</blockquote>"
 
         # Upload APK to Telegram
-        if [ "$SKIP_BUILDING_APK" != "true" ]; then
+        if [ "$SKIP_BUILD" != "true" ]; then
           APK_PATH="app/build/outputs/apk/google/alpha/app-google-alpha.apk"
           response=$(curl -sS -f -X POST \
             "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument" \
@@ -275,7 +277,7 @@ jobs:
         version: ${VERSION}" \
             -F "parse_mode=HTML")
         else
-          echo "Skipping Telegram message and APK upload due to SKIP_BUILDING_APK being set to true"
+          echo "Skipping Telegram message and APK upload due to SKIP_BUILD being set to true"
         fi
         
       env:
