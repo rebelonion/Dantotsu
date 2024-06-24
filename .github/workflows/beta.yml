@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: true
-      SKIP_BUILD: true
+      SKIP_BUILD: false
 
     steps:
     - name: Checkout repo
@@ -255,6 +255,7 @@ jobs:
         curl -H "Content-Type: application/json" \
              -d "$discord_data" \
              ${{ secrets.DISCORD_WEBHOOK }}
+        echo "You have only send an embed to discord due to SKIP_BUILD being set to true"
         
         # Upload APK to Discord
         if [ "$SKIP_BUILD" != "true" ]; then
