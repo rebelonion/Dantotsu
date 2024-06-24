@@ -19,7 +19,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
-        
+
     - name: Download last SHA artifact
       uses: dawidd6/action-download-artifact@v3
       with:
