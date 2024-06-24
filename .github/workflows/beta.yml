@@ -177,7 +177,7 @@ jobs:
               top_contributors=("$login")
               top_contributor_count=1
               top_contributor_avatar="$avatar_url"
-              embed_color=${contributor_colors[$login]:-$default_color}
+              embed_color=${contributor_colors[$name]:-$default_color}
             elif [ $commit_count -eq $max_commits ]; then
               top_contributors+=("$login")
               top_contributor_count=$((top_contributor_count + 1))
