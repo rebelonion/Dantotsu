@@ -78,7 +78,7 @@ jobs:
         cache: gradle
 
     - name: Decode Keystore File
-      if: ${{ env.SKIP_BUILD != 'true' }}
+      if: ${{ github.repository == 'rebelonion/Dantotsu' || env.SKIP_BUILD != 'true' }}
       run: echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > $GITHUB_WORKSPACE/key.keystore
 
     - name: Make gradlew executable
@@ -87,8 +87,17 @@ jobs:
 
     - name: Build with Gradle
       if: ${{ env.SKIP_BUILD != 'true' }}
-      run: ./gradlew assembleGoogleAlpha -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/key.keystore -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
-
+      run: |
+        if [ "${{ github.repository }}" == "rebelonion/Dantotsu" ]; then
+          ./gradlew assembleGoogleAlpha \
+            -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/key.keystore \
+            -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
+            -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
+            -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }};
+        else
+          ./gradlew assembleGoogleAlpha;
+        fi
+          
     - name: Upload a Build Artifact
       if: ${{ env.SKIP_BUILD != 'true' }}
       uses: actions/upload-artifact@v4
