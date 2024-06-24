@@ -108,7 +108,6 @@ jobs:
           path: "app/build/outputs/apk/google/alpha/app-google-alpha.apk"
             
     - name: Upload APK to Discord and Telegram
-      if: ${{ github.repository == 'rebelonion/Dantotsu' || env.SKIP_BUILD != 'false' }}
       shell: bash
       run: |
         # Prepare Discord embed
@@ -281,7 +280,8 @@ jobs:
             "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument" \
             -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
             -F "document=@$APK_PATH" \
-            -F "caption=New Alpha-Build dropped 🔥 
+            -F "caption=New Alpha-Build dropped 🔥
+        
         Commits:
         ${telegram_commit_messages}
         version: ${VERSION}" \
