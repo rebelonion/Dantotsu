@@ -129,11 +129,12 @@ jobs:
         
         # Decimal color codes for contributors
         declare -A contributor_colors
-        contributor_colors["ibo"]=16741632  # Hex: #ff7500
-        contributor_colors["aayush262"]=6121629  # Hex: #5d689d
-        contributor_colors["Sadwhy"]=16744085  # Hex: #ff7e95
-        contributor_colors["rebelonion"]=13952493  # Hex: #d4e5ed
-        default_color=16721401  # Hex: #ff25f9
+        default_color="#ff25f9"
+        contributor_colors["ibo"]="#ff7500"
+        contributor_colors["aayush262"]="#5d689d"
+        contributor_colors["Sadwhy"]="#ff7e95"
+        contributor_colors["rebelonion"]="#d4e5ed"
+        hex_to_decimal() {printf '%d' "0x${1#"#"}"}
         
         # Count recent commits and create an associative array
         declare -A recent_commit_counts
@@ -177,7 +178,7 @@ jobs:
               top_contributors=("$login")
               top_contributor_count=1
               top_contributor_avatar="$avatar_url"
-              embed_color=${contributor_colors[$name]:-$default_color}
+              embed_color=$(hex_to_decimal "${contributor_colors[$name]:-$default_color}")
             elif [ $commit_count -eq $max_commits ]; then
               top_contributors+=("$login")
               top_contributor_count=$((top_contributor_count + 1))
