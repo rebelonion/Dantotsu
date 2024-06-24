@@ -117,10 +117,9 @@ jobs:
         while read -r count name; do
             recent_commit_counts["$name"]=$count
         done < <(echo "$COMMIT_LOG" | sed 's/%0A/\n/g' | grep -oP '(?<=~)[^[]*' | sort | uniq -c | sort -rn)
-        
         # Fetch contributors from GitHub
         contributors=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-                       "https://api.github.com/repos/Dantotsu-inc/FUCKYML/contributors")
+                       "https://api.github.com/repos/rebelonion/Dantotsu/contributors")
         
         # Create a sorted list of contributors based on recent commit counts
         sorted_contributors=$(for login in $(echo "$contributors" | jq -r '.[].login'); do
@@ -251,17 +250,15 @@ jobs:
           echo "Skipping APK upload to Discord due to SKIP_BUILDING_APK being set to true"
         fi
 
-        # Format commit messages for Telegram (HTML format with quote)
+        # Format commit messages for Telegram
         telegram_commit_messages=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g' | while read -r line; do
           message=$(echo "$line" | sed -E 's/● (.*) ~(.*) \[֍\]\((.*)\)/● \1 ~\2 <a href="\3">֍<\/a>/')
           message=$(echo "$message" | sed -E 's/\[#([0-9]+)\]\((https:\/\/github\.com\/[^)]+)\)/<a href="\2">#\1<\/a>/g')
           echo "$message"
         done)
-        
-        # Wrap commit messages in a blockquote for proper quote effect
         telegram_commit_messages="<blockquote>${telegram_commit_messages}</blockquote>"
 
-        # Send Telegram message with APK upload
+        # Upload APK to Telegram
         if [ "$SKIP_BUILDING_APK" != "true" ]; then
           APK_PATH="app/build/outputs/apk/google/alpha/app-google-alpha.apk"
           response=$(curl -sS -f -X POST \
@@ -276,6 +273,7 @@ jobs:
         else
           echo "Skipping Telegram message and APK upload due to SKIP_BUILDING_APK being set to true"
         fi
+        
       env:
         COMMIT_LOG: ${{ env.COMMIT_LOG }}
         VERSION: ${{ env.VERSION }}

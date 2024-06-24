@@ -91,9 +91,10 @@ internal class ExtensionGithubApi {
 
                     // Sanity check - a small number of extensions probably means something broke
                     // with the repo generator
-                    if (repoExtensions.size < 10) {
-                        throw Exception()
-                    }
+                    //if (repoExtensions.size < 10) {
+                    //    throw Exception()
+                    //}
+                    // No official repo now so this won't be needed anymore. User-made repo can have less than 10 extensions
 
                     extensions.addAll(repoExtensions)
                 } catch (e: Throwable) {
@@ -180,9 +181,10 @@ internal class ExtensionGithubApi {
 
                     // Sanity check - a small number of extensions probably means something broke
                     // with the repo generator
-                    if (repoExtensions.size < 10) {
-                        throw Exception()
-                    }
+                    //if (repoExtensions.size < 10) {
+                    //    throw Exception()
+                    //}
+                    // No official repo now so this won't be needed anymore. User made repo can have less than 10 extensions.
 
                     extensions.addAll(repoExtensions)
                 } catch (e: Throwable) {
