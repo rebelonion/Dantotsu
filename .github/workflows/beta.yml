@@ -19,7 +19,6 @@ jobs:
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
-
         
     - name: Download last SHA artifact
       uses: dawidd6/action-download-artifact@v3
@@ -67,7 +66,11 @@ jobs:
         echo "Version $VERSION"
         echo "VERSION=$VERSION" >> $GITHUB_ENV
 
+    - name: List files in the directory
+      run: ls -l
+
     - name: Setup JDK 17
+      if: ${{ env.SKIP_BUILD != 'true' }}
       uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
@@ -77,9 +80,6 @@ jobs:
     - name: Decode Keystore File
       if: ${{ env.SKIP_BUILD != 'true' }}
       run: echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > $GITHUB_WORKSPACE/key.keystore
-
-    - name: List files in the directory
-      run: ls -l
 
     - name: Make gradlew executable
       if: ${{ env.SKIP_BUILD != 'true' }}
@@ -99,7 +99,7 @@ jobs:
           path: "app/build/outputs/apk/google/alpha/app-google-alpha.apk"
             
     - name: Upload APK to Discord and Telegram
-      if: ${{ github.repository == 'rebelonion/Dantotsu' && env.SKIP_BUILD != 'false' }}
+      if: ${{ github.repository == 'rebelonion/Dantotsu' || env.SKIP_BUILD != 'false' }}
       shell: bash
       run: |
         # Prepare Discord embed
