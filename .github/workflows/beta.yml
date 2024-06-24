@@ -254,6 +254,7 @@ jobs:
         # Format commit messages for Telegram (HTML format with quote)
         telegram_commit_messages=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g' | while read -r line; do
           message=$(echo "$line" | sed -E 's/● (.*) ~(.*) \[֍\]\((.*)\)/● \1 ~\2 <a href="\3">֍<\/a>/')
+          message=$(echo "$message" | sed -E 's/\[#([0-9]+)\]\((https:\/\/github\.com\/[^)]+)\)/<a href="\2">#\1<\/a>/g')
           echo "$message"
         done)
         
@@ -272,15 +273,6 @@ jobs:
 
         ${telegram_commit_messages}" \
               -F "parse_mode=HTML")
-            
-            if [ $? -eq 0 ]; then
-              echo "Successfully uploaded APK to Telegram"
-              echo "Response: $response"
-            else
-              echo "Failed to upload APK to Telegram"
-              echo "Response: $response"
-              exit 1
-            fi
           else
             echo "APK file not found at $APK_PATH"
             exit 1
