@@ -78,7 +78,7 @@ jobs:
         cache: gradle
 
     - name: Decode Keystore File
-      if: ${{ github.repository == 'rebelonion/Dantotsu' || env.SKIP_BUILD != 'true' }}
+      if: ${{ github.repository == 'rebelonion/Dantotsu' }}
       run: echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > $GITHUB_WORKSPACE/key.keystore
 
     - name: Make gradlew executable
