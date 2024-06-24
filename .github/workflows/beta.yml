@@ -212,7 +212,7 @@ jobs:
         if [ ${#commit_messages} -gt $max_length ]; then
           commit_messages="${commit_messages:0:$max_length}... (truncated)"
         fi
-        
+
         # Construct Discord payload
         discord_data=$(jq -nc \
                       --arg field_value "$commit_messages" \
