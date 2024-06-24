@@ -269,10 +269,10 @@ jobs:
               "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument" \
               -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
               -F "document=@$APK_PATH" \
-              -F "caption=<b>New Alpha-Build dropped</b> 🔥 
-
+              -F "caption=New Alpha-Build dropped 🔥 
+        Commits:
         ${telegram_commit_messages}
-        version ${VERSION}" \
+        version: ${VERSION}" \
               -F "parse_mode=HTML")
           else
             echo "APK file not found at $APK_PATH"
