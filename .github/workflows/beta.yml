@@ -134,7 +134,7 @@ jobs:
         contributor_colors["aayush262"]="#5d689d"
         contributor_colors["Sadwhy"]="#ff7e95"
         contributor_colors["rebelonion"]="#d4e5ed"
-        hex_to_decimal() {printf '%d' "0x${1#"#"}"}
+        hex_to_decimal() { printf '%d' "0x${1#"#"}"; }
         
         # Count recent commits and create an associative array
         declare -A recent_commit_counts
