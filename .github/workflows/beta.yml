@@ -264,20 +264,15 @@ jobs:
         # Send Telegram message with APK upload
         if [ "$SKIP_BUILDING_APK" != "true" ]; then
           APK_PATH="app/build/outputs/apk/google/alpha/app-google-alpha.apk"
-          if [ -f "$APK_PATH" ]; then
-            response=$(curl -sS -f -X POST \
-              "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument" \
-              -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
-              -F "document=@$APK_PATH" \
-              -F "caption=New Alpha-Build dropped 🔥 
+          response=$(curl -sS -f -X POST \
+            "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument" \
+            -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
+            -F "document=@$APK_PATH" \
+            -F "caption=New Alpha-Build dropped 🔥 
         Commits:
         ${telegram_commit_messages}
         version: ${VERSION}" \
-              -F "parse_mode=HTML")
-          else
-            echo "APK file not found at $APK_PATH"
-            exit 1
-          fi
+            -F "parse_mode=HTML")
         else
           echo "Skipping Telegram message and APK upload due to SKIP_BUILDING_APK being set to true"
         fi
