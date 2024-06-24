@@ -269,7 +269,7 @@ jobs:
               "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument" \
               -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
               -F "document=@$APK_PATH" \
-              -F "caption=Alpha-Build: ${VERSION}
+              -F "caption=New Alpha-Build dropped 🔥 ${VERSION}
 
         ${telegram_commit_messages}" \
               -F "parse_mode=HTML")
