@@ -122,12 +122,8 @@
     <string name="chaps">Capítulos</string>
     <string name="chap">Capítulo</string>
     <string name="wrong"><u>¿Título incorrecto?</u></string>
-    <string name="source_not_found">        Nada foi encontrado desta fonte.\n
-        Vamos procurar em outro lugar.
-    </string>
-    <string name="download_not_found">        Seus downloads estão se sentindo um pouco solitários…\n
-        Tente baixar algo.
-    </string>
+    <string name="source_not_found">No se encontró nada de esta fuente.\n Vamos a buscar en otro lugar.</string>
+    <string name="download_not_found">Tus descargas se sienten un poco solas…\n Intenta descargar algo.</string>
     <string name="not_supported">¡%1$s no es compatible!</string>
     <string name="server_selector">Seleccionar servidor</string>
     <string name="auto_select_server">Seleccionando servidor automáticamente</string>
@@ -566,7 +562,7 @@
     <string name="question_6">¿Por qué mis estadísticas no se actualizan?</string>
     <string name="answer_6">Esto se debe a que se actualiza automáticamente cada 48 horas (por Anilist). Si realmente necesitas actualizar tus estadísticas, puedes forzar la actualización después de ir a este [enlace](https://anilist.co/settings/lists).</string>
     <string name="question_7">¿Cómo descargar anime?</string>
-    <string name="answer_7">There are two methods of downloading. Internal and external. If you download internally, then it can be viewed within the app and tracking will work normally for it. The other option is to use external downloader. It requires a download manager to download and a separate video player to watch. External downloads cannot be viewed within the Dantotsu app.\n\n•To download internally:\n\n1. Tap the download button.\n2. For the first time, it will ask you to set a download location. All your downloads will be stored there.\n3. Pick the server and the video quality.\n4. Profit.\n\n•To download externally:\n\n 1. Download 1DM or ADM from Google Play Store.\n2. Enter the app, give storage access and set your preferences (downloading speed, downloading path etc(optional))\n3. Now go to \`Dantotsu &gt; Settings &gt; Common &gt; Download Managers\` and choose the download manager you just set up.\n4. Go to your desired episode and press on the download icon of any server. There may be a popup to set your preferences again, just press on \"Download\" and it will be saved in the directed path.\n\nNote: External downloads are also possible without a manager but it\'s not recommended.\n\nNerd Note: Internally downloaded episodes are stored in \`{your set location}/Dantotsu/Anime/*`\nYou can change your download location in settings but your previous downloaded episodes will not show up in the app anymore.</string>
+    <string name="answer_7">Hay dos métodos de descarga. Interna y externa. Si descargas internamente, entonces se puede ver dentro de la aplicación y el seguimiento funcionará normalmente para ella. La otra opción es usar un descargador externo. Requiere un administrador de descargas para descargar y un reproductor de video separado para ver. Las descargas externas no se pueden ver dentro de la aplicación Dantotsu.\n\n• Para descargar internamente:\n\n1. Toca el botón de descarga.\n2. Por primera vez, te pedirá que establezcas una ubicación de descarga. Todas tus descargas se almacenarán allí.\n3. Elige el servidor y la calidad del video.\n4. ¡Listo!\n\n• Para descargar externamente:\n\n1. Descarga 1DM o ADM desde Google Play Store.\n2. Ingresa a la aplicación, otorga acceso al almacenamiento y configura tus preferencias (velocidad de descarga, ruta de descarga, etc. (opcional)).\n3. Ahora ve a \Dantotsu &gt; Configuración &gt; Común &gt; Administradores de descargas\ y elige el administrador de descargas que acabas de configurar.\n4. Ve al episodio deseado y presiona sobre el icono de descarga de cualquier servidor. Puede aparecer un mensaje emergente para configurar tus preferencias nuevamente, simplemente presiona en \"Descargar\" y se guardará en la ruta indicada.\n\nNota: Las descargas externas también son posibles sin un administrador, pero no se recomienda.\n\nNota de Nerd: Los episodios descargados internamente se almacenan en \{tu ubicación establecida}/Dantotsu/Anime/*\nPuedes cambiar la ubicación de descarga en la configuración, pero tus episodios descargados anteriormente ya no se mostrarán en la aplicación.</string>
     <string name="question_9">¿Cómo activar contenido NSFW?</string>
     <string name="answer_9">Puedes activar contenido NSFW habilitando contenido para mayores de 18 años desde este [enlace](https://anilist.co/settings/media). También debes habilitar las extensiones NSFW en \`Configuración &gt; Extensiones &gt; Extensiones NSFW\` </string>
     <string name="question_10">¿Cómo importar mi lista de MAL/Kitsu a Anilist?</string>
@@ -586,9 +582,9 @@
     <string name="question_17">Algunos consejos y trucos útiles</string>
     <string name="answer_17">Lo siguiente presenta algunos consejos y trucos que quizás conozcas o no: \n\n- Al mantener presionado el logo de Dantotsu en la configuración, puedes verificar si hay nuevas actualizaciones manualmente. \n\n- Al mantener presionado un mensaje de error/etiqueta/sinónimo o título, lo copiarás. \n\n- Puedes abrir un episodio con otras aplicaciones manteniendo presionado cualquier servidor para ese episodio. Esto ayuda a transmitir el episodio usando otros reproductores de video o descargar el episodio usando gestores de descargas. \n\n- Puedes configurar listas personalizadas usando este [enlace](https://anilist.co/settings/lists). (necesitas estar registrado) \n\n- Si tu episodio/capítulo no avanza automáticamente después de que termines de ver/leerlo, entonces mantén presionada la barra de estado (botón de planificación/repetición/visualización) de ese anime/manga. La próxima vez que comiences un capítulo/termines un episodio, te encontrarás con un mensaje emergente. Presiona sí allí.</string>
     <string name="question_18">Não consigo fazer login no Anilist.</string>
-    <string name="answer_18">The reason this happens is probably because you\'re not using the default browser.\n\n&gt;You have to set Chrome as your default browser to login to Anilist.\n\n&gt;It takes a few seconds for the login button to display changes.\n\nIf it doesn\'t work then you could possibly be IP banned from Anilist or your ISP banned Anilist themselves. We believe that this is highly unlikely so open [Anilist](https://anilist.co) in your browser to see if that\`s the case.</string>
-    <string name="question_19">What is torrent? How do I use it?</string>
-    <string name="answer_19">Torrent or formally known as BitTorrent is an internet communication protocol for peer\-to\-peer file sharing. A torrent network doesn\'t use a centralised server to host files. It shares files in a decentralised manner. A torrent network has two types of peers. Seeders &amp; Leachers.\n\n• Seeders : These are peers who completed downloading and has the full file. And now they are sharing this file to other peers which is called seeding. A torrent cannot work without at least one seeder. The more seeder a torrent has, the better.\n\n• Leachers : These are peers who are currently downloading the file. If they currently have 40&#37; downloaded then they will share the 40&#37; to any other peers who requests it.\n\nUnlike a centralised server, torrents have no bandwidth limit. You can get your files from hundreds of seeders at the highest possible speed your internet can offer. But many ISP throttle torrent to slow them down because it\'s demanding on their infrastructure. Use a VPN to circumvent this.\n\n• How to use torrents :\n\n1. Install the Torrent Add-on from \`Dantotsu &gt; Settings &gt; Add-ons &gt; Torrent Add-on.\` \n2. Get a source that provides torrents.\n3. USE A VPN. Using VPN while torrenting only has upsides. Without a VPN your IP address will be exposed, your ISP will throttle your network and you could possibly be fined if you live in a country first world country. DO NOT USE IT WITHOUT A VPN IF YOU DON\'T KNOW WHAT YOU\'RE DOING.\n4. Now use that source to start torrenting.</string>
+    <string name="answer_18">La razón por la que esto sucede probablemente sea porque no estás usando el navegador predeterminado.\n\n&gt; Debes establecer Chrome como tu navegador predeterminado para iniciar sesión en Anilist.\n\n&gt; Toma unos segundos para que el botón de inicio de sesión muestre cambios.\n\nSi no funciona, es posible que estés bloqueado por IP en Anilist o que tu proveedor de servicios de Internet haya bloqueado Anilist. Creemos que esto es muy improbable, así que abre [Anilist](https://anilist.co) en tu navegador para ver si ese es el caso.</string>
+    <string name="question_19">¿Qué es un torrent? ¿Cómo lo uso?</string>
+    <string name="answer_19">Torrent o formalmente conocido como BitTorrent es un protocolo de comunicación en Internet para compartir archivos de igual a igual. Una red torrent no utiliza un servidor centralizado para alojar archivos. Comparte archivos de manera descentralizada. Una red torrent tiene dos tipos de pares. Seeders y Leachers.\n\n• Seeders: Estos son pares que completaron la descarga y tienen el archivo completo. Y ahora están compartiendo este archivo con otros pares, lo que se llama siembra. Un torrent no puede funcionar sin al menos un seeder. Cuantos más seeders tenga un torrent, mejor.\n\n• Leachers: Estos son pares que están descargando actualmente el archivo. Si actualmente tienen descargado el 40%, compartirán el 40% a cualquier otro par que lo solicite.\n\nA diferencia de un servidor centralizado, los torrents no tienen límite de ancho de banda. Puedes obtener tus archivos de cientos de seeders a la velocidad más alta posible que tu Internet pueda ofrecer. Pero muchos ISP ralentizan los torrents para reducir su velocidad porque es exigente para su infraestructura. Usa una VPN para evitar esto.\n\n• Cómo usar torrents:\n\n1. Instala el complemento Torrent desde \Dantotsu &gt; Configuración &gt; Complementos &gt; Complemento Torrent.\n2. Consigue una fuente que proporcione torrents.\n3. USA UNA VPN. Usar VPN mientras descargas torrents solo tiene aspectos positivos. Sin una VPN, tu dirección IP quedará expuesta, tu ISP reducirá la velocidad de tu red y podrías ser multado si vives en un país del primer mundo. NO LO USES SIN UNA VPN SI NO SABES LO QUE ESTÁS HACIENDO.\n4. Ahora utiliza esa fuente para comenzar a descargar torrents.</string>
     <string name="subscribed_notification">¡Suscrito! Recibiendo notificaciones cuando se lanzan nuevos episodios en %1$s.</string>
     <string name="unsubscribed_notification">Dado de baja, no recibirás ninguna notificación.</string>
     <string name="episode_plural">Episodios</string>
@@ -631,7 +627,7 @@
     <string name="installed_manga">Mangas instalados</string>
     <string name="color_picker">Selector de color</string>
     <string name="random_selection">Selección aleatoria</string>
-    <string name="listed_in_library">Listed in Library</string>
+    <string name="listed_in_library">Listado en la biblioteca</string>
     <string name="incognito_mode">Modo incógnito</string>
     <string name="appwidget_text">EJEMPLO</string>
     <string name="configure">Configurar</string>
@@ -842,8 +838,8 @@
     <string name="use_unique_theme_for_each_item_desc">Usar el color del banner del medio</string>
     <string name="use_custom_theme_desc">Usar tu propio color para el tema</string>
     <string name="color_picker_desc">Elige un color</string>
-    <string name="hide_private">Hide private Media from home screen</string>
-    <string name="hide_private_desc">Long click \"Continue Watching\" to access</string>
+    <string name="hide_private">Ocultar medios privados de la pantalla de inicio</string>
+    <string name="hide_private_desc">Haga clic prolongado en \"Seguir viendo\" para acceder</string>
     <string name="torrent_addon">Complemento de Torrent</string>
     <string name="enable_torrent">Activar Torrent</string>
     <string name="anime_downloader_addon">Complemento de descarga de anime</string>
@@ -855,7 +851,7 @@
     <string name="install_addon">Instalar complemento</string>
     <string name="download_addon_not_found">Complemento no encontrado</string>
     <string name="image">Imagen</string>
-    <string name="clear_history">Clear History</string>
+    <string name="clear_history">Borrar historial</string>
     <string name="failed_ext_install_conflict">Error al instalar la extensión debido a un conflicto</string>
     <string name="reading">LEYENDO</string>
     <string name="watching">VIENDO</string>
