@@ -369,6 +369,8 @@
     <string name="use_alarm_manager_reliable">Χρησιμοποιήστε το Alarm Manager για αξιόπιστες ειδοποιήσεις</string>
     <string name="use_alarm_manager_confirm">Η χρήση του Alarm Manager μπορεί να βοηθήσει στην καταπολέμηση της βελτιστοποίησης της μπαταρίας, αλλά μπορεί να καταναλώσει περισσότερη μπαταρία. Απαιτεί επίσης την άδεια του Alarm Manager.</string>
     <string name="use">Χρησιμοποίησε</string>
+    <string name="remove_all_subscriptions">Remove All Subscriptions</string>
+    <string name="remove_all_subscriptions_desc">Are you sure you want to remove all subscriptions for %1$s?</string>
     <string name="checking_subscriptions">Ειδοποίηση για έλεγχο συνδρομών</string>
     <string name="subscriptions_checking_time_s">Συχνότητα ενημέρωσης συνδρομών : %1$s</string>
     <string name="subscriptions_checking_time">Συχνότητα ενημέρωσης συνδρομών</string>
