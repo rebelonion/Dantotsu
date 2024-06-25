@@ -371,6 +371,8 @@
     <string name="use_alarm_manager_reliable">আ্যলার্ম মেনেজার ব্যবহারজো বিশস্ত নটিফিকেশন এর জন্য</string>
     <string name="use_alarm_manager_confirm">আ্যলার্ম ম্যানেজার ব্যবহার বেটারি অপ্টিমাইজেশান এর বিরুদ্ধে সাহায্য করতে পারে, তবে আরো বেটারি খরচ করতে পারে। এটার আ্যলার্ম ম্যানেজার অনুমতি ও প্রয়োজন হয়.</string>
     <string name="use">ব্যবহার</string>
+    <string name="remove_all_subscriptions">Remove All Subscriptions</string>
+    <string name="remove_all_subscriptions_desc">Are you sure you want to remove all subscriptions for %1$s?</string>
     <string name="checking_subscriptions">সাবস্ক্রিপশন চেক করার জন্য নোটিফিকেশন</string>
     <string name="subscriptions_checking_time_s">সাবস্ক্রিপশন আপডেট সময়: %1$s</string>
     <string name="subscriptions_checking_time">সাবস্ক্রিপশন আপডেট সময়</string>
