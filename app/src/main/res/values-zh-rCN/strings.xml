@@ -367,6 +367,8 @@
     <string name="use_alarm_manager_reliable">使用智能闹钟获得可靠的通知</string>
     <string name="use_alarm_manager_confirm">使用智能闹钟可以帮助对抗电池优化，但可能会消耗更多电量。它还需要后台白名单权限。</string>
     <string name="use">使用</string>
+    <string name="remove_all_subscriptions">Remove All Subscriptions</string>
+    <string name="remove_all_subscriptions_desc">Are you sure you want to remove all subscriptions for %1$s?</string>
     <string name="checking_subscriptions">检查订阅的通知</string>
     <string name="subscriptions_checking_time_s">订阅更新频率：%1$s</string>
     <string name="subscriptions_checking_time">订阅更新频率</string>
