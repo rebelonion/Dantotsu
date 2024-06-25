@@ -371,6 +371,8 @@
     <string name="use_alarm_manager_reliable">নিৰ্ভৰযোগ্য অধিসূচনাৰ বাবে এলাৰ্ম মেনেজাৰ ব্যৱহাৰ কৰক </string>
     <string name="use_alarm_manager_confirm">এলাৰ্ম মেঞ্জাৰ ব্যৱহাৰ কৰিলে বেটাৰি অপ্টিমাইজেচনৰ বিৰুদ্ধে যুঁজ দিয়াত সহায় কৰিব পাৰে, কিন্তু অধিক বেটাৰী ব্যৱহাৰ কৰিব পাৰে। ইয়াৰ বাবে এলাৰ্ম মেনেজাৰৰ অনুমতিও প্ৰয়োজন।</string>
     <string name="use">ব্যৱহাৰ</string>
+    <string name="remove_all_subscriptions">Remove All Subscriptions</string>
+    <string name="remove_all_subscriptions_desc">Are you sure you want to remove all subscriptions for %1$s?</string>
     <string name="checking_subscriptions">সাবস্ক্ৰিপশন পৰীক্ষাৰ বিজ্ঞপ্তি</string>
     <string name="subscriptions_checking_time_s">সাবস্ক্ৰিপশন আপডেট পৰ্যায়ত: %1$s</string>
     <string name="subscriptions_checking_time">সাবস্ক্ৰিপশন আপডেট পৰ্যায়ত</string>
