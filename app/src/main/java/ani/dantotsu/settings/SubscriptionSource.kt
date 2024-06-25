@@ -37,7 +37,7 @@ class SubscriptionSource(
         }
         binding.extensionIconImageView.visibility = View.VISIBLE
         val layoutParams = binding.extensionIconImageView.layoutParams as ViewGroup.MarginLayoutParams
-        layoutParams.leftMargin = 42
+        layoutParams.leftMargin = 28
         binding.extensionIconImageView.layoutParams = layoutParams
 
         parserIcon?.let {
