@@ -371,8 +371,8 @@
     <string name="use_alarm_manager_reliable">Alarm Yöneticisini güvenilir Bildirimler için kullan</string>
     <string name="use_alarm_manager_confirm">Alarm Yöneticisinin kullanılması pil optimizasyonuna yardımcı olabilir ancak daha fazla pil tüketebilir. Ayrıca Alarm Yöneticisi iznini de gerektirir.</string>
     <string name="use">Kullan</string>
-    <string name="remove_all_subscriptions">Remove All Subscriptions</string>
-    <string name="remove_all_subscriptions_desc">Are you sure you want to remove all subscriptions for %1$s?</string>
+    <string name="remove_all_subscriptions">Tüm Abonelikleri Kaldır</string>
+    <string name="remove_all_subscriptions_desc">%1$s için tüm abonelikleri kaldırmak istediğinize emin misiniz?</string>
     <string name="checking_subscriptions">Abonelik Kontrolleri Bildirimleri</string>
     <string name="subscriptions_checking_time_s">Abonelikleri Güncelleme Sıklığı : %1$s</string>
     <string name="subscriptions_checking_time">Abonelikleri Güncelleme Sıklığı</string>
@@ -633,7 +633,7 @@
     <string name="installed_manga">Kurulu Mangalar</string>
     <string name="color_picker">Renk Seçici</string>
     <string name="random_selection">Rastgele Seçme</string>
-    <string name="listed_in_library">Listed in Library</string>
+    <string name="listed_in_library">Kütüphanede Listelendi</string>
     <string name="incognito_mode">Gizli Mod</string>
     <string name="appwidget_text">ÖRNEK</string>
     <string name="configure">Yapılandır</string>
@@ -844,8 +844,8 @@
     <string name="use_unique_theme_for_each_item_desc">Medyanın afişindeki rengi kullan</string>
     <string name="use_custom_theme_desc">Tema olarak senin kendi rengini kullan</string>
     <string name="color_picker_desc">Bi̇r renk seç</string>
-    <string name="hide_private">Hide private Media from home screen</string>
-    <string name="hide_private_desc">Long click \"Continue Watching\" to access</string>
+    <string name="hide_private">Kişisel Medyaları ana sayfadan gizle</string>
+    <string name="hide_private_desc">Erişmek için \"İzlemeye devam et\" butonuna basılı tut</string>
     <string name="torrent_addon">Torrent Eklentisi</string>
     <string name="enable_torrent">Torrente izin ver</string>
     <string name="anime_downloader_addon">Anime İndirme Eklentisi</string>
@@ -857,7 +857,7 @@
     <string name="install_addon">Eklentiyi Kur</string>
     <string name="download_addon_not_found">Eklenti bulunamadı</string>
     <string name="image">Görsel</string>
-    <string name="clear_history">Clear History</string>
+    <string name="clear_history">Geçmişi Temizle</string>
     <string name="failed_ext_install_conflict">Çakışma nedeniyle uzantı yüklenemedi</string>
     <string name="reading">OKUNUYOR</string>
     <string name="watching">İZLENİYOR</string>
@@ -932,5 +932,5 @@
     <string name="bio_prompt_info_desc">Uygulamayı açmak için parmak izini veye yüzünü kullan</string>
     <string name="enable_forgot_password">Şifremi Unuttum\'a izin ver (temizle butonuna 10 saniye basılı tutun)</string>
     <string name="hide_notification_dot">Bildirim Noktasını Gizle</string>
-    <string name="private_mode">Private</string>
+    <string name="private_mode">Kişisel</string>
 </resources>
