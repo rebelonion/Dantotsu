@@ -369,6 +369,8 @@
     <string name="use_alarm_manager_reliable">Gebruik Alarmbeheerder voor betrouwbare meldingen</string>
     <string name="use_alarm_manager_confirm">Het gebruik van Alarmbeheerder kan helpen bij het bestrijden van batterijoptimalisatie, maar kan meer batterij verbruiken. Het vereist ook de machtiging van de Alarmbeheerder.</string>
     <string name="use">Gebruiken</string>
+    <string name="remove_all_subscriptions">Remove All Subscriptions</string>
+    <string name="remove_all_subscriptions_desc">Are you sure you want to remove all subscriptions for %1$s?</string>
     <string name="checking_subscriptions">Melding voor het controleren van abonnementen</string>
     <string name="subscriptions_checking_time_s">Frequentie van updates van abonnementen: %1$s</string>
     <string name="subscriptions_checking_time">Frequentie van updates van abonnementen</string>
