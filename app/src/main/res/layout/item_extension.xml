@@ -25,7 +25,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center_vertical"
-        android:layout_marginEnd="3dp"
+        android:layout_marginEnd="9dp"
         tools:ignore="ContentDescription" />
 
     <LinearLayout
@@ -52,6 +52,26 @@
             android:textSize="10sp"
             tools:ignore="SmallSp" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/subscriptionCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="12dp"
+        android:fontFamily="@font/poppins_bold"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/extensionSubscriptions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="0"
+        android:src="@drawable/ui_bg"
+        android:visibility="gone"
+        app:tint="?attr/colorOnBackground"
+        tools:ignore="ContentDescription"/>
 
     <ImageView
         android:id="@+id/closeTextView"
