@@ -122,11 +122,11 @@
     <string name="chaps">الفصول</string>
     <string name="chap">الفصل</string>
     <string name="wrong"><u>عنوان خطأ؟</u></string>
-    <string name="source_not_found">        Nothing came up from this source.\n
-        Let\'s look elsewhere.
+    <string name="source_not_found">        مفيش حاجه هنا :\\n
+        جرب مصدر غيره
     </string>
-    <string name="download_not_found">        Your downloads are feeling a bit lonely…\n
-        Try downloading something.
+    <string name="download_not_found">        مفيش تنزيلات كده ليه…\n
+        جرب تنزل حاجه ;)
     </string>
     <string name="not_supported">%1$s غير مدعوم!</string>
     <string name="server_selector">حدد السيرفر</string>
@@ -370,8 +370,8 @@
     <string name="use_alarm_manager_reliable">استخدم مدير المنبهات للحصول على إشعارات يعتمد عليها</string>
     <string name="use_alarm_manager_confirm">يمكن أن يساعد استخدام مدير المنبهات كبديل لخاصية \"battery optimization\"، ولكنه قد يستهلك المزيد من البطارية. كما يتطلب أيضًا إذن مدير المنبهات.</string>
     <string name="use">أستخدم</string>
-    <string name="remove_all_subscriptions">Remove All Subscriptions</string>
-    <string name="remove_all_subscriptions_desc">Are you sure you want to remove all subscriptions for %1$s?</string>
+    <string name="remove_all_subscriptions">إزالة جميع الاشتراكات</string>
+    <string name="remove_all_subscriptions_desc">هل أنت متأكد أنك تريد إزالة جميع الاشتراكات لـ %1$s ؟</string>
     <string name="checking_subscriptions">اشعار التحقق من الاشتراكات</string>
     <string name="subscriptions_checking_time_s">التحقق من تحديثات الاشتراكات كل : %1$s</string>
     <string name="subscriptions_checking_time">التحقق من تحديثات الاشتراكات كل</string>
