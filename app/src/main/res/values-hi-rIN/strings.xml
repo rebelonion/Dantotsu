@@ -369,6 +369,8 @@
     <string name="use_alarm_manager_reliable">विश्वसनीय अधिसूचनाओं के लिए अलार्म प्रबंधक का प्रयोग करें</string>
     <string name="use_alarm_manager_confirm">अलार्म मैनेजर का उपयोग करने से बैटरी ऑप्टिमाइजेशन के खिलाफ लड़ने में मदद हो सकती है, लेकिन यह अधिक बैटरी खर्च कर सकता है। इसके लिए अलार्म मैनेजर की अनुमति भी आवश्यक होती है।</string>
     <string name="use">उपयोग</string>
+    <string name="remove_all_subscriptions">Remove All Subscriptions</string>
+    <string name="remove_all_subscriptions_desc">Are you sure you want to remove all subscriptions for %1$s?</string>
     <string name="checking_subscriptions">सब्सक्रिप्शन्स की जांच के लिए अधिसूचना</string>
     <string name="subscriptions_checking_time_s">सब्सक्रिप्शन्स अपडेट अवधि : %1$s</string>
     <string name="subscriptions_checking_time">सब्सक्रिप्शन्स अपडेट अवधि</string>
