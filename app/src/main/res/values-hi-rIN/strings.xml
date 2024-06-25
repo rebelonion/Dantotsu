@@ -122,10 +122,8 @@
     <string name="chaps">अध्याय</string>
     <string name="chap">अध्याय</string>
     <string name="wrong"><u>गलत शीर्षक?</u></string>
-    <string name="source_not_found">        इस स्रोत से कुछ नहीं आया।\n        चलो कहीं और देखते हैं।
-    </string>
-    <string name="download_not_found">        आपके डाउनलोड में थोड़ी सी अकेलापन महसूस हो रहा है…\n        कुछ डाउनलोड करने की कोशिश करें।
-    </string>
+    <string name="source_not_found">इस स्रोत से कुछ भी नहीं आया।\n चलो कहीं और देखें।</string>
+    <string name="download_not_found">आपकी डाउनलोड थोड़ी अकेली महसूस कर रही है…\n कुछ डाउनलोड करने की कोशिश करें।</string>
     <string name="not_supported">%1$s समर्थित नहीं है!</string>
     <string name="server_selector">सर्वर का चयन करें</string>
     <string name="auto_select_server">स्वचालित रूप से सर्वर का चयन किया जा रहा है</string>
@@ -566,7 +564,7 @@
     <string name="question_6">मेरे स्टैट्स क्यों अपडेट नहीं हो रहे हैं?</string>
     <string name="answer_6">यह इसलिए है क्योंकि यह हर 48 घंटे में स्वचालित रूप से अपडेट होता है (अनिलिस्ट द्वारा)। यदि आप वास्तव में अपने स्टैट्स को अपडेट करना चाहते हैं, तो आप इस [लिंक](https://anilist.co/settings/lists) पर जाकर अपने स्टैट्स को बल प्रगति कर सकते हैं।</string>
     <string name="question_7">एनिमे कैसे डाउनलोड करें?</string>
-    <string name="answer_7">There are two methods of downloading. Internal and external. If you download internally, then it can be viewed within the app and tracking will work normally for it. The other option is to use external downloader. It requires a download manager to download and a separate video player to watch. External downloads cannot be viewed within the Dantotsu app.\n\n•To download internally:\n\n1. Tap the download button.\n2. For the first time, it will ask you to set a download location. All your downloads will be stored there.\n3. Pick the server and the video quality.\n4. Profit.\n\n•To download externally:\n\n 1. Download 1DM or ADM from Google Play Store.\n2. Enter the app, give storage access and set your preferences (downloading speed, downloading path etc(optional))\n3. Now go to \`Dantotsu &gt; Settings &gt; Common &gt; Download Managers\` and choose the download manager you just set up.\n4. Go to your desired episode and press on the download icon of any server. There may be a popup to set your preferences again, just press on \"Download\" and it will be saved in the directed path.\n\nNote: External downloads are also possible without a manager but it\'s not recommended.\n\nNerd Note: Internally downloaded episodes are stored in \`{your set location}/Dantotsu/Anime/*`\nYou can change your download location in settings but your previous downloaded episodes will not show up in the app anymore.</string>
+    <string name="answer_7">डाउनलोड करने के दो तरीके हैं। आंतरिक और बाहरी। यदि आप आंतरिक डाउनलोड करते हैं, तो इसे ऐप के भीतर देखा जा सकता है और ट्रैकिंग सामान्य रूप से काम करेगी। दूसरा विकल्प बाहरी डाउनलोडर का उपयोग करना है। इसके लिए डाउनलोड प्रबंधक की आवश्यकता होती है और देखने के लिए एक अलग वीडियो प्लेयर की। बाहरी डाउनलोड Dantotsu ऐप के भीतर नहीं देखे जा सकते हैं।\n\n•आंतरिक रूप से डाउनलोड करने के लिए:\n\n1. डाउनलोड बटन पर टैप करें।\n2. पहली बार, यह आपको एक डाउनलोड स्थान सेट करने के लिए कहेगा। आपके सभी डाउनलोड वहीं संग्रहीत होंगे।\n3. सर्वर और वीडियो गुणवत्ता चुनें।\n4. हो गया।\n\n•बाहरी रूप से डाउनलोड करने के लिए:\n\n1. Google Play Store से 1DM या ADM डाउनलोड करें।\n2. ऐप में प्रवेश करें, स्टोरेज एक्सेस दें और अपनी प्राथमिकताएँ सेट करें (डाउनलोड गति, डाउनलोड पथ, आदि (वैकल्पिक))\n3. अब \`Dantotsu &gt; सेटिंग्स &gt; सामान्य &gt; डाउनलोड प्रबंधक\` पर जाएं और उस डाउनलोड प्रबंधक को चुनें जिसे आपने अभी सेट किया है।\n4. वांछित एपिसोड पर जाएं और किसी भी सर्वर का डाउनलोड आइकन दबाएं। आपकी प्राथमिकताओं को फिर से सेट करने के लिए एक पॉपअप आ सकता है, बस \"डाउनलोड\" पर टैप करें और इसे निर्दिष्ट पथ में सहेज दिया जाएगा।\n\nनोट: प्रबंधक के बिना बाहरी डाउनलोड भी संभव हैं, लेकिन अनुशंसित नहीं हैं।\n\nतकनीकी नोट: आंतरिक रूप से डाउनलोड किए गए एपिसोड \`{your set location}/Dantotsu/Anime/*`\n में संग्रहीत किए जाते हैं। आप सेटिंग्स में अपना डाउनलोड स्थान बदल सकते हैं, लेकिन आपके पहले से डाउनलोड किए गए एपिसोड अब ऐप में दिखाई नहीं देंगे।</string>
     <string name="question_9">NSFW कंटेंट को कैसे सक्षम करें?</string>
     <string name="answer_9">आप 18+ सामग्री को इस [लिंक](https://anilist.co/settings/media) से सक्षम करके NSFW कंटेंट को सक्षम कर सकते हैं। आपको \`सेटिंग्स &gt; एक्सटेंशन &gt; NSFW एक्सटेंशन\` में भी NSFW एक्सटेंशन को सक्षम करना होगा।</string>
     <string name="question_10">मेरी MAL/Kitsu सूची को Anilist में कैसे आयात करें?</string>
@@ -585,10 +583,10 @@
     <string name="answer_16">कुछ मौलिक सुधार हो सकते हैं : \n\n• अगर कोई विस्तार है, तो अपनी एक्सटेंशन को अपडेट करें। \n• वेब व्यू को खोलें और इसे लोड होने का इंतजार करें। जब लोडिंग पूरी हो जाए, तो पिछले पेज पर जाएं। (अगर वेब व्यू में त्रुटि 404 या कुछ समान दिखाता है, तो आपका स्रोत नीचे है) \n• अपनी सेटिंग्स से एक अलग DNS का उपयोग करें, पसंदीदा, Libre। \n• विश्वसनीय VPN का प्रयोग करें। (इसके बाद आपको कदम 1 को दोहराना होगा) \n\nयदि ऊपर के कोई भी कदम काम नहीं करते हैं, तो कोई अलग स्रोत का उपयोग करें या हमारे [discord](https://discord.gg/invite/4HPZ5nAWwM) में मदद के लिए शामिल हों।</string>
     <string name="question_17">कुछ उपयोगी टिप्स और ट्रिक्स</string>
     <string name="answer_17">निम्नलिखित कुछ टिप्स और ट्रिक्स आपको पता हो सकते हैं - \n \n \n - सेटिंग्स में Dantotsu लोगो को होल्ड करके, आप मैन्युअल रूप से क्या नया अपडेट है देख सकते हैं। \n \n - किसी त्रुटि संदेश/टैग/पर्यायवाची या शीर्षक को होल्ड करने से यह कॉपी हो जाएगा। \n \n - एक एपिसोड को अन्य ऐप्स के साथ खोल सकते हैं, उस एपिसोड के लिए किसी भी सर्वर को होल्ड करके। इससे आप एपिसोड को अन्य वीडियो प्लेयर का उपयोग करके स्ट्रीम करने में मदद मिलती है या एपिसोड को डाउनलोड मैनेजर का उपयोग करके डाउनलोड कर सकते हैं। \n \n - आप इस [लिंक](https://anilist.co/settings/lists) का उपयोग करके कस्टम सूचियाँ सेट अप कर सकते हैं। (आपको साइन इन करना होगा) \n \n - अगर आपका एपिसोड/अध्याय स्वचालित रूप से प्रगति कर रहा है, तो आपको उस एनिमे/मंगा के स्थिति संबंधित बार (प्लानिंग/दोहराना/देखना बटन) को होल्ड करें। अगली बार जब आप एक अध्याय/एपिसोड शुरू करेंगे/समाप्त करेंगे, तो आपको एक पॉपअप मिलेगा। वहाँ हां दबाएं।</string>
-    <string name="question_18">मुझे Anilist में लॉगिन नहीं करने देता।</string>
-    <string name="answer_18">The reason this happens is probably because you\'re not using the default browser.\n\n&gt;You have to set Chrome as your default browser to login to Anilist.\n\n&gt;It takes a few seconds for the login button to display changes.\n\nIf it doesn\'t work then you could possibly be IP banned from Anilist or your ISP banned Anilist themselves. We believe that this is highly unlikely so open [Anilist](https://anilist.co) in your browser to see if that\`s the case.</string>
-    <string name="question_19">What is torrent? How do I use it?</string>
-    <string name="answer_19">Torrent or formally known as BitTorrent is an internet communication protocol for peer\-to\-peer file sharing. A torrent network doesn\'t use a centralised server to host files. It shares files in a decentralised manner. A torrent network has two types of peers. Seeders &amp; Leachers.\n\n• Seeders : These are peers who completed downloading and has the full file. And now they are sharing this file to other peers which is called seeding. A torrent cannot work without at least one seeder. The more seeder a torrent has, the better.\n\n• Leachers : These are peers who are currently downloading the file. If they currently have 40&#37; downloaded then they will share the 40&#37; to any other peers who requests it.\n\nUnlike a centralised server, torrents have no bandwidth limit. You can get your files from hundreds of seeders at the highest possible speed your internet can offer. But many ISP throttle torrent to slow them down because it\'s demanding on their infrastructure. Use a VPN to circumvent this.\n\n• How to use torrents :\n\n1. Install the Torrent Add-on from \`Dantotsu &gt; Settings &gt; Add-ons &gt; Torrent Add-on.\` \n2. Get a source that provides torrents.\n3. USE A VPN. Using VPN while torrenting only has upsides. Without a VPN your IP address will be exposed, your ISP will throttle your network and you could possibly be fined if you live in a country first world country. DO NOT USE IT WITHOUT A VPN IF YOU DON\'T KNOW WHAT YOU\'RE DOING.\n4. Now use that source to start torrenting.</string>
+    <string name="question_18">मैं Anilist में लॉग इन नहीं कर सकता।</string>
+    <string name="answer_18">यह होने का कारण संभवतः यह है कि आप डिफ़ॉल्ट ब्राउज़र का उपयोग नहीं कर रहे हैं।\n\n&gt;आपको Anilist में लॉग इन करने के लिए Chrome को अपना डिफ़ॉल्ट ब्राउज़र सेट करना होगा।\n\n&gt;लॉगिन बटन को परिवर्तन दिखाने में कुछ सेकंड लगते हैं।\n\nयदि यह काम नहीं करता है, तो आपको Anilist द्वारा आईपी ब्लॉक किया जा सकता है या आपके आईएसपी ने स्वयं Anilist को ब्लॉक कर दिया है। हमें लगता है कि यह बहुत संभावना नहीं है, इसलिए यह देखने के लिए [Anilist](https://anilist.co) को अपने ब्राउज़र में खोलें कि क्या यह मामला है।</string>
+    <string name="question_19">टॉरेंट क्या है? मैं इसे कैसे उपयोग करूं?</string>
+    <string name="answer_19">टोरेंट या औपचारिक रूप से बिटटोरेंट के रूप में जाना जाने वाला एक पीयर-टू-पीयर फाइल शेयरिंग के लिए इंटरनेट संचार प्रोटोकॉल है। एक टोरेंट नेटवर्क फाइलों की मेजबानी करने के लिए केंद्रीकृत सर्वर का उपयोग नहीं करता है। यह विकेन्द्रीकृत तरीके से फाइलें साझा करता है। एक टोरेंट नेटवर्क में दो प्रकार के पीयर होते हैं। सीडर और लीचर।\n\n• सीडर: ये वे पीयर हैं जिन्होंने डाउनलोड पूरा कर लिया है और उनके पास पूरी फाइल है। और अब वे इस फाइल को अन्य पीयर के साथ साझा कर रहे हैं, जिसे सीडिंग कहा जाता है। एक टोरेंट कम से कम एक सीडर के बिना काम नहीं कर सकता है। एक टोरेंट में जितने अधिक सीडर होते हैं, उतना ही बेहतर होता है।\n\n• लीचर: ये वे पीयर हैं जो वर्तमान में फाइल डाउनलोड कर रहे हैं। यदि उन्होंने वर्तमान में 40&#37; डाउनलोड किया है, तो वे उन अन्य पीयर के साथ इस 40&#37; को साझा करेंगे जो इसे मांगते हैं।\n\nकेंद्रीकृत सर्वर के विपरीत, टोरेंट्स में बैंडविड्थ की कोई सीमा नहीं होती है। आप अपनी फाइलें सैकड़ों सीडर से प्राप्त कर सकते हैं जो आपके इंटरनेट की पेशकश की उच्चतम संभव गति के साथ कर सकते हैं। लेकिन कई आईएसपी टोरेंट्स को धीमा करने के लिए उन्हें सीमित करते हैं क्योंकि यह उनके बुनियादी ढांचे के लिए मांग कर रहा है। इसे दरकिनार करने के लिए वीपीएन का उपयोग करें।\n\n• टोरेंट का उपयोग कैसे करें:\n\n1. \`Dantotsu &gt; सेटिंग्स &gt; ऐड-ऑन &gt; टोरेंट ऐड-ऑन\` से टोरेंट ऐड-ऑन इंस्टॉल करें।\n2. एक स्रोत प्राप्त करें जो टोरेंट्स प्रदान करता है।\n3. वीपीएन का उपयोग करें। टोरेंटिंग के दौरान वीपीएन का उपयोग करने का केवल लाभ है। वीपीएन के बिना आपका आईपी पता उजागर हो जाएगा, आपका आईएसपी आपके नेटवर्क को सीमित कर देगा और यदि आप एक प्रथम विश्व देश में रहते हैं तो आपको जुर्माना हो सकता है। यदि आप नहीं जानते कि आप क्या कर रहे हैं तो बिना वीपीएन के इसका उपयोग न करें।\n4. अब टोरेंटिंग शुरू करने के लिए उस स्रोत का उपयोग करें।</string>
     <string name="subscribed_notification">सदस्यता लें! नए एपिसोड %1$s पर रिलीज होते ही सूचनाएँ प्राप्त कर रहे हैं।</string>
     <string name="unsubscribed_notification">सदस्यता रद्द की गई, आपको कोई सूचनाएँ प्राप्त नहीं होंगी।</string>
     <string name="episode_plural">एपिसोड</string>
@@ -631,7 +629,7 @@
     <string name="installed_manga">स्थापित मंगा</string>
     <string name="color_picker">रंग चुनें</string>
     <string name="random_selection">रैंडम चयन</string>
-    <string name="listed_in_library">Listed in Library</string>
+    <string name="listed_in_library">लाइब्रेरी में सूचीबद्ध</string>
     <string name="incognito_mode">गुप्त मोड</string>
     <string name="appwidget_text">ऐपविजेट_टेक्स्ट</string>
     <string name="configure">कॉन्फ़िगर करें</string>
@@ -842,8 +840,8 @@
     <string name="use_unique_theme_for_each_item_desc">मीडिया के बैनर से रंग का उपयोग करें</string>
     <string name="use_custom_theme_desc">थीम के लिए अपने रंग का उपयोग करें</string>
     <string name="color_picker_desc">एक रंग चुनें</string>
-    <string name="hide_private">Hide private Media from home screen</string>
-    <string name="hide_private_desc">Long click \"Continue Watching\" to access</string>
+    <string name="hide_private">होम स्क्रीन से निजी मीडिया छुपाएं</string>
+    <string name="hide_private_desc">प्रवेश करने के लिए \"जारी रखें देखना\" पर लंबे समय तक क्लिक करें</string>
     <string name="torrent_addon">टोरेंट एड-ऑन</string>
     <string name="enable_torrent">टोरेंट सक्रिय करें</string>
     <string name="anime_downloader_addon">एनिमे डाउनलोडर एड-ऑन</string>
@@ -855,7 +853,7 @@
     <string name="install_addon">एड-ऑन इंस्टॉल करें</string>
     <string name="download_addon_not_found">एड-ऑन नहीं मिला</string>
     <string name="image">इमेज</string>
-    <string name="clear_history">Clear History</string>
+    <string name="clear_history">इतिहास साफ़ करें</string>
     <string name="failed_ext_install_conflict">टकराव के कारण एक्सटेंशन को स्थापित करने में विफल</string>
     <string name="reading">रीडिंग</string>
     <string name="watching">देखना</string>
