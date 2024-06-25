@@ -371,6 +371,8 @@
     <string name="use_alarm_manager_reliable">Użyj menedżera alarmów dla niezawodnych powiadomień</string>
     <string name="use_alarm_manager_confirm">Używanie menedżera alarmów może pomóc w walce z systemową optymalizacją baterii, ale może zużywać więcej baterii. Wymaga również uprawnień menedżera alarmów.</string>
     <string name="use">Użyj</string>
+    <string name="remove_all_subscriptions">Remove All Subscriptions</string>
+    <string name="remove_all_subscriptions_desc">Are you sure you want to remove all subscriptions for %1$s?</string>
     <string name="checking_subscriptions">Powiadomienie o sprawdzaniu subskrypcji</string>
     <string name="subscriptions_checking_time_s">Częstotliwość aktualizacji subskrypcji: %1$s</string>
     <string name="subscriptions_checking_time">Częstotliwość aktualizacji subskrypcji</string>
