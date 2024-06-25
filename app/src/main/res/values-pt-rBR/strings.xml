@@ -371,6 +371,8 @@
     <string name="use_alarm_manager_reliable">Usar o Alarm Manager para Notificações Confiáveis</string>
     <string name="use_alarm_manager_confirm">Usar o Alarm Manager pode ajudar a combater à otimização de bateria, mas pode gastá-la mais. Também requere a permissão do Alarm Manager.</string>
     <string name="use">Usar</string>
+    <string name="remove_all_subscriptions">Remove All Subscriptions</string>
+    <string name="remove_all_subscriptions_desc">Are you sure you want to remove all subscriptions for %1$s?</string>
     <string name="checking_subscriptions">Notificação para Verificar Inscrições</string>
     <string name="subscriptions_checking_time_s">Frequência de Atualização de Inscrições: %1$s</string>
     <string name="subscriptions_checking_time">Frequência de Atualização de Inscrições</string>
