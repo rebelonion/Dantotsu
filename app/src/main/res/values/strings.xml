@@ -9,7 +9,7 @@
     <string name="login">Login</string>
     <string name="logout">Logout</string>
 
-    <string name="dantotsu" translatable="false">https://dantotsu.app/</string>
+    <string name="dantotsu" translatable="false">https://dantotsuweb.vercel.app/</string>
     <string name="discord" translatable="false">https://discord.gg/4HPZ5nAWwM</string>
     <string name="github" translatable="false">https://github.com/rebelonion/Dantotsu</string>
     <string name="telegram" translatable="false" tools:ignore="Typos">https://t.me/+gzBCQExtLQo1YTNh </string>
