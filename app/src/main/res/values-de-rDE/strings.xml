@@ -370,6 +370,8 @@
     <string name="use_alarm_manager_reliable">Verwenden Sie Alarm Manager für zuverlässige Benachrichtigungen</string>
     <string name="use_alarm_manager_confirm">Die Verwendung des Alarmmanagers kann bei der Batterieoptimierung helfen, verbraucht aber möglicherweise mehr Batterie. Außerdem ist die Berechtigung \"Alarmmanager\" erforderlich.</string>
     <string name="use">Verwenden Sie</string>
+    <string name="remove_all_subscriptions">Remove All Subscriptions</string>
+    <string name="remove_all_subscriptions_desc">Are you sure you want to remove all subscriptions for %1$s?</string>
     <string name="checking_subscriptions">Benachrichtigung zur Überprüfung von Abonnements</string>
     <string name="subscriptions_checking_time_s">Häufigkeit der Aktualisierung von Abonnements: %1$s</string>
     <string name="subscriptions_checking_time">Häufigkeit der Aktualisierung von Abonnements</string>
