@@ -122,8 +122,8 @@
     <string name="chaps">章节</string>
     <string name="chap">章</string>
     <string name="wrong"><u>错误的标题？</u></string>
-    <string name="source_not_found">        未从此来源找到任何内容。\n        让我们换个地方看看。</string>
-    <string name="download_not_found">        您的下载似乎有点孤单…\n        尝试下载一些东西。</string>
+    <string name="source_not_found">没有找到任何来自此来源的内容。\n 让我们看看别处。</string>
+    <string name="download_not_found">您的下载有点孤单…\n 尝试下载一些东西。</string>
     <string name="not_supported">%1$s 不支持！</string>
     <string name="server_selector">选择服务器</string>
     <string name="auto_select_server">自动选择服务器</string>
@@ -564,7 +564,7 @@
     <string name="question_6">为什么我的统计数据没有更新？</string>
     <string name="answer_6">这是因为它每 48 小时自动更新一次（由 Anilist）。如果您确实需要更新您的统计数据，您可以在此 [链接](https://anilist.co/settings/lists) 中强制更新您的统计数据。</string>
     <string name="question_7">如何下载动画？</string>
-    <string name="answer_7">There are two methods of downloading. Internal and external. If you download internally, then it can be viewed within the app and tracking will work normally for it. The other option is to use external downloader. It requires a download manager to download and a separate video player to watch. External downloads cannot be viewed within the Dantotsu app.\n\n•To download internally:\n\n1. Tap the download button.\n2. For the first time, it will ask you to set a download location. All your downloads will be stored there.\n3. Pick the server and the video quality.\n4. Profit.\n\n•To download externally:\n\n 1. Download 1DM or ADM from Google Play Store.\n2. Enter the app, give storage access and set your preferences (downloading speed, downloading path etc(optional))\n3. Now go to \`Dantotsu &gt; Settings &gt; Common &gt; Download Managers\` and choose the download manager you just set up.\n4. Go to your desired episode and press on the download icon of any server. There may be a popup to set your preferences again, just press on \"Download\" and it will be saved in the directed path.\n\nNote: External downloads are also possible without a manager but it\'s not recommended.\n\nNerd Note: Internally downloaded episodes are stored in \`{your set location}/Dantotsu/Anime/*`\nYou can change your download location in settings but your previous downloaded episodes will not show up in the app anymore.</string>
+    <string name="answer_7">有两种下载方法。内部和外部。如果你内部下载，那么可以在应用程序内查看，并且跟踪将正常工作。另一种选择是使用外部下载器。它需要下载管理器进行下载，并需要单独的视频播放器观看。外部下载无法在Dantotsu应用程序中查看。\n\n•内部下载:\n\n1. 点击下载按钮。\n2. 第一次会要求你设置下载位置。所有下载内容都会存储在那里。\n3. 选择服务器和视频质量。\n4. 完成。\n\n•外部下载:\n\n1. 从Google Play商店下载1DM或ADM。\n2. 进入应用程序，授予存储访问权限并设置你的偏好（下载速度、下载路径等（可选））\n3. 现在转到\`Dantotsu &gt; 设置 &gt; 常用 &gt; 下载管理器\`，选择你刚刚设置的下载管理器。\n4. 转到你想要的剧集，并点击任何服务器的下载图标。可能会弹出一个设置偏好的弹窗，只需点击“下载”，它就会保存在指定路径中。\n\n注意：无需管理器也可以进行外部下载，但不推荐。\n\n技术说明：内部下载的剧集存储在\`{your set location}/Dantotsu/Anime/*\`中\n你可以在设置中更改下载位置，但之前下载的剧集将不再显示在应用程序中。</string>
     <string name="question_9">如何启用 NSFW 内容？</string>
     <string name="answer_9">您可以通过从此 [链接](https://anilist.co/settings/media) 启用 18+ 内容来启用 NSFW 内容。您还必须在 \`设置 &gt; 扩展 &gt; NSFW 扩展\` 中启用 NSFW 扩展</string>
     <string name="question_10">如何将我的 MAL/Kitsu 列表导入到 Anilist？</string>
@@ -583,10 +583,10 @@
     <string name="answer_16">一些基本的修复方法是：\n\n• 如果有的话，请更新您的扩展。\n• 打开 Web View 并等待加载完成。加载完成后，返回。（如果 Web View 显示错误 404 或类似的错误，那么您的来源可能已关闭）\n• 使用您设置的不同 DNS，最好是 Libre。\n• 尝试可信赖的 VPN。（之后您需要重复步骤 1）\n\n如果以上步骤都不起作用，请使用其他来源或加入我们的 [discord](https://discord.gg/invite/4HPZ5nAWwM) 寻求帮助。</string>
     <string name="question_17">一些有用的技巧和诀窍</string>
     <string name="answer_17">以下是一些您可能已经知道或者不知道的技巧和诀窍 - \n \n \n- 通过长按设置中的 Dantotsu 徽标，您可以手动检查是否有新更新。\n \n- 长按错误消息/标签/同义词或标题将复制它。\n \n- 您可以通过长按任何剧集的任何服务器来使用其他应用程序打开剧集。这有助于使用其他视频播放器流式传输剧集或使用下载管理器下载剧集。\n \n- 您可以使用此 [链接](https://anilist.co/settings/lists) 设置自定义列表（您需要登录）\n \n- 如果您的剧集/章节在您完成观看/阅读后仍然没有自动进行，那么长按该动画/漫画的状态栏（计划/重复/观看按钮）。下次您开始章节/完成剧集时，您将遇到一个弹出窗口。在那里按是。</string>
-    <string name="question_18">我无法登录到 Anilist。</string>
-    <string name="answer_18">The reason this happens is probably because you\'re not using the default browser.\n\n&gt;You have to set Chrome as your default browser to login to Anilist.\n\n&gt;It takes a few seconds for the login button to display changes.\n\nIf it doesn\'t work then you could possibly be IP banned from Anilist or your ISP banned Anilist themselves. We believe that this is highly unlikely so open [Anilist](https://anilist.co) in your browser to see if that\`s the case.</string>
-    <string name="question_19">What is torrent? How do I use it?</string>
-    <string name="answer_19">Torrent or formally known as BitTorrent is an internet communication protocol for peer\-to\-peer file sharing. A torrent network doesn\'t use a centralised server to host files. It shares files in a decentralised manner. A torrent network has two types of peers. Seeders &amp; Leachers.\n\n• Seeders : These are peers who completed downloading and has the full file. And now they are sharing this file to other peers which is called seeding. A torrent cannot work without at least one seeder. The more seeder a torrent has, the better.\n\n• Leachers : These are peers who are currently downloading the file. If they currently have 40&#37; downloaded then they will share the 40&#37; to any other peers who requests it.\n\nUnlike a centralised server, torrents have no bandwidth limit. You can get your files from hundreds of seeders at the highest possible speed your internet can offer. But many ISP throttle torrent to slow them down because it\'s demanding on their infrastructure. Use a VPN to circumvent this.\n\n• How to use torrents :\n\n1. Install the Torrent Add-on from \`Dantotsu &gt; Settings &gt; Add-ons &gt; Torrent Add-on.\` \n2. Get a source that provides torrents.\n3. USE A VPN. Using VPN while torrenting only has upsides. Without a VPN your IP address will be exposed, your ISP will throttle your network and you could possibly be fined if you live in a country first world country. DO NOT USE IT WITHOUT A VPN IF YOU DON\'T KNOW WHAT YOU\'RE DOING.\n4. Now use that source to start torrenting.</string>
+    <string name="question_18">我无法登录Anilist。</string>
+    <string name="answer_18">发生这种情况的原因可能是你没有使用默认浏览器。\n\n&gt;你必须将Chrome设置为默认浏览器才能登录Anilist。\n\n&gt;登录按钮显示变化需要几秒钟时间。\n\n如果这不起作用，那么你可能被Anilist封禁了IP地址，或者你的ISP封禁了Anilist。我们认为这种情况极不可能发生，所以打开[Anilist](https://anilist.co)查看是否是这种情况。</string>
+    <string name="question_19">什么是种子？我该如何使用它？</string>
+    <string name="answer_19">种子或正式称为比特种子是一种用于点对点文件共享的互联网通信协议。种子网络不使用集中式服务器来托管文件。它以去中心化的方式共享文件。种子网络有两种类型的节点。做种者和下载者。\n\n• 做种者：这些节点已完成下载并拥有完整文件。现在他们正在向其他节点共享此文件，这称为做种。没有至少一个做种者，种子无法工作。种子的做种者越多，效果越好。\n\n• 下载者：这些节点当前正在下载文件。如果他们目前已下载40&#37;，他们将向任何请求它的其他节点共享这40&#37;。\n\n与集中式服务器不同，种子没有带宽限制。你可以从数百个做种者以你互联网提供的最高速度获取文件。但许多ISP会限制种子的速度，因为它们对其基础设施要求很高。使用VPN绕过这一限制。\n\n• 如何使用种子：\n\n1. 从\`Dantotsu &gt; 设置 &gt; 插件 &gt; 种子插件\`安装种子插件。\n2. 获取提供种子的来源。\n3. 使用VPN。在种子下载时使用VPN只有好处。没有VPN你的IP地址将暴露，ISP会限制你的网络，如果你生活在一个发达国家，可能会被罚款。如果你不知道你在做什么，请勿在没有VPN的情况下使用它。\n4. 现在使用该来源开始种子下载。</string>
     <string name="subscribed_notification">已订阅！当 %1$s 发布新剧集时，您将收到通知。</string>
     <string name="unsubscribed_notification">已取消订阅，您将不会收到任何通知。</string>
     <string name="episode_plural">剧集</string>
@@ -629,7 +629,7 @@
     <string name="installed_manga">已安装的漫画</string>
     <string name="color_picker">颜色选择器</string>
     <string name="random_selection">随机选择</string>
-    <string name="listed_in_library">Listed in Library</string>
+    <string name="listed_in_library">列在图书馆</string>
     <string name="incognito_mode">隐身模式</string>
     <string name="appwidget_text">示例</string>
     <string name="configure">配置</string>
@@ -840,8 +840,8 @@
     <string name="use_unique_theme_for_each_item_desc">使用媒体横幅中的颜色</string>
     <string name="use_custom_theme_desc">使用您自己的主题颜色</string>
     <string name="color_picker_desc">选择颜色</string>
-    <string name="hide_private">Hide private Media from home screen</string>
-    <string name="hide_private_desc">Long click \"Continue Watching\" to access</string>
+    <string name="hide_private">从主页屏幕隐藏私人媒体</string>
+    <string name="hide_private_desc">长按“继续观看”以访问</string>
     <string name="torrent_addon">Torrent 插件</string>
     <string name="enable_torrent">启用 Torrent</string>
     <string name="anime_downloader_addon">动漫下载器插件</string>
@@ -853,7 +853,7 @@
     <string name="install_addon">安装插件</string>
     <string name="download_addon_not_found">未找到插件</string>
     <string name="image">图片</string>
-    <string name="clear_history">Clear History</string>
+    <string name="clear_history">清除历史记录</string>
     <string name="failed_ext_install_conflict">由于冲突，扩展安装失败</string>
     <string name="reading">阅读</string>
     <string name="watching">观看</string>
