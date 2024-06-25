@@ -369,6 +369,8 @@
     <string name="use_alarm_manager_reliable">Utilisez le Gestionnaire d\'Alarmes pour des Notifications fiables</string>
     <string name="use_alarm_manager_confirm">Utiliser le Gestionnaire d\'Alarmes peut aider à lutter contre l\'économiseur de batterie, mais peut consommer plus de batterie. Cela nécessite la permission Gestionnaire d\'Alarmes.</string>
     <string name="use">Utiliser</string>
+    <string name="remove_all_subscriptions">Remove All Subscriptions</string>
+    <string name="remove_all_subscriptions_desc">Are you sure you want to remove all subscriptions for %1$s?</string>
     <string name="checking_subscriptions">Notification pour la vérification des abonnements</string>
     <string name="subscriptions_checking_time_s">Fréquence de mise à jour des abonnements : %1$s</string>
     <string name="subscriptions_checking_time">Fréquence de mise à jour des abonnements</string>
