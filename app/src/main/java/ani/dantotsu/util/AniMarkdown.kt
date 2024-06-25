@@ -90,10 +90,8 @@ class AniMarkdown { //istg anilist has the worst api
             /* Add responsive design elements for other content as needed */
         </style>
 </head>
-<body>
-    $basicHtml
-</body>
-
+<body>$basicHtml</body>
+</html>
     """.trimIndent()
             return returnHtml
         }

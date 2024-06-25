@@ -92,6 +92,7 @@ class HomeFragment : Fragment() {
                 )
                 binding.homeUserDataProgressBar.visibility = View.GONE
                 binding.homeNotificationCount.isVisible = Anilist.unreadNotificationCount > 0
+                        && PrefManager.getVal<Boolean>(PrefName.ShowNotificationRedDot) == true
                 binding.homeNotificationCount.text = Anilist.unreadNotificationCount.toString()
 
                 binding.homeAnimeList.setOnClickListener {
@@ -233,10 +234,10 @@ class HomeFragment : Fragment() {
                             false
                         )
                         more.setOnClickListener { i ->
+                            MediaListViewActivity.passedMedia = it
                             ContextCompat.startActivity(
                                 i.context, Intent(i.context, MediaListViewActivity::class.java)
-                                    .putExtra("title", string)
-                                    .putExtra("media", it),
+                                    .putExtra("title", string),
                                 null
                             )
                         }
@@ -393,11 +394,11 @@ class HomeFragment : Fragment() {
                         true
                     }
                     binding.homeHiddenItemsMore.setSafeOnClickListener { _ ->
+                        MediaListViewActivity.passedMedia = it
                         ContextCompat.startActivity(
                             requireActivity(),
                             Intent(requireActivity(), MediaListViewActivity::class.java)
-                                .putExtra("title", getString(R.string.hidden))
-                                .putExtra("media", it),
+                                .putExtra("title", getString(R.string.hidden)),
                             null
                         )
                     }
@@ -481,10 +482,12 @@ class HomeFragment : Fragment() {
                         CoroutineScope(Dispatchers.IO).launch {
                             model.setListImages()
                         }
+
                         var empty = true
                         val homeLayoutShow: List<Boolean> =
                             PrefManager.getVal(PrefName.HomeLayout)
                         model.initHomePage()
+                        model.initUserStatus()
                         (array.indices).forEach { i ->
                             if (homeLayoutShow.elementAt(i)) {
                                 empty = false
@@ -508,6 +511,7 @@ class HomeFragment : Fragment() {
         if (!model.loaded) Refresh.activity[1]!!.postValue(true)
         if (_binding != null) {
             binding.homeNotificationCount.isVisible = Anilist.unreadNotificationCount > 0
+                    && PrefManager.getVal<Boolean>(PrefName.ShowNotificationRedDot) == true
             binding.homeNotificationCount.text = Anilist.unreadNotificationCount.toString()
         }
         super.onResume()

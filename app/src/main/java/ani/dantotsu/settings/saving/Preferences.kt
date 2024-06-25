@@ -22,6 +22,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     CheckUpdate(Pref(Location.General, Boolean::class, true)),
     VerboseLogging(Pref(Location.General, Boolean::class, false)),
     DohProvider(Pref(Location.General, Int::class, 0)),
+    HidePrivate(Pref(Location.General, Boolean::class, false)),
     DefaultUserAgent(
         Pref(
             Location.General,
@@ -82,6 +83,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     MangaListSortOrder(Pref(Location.UI, String::class, "score")),
     CommentSortOrder(Pref(Location.UI, String::class, "newest")),
     FollowerLayout(Pref(Location.UI, Int::class, 0)),
+    ShowNotificationRedDot(Pref(Location.UI, Boolean::class, true)),
 
 
     //Player
@@ -202,4 +204,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     AnilistUserId(Pref(Location.Protected, String::class, "")),
     MALCodeChallenge(Pref(Location.Protected, String::class, "")),
     MALToken(Pref(Location.Protected, MAL.ResponseToken::class, "")),
+    AppPassword(Pref(Location.Protected, String::class, "")),
+    BiometricToken(Pref(Location.Protected, String::class, "")),
+    OverridePassword(Pref(Location.Protected, Boolean::class, false)),
 }

@@ -125,7 +125,7 @@ class DownloadCompat {
                 Logger.log(e)
                 Injekt.get<CrashlyticsInterface>().logException(e)
                 return OfflineAnimeModel(
-                    "unknown",
+                    downloadedType.titleName,
                     "0",
                     "??",
                     "??",
@@ -188,7 +188,7 @@ class DownloadCompat {
                 Logger.log(e)
                 Injekt.get<CrashlyticsInterface>().logException(e)
                 return OfflineMangaModel(
-                    "unknown",
+                    downloadedType.titleName,
                     "0",
                     "??",
                     "??",
@@ -347,7 +347,7 @@ class DownloadCompat {
         }
 
         @Deprecated("external storage is deprecated, use SAF instead")
-        fun removeDownloadCompat(context: Context, downloadedType: DownloadedType) {
+        fun removeDownloadCompat(context: Context, downloadedType: DownloadedType, toast: Boolean) {
             val directory = if (downloadedType.type == MediaType.MANGA) {
                 File(
                     context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
@@ -368,10 +368,13 @@ class DownloadCompat {
             // Check if the directory exists and delete it recursively
             if (directory.exists()) {
                 val deleted = directory.deleteRecursively()
-                if (deleted) {
-                    Toast.makeText(context, "Successfully deleted", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(context, "Failed to delete directory", Toast.LENGTH_SHORT).show()
+                if (toast) {
+                    if (deleted) {
+                        Toast.makeText(context, "Successfully deleted", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(context, "Failed to delete directory", Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 }
             }
         }

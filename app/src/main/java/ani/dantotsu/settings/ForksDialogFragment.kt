@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.BottomSheetDialogFragment
 import ani.dantotsu.R
-import ani.dantotsu.connections.github.Forks
 import ani.dantotsu.databinding.BottomSheetDevelopersBinding
 
 class ForksDialogFragment : BottomSheetDialogFragment() {
@@ -26,7 +25,16 @@ class ForksDialogFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.devsTitle.setText(R.string.forks)
-        binding.devsRecyclerView.adapter = DevelopersAdapter(Forks().getForks())
+        binding.devsRecyclerView.adapter = DevelopersAdapter(
+            arrayOf(
+                Developer(
+                    "Awery",
+                    "https://avatars.githubusercontent.com/u/92123190?v=4",
+                    "MrBoomDeveloper",
+                    "https://github.com/MrBoomDeveloper/Awery"
+                ),
+            )
+        )
         binding.devsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
 

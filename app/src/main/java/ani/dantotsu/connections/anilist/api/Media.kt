@@ -143,7 +143,7 @@ data class Media(
     @SerialName("externalLinks") var externalLinks: List<MediaExternalLink>?,
 
     // Data and links to legal streaming episodes on external sites
-    // @SerialName("streamingEpisodes") var streamingEpisodes: List<MediaStreamingEpisode>?,
+    @SerialName("streamingEpisodes") var streamingEpisodes: List<MediaStreamingEpisode>?,
 
     // The ranking of the media in a particular time span and format compared to other media
     // @SerialName("rankings") var rankings: List<MediaRank>?,
@@ -239,7 +239,20 @@ data class AiringSchedule(
     // The associate media of the airing episode
     @SerialName("media") var media: Media?,
 )
+@Serializable
+data class MediaStreamingEpisode(
+    // The title of the episode
+    @SerialName("title") var title: String?,
 
+    // The thumbnail image of the episode
+    @SerialName("thumbnail") var thumbnail: String?,
+
+    // The url of the episode
+    @SerialName("url") var url: String?,
+
+    // The site location of the streaming episode
+    @SerialName("site") var site: String?,
+)
 @Serializable
 data class MediaCoverImage(
     // The cover image url of the media at its largest size. If this size isn't available, large will be provided instead.

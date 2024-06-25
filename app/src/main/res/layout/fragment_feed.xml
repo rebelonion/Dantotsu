@@ -1,53 +1,95 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ProgressBar
+    <LinearLayout
         android:id="@+id/listProgressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone" />
-
-    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:gravity="center"
+        tools:visibility="gone">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/titleBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="24dp"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            tools:ignore="UseCompoundDrawables">
+
+            <TextView
+                android:id="@+id/titleText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppins_bold"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/titleImage"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:contentDescription="@string/reply"
+                android:fontFamily="@font/poppins_bold"
+                android:src="@drawable/ic_add"
+                app:tint="?attr/colorPrimary" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/emptyTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:gravity="center"
+            android:visibility="gone" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/feedSwipeRefresh"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
+            android:layout_weight="1"
             android:clipChildren="false"
             android:clipToPadding="false">
 
             <ani.dantotsu.FadingEdgeRecyclerView
                 android:id="@+id/listRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
+                android:layout_height="match_parent"
                 android:nestedScrollingEnabled="true"
                 android:requiresFadingEdge="vertical"
-                android:visibility="visible"
                 tools:listitem="@layout/item_activity" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
 
         <ProgressBar
             android:id="@+id/feedRefresh"
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
+            android:layout_gravity="center_horizontal"
             android:layout_marginBottom="32dp"
             android:visibility="gone" />
 
-    </FrameLayout>
+    </LinearLayout>
 
 </LinearLayout>

@@ -30,6 +30,7 @@ class CalendarActivity : AppCompatActivity() {
     private lateinit var binding: ActivityListBinding
     private val scope = lifecycleScope
     private var selectedTabIdx = 1
+    private var showOnlyLibrary = false
     private val model: OtherDetailsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,8 +38,6 @@ class CalendarActivity : AppCompatActivity() {
 
         ThemeManager(this).applyTheme()
         binding = ActivityListBinding.inflate(layoutInflater)
-
-
 
         val primaryColor = getThemeColor(com.google.android.material.R.attr.colorSurface)
         val primaryTextColor = getThemeColor(com.google.android.material.R.attr.colorPrimary)
@@ -79,6 +78,17 @@ class CalendarActivity : AppCompatActivity() {
             override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
 
+        binding.listed.setOnClickListener {
+            showOnlyLibrary = !showOnlyLibrary
+            binding.listed.setImageResource(
+                if (showOnlyLibrary) R.drawable.ic_round_collections_bookmark_24
+                else R.drawable.ic_round_library_books_24
+            )
+            scope.launch {
+                model.loadCalendar(showOnlyLibrary)
+            }
+        }
+
         model.getCalendar().observe(this) {
             if (it != null) {
                 binding.listProgressBar.visibility = View.GONE
@@ -97,11 +107,10 @@ class CalendarActivity : AppCompatActivity() {
         live.observe(this) {
             if (it) {
                 scope.launch {
-                    withContext(Dispatchers.IO) { model.loadCalendar() }
+                    withContext(Dispatchers.IO) { model.loadCalendar(showOnlyLibrary) }
                     live.postValue(false)
                 }
             }
         }
-
     }
 }

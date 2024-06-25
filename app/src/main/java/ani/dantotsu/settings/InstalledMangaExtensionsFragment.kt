@@ -34,6 +34,7 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.util.Logger
+import ani.dantotsu.util.customAlertDialog
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputLayout
 import eu.kanade.tachiyomi.data.notification.Notifications
@@ -74,13 +75,12 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
                     val names = allSettings.map { LanguageMapper.getLanguageName(it.lang) }
                         .toTypedArray()
                     var selectedIndex = 0
-                    val dialog = AlertDialog.Builder(requireContext(), R.style.MyPopup)
-                        .setTitle("Select a Source")
-                        .setSingleChoiceItems(names, selectedIndex) { dialog, which ->
+                    requireContext().customAlertDialog().apply {
+                        setTitle("Select a Source")
+                        singleChoiceItems(names, selectedIndex) { which ->
                             itemSelected = true
                             selectedIndex = which
                             selectedSetting = allSettings[selectedIndex]
-                            dialog.dismiss()
 
                             // Move the fragment transaction here
                             val fragment =
@@ -93,13 +93,13 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
                                 .addToBackStack(null)
                                 .commit()
                         }
-                        .setOnDismissListener {
+                        onDismiss {
                             if (!itemSelected) {
                                 changeUIVisibility(true)
                             }
                         }
-                        .show()
-                    dialog.window?.setDimAmount(0.8f)
+                        show()
+                    }
                 } else {
                     // If there's only one setting, proceed with the fragment transaction
                     val fragment =

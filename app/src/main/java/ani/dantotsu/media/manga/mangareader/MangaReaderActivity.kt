@@ -83,6 +83,7 @@ import ani.dantotsu.showSystemBarsRetractView
 import ani.dantotsu.snackString
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.tryWith
+import ani.dantotsu.util.customAlertDialog
 import com.alexvasilkov.gestures.views.GestureFrameLayout
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
@@ -1013,28 +1014,27 @@ class MangaReaderActivity : AppCompatActivity() {
                     PrefManager.setCustomVal("${media.id}_progressDialog", !isChecked)
                     showProgressDialog = !isChecked
                 }
-                AlertDialog.Builder(this, R.style.MyPopup)
-                    .setTitle(getString(R.string.title_update_progress))
-                    .setView(dialogView)
-                    .setCancelable(false)
-                    .setPositiveButton(getString(R.string.yes)) { dialog, _ ->
+                customAlertDialog().apply {
+                    setTitle(R.string.title_update_progress)
+                    setCustomView(dialogView)
+                    setCancelable(false)
+                    setPosButton(R.string.yes) {
                         PrefManager.setCustomVal("${media.id}_save_progress", true)
                         updateProgress(
                             media,
                             MediaNameAdapter.findChapterNumber(media.manga!!.selectedChapter!!)
                                 .toString()
                         )
-                        dialog.dismiss()
                         runnable.run()
                     }
-                    .setNegativeButton(getString(R.string.no)) { dialog, _ ->
+                    setNegButton(R.string.no) {
                         PrefManager.setCustomVal("${media.id}_save_progress", false)
-                        dialog.dismiss()
                         runnable.run()
                     }
-                    .setOnCancelListener { hideSystemBars() }
-                    .create()
-                    .show()
+                    setOnCancelListener { hideSystemBars() }
+                    show()
+
+                }
             } else {
                 if (!incognito && PrefManager.getCustomVal(
                         "${media.id}_save_progress",

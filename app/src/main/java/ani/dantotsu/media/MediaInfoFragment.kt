@@ -528,26 +528,11 @@ class MediaInfoFragment : Fragment() {
                             parent,
                             false
                         ).apply {
-                            fun onUserClick(userId: Int) {
-                                val review = media.review!!.find { i -> i.id == userId }
-                                if (review != null) {
-                                    startActivity(
-                                        Intent(requireContext(), ReviewViewActivity::class.java)
-                                            .putExtra("review", review)
-                                    )
-                                }
-                            }
                             val adapter = GroupieAdapter()
-                            media.review!!.forEach {
-                                adapter.add(ReviewAdapter(it, ::onUserClick))
-                            }
+                            media.review!!.forEach { adapter.add(ReviewAdapter(it)) }
                             itemTitle.setText(R.string.reviews)
                             itemRecycler.adapter = adapter
-                            itemRecycler.layoutManager = LinearLayoutManager(
-                                requireContext(),
-                                LinearLayoutManager.VERTICAL,
-                                false
-                            )
+                            itemRecycler.layoutManager = LinearLayoutManager(requireContext())
                             itemMore.visibility = View.VISIBLE
                             itemMore.setSafeOnClickListener {
                                 startActivity(

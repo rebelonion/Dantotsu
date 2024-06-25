@@ -1,4 +1,4 @@
-package ani.dantotsu.home.status
+package ani.dantotsu.profile.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -14,9 +14,8 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.ActivityReply
 import ani.dantotsu.databinding.BottomSheetRecyclerBinding
 import ani.dantotsu.profile.ProfileActivity
-import ani.dantotsu.profile.activity.ActivityReplyItem
 import ani.dantotsu.snackString
-import ani.dantotsu.util.MarkdownCreatorActivity
+import ani.dantotsu.util.ActivityMarkdownCreator
 import com.xwray.groupie.GroupieAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -49,7 +48,7 @@ class RepliesBottomDialog : BottomSheetDialogFragment() {
         binding.replyButton.setOnClickListener {
             ContextCompat.startActivity(
                 context,
-                Intent(context, MarkdownCreatorActivity::class.java)
+                Intent(context, ActivityMarkdownCreator::class.java)
                     .putExtra("type", "replyActivity")
                     .putExtra("parentId", activityId),
                 null
@@ -58,29 +57,30 @@ class RepliesBottomDialog : BottomSheetDialogFragment() {
         activityId = requireArguments().getInt("activityId")
         loading(true)
         lifecycleScope.launch(Dispatchers.IO) {
-            val response = Anilist.query.getReplies(activityId)
-            withContext(Dispatchers.Main) {
-                loading(false)
-                if (response != null) {
-                    replies.clear()
-                    replies.addAll(response.data.page.activityReplies)
-                    adapter.update(
-                        replies.map {
-                            ActivityReplyItem(
-                                it,
-                                requireActivity(),
-                                clickCallback = { int, _ ->
-                                    onClick(int)
-                                }
-                            )
+            loadData()
+        }
+    }
+
+    private suspend fun loadData() {
+        val response = Anilist.query.getReplies(activityId)
+        withContext(Dispatchers.Main) {
+            loading(false)
+            if (response != null) {
+                replies.clear()
+                replies.addAll(response.data.page.activityReplies)
+                adapter.update(
+                    replies.map {
+                        ActivityReplyItem(
+                            it, activityId, requireActivity(), adapter,
+                        ) { i, _ ->
+                            onClick(i)
                         }
-                    )
-                } else {
-                    snackString("Failed to load replies")
-                }
+                    }
+                )
+            } else {
+                snackString("Failed to load replies")
             }
         }
-
     }
 
     private fun onClick(int: Int) {
@@ -99,6 +99,14 @@ class RepliesBottomDialog : BottomSheetDialogFragment() {
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loading(true)
+        lifecycleScope.launch(Dispatchers.IO) {
+            loadData()
+        }
     }
 
     companion object {

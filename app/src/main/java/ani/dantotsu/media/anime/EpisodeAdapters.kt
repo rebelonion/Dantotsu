@@ -23,6 +23,7 @@ import ani.dantotsu.media.MediaNameAdapter
 import ani.dantotsu.media.MediaType
 import ani.dantotsu.setAnimation
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.util.customAlertDialog
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
 import kotlinx.coroutines.delay
@@ -106,8 +107,8 @@ class EpisodeAdapter(
 
                 val thumb =
                     ep.thumb?.let { if (it.url.isNotEmpty()) GlideUrl(it.url) { it.headers } else null }
-                Glide.with(binding.itemEpisodeImage).load(thumb ?: media.cover).override(400, 0)
-                    .into(binding.itemEpisodeImage)
+                Glide.with(binding.itemMediaImage).load(thumb ?: media.cover).override(400, 0)
+                    .into(binding.itemMediaImage)
                 binding.itemEpisodeNumber.text = ep.number
                 binding.itemEpisodeTitle.text = if (ep.number == title) "Episode $title" else title
 
@@ -140,9 +141,9 @@ class EpisodeAdapter(
                 }
 
                 handleProgress(
-                    binding.itemEpisodeProgressCont,
-                    binding.itemEpisodeProgress,
-                    binding.itemEpisodeProgressEmpty,
+                    binding.itemMediaProgressCont,
+                    binding.itemMediaProgress,
+                    binding.itemMediaProgressEmpty,
                     media.id,
                     ep.number
                 )
@@ -154,8 +155,8 @@ class EpisodeAdapter(
 
                 val thumb =
                     ep.thumb?.let { if (it.url.isNotEmpty()) GlideUrl(it.url) { it.headers } else null }
-                Glide.with(binding.itemEpisodeImage).load(thumb ?: media.cover).override(400, 0)
-                    .into(binding.itemEpisodeImage)
+                Glide.with(binding.itemMediaImage).load(thumb ?: media.cover).override(400, 0)
+                    .into(binding.itemMediaImage)
 
                 binding.itemEpisodeNumber.text = ep.number
                 binding.itemEpisodeTitle.text = title
@@ -183,9 +184,9 @@ class EpisodeAdapter(
                     binding.itemEpisodeViewed.visibility = View.GONE
                 }
                 handleProgress(
-                    binding.itemEpisodeProgressCont,
-                    binding.itemEpisodeProgress,
-                    binding.itemEpisodeProgressEmpty,
+                    binding.itemMediaProgressCont,
+                    binding.itemMediaProgress,
+                    binding.itemMediaProgressEmpty,
                     media.id,
                     ep.number
                 )
@@ -208,9 +209,9 @@ class EpisodeAdapter(
                     }
                 }
                 handleProgress(
-                    binding.itemEpisodeProgressCont,
-                    binding.itemEpisodeProgress,
-                    binding.itemEpisodeProgressEmpty,
+                    binding.itemMediaProgressCont,
+                    binding.itemMediaProgress,
+                    binding.itemMediaProgressEmpty,
                     media.id,
                     ep.number
                 )
@@ -318,21 +319,29 @@ class EpisodeAdapter(
                         fragment.onAnimeEpisodeStopDownloadClick(episodeNumber)
                         return@setOnClickListener
                     } else if (downloadedEpisodes.contains(episodeNumber)) {
-                        val builder = AlertDialog.Builder(currContext(), R.style.MyPopup)
-                        builder.setTitle("Delete Episode")
-                        builder.setMessage("Are you sure you want to delete Episode ${episodeNumber}?")
-                        builder.setPositiveButton("Yes") { _, _ ->
-                            fragment.onAnimeEpisodeRemoveDownloadClick(episodeNumber)
-                        }
-                        builder.setNegativeButton("No") { _, _ ->
-                        }
-                        val dialog = builder.show()
-                        dialog.window?.setDimAmount(0.8f)
+                        binding.root.context.customAlertDialog().apply {
+                            setTitle("Delete Episode")
+                            setMessage("Are you sure you want to delete Episode $episodeNumber?")
+                            setPosButton(R.string.yes) {
+                                fragment.onAnimeEpisodeRemoveDownloadClick(episodeNumber)
+                            }
+                            setNegButton(R.string.no)
+                        }.show()
                         return@setOnClickListener
                     } else {
                         fragment.onAnimeEpisodeDownloadClick(episodeNumber)
                     }
                 }
+            }
+            binding.itemDownload.setOnLongClickListener {
+                if (0 <= bindingAdapterPosition && bindingAdapterPosition < arr.size) {
+                    val episodeNumber = arr[bindingAdapterPosition].number
+                    if (downloadedEpisodes.contains(episodeNumber)) {
+                        fragment.fixDownload(episodeNumber)
+                    }
+                }
+
+                true
             }
             binding.itemEpisodeDesc.setOnClickListener {
                 if (binding.itemEpisodeDesc.maxLines == 3)

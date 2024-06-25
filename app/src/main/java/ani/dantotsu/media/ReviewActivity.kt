@@ -3,7 +3,6 @@ package ani.dantotsu.media
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.text.SpannableString
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
@@ -19,10 +18,9 @@ import ani.dantotsu.connections.anilist.api.Query
 import ani.dantotsu.databinding.ActivityFollowBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.navBarHeight
-import ani.dantotsu.profile.FollowerItem
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
-import ani.dantotsu.util.MarkdownCreatorActivity
+import ani.dantotsu.util.ActivityMarkdownCreator
 import com.xwray.groupie.GroupieAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -60,7 +58,7 @@ class ReviewActivity : AppCompatActivity() {
         binding.followFilterButton.setOnClickListener {
             ContextCompat.startActivity(
                 this,
-                Intent(this, MarkdownCreatorActivity::class.java)
+                Intent(this, ActivityMarkdownCreator::class.java)
                     .putExtra("type", "review"),
                 null
             )
@@ -122,19 +120,7 @@ class ReviewActivity : AppCompatActivity() {
     private fun fillList() {
         adapter.clear()
         reviews.forEach {
-            adapter.add(
-                ReviewAdapter(
-                    it,
-                    this::onUserClick
-                )
-            )
-        }
-    }
-
-    private fun onUserClick(userId: Int) {
-        val review = reviews.find { it.id == userId }
-        if (review != null) {
-            startActivity(Intent(this, ReviewViewActivity::class.java).putExtra("review", review))
+            adapter.add(ReviewAdapter(it))
         }
     }
 }

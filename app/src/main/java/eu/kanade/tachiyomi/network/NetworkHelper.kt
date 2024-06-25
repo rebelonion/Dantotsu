@@ -5,8 +5,10 @@ import android.os.Build
 import ani.dantotsu.Mapper
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.util.Logger
 import com.lagradost.nicehttp.Requests
 import eu.kanade.tachiyomi.network.interceptor.CloudflareInterceptor
+import eu.kanade.tachiyomi.network.interceptor.IgnoreGzipInterceptor
 import eu.kanade.tachiyomi.network.interceptor.UncaughtExceptionInterceptor
 import eu.kanade.tachiyomi.network.interceptor.UserAgentInterceptor
 import okhttp3.Cache
@@ -35,12 +37,21 @@ class NetworkHelper(
                 ),
             )
             .addInterceptor(UncaughtExceptionInterceptor())
-            .addInterceptor(BrotliInterceptor)
             .addInterceptor(UserAgentInterceptor(::defaultUserAgentProvider))
+            .addNetworkInterceptor(IgnoreGzipInterceptor())
+            .addNetworkInterceptor(BrotliInterceptor)
 
-        if (PrefManager.getVal(PrefName.VerboseLogging)) {
-            val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.HEADERS
+        class ConsoleLogger : HttpLoggingInterceptor.Logger {
+            override fun log(message: String) {
+                Logger.log("OkHttp: $message")
+            }
+        }
+
+
+        if (PrefManager.getVal<Boolean>(PrefName.VerboseLogging)) {
+            val httpLoggingInterceptor = HttpLoggingInterceptor(ConsoleLogger()).apply {
+                level = HttpLoggingInterceptor.Level.BASIC
+
             }
             builder.addNetworkInterceptor(httpLoggingInterceptor)
         }

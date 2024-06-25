@@ -35,6 +35,7 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.util.customAlertDialog
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
@@ -43,6 +44,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import uy.kohesive.injekt.injectLazy
+import java.util.Locale
 
 class ExtensionsActivity : AppCompatActivity() {
     lateinit var binding: ActivityExtensionsBinding
@@ -173,26 +175,24 @@ class ExtensionsActivity : AppCompatActivity() {
         initActivity(this)
         binding.languageselect.setOnClickListener {
             val languageOptions =
-                LanguageMapper.Companion.Language.entries.map { it.name }.toTypedArray()
-            val builder = AlertDialog.Builder(currContext(), R.style.MyPopup)
+                LanguageMapper.Companion.Language.entries.map { entry ->
+                    entry.name.lowercase().replace("_", " ")
+                        .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
+                }.toTypedArray()
             val listOrder: String = PrefManager.getVal(PrefName.LangSort)
             val index = LanguageMapper.Companion.Language.entries.toTypedArray()
                 .indexOfFirst { it.code == listOrder }
-            builder.setTitle("Language")
-            builder.setSingleChoiceItems(languageOptions, index) { dialog, i ->
-                PrefManager.setVal(
-                    PrefName.LangSort,
-                    LanguageMapper.Companion.Language.entries[i].code
-                )
-                val currentFragment =
-                    supportFragmentManager.findFragmentByTag("f${viewPager.currentItem}")
-                if (currentFragment is SearchQueryHandler) {
-                    currentFragment.notifyDataChanged()
+            customAlertDialog().apply {
+                setTitle("Language")
+                singleChoiceItems(languageOptions, index) { selected ->
+                    PrefManager.setVal(PrefName.LangSort, LanguageMapper.Companion.Language.entries[selected].code)
+                    val currentFragment = supportFragmentManager.findFragmentByTag("f${viewPager.currentItem}")
+                    if (currentFragment is SearchQueryHandler) {
+                        currentFragment.notifyDataChanged()
+                    }
                 }
-                dialog.dismiss()
+                show()
             }
-            val dialog = builder.show()
-            dialog.window?.setDimAmount(0.8f)
         }
         binding.settingsContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             topMargin = statusBarHeight
@@ -243,10 +243,10 @@ class ExtensionsActivity : AppCompatActivity() {
                 )
                 view.repositoryItem.text = item.removePrefix("https://raw.githubusercontent.com")
                 view.repositoryItem.setOnClickListener {
-                    AlertDialog.Builder(this@ExtensionsActivity, R.style.MyPopup)
-                        .setTitle(R.string.rem_repository)
-                        .setMessage(item)
-                        .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                    customAlertDialog().apply {
+                        setTitle(R.string.rem_repository)
+                        setMessage(item)
+                        setPosButton(R.string.ok) {
                             val repos = PrefManager.getVal<Set<String>>(prefName).minus(item)
                             PrefManager.setVal(prefName, repos)
                             repoInventory.removeView(view.root)
@@ -263,13 +263,10 @@ class ExtensionsActivity : AppCompatActivity() {
                                     else -> {}
                                 }
                             }
-                            dialog.dismiss()
                         }
-                        .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
-                            dialog.dismiss()
-                        }
-                        .create()
-                        .show()
+                        setNegButton(R.string.cancel)
+                        show()
+                    }
                 }
                 view.repositoryItem.setOnLongClickListener {
                     it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
@@ -320,20 +317,18 @@ class ExtensionsActivity : AppCompatActivity() {
                 dialogView.repoInventory.apply {
                     getSavedRepositories(this, type)
                 }
-                val alertDialog = AlertDialog.Builder(this@ExtensionsActivity, R.style.MyPopup)
-                    .setTitle(R.string.edit_repositories)
-                    .setView(dialogView.root)
-                    .setPositiveButton(getString(R.string.add)) { _, _ ->
-                        if (!dialogView.repositoryTextBox.text.isNullOrBlank())
-                            processUserInput(dialogView.repositoryTextBox.text.toString(), type)
-                    }
-                    .setNegativeButton(getString(R.string.close)) { dialog, _ ->
-                        dialog.dismiss()
-                    }
-                    .create()
                 processEditorAction(dialogView.repositoryTextBox, type)
-                alertDialog.show()
-                alertDialog.window?.setDimAmount(0.8f)
+                customAlertDialog().apply {
+                    setTitle(R.string.edit_repositories)
+                    setCustomView(dialogView.root)
+                    setPosButton(R.string.add) {
+                        if (!dialogView.repositoryTextBox.text.isNullOrBlank()) {
+                            processUserInput(dialogView.repositoryTextBox.text.toString(), type)
+                        }
+                    }
+                    setNegButton(R.string.close)
+                    show()
+                }
             }
         }
     }

@@ -55,13 +55,11 @@ class OfflineAnimeParser : AnimeParser() {
                     episodes.add(episode)
                 }
             }
-            //episodes.sortBy { MediaNameAdapter.findEpisodeNumber(it.number) }
-            episodes.addAll(loadEpisodesCompat(animeLink, extra, sAnime))
-            //filter those with the same name
-            return episodes.distinctBy { it.number }
-                .sortedBy { MediaNameAdapter.findEpisodeNumber(it.number) }
         }
-        return emptyList()
+        episodes.addAll(loadEpisodesCompat(animeLink, extra, sAnime))
+        //filter those with the same name
+        return episodes.distinctBy { it.number }
+            .sortedBy { MediaNameAdapter.findEpisodeNumber(it.number) }
     }
 
     override suspend fun loadVideoServers(

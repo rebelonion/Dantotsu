@@ -25,13 +25,15 @@ import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.R
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.databinding.FragmentExtensionsBinding
-import ani.dantotsu.others.LanguageMapper
+import ani.dantotsu.others.LanguageMapper.Companion.getLanguageName
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.settings.extensionprefs.AnimeSourcePreferencesFragment
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.util.Logger
+import ani.dantotsu.util.customAlertDialog
+
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputLayout
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
@@ -72,16 +74,15 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
             if (allSettings.isNotEmpty()) {
                 var selectedSetting = allSettings[0]
                 if (allSettings.size > 1) {
-                    val names = allSettings.map { LanguageMapper.getLanguageName(it.lang) }
+                    val names = allSettings.map { getLanguageName(it.lang) }
                         .toTypedArray()
                     var selectedIndex = 0
-                    val dialog = AlertDialog.Builder(requireContext(), R.style.MyPopup)
-                        .setTitle("Select a Source")
-                        .setSingleChoiceItems(names, selectedIndex) { dialog, which ->
+                    requireContext().customAlertDialog().apply {
+                        setTitle("Select a Source")
+                        singleChoiceItems(names, selectedIndex) { which ->
                             itemSelected = true
                             selectedIndex = which
                             selectedSetting = allSettings[selectedIndex]
-                            dialog.dismiss()
 
                             val fragment =
                                 AnimeSourcePreferencesFragment().getInstance(selectedSetting.id) {
@@ -93,13 +94,13 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
                                 .addToBackStack(null)
                                 .commit()
                         }
-                        .setOnDismissListener {
+                        onDismiss {
                             if (!itemSelected) {
                                 changeUIVisibility(true)
                             }
                         }
-                        .show()
-                    dialog.window?.setDimAmount(0.8f)
+                        show()
+                    }
                 } else {
                     // If there's only one setting, proceed with the fragment transaction
                     val fragment =
@@ -295,7 +296,7 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val extension = getItem(position)
             val nsfw = if (extension.isNsfw) "(18+)" else ""
-            val lang = LanguageMapper.getLanguageName(extension.lang)
+            val lang = getLanguageName(extension.lang)
             holder.extensionNameTextView.text = extension.name
             val versionText = "$lang ${extension.versionName} $nsfw"
             holder.extensionVersionTextView.text = versionText

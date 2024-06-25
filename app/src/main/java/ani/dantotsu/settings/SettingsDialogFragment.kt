@@ -1,6 +1,5 @@
 package ani.dantotsu.settings
 
-import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -16,7 +15,6 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.databinding.BottomSheetSettingsBinding
 import ani.dantotsu.download.anime.OfflineAnimeFragment
 import ani.dantotsu.download.manga.OfflineMangaFragment
-import ani.dantotsu.getAppString
 import ani.dantotsu.getThemeColor
 import ani.dantotsu.home.AnimeFragment
 import ani.dantotsu.home.HomeFragment
@@ -28,7 +26,7 @@ import ani.dantotsu.loadImage
 import ani.dantotsu.offline.OfflineFragment
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.profile.activity.FeedActivity
-import ani.dantotsu.profile.activity.NotificationActivity
+import ani.dantotsu.profile.notification.NotificationActivity
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName

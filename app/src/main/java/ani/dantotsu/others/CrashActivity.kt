@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.view.updateLayoutParams
@@ -24,7 +25,10 @@ class CrashActivity : AppCompatActivity() {
         ThemeManager(this).applyTheme()
         initActivity(this)
         binding = ActivityCrashBinding.inflate(layoutInflater)
-
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_SECURE,
+            WindowManager.LayoutParams.FLAG_SECURE
+        )
         setContentView(binding.root)
         binding.root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             topMargin = statusBarHeight

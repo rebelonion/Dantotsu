@@ -424,7 +424,8 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
     }
 
     override fun onResume() {
-        navBar.selectTabAt(selected)
+        if (::navBar.isInitialized)
+            navBar.selectTabAt(selected)
         super.onResume()
     }
 

@@ -71,20 +71,17 @@ class StoragePermissions {
                 complete(true)
                 return
             }
-            val builder = AlertDialog.Builder(this, R.style.MyPopup)
-            builder.setTitle(getString(R.string.dir_access))
-            builder.setMessage(getString(R.string.dir_access_msg))
-            builder.setPositiveButton(getString(R.string.ok)) { dialog, _ ->
-                launcher.registerForCallback(complete)
-                launcher.launch()
-                dialog.dismiss()
-            }
-            builder.setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
-                dialog.dismiss()
-                complete(false)
-            }
-            val dialog = builder.show()
-            dialog.window?.setDimAmount(0.8f)
+            customAlertDialog().apply {
+                setTitle(getString(R.string.dir_access))
+                setMessage(getString(R.string.dir_access_msg))
+                setPosButton(getString(R.string.ok)) {
+                    launcher.registerForCallback(complete)
+                    launcher.launch()
+                }
+                setNegButton(getString(R.string.cancel)) {
+                    complete(false)
+                }
+            }.show()
         }
 
         private fun pathToUri(path: String): Uri {

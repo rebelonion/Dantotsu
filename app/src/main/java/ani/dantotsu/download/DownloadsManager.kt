@@ -13,7 +13,6 @@ import ani.dantotsu.snackString
 import ani.dantotsu.util.Logger
 import com.anggrayudi.storage.callback.FolderCallback
 import com.anggrayudi.storage.file.deleteRecursively
-import com.anggrayudi.storage.file.findFolder
 import com.anggrayudi.storage.file.moveFolderTo
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -60,7 +59,7 @@ class DownloadsManager(private val context: Context) {
         toast: Boolean = true,
         onFinished: () -> Unit
     ) {
-        removeDownloadCompat(context, downloadedType)
+        removeDownloadCompat(context, downloadedType, toast)
         downloadsList.remove(downloadedType)
         CoroutineScope(Dispatchers.IO).launch {
             removeDirectory(downloadedType, toast)
@@ -279,6 +278,7 @@ class DownloadsManager(private val context: Context) {
          * @param type the type of media
          * @return the base directory
          */
+        @Synchronized
         private fun getBaseDirectory(context: Context, type: MediaType): DocumentFile? {
             val baseDirectory = Uri.parse(PrefManager.getVal<String>(PrefName.DownloadsDir))
             if (baseDirectory == Uri.EMPTY) return null
@@ -307,6 +307,7 @@ class DownloadsManager(private val context: Context) {
          * @param chapter the chapter of the media
          * @return the subdirectory
          */
+        @Synchronized
         fun getSubDirectory(
             context: Context,
             type: MediaType,
@@ -344,22 +345,33 @@ class DownloadsManager(private val context: Context) {
             }
         }
 
+        @Synchronized
         private fun getBaseDirectory(context: Context): DocumentFile? {
             val baseDirectory = Uri.parse(PrefManager.getVal<String>(PrefName.DownloadsDir))
             if (baseDirectory == Uri.EMPTY) return null
-            return DocumentFile.fromTreeUri(context, baseDirectory)
+            val base = DocumentFile.fromTreeUri(context, baseDirectory) ?: return null
+            return base.findOrCreateFolder(BASE_LOCATION, false)
         }
+
+        private val lock = Any()
 
         private fun DocumentFile.findOrCreateFolder(
             name: String, overwrite: Boolean
         ): DocumentFile? {
-            return if (overwrite) {
-                findFolder(name.findValidName())?.delete()
-                createDirectory(name.findValidName())
-            } else {
-                findFolder(name.findValidName()) ?: createDirectory(name.findValidName())
+            val validName = name.findValidName()
+            synchronized(lock) {
+                return if (overwrite) {
+                    findFolder(validName)?.delete()
+                    createDirectory(validName)
+                } else {
+                    val folder = findFolder(validName)
+                    folder ?: createDirectory(validName)
+                }
             }
         }
+
+        private fun DocumentFile.findFolder(name: String): DocumentFile? =
+            listFiles().find { it.name == name && it.isDirectory }
 
         private const val RATIO_THRESHOLD = 95
         fun Media.compareName(name: String): Boolean {
@@ -379,7 +391,7 @@ class DownloadsManager(private val context: Context) {
 
 private const val RESERVED_CHARS = "|\\?*<\":>+[]/'"
 fun String?.findValidName(): String {
-    return this?.filterNot { RESERVED_CHARS.contains(it) } ?: ""
+    return this?.replace("/", "_")?.filterNot { RESERVED_CHARS.contains(it) } ?: ""
 }
 
 data class DownloadedType(

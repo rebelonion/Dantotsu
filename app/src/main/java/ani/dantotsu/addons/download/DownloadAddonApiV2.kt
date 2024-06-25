@@ -9,6 +9,8 @@ interface DownloadAddonApiV2 {
 
     fun setDownloadPath(context: Context, uri: Uri): String
 
+    fun getReadPath(context: Context, uri: Uri): String
+
     suspend fun executeFFProbe(
         videoUrl: String,
         headers: Map<String, String> = emptyMap(),
@@ -24,9 +26,15 @@ interface DownloadAddonApiV2 {
         statCallback: (Double) -> Unit
     ): Long
 
+    suspend fun customFFMpeg(command: String, videoUrls: List<String>, logCallback: (String) -> Unit): Long
+
+    suspend fun customFFProbe(command: String, videoUrls: List<String>, logCallback: (String) -> Unit)
+
     fun getState(sessionId: Long): String
 
     fun getStackTrace(sessionId: Long): String?
 
     fun hadError(sessionId: Long): Boolean
+
+    fun getFileExtension(): Pair<String, String> = Pair("mkv", "video/x-matroska")
 }

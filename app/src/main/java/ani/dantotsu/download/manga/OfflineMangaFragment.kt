@@ -46,6 +46,7 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.util.Logger
+import ani.dantotsu.util.customAlertDialog
 import com.anggrayudi.storage.file.openInputStream
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.imageview.ShapeableImageView
@@ -171,7 +172,11 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             val item = adapter.getItem(position) as OfflineMangaModel
             val media =
                 downloadManager.mangaDownloadedTypes.firstOrNull { it.titleName.compareName(item.title) }
-                    ?: downloadManager.novelDownloadedTypes.firstOrNull { it.titleName.compareName(item.title) }
+                    ?: downloadManager.novelDownloadedTypes.firstOrNull {
+                        it.titleName.compareName(
+                            item.title
+                        )
+                    }
             media?.let {
                 lifecycleScope.launch {
                     ContextCompat.startActivity(
@@ -197,19 +202,15 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
                     MediaType.NOVEL
                 }
             // Alert dialog to confirm deletion
-            val builder =
-                androidx.appcompat.app.AlertDialog.Builder(requireContext(), R.style.MyPopup)
-            builder.setTitle("Delete ${item.title}?")
-            builder.setMessage("Are you sure you want to delete ${item.title}?")
-            builder.setPositiveButton("Yes") { _, _ ->
-                downloadManager.removeMedia(item.title, type)
-                getDownloads()
-            }
-            builder.setNegativeButton("No") { _, _ ->
-                // Do nothing
-            }
-            val dialog = builder.show()
-            dialog.window?.setDimAmount(0.8f)
+            requireContext().customAlertDialog().apply {
+                setTitle("Delete ${item.title}?")
+                setMessage("Are you sure you want to delete ${item.title}?")
+                setPosButton(R.string.yes) {
+                    downloadManager.removeMedia(item.title, type)
+                    getDownloads()
+                }
+                setNegButton(R.string.no)
+            }.show()
             true
         }
     }
@@ -279,10 +280,12 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
         downloads = listOf()
         downloadsJob = Job()
         CoroutineScope(Dispatchers.IO + downloadsJob).launch {
-            val mangaTitles = downloadManager.mangaDownloadedTypes.map { it.titleName.findValidName() }.distinct()
+            val mangaTitles =
+                downloadManager.mangaDownloadedTypes.map { it.titleName.findValidName() }.distinct()
             val newMangaDownloads = mutableListOf<OfflineMangaModel>()
             for (title in mangaTitles) {
-                val tDownloads = downloadManager.mangaDownloadedTypes.filter { it.titleName.findValidName() == title }
+                val tDownloads =
+                    downloadManager.mangaDownloadedTypes.filter { it.titleName.findValidName() == title }
                 val download = tDownloads.firstOrNull() ?: continue
                 val offlineMangaModel = loadOfflineMangaModel(download)
                 newMangaDownloads += offlineMangaModel
@@ -291,7 +294,8 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             val novelTitles = downloadManager.novelDownloadedTypes.map { it.titleName }.distinct()
             val newNovelDownloads = mutableListOf<OfflineMangaModel>()
             for (title in novelTitles) {
-                val tDownloads = downloadManager.novelDownloadedTypes.filter { it.titleName.findValidName() == title }
+                val tDownloads =
+                    downloadManager.novelDownloadedTypes.filter { it.titleName.findValidName() == title }
                 val download = tDownloads.firstOrNull() ?: continue
                 val offlineMangaModel = loadOfflineMangaModel(download)
                 newNovelDownloads += offlineMangaModel
@@ -320,11 +324,14 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             )
             val gson = GsonBuilder()
                 .registerTypeAdapter(SChapter::class.java, InstanceCreator<SChapter> {
-                    SChapterImpl() // Provide an instance of SChapterImpl
+                    SChapterImpl()
                 })
                 .create()
             val media = directory?.findFile("media.json")
-                ?: return DownloadCompat.loadMediaCompat(downloadedType)
+            if (media == null) {
+                Logger.log("No media.json found at ${directory?.uri?.path}")
+                return DownloadCompat.loadMediaCompat(downloadedType)
+            }
             val mediaJson =
                 media.openInputStream(context ?: currContext()!!)?.bufferedReader().use {
                     it?.readText()
@@ -340,7 +347,6 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
 
     private suspend fun loadOfflineMangaModel(downloadedType: DownloadedType): OfflineMangaModel {
         val type = downloadedType.type.asText()
-        //load media.json and convert to media class with gson
         try {
             val directory = getSubDirectory(
                 context ?: currContext()!!, downloadedType.type,
@@ -378,6 +384,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
                 bannerUri
             )
         } catch (e: Exception) {
+            Logger.log(e)
             return try {
                 loadOfflineMangaModelCompat(downloadedType)
             } catch (e: Exception) {
@@ -385,7 +392,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
                 Logger.log(e)
                 Injekt.get<CrashlyticsInterface>().logException(e)
                 return OfflineMangaModel(
-                    "unknown",
+                    downloadedType.titleName,
                     "0",
                     "??",
                     "??",

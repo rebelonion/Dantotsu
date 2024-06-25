@@ -14,12 +14,14 @@ import ani.dantotsu.copyToClipboard
 import ani.dantotsu.databinding.ItemCommentsBinding
 import ani.dantotsu.getAppString
 import ani.dantotsu.loadImage
+import ani.dantotsu.openImage
 import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.setAnimation
 import ani.dantotsu.snackString
 import ani.dantotsu.util.ColorEditor.Companion.adjustColorForContrast
 import ani.dantotsu.util.ColorEditor.Companion.getContrastRatio
+import ani.dantotsu.util.customAlertDialog
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.viewbinding.BindableItem
@@ -251,13 +253,10 @@ class CommentItem(
                 }
             }
             commentTotalVotes.text = (comment.upvotes - comment.downvotes).toString()
-            commentUserAvatar.setOnLongClickListener {
-                ImageViewDialog.newInstance(
-                    commentsFragment.activity,
-                    commentsFragment.activity.getString(R.string.avatar, comment.username),
-                    comment.profilePictureUrl
-                )
-            }
+            commentUserAvatar.openImage(
+                commentsFragment.activity.getString(R.string.avatar, comment.username),
+                comment.profilePictureUrl ?: ""
+            )
             comment.profilePictureUrl?.let { commentUserAvatar.loadImage(it) }
             commentUserName.text = comment.username
             val userColor = "[${levelColor.second}]"
@@ -387,19 +386,14 @@ class CommentItem(
      * @param callback the callback to call when the user clicks yes
      */
     private fun dialogBuilder(title: String, message: String, callback: () -> Unit) {
-        val alertDialog =
-            android.app.AlertDialog.Builder(commentsFragment.activity, R.style.MyPopup)
-                .setTitle(title)
-                .setMessage(message)
-                .setPositiveButton("Yes") { dialog, _ ->
-                    callback()
-                    dialog.dismiss()
-                }
-                .setNegativeButton("No") { dialog, _ ->
-                    dialog.dismiss()
-                }
-        val dialog = alertDialog.show()
-        dialog?.window?.setDimAmount(0.8f)
+        commentsFragment.activity.customAlertDialog().apply {
+            setTitle(title)
+            setMessage(message)
+            setPosButton("Yes") {
+                callback()
+            }
+            setNegButton("No") {}
+        }.show()
     }
 
     private val usernameColors: Array<String> = arrayOf(

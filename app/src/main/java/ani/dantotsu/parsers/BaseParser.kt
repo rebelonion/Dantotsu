@@ -11,6 +11,7 @@ import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.source.model.SManga
 import me.xdrop.fuzzywuzzy.FuzzySearch
+import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.Serializable
 import java.net.URLDecoder
@@ -147,10 +148,11 @@ abstract class BaseParser {
      * @return Triple<Int, Int?, String> : First Int is the status code, Second Int is the response time in milliseconds, Third String is the response message.
      */
     fun ping(): Triple<Int, Int?, String> {
-        val client = okHttpClient
+        val client = OkHttpClient()
         var statusCode = 0
         var responseTime: Int? = null
         var responseMessage = ""
+        println("Pinging $name at $hostUrl")
         try {
             val request = Request.Builder()
                 .url(hostUrl)
@@ -158,7 +160,7 @@ abstract class BaseParser {
             responseTime = measureTimeMillis {
                 client.newCall(request).execute().use { response ->
                     statusCode = response.code
-                    responseMessage = response.message
+                    responseMessage = response.message.ifEmpty { "None" }
                 }
             }.toInt()
         } catch (e: Exception) {

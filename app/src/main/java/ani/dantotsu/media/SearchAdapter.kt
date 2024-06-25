@@ -183,6 +183,12 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Stri
         binding.searchByImage.setOnClickListener {
             activity.startActivity(Intent(activity, ImageSearchActivity::class.java))
         }
+        binding.clearHistory.setOnClickListener {
+            it.startAnimation(fadeOutAnimation())
+            it.visibility = View.GONE
+            searchHistoryAdapter.clearHistory()
+        }
+        updateClearHistoryVisibility()
         fun searchTitle() {
             activity.result.apply {
                 search =
@@ -300,9 +306,15 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Stri
             }
 
             binding.searchResultLayout.visibility = View.VISIBLE
+            binding.clearHistory.visibility = View.GONE
             binding.searchHistoryList.visibility = View.GONE
             binding.searchByImage.visibility = View.GONE
         }
+    }
+
+    private fun updateClearHistoryVisibility() {
+        binding.clearHistory.visibility =
+            if (searchHistoryAdapter.itemCount > 0) View.VISIBLE else View.GONE
     }
 
     private fun fadeInAnimation(): Animation {
@@ -375,4 +387,3 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Stri
         override fun getItemCount(): Int = chips.size
     }
 }
-

@@ -1,12 +1,24 @@
 package ani.dantotsu.media
 
 
+import android.app.Activity
+import android.content.Intent
 import android.view.View
+import androidx.activity.ComponentActivity
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.content.ContextCompat
+import androidx.core.util.Pair
+import androidx.core.view.ViewCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.Query
 import ani.dantotsu.databinding.ItemReviewsBinding
 import ani.dantotsu.loadImage
+import ani.dantotsu.openImage
+import ani.dantotsu.others.ImageViewDialog
+import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.profile.activity.ActivityItemBuilder
 import ani.dantotsu.toast
 import com.xwray.groupie.viewbinding.BindableItem
@@ -18,19 +30,49 @@ import kotlinx.coroutines.withContext
 
 class ReviewAdapter(
     private var review: Query.Review,
-    val clickCallback: (Int) -> Unit
 ) : BindableItem<ItemReviewsBinding>() {
     private lateinit var binding: ItemReviewsBinding
 
     override fun bind(viewBinding: ItemReviewsBinding, position: Int) {
         binding = viewBinding
+        val context = binding.root.context
         binding.reviewUserName.text = review.user?.name
         binding.reviewUserAvatar.loadImage(review.user?.avatar?.medium)
         binding.reviewText.text = review.summary
         binding.reviewPostTime.text = ActivityItemBuilder.getDateTime(review.createdAt)
         val text = "[${review.score/ 10.0f}]"
         binding.reviewTag.text = text
-        binding.root.setOnClickListener { clickCallback(review.id) }
+        binding.root.setOnClickListener {
+            ContextCompat.startActivity(
+                context,
+                Intent(context, ReviewViewActivity::class.java)
+                    .putExtra("review", review),
+                null
+            )
+        }
+        binding.reviewUserName.setOnClickListener {
+            ContextCompat.startActivity(
+                context,
+                Intent(context, ProfileActivity::class.java)
+                    .putExtra("userId", review.user?.id),
+                null
+            )
+        }
+        binding.reviewUserAvatar.setOnClickListener {
+            ContextCompat.startActivity(
+                context,
+                Intent(context, ProfileActivity::class.java)
+                    .putExtra("userId", review.user?.id),
+                null
+            )
+        }
+        binding.reviewUserAvatar.openImage(
+            context.getString(
+                R.string.avatar,
+                review.user?.name
+            ),
+            review.user?.avatar?.medium ?: ""
+        )
         userVote(review.userRating)
         enableVote()
         binding.reviewTotalVotes.text = review.rating.toString()

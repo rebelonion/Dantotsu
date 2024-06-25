@@ -5,7 +5,6 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
-import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
 import ani.dantotsu.blurImage
 import ani.dantotsu.buildMarkwon
@@ -18,7 +17,7 @@ import ani.dantotsu.profile.UsersDialogFragment
 import ani.dantotsu.setAnimation
 import ani.dantotsu.snackString
 import ani.dantotsu.util.AniMarkdown.Companion.getBasicAniHTML
-import ani.dantotsu.util.MarkdownCreatorActivity
+import ani.dantotsu.util.ActivityMarkdownCreator
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.viewbinding.BindableItem
 import kotlinx.coroutines.CoroutineScope
@@ -29,23 +28,16 @@ import kotlinx.coroutines.withContext
 
 class ActivityItem(
     private val activity: Activity,
+    private val parentAdapter: GroupieAdapter,
     val clickCallback: (Int, type: String) -> Unit,
-    private val fragActivity: FragmentActivity
 ) : BindableItem<ItemActivityBinding>() {
     private lateinit var binding: ItemActivityBinding
-    private lateinit var repliesAdapter: GroupieAdapter
 
     override fun bind(viewBinding: ItemActivityBinding, position: Int) {
         binding = viewBinding
+        val context = binding.root.context
+        val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
         setAnimation(binding.root.context, binding.root)
-
-        repliesAdapter = GroupieAdapter()
-        binding.activityReplies.adapter = repliesAdapter
-        binding.activityReplies.layoutManager = LinearLayoutManager(
-            binding.root.context,
-            LinearLayoutManager.VERTICAL,
-            false
-        )
         binding.activityUserName.text = activity.user?.name ?: activity.messenger?.name
         binding.activityUserAvatar.loadImage(
             activity.user?.avatar?.medium ?: activity.messenger?.avatar?.medium
@@ -54,66 +46,29 @@ class ActivityItem(
         val likeColor = ContextCompat.getColor(binding.root.context, R.color.yt_red)
         val notLikeColor = ContextCompat.getColor(binding.root.context, R.color.bg_opp)
         binding.activityLike.setColorFilter(if (activity.isLiked == true) likeColor else notLikeColor)
-        binding.commentTotalReplies.isVisible = activity.replyCount > 0
-        binding.dot.isVisible = activity.replyCount > 0
-        binding.commentTotalReplies.setOnClickListener {
-            when (binding.activityReplies.visibility) {
-                View.GONE -> {
-                    val replyItems = activity.replies?.map {
-                        ActivityReplyItem(it,fragActivity) { id, type ->
-                            clickCallback(
-                                id,
-                                type
-                            )
-                        }
-                    } ?: emptyList()
-                    repliesAdapter.addAll(replyItems)
-                    binding.activityReplies.visibility = View.VISIBLE
-                    binding.commentTotalReplies.setText(R.string.hide_replies)
-                }
-
-                else -> {
-                    repliesAdapter.clear()
-                    binding.activityReplies.visibility = View.GONE
-                    binding.commentTotalReplies.setText(R.string.view_replies)
-
-                }
-            }
-        }
-        if (activity.isLocked != true) {
-            binding.commentReply.setOnClickListener {
-                val context = binding.root.context
-                ContextCompat.startActivity(
-                    context,
-                    Intent(context, MarkdownCreatorActivity::class.java)
-                        .putExtra("type", "replyActivity")
-                        .putExtra("parentId", activity.id),
-                    null
-                )
-            }
-        } else {
-            binding.commentReply.visibility = View.GONE
-            binding.dot.visibility = View.GONE
-        }
         val userList = arrayListOf<User>()
         activity.likes?.forEach { i ->
             userList.add(User(i.id, i.name.toString(), i.avatar?.medium, i.bannerImage))
         }
+        binding.activityRepliesContainer.setOnClickListener {
+            RepliesBottomDialog.newInstance(activity.id)
+                .show((context as  FragmentActivity).supportFragmentManager, "replies")
+        }
+        binding.replyCount.text = activity.replyCount.toString()
+        binding.activityReplies.setColorFilter(ContextCompat.getColor(binding.root.context, R.color.bg_opp))
         binding.activityLikeContainer.setOnLongClickListener {
             UsersDialogFragment().apply {
                 userList(userList)
-                show(fragActivity.supportFragmentManager, "dialog")
+                show((context as  FragmentActivity).supportFragmentManager, "dialog")
             }
             true
         }
         binding.activityLikeCount.text = (activity.likeCount ?: 0).toString()
         binding.activityLikeContainer.setOnClickListener {
-            val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
             scope.launch {
-                val res = Anilist.query.toggleLike(activity.id, "ACTIVITY")
+                val res = Anilist.mutation.toggleLike(activity.id, "ACTIVITY")
                 withContext(Dispatchers.Main) {
                     if (res != null) {
-
                         if (activity.isLiked == true) {
                             activity.likeCount = activity.likeCount?.minus(1)
                         } else {
@@ -129,13 +84,27 @@ class ActivityItem(
                 }
             }
         }
-        val context = binding.root.context
+        binding.activityDelete.isVisible = activity.userId == Anilist.userid || activity.messenger?.id == Anilist.userid
+        binding.activityDelete.setOnClickListener {
+            scope.launch {
+                val res = Anilist.mutation.deleteActivity(activity.id)
+                withContext(Dispatchers.Main) {
+                    if (res) {
+                        snackString("Deleted activity")
+                        parentAdapter.remove(this@ActivityItem)
+                    } else {
+                        snackString("Failed to delete activity")
+                    }
+                }
+            }
+        }
         when (activity.typename) {
             "ListActivity" -> {
                 val cover = activity.media?.coverImage?.large
                 val banner = activity.media?.bannerImage
                 binding.activityContent.visibility = View.GONE
                 binding.activityBannerContainer.visibility = View.VISIBLE
+                binding.activityPrivate.visibility = View.GONE
                 binding.activityMediaName.text = activity.media?.title?.userPreferred
                 val activityText = "${activity.user!!.name} ${activity.status} ${
                     activity.progress
@@ -156,11 +125,13 @@ class ActivityItem(
                 binding.activityMediaName.setOnClickListener {
                     clickCallback(activity.media?.id ?: -1, "MEDIA")
                 }
+                binding.activityEdit.isVisible = false
             }
 
             "TextActivity" -> {
                 binding.activityBannerContainer.visibility = View.GONE
                 binding.activityContent.visibility = View.VISIBLE
+                binding.activityPrivate.visibility = View.GONE
                 if (!(context as android.app.Activity).isDestroyed) {
                     val markwon = buildMarkwon(context, false)
                     markwon.setMarkdown(
@@ -174,11 +145,23 @@ class ActivityItem(
                 binding.activityUserName.setOnClickListener {
                     clickCallback(activity.userId ?: -1, "USER")
                 }
+                binding.activityEdit.isVisible = activity.userId == Anilist.userid
+                binding.activityEdit.setOnClickListener {
+                    ContextCompat.startActivity(
+                        context,
+                        Intent(context, ActivityMarkdownCreator::class.java)
+                            .putExtra("type", "activity")
+                            .putExtra("other", activity.text)
+                            .putExtra("edit", activity.id),
+                        null
+                    )
+                }
             }
 
             "MessageActivity" -> {
                 binding.activityBannerContainer.visibility = View.GONE
                 binding.activityContent.visibility = View.VISIBLE
+                binding.activityPrivate.visibility = if (activity.isPrivate == true) View.VISIBLE else View.GONE
                 if (!(context as android.app.Activity).isDestroyed) {
                     val markwon = buildMarkwon(context, false)
                     markwon.setMarkdown(
@@ -191,6 +174,19 @@ class ActivityItem(
                 }
                 binding.activityUserName.setOnClickListener {
                     clickCallback(activity.messengerId ?: -1, "USER")
+                }
+                binding.activityEdit.isVisible = false
+                binding.activityEdit.isVisible = activity.messenger?.id == Anilist.userid
+                binding.activityEdit.setOnClickListener {
+                    ContextCompat.startActivity(
+                        context,
+                        Intent(context, ActivityMarkdownCreator::class.java)
+                            .putExtra("type", "message")
+                            .putExtra("other", activity.message)
+                            .putExtra("edit", activity.id)
+                            .putExtra("userId", activity.recipientId),
+                        null
+                    )
                 }
             }
         }

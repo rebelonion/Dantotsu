@@ -16,6 +16,8 @@ import ani.dantotsu.navBarHeight
 import ani.dantotsu.profile.User
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.statusBarHeight
+import ani.dantotsu.toast
+import ani.dantotsu.util.Logger
 
 class StatusActivity : AppCompatActivity(), StoriesCallback {
     private lateinit var activity: ArrayList<User>
@@ -44,10 +46,14 @@ class StatusActivity : AppCompatActivity(), StoriesCallback {
 
         val key = "activities"
         val watchedActivity = PrefManager.getCustomVal<Set<Int>>(key, setOf())
-        val startFrom = findFirstNonMatch(watchedActivity, activity[position].activity )
-        val startIndex = if ( startFrom > 0) startFrom else 0
-        binding.stories.setStoriesList(activity[position].activity, this, startIndex + 1)
-
+        if (activity.getOrNull(position) != null) {
+            val startFrom = findFirstNonMatch(watchedActivity, activity[position].activity )
+            val startIndex = if ( startFrom > 0) startFrom else 0
+            binding.stories.setStoriesList(activity[position].activity, this, startIndex + 1)
+        } else {
+            Logger.log("index out of bounds for position $position of size ${activity.size}")
+            finish()
+        }
 
     }
     private fun findFirstNonMatch(watchedActivity: Set<Int>, activity: List<Activity>): Int {
@@ -58,13 +64,16 @@ class StatusActivity : AppCompatActivity(), StoriesCallback {
         }
         return -1
     }
+
     override fun onPause() {
         super.onPause()
         binding.stories.pause()
     }
+
     override fun onResume() {
         super.onResume()
-        binding.stories.resume()
+        if (hasWindowFocus())
+            binding.stories.resume()
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -92,7 +101,7 @@ class StatusActivity : AppCompatActivity(), StoriesCallback {
 
     override fun onStoriesStart() {
         position -= 1
-        if (position >= 0) {
+        if (position >= 0 && activity[position].activity.isNotEmpty()) {
             val key = "activities"
             val watchedActivity = PrefManager.getCustomVal<Set<Int>>(key, setOf())
             val startFrom = findFirstNonMatch(watchedActivity, activity[position].activity )

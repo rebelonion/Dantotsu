@@ -146,8 +146,13 @@ class SubscriptionHelper {
             val isAdult: Boolean,
             val id: Int,
             val name: String,
-            val image: String?
-        ) : java.io.Serializable
+            val image: String?,
+            val banner: String? = null
+        ) : java.io.Serializable {
+            companion object {
+                private const val serialVersionUID = 1L
+            }
+        }
 
         private const val SUBSCRIPTIONS = "subscriptions"
 
@@ -188,7 +193,8 @@ class SubscriptionHelper {
                         media.isAdult,
                         media.id,
                         media.userPreferredName,
-                        media.cover
+                        media.cover,
+                        media.banner
                     )
                     data[media.id] = new
                 }

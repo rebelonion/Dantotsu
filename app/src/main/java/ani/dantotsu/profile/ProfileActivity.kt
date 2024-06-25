@@ -28,16 +28,16 @@ import ani.dantotsu.initActivity
 import ani.dantotsu.loadImage
 import ani.dantotsu.media.user.ListActivity
 import ani.dantotsu.navBarHeight
+import ani.dantotsu.openImage
 import ani.dantotsu.openLinkInBrowser
-import ani.dantotsu.others.ImageViewDialog
-import ani.dantotsu.profile.activity.FeedFragment
+import ani.dantotsu.profile.activity.ActivityFragment
+import ani.dantotsu.profile.activity.ActivityFragment.Companion.ActivityType
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.toast
-import ani.dantotsu.util.MarkdownCreatorActivity
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -135,7 +135,7 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
 
                     followButton.setOnClickListener {
                         lifecycleScope.launch(Dispatchers.IO) {
-                            val res = Anilist.query.toggleFollow(user.id)
+                            val res = Anilist.mutation.toggleFollow(user.id)
                             if (res?.data?.toggleFollow != null) {
                                 withContext(Dispatchers.Main) {
                                     snackString(R.string.success)
@@ -155,15 +155,8 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                                     openLinkInBrowser("https://anilist.co/user/${user.name}")
                                     true
                                 }
-                                R.id.action_create_new_activity -> {
-                                    ContextCompat.startActivity(
-                                        context,
-                                        Intent(context, MarkdownCreatorActivity::class.java)
-                                            .putExtra("type", "activity"),
-                                        null
-                                    )
-                                    true
-                                }
+
+
                                 else -> false
                             }
                         }
@@ -171,15 +164,13 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                     }
 
                     profileUserAvatar.loadImage(user.avatar?.medium)
-                    profileUserAvatar.setOnLongClickListener {
-                        ImageViewDialog.newInstance(
-                            context,
-                            getString(R.string.avatar, user.name),
-                            user.avatar?.medium
-                        )
-                    }
+                    profileUserAvatar.openImage(
+                        context.getString(R.string.avatar, user.name),
+                        user.avatar?.medium ?: ""
+                    )
                     profileUserName.text = user.name
-                    val bannerAnimations: ImageView= if (PrefManager.getVal(PrefName.BannerAnimations)) profileBannerImage else profileBannerImageNoKen
+                    val bannerAnimations: ImageView =
+                        if (PrefManager.getVal(PrefName.BannerAnimations)) profileBannerImage else profileBannerImageNoKen
 
                     blurImage(
                         bannerAnimations,
@@ -192,19 +183,17 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                     profileMenuButton.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
                     profileButtonContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
 
-                    profileBannerImage.setOnLongClickListener {
-                        ImageViewDialog.newInstance(
-                            context,
-                            getString(R.string.banner, user.name),
-                            user.bannerImage
-                        )
-                    }
+                    profileBannerImage.openImage(
+                        context.getString(R.string.banner, user.name),
+                        user.bannerImage ?: user.avatar?.medium ?: ""
+                    )
 
                     mMaxScrollSize = profileAppBar.totalScrollRange
                     profileAppBar.addOnOffsetChangedListener(context)
 
 
-                    profileFollowerCount.text = (respond.data.followerPage?.pageInfo?.total ?: 0).toString()
+                    profileFollowerCount.text =
+                        (respond.data.followerPage?.pageInfo?.total ?: 0).toString()
                     profileFollowerCountContainer.setOnClickListener {
                         ContextCompat.startActivity(
                             context,
@@ -214,7 +203,8 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                             null
                         )
                     }
-                    profileFollowingCount.text = (respond.data.followingPage?.pageInfo?.total ?: 0).toString()
+                    profileFollowingCount.text =
+                        (respond.data.followingPage?.pageInfo?.total ?: 0).toString()
                     profileFollowingCountContainer.setOnClickListener {
                         ContextCompat.startActivity(
                             context,
@@ -325,7 +315,7 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
         override fun getItemCount(): Int = 3
         override fun createFragment(position: Int): Fragment = when (position) {
             0 -> ProfileFragment.newInstance(user)
-            1 -> FeedFragment.newInstance(user.id, false, -1)
+            1 -> ActivityFragment.newInstance(ActivityType.OTHER_USER, user.id)
             2 -> StatsFragment.newInstance(user)
             else -> ProfileFragment.newInstance(user)
         }

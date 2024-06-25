@@ -1,4 +1,4 @@
-package ani.dantotsu.profile.activity
+package ani.dantotsu.profile.notification
 
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +8,8 @@ import ani.dantotsu.connections.anilist.api.Notification
 import ani.dantotsu.connections.anilist.api.NotificationType
 import ani.dantotsu.databinding.ItemNotificationBinding
 import ani.dantotsu.loadImage
-import ani.dantotsu.profile.activity.NotificationActivity.Companion.NotificationClickType
+import ani.dantotsu.profile.notification.NotificationFragment.Companion.NotificationClickType
+import ani.dantotsu.profile.activity.ActivityItemBuilder
 import ani.dantotsu.setAnimation
 import ani.dantotsu.toPx
 import com.xwray.groupie.viewbinding.BindableItem
@@ -32,12 +33,12 @@ class NotificationItem(
         return ItemNotificationBinding.bind(view)
     }
 
-    private fun image(user: Boolean = false, commentNotification: Boolean = false) {
+    private fun image(user: Boolean = false, commentNotification: Boolean = false, newRelease: Boolean = false) {
 
         val cover = if (user) notification.user?.bannerImage
             ?: notification.user?.avatar?.medium else notification.media?.bannerImage
             ?: notification.media?.coverImage?.large
-        blurImage(binding.notificationBannerImage, cover)
+        blurImage(binding.notificationBannerImage, if (newRelease) notification.banner else cover)
 
         val defaultHeight = 153.toPx
 
@@ -64,7 +65,7 @@ class NotificationItem(
             binding.notificationCover.visibility = View.VISIBLE
             binding.notificationCoverUser.visibility = View.VISIBLE
             binding.notificationCoverUserContainer.visibility = View.GONE
-            binding.notificationCover.loadImage(notification.media?.coverImage?.large)
+            binding.notificationCover.loadImage(if (newRelease) notification.image else notification.media?.coverImage?.large)
             binding.notificationBannerImage.layoutParams.height = defaultHeight
             binding.notificationGradiant.layoutParams.height = defaultHeight
             (binding.notificationTextContainer.layoutParams as ViewGroup.MarginLayoutParams).marginStart =
@@ -334,7 +335,7 @@ class NotificationItem(
             }
 
             NotificationType.SUBSCRIPTION -> {
-                image(user = true, commentNotification = true)
+                image(newRelease = true)
                 binding.notificationCoverUser.setOnClickListener {
                     clickCallback(
                         notification.mediaId ?: 0, null, NotificationClickType.MEDIA

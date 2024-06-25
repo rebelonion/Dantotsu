@@ -92,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:fontFamily="@font/poppins_bold"
-                android:maxLines="3"
+                android:maxLines="4"
                 android:textSize="14dp"
                 android:transitionName="mediaTitle"
                 tools:ignore="SpUsage"

@@ -48,9 +48,10 @@ import ani.dantotsu.home.NoInternet
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.notifications.TaskScheduler
 import ani.dantotsu.others.CustomBottomDialog
+import ani.dantotsu.others.calc.CalcActivity
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.profile.activity.FeedActivity
-import ani.dantotsu.profile.activity.NotificationActivity
+import ani.dantotsu.profile.notification.NotificationActivity
 import ani.dantotsu.settings.ExtensionsActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefManager.asLiveBool
@@ -60,6 +61,7 @@ import ani.dantotsu.settings.saving.internal.PreferenceKeystore
 import ani.dantotsu.settings.saving.internal.PreferencePackager
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.util.Logger
+import ani.dantotsu.util.customAlertDialog
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
@@ -100,6 +102,20 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         TaskScheduler.scheduleSingleWork(this)
+        if (!CalcActivity.hasPermission) {
+            val pin: String = PrefManager.getVal(PrefName.AppPassword)
+            if (pin.isNotEmpty()) {
+                ContextCompat.startActivity(
+                    this@MainActivity,
+                    Intent(this@MainActivity, CalcActivity::class.java)
+                        .putExtra("code", pin)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK),
+                    null
+                )
+                finish()
+                return
+            }
+        }
 
         val action = intent.action
         val type = intent.type
@@ -297,6 +313,7 @@ class MainActivity : AppCompatActivity() {
             mainViewPager.adapter =
                 ViewPagerAdapter(supportFragmentManager, lifecycle)
             mainViewPager.setPageTransformer(ZoomOutPageTransformer())
+            mainViewPager.offscreenPageLimit = 1
             navbar.selectTabAt(selectedOption)
             navbar.setOnTabSelectListener(object :
                 AnimatedBottomBar.OnTabSelectListener {
@@ -350,7 +367,6 @@ class MainActivity : AppCompatActivity() {
             } else if (fragmentToLoad == "NOTIFICATIONS" && activityId != -1) {
                 Logger.log("MainActivity, onCreate: $activityId")
                 val notificationIntent = Intent(this, NotificationActivity::class.java).apply {
-                    putExtra("FRAGMENT_TO_LOAD", "NOTIFICATIONS")
                     putExtra("activityId", activityId)
                 }
                 launched = true
@@ -479,35 +495,28 @@ class MainActivity : AppCompatActivity() {
         val password = CharArray(16).apply { fill('0') }
 
         // Inflate the dialog layout
-        val dialogView = DialogUserAgentBinding.inflate(layoutInflater)
-        dialogView.userAgentTextBox.hint = "Password"
-        dialogView.subtitle.visibility = View.VISIBLE
-        dialogView.subtitle.text = getString(R.string.enter_password_to_decrypt_file)
-
-        val dialog = AlertDialog.Builder(this, R.style.MyPopup)
-            .setTitle("Enter Password")
-            .setView(dialogView.root)
-            .setPositiveButton("OK", null)
-            .setNegativeButton("Cancel") { dialog, _ ->
+        val dialogView = DialogUserAgentBinding.inflate(layoutInflater).apply {
+            userAgentTextBox.hint = "Password"
+            subtitle.visibility = View.VISIBLE
+            subtitle.text = getString(R.string.enter_password_to_decrypt_file)
+        }
+        customAlertDialog().apply {
+            setTitle("Enter Password")
+            setCustomView(dialogView.root)
+            setPosButton(R.string.yes) {
+                val editText = dialogView.userAgentTextBox
+                if (editText.text?.isNotBlank() == true) {
+                    editText.text?.toString()?.trim()?.toCharArray(password)
+                    callback(password)
+                } else {
+                    toast("Password cannot be empty")
+                }
+            }
+            setNegButton(R.string.cancel) {
                 password.fill('0')
-                dialog.dismiss()
                 callback(null)
             }
-            .create()
-
-        dialog.window?.setDimAmount(0.8f)
-        dialog.show()
-
-        // Override the positive button here
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-            val editText = dialog.findViewById<TextInputEditText>(R.id.userAgentTextBox)
-            if (editText?.text?.isNotBlank() == true) {
-                editText.text?.toString()?.trim()?.toCharArray(password)
-                dialog.dismiss()
-                callback(password)
-            } else {
-                toast("Password cannot be empty")
-            }
+            show()
         }
     }
 

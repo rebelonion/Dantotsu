@@ -129,6 +129,8 @@
                 <data android:scheme="file" />
             </intent-filter>
         </activity>
+        <activity android:name=".others.calc.CalcActivity"
+            android:parentActivityName=".MainActivity" />
         <activity android:name=".settings.FAQActivity" />
         <activity android:name=".settings.ReaderSettingsActivity" />
         <activity android:name=".settings.UserInterfaceSettingsActivity" />
@@ -192,14 +194,15 @@
             android:label="Inbox Activity"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".profile.activity.NotificationActivity"
+            android:name=".profile.notification.NotificationActivity"
             android:label="Inbox Activity"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".others.imagesearch.ImageSearchActivity"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".util.MarkdownCreatorActivity"/>
+            android:name=".util.ActivityMarkdownCreator"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".parsers.ParserTestActivity" />
         <activity
             android:name=".media.ReviewActivity"

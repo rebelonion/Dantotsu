@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.BottomSheetDialogFragment
 import ani.dantotsu.databinding.BottomSheetExtensionTestSettingsBinding
@@ -38,6 +39,26 @@ class ExtensionTestSettingsBottomDialog : BottomSheetDialogFragment() {
             context,
             LinearLayoutManager.VERTICAL,
             false
+        )
+        binding.searchViewText.setText(searchQuery)
+        binding.searchViewText.addTextChangedListener {
+            searchQuery = it.toString()
+        }
+        binding.extensionTypeRadioGroup.check(
+            when (extensionType) {
+                "anime" -> binding.animeRadioButton.id
+                "manga" -> binding.mangaRadioButton.id
+                "novel" -> binding.novelsRadioButton.id
+                else -> binding.animeRadioButton.id
+            }
+        )
+        binding.testTypeRadioGroup.check(
+            when (testType) {
+                "ping" -> binding.pingRadioButton.id
+                "basic" -> binding.basicRadioButton.id
+                "full" -> binding.fullRadioButton.id
+                else -> binding.pingRadioButton.id
+            }
         )
         binding.animeRadioButton.setOnCheckedChangeListener { _, b ->
             if (b) {
@@ -75,6 +96,11 @@ class ExtensionTestSettingsBottomDialog : BottomSheetDialogFragment() {
                 testType = "full"
             }
         }
+        binding.extensionTypeTextView.setOnLongClickListener {
+            binding.searchTextView.visibility = View.VISIBLE
+            binding.searchView.visibility = View.VISIBLE
+            true
+        }
         setupAdapter()
     }
 
@@ -111,7 +137,8 @@ class ExtensionTestSettingsBottomDialog : BottomSheetDialogFragment() {
         }
 
         var extensionType = "anime"
-        var testType = "ping"
+        var testType = "basic"
+        var searchQuery = "Chainsaw Man"
         var extensionsToTest: MutableList<String> = mutableListOf()
     }
 }

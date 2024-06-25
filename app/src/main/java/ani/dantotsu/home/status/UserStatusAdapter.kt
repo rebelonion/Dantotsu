@@ -1,6 +1,5 @@
 package ani.dantotsu.home.status
 
-import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -15,6 +14,8 @@ import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.profile.User
 import ani.dantotsu.setAnimation
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.snackString
+import ani.dantotsu.util.ActivityMarkdownCreator
 
 class UserStatusAdapter(private val user: ArrayList<User>) :
     RecyclerView.Adapter<UserStatusAdapter.UsersViewHolder>() {
@@ -23,6 +24,10 @@ class UserStatusAdapter(private val user: ArrayList<User>) :
         RecyclerView.ViewHolder(binding.root) {
         init {
             itemView.setOnClickListener {
+                if (user[bindingAdapterPosition].activity.isEmpty()) {
+                    snackString("No activity")
+                    return@setOnClickListener
+                }
                 StatusActivity.user = user
                 ContextCompat.startActivity(
                     itemView.context,
@@ -34,14 +39,23 @@ class UserStatusAdapter(private val user: ArrayList<User>) :
                 )
             }
             itemView.setOnLongClickListener {
-                ContextCompat.startActivity(
-                    itemView.context,
-                    Intent(
+                if (user[bindingAdapterPosition].id == Anilist.userid) {
+                    ContextCompat.startActivity(
                         itemView.context,
-                        ProfileActivity::class.java
-                    ).putExtra("userId", user[bindingAdapterPosition].id),
-                    null
-                )
+                        Intent(itemView.context, ActivityMarkdownCreator::class.java)
+                            .putExtra("type", "activity"),
+                        null
+                    )
+                }else{
+                    ContextCompat.startActivity(
+                        itemView.context,
+                        Intent(
+                            itemView.context,
+                            ProfileActivity::class.java
+                        ).putExtra("userId", user[bindingAdapterPosition].id),
+                        null
+                    )
+                }
                 true
             }
         }

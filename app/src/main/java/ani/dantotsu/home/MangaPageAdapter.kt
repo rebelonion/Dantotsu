@@ -80,6 +80,7 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
 
         updateAvatar()
         trendingBinding.notificationCount.isVisible = Anilist.unreadNotificationCount > 0
+                && PrefManager.getVal<Boolean>(PrefName.ShowNotificationRedDot) == true
         trendingBinding.notificationCount.text = Anilist.unreadNotificationCount.toString()
         trendingBinding.searchBar.hint = "MANGA"
         trendingBinding.searchBarText.setOnClickListener {
@@ -271,10 +272,10 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
                 false
             )
         more.setOnClickListener {
+            MediaListViewActivity.passedMedia = media.toCollection(ArrayList())
             ContextCompat.startActivity(
                 it.context, Intent(it.context, MediaListViewActivity::class.java)
-                    .putExtra("title", string)
-                    .putExtra("media",  media as ArrayList<Media>),
+                    .putExtra("title", string),
                 null
             )
         }
@@ -296,8 +297,8 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
 
     fun updateNotificationCount() {
         if (this::binding.isInitialized) {
-            trendingBinding.notificationCount.visibility =
-                if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
+            trendingBinding.notificationCount.isVisible = Anilist.unreadNotificationCount > 0
+                    && PrefManager.getVal<Boolean>(PrefName.ShowNotificationRedDot) == true
             trendingBinding.notificationCount.text = Anilist.unreadNotificationCount.toString()
         }
     }
