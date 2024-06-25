@@ -369,6 +369,8 @@
     <string name="use_alarm_manager_reliable">Utiliza el gestor de alarmas para notificaciones confiables</string>
     <string name="use_alarm_manager_confirm">El uso de opción Administrador de Alarma puede ayudar a luchar contra la optimización de la batería, pero puede consumir más batería. También requiere el permiso Administrador de Alarma.</string>
     <string name="use">Utilizar</string>
+    <string name="remove_all_subscriptions">Remove All Subscriptions</string>
+    <string name="remove_all_subscriptions_desc">Are you sure you want to remove all subscriptions for %1$s?</string>
     <string name="checking_subscriptions">Notificación para revisar suscripciones</string>
     <string name="subscriptions_checking_time_s">Frecuencia de actualización de suscripciones: %1$s</string>
     <string name="subscriptions_checking_time">Frecuencia de actualización de suscripciones</string>
