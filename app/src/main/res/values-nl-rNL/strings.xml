@@ -122,10 +122,8 @@
     <string name="chaps">Hoofdstukken</string>
     <string name="chap">Hoofdstuk</string>
     <string name="wrong"><u>Verkeerde Titel?</u></string>
-    <string name="source_not_found">        Er kwam niets uit deze bron.\n        Laten we ergens anders kijken.
-    </string>
-    <string name="download_not_found">        Jouw downloads voelen zich een beetje eenzaam…\n        Probeer iets te downloaden.
-    </string>
+    <string name="source_not_found">Er kwam niets uit deze bron.\n Laten we ergens anders kijken.</string>
+    <string name="download_not_found">Uw downloads voelen zich een beetje eenzaam…\n Probeer iets te downloaden.</string>
     <string name="not_supported">%1$s wordt niet ondersteund!</string>
     <string name="server_selector">Selecteer Server</string>
     <string name="auto_select_server">Automatisch Server Selecteren</string>
@@ -566,7 +564,7 @@
     <string name="question_6">Waarom worden mijn statistieken niet bijgewerkt?</string>
     <string name="answer_6">Dit komt omdat het elke 48 uur automatisch wordt bijgewerkt (door Anilist). Als je je statistieken echt wilt bijwerken, kun je je statistieken forceren nadat je naar deze [link](https://anilist.co/settings/lists) bent gegaan.</string>
     <string name="question_7">Hoe anime downloaden?</string>
-    <string name="answer_7">There are two methods of downloading. Internal and external. If you download internally, then it can be viewed within the app and tracking will work normally for it. The other option is to use external downloader. It requires a download manager to download and a separate video player to watch. External downloads cannot be viewed within the Dantotsu app.\n\n•To download internally:\n\n1. Tap the download button.\n2. For the first time, it will ask you to set a download location. All your downloads will be stored there.\n3. Pick the server and the video quality.\n4. Profit.\n\n•To download externally:\n\n 1. Download 1DM or ADM from Google Play Store.\n2. Enter the app, give storage access and set your preferences (downloading speed, downloading path etc(optional))\n3. Now go to \`Dantotsu &gt; Settings &gt; Common &gt; Download Managers\` and choose the download manager you just set up.\n4. Go to your desired episode and press on the download icon of any server. There may be a popup to set your preferences again, just press on \"Download\" and it will be saved in the directed path.\n\nNote: External downloads are also possible without a manager but it\'s not recommended.\n\nNerd Note: Internally downloaded episodes are stored in \`{your set location}/Dantotsu/Anime/*`\nYou can change your download location in settings but your previous downloaded episodes will not show up in the app anymore.</string>
+    <string name="answer_7">Er zijn twee methoden om te downloaden. Intern en extern. Als je intern downloadt, kan het binnen de app worden bekeken en werkt de tracking normaal. De andere optie is om een externe downloader te gebruiken. Hiervoor is een downloadmanager nodig om te downloaden en een aparte videospeler om te kijken. Externe downloads kunnen niet binnen de Dantotsu-app worden bekeken.\n\n•Om intern te downloaden:\n\n1. Tik op de downloadknop.\n2. Voor de eerste keer zal het je vragen om een downloadlocatie in te stellen. Al je downloads worden daar opgeslagen.\n3. Kies de server en de videokwaliteit.\n4. Klaar.\n\n•Om extern te downloaden:\n\n1. Download 1DM of ADM uit de Google Play Store.\n2. Ga naar de app, geef opslagtoegang en stel je voorkeuren in (downloadsnelheid, downloadpad, enz. (optioneel))\n3. Ga nu naar \`Dantotsu &gt; Instellingen &gt; Algemeen &gt; Downloadmanagers\` en kies de downloadmanager die je zojuist hebt ingesteld.\n4. Ga naar de gewenste aflevering en druk op het downloadpictogram van een server. Er kan een popup verschijnen om je voorkeuren opnieuw in te stellen, druk gewoon op \"Download\" en het wordt opgeslagen in het opgegeven pad.\n\nOpmerking: Externe downloads zijn ook mogelijk zonder manager, maar het wordt niet aanbevolen.\n\nTechnische noot: Intern gedownloade afleveringen worden opgeslagen in \`{your set location}/Dantotsu/Anime/*`\nJe kunt je downloadlocatie wijzigen in de instellingen, maar je eerder gedownloade afleveringen worden dan niet meer in de app weergegeven.</string>
     <string name="question_9">Hoe kan ik NSFW-inhoud inschakelen?</string>
     <string name="answer_9">Je kunt NSFW-inhoud inschakelen door 18+ inhoud in te schakelen vanaf deze [link](https://anilist.co/settings/media). Je moet ook NSFW-extensies inschakelen in \`Instellingen &amp; Extensies &amp; NSFW-extensies\` </string>
     <string name="question_10">Hoe kan ik mijn MAL/Kitsu-lijsten importeren naar Anilist?</string>
@@ -586,9 +584,9 @@
     <string name="question_17">Enkele nuttige tips en trucs</string>
     <string name="answer_17">Hier volgen enkele tips en trucs die je misschien wel of niet kent - \n \n \n - Door lang op het Dantotsu-logo in de instellingen te drukken, kun je handmatig controleren of er nieuwe updates zijn. \n \n - Door lang op een foutmelding/tag/synoniem of titel te drukken, wordt deze gekopieerd. \n \n - Je kunt een aflevering openen met andere apps door lang op een server voor die aflevering te drukken. Dit helpt bij het streamen van de aflevering met andere videospelers of het downloaden van de aflevering met downloadbeheerders. \n \n - Je kunt aangepaste lijsten instellen via deze [link](https://anilist.co/settings/lists). (je moet ingelogd zijn) \n \n - Als je episode/hoofdstuk niet automatisch wordt voortgezet nadat je klaar bent met kijken/lezen, houd dan de statusbalk (plannen/herhalen/kijken-knop) van die anime/manga ingedrukt. De volgende keer dat je een hoofdstuk/aflevering start of eindigt, stuit je op een pop-up. Druk daar op ja.</string>
     <string name="question_18">Ik kan niet inloggen op Anilist.</string>
-    <string name="answer_18">The reason this happens is probably because you\'re not using the default browser.\n\n&gt;You have to set Chrome as your default browser to login to Anilist.\n\n&gt;It takes a few seconds for the login button to display changes.\n\nIf it doesn\'t work then you could possibly be IP banned from Anilist or your ISP banned Anilist themselves. We believe that this is highly unlikely so open [Anilist](https://anilist.co) in your browser to see if that\`s the case.</string>
-    <string name="question_19">What is torrent? How do I use it?</string>
-    <string name="answer_19">Torrent or formally known as BitTorrent is an internet communication protocol for peer\-to\-peer file sharing. A torrent network doesn\'t use a centralised server to host files. It shares files in a decentralised manner. A torrent network has two types of peers. Seeders &amp; Leachers.\n\n• Seeders : These are peers who completed downloading and has the full file. And now they are sharing this file to other peers which is called seeding. A torrent cannot work without at least one seeder. The more seeder a torrent has, the better.\n\n• Leachers : These are peers who are currently downloading the file. If they currently have 40&#37; downloaded then they will share the 40&#37; to any other peers who requests it.\n\nUnlike a centralised server, torrents have no bandwidth limit. You can get your files from hundreds of seeders at the highest possible speed your internet can offer. But many ISP throttle torrent to slow them down because it\'s demanding on their infrastructure. Use a VPN to circumvent this.\n\n• How to use torrents :\n\n1. Install the Torrent Add-on from \`Dantotsu &gt; Settings &gt; Add-ons &gt; Torrent Add-on.\` \n2. Get a source that provides torrents.\n3. USE A VPN. Using VPN while torrenting only has upsides. Without a VPN your IP address will be exposed, your ISP will throttle your network and you could possibly be fined if you live in a country first world country. DO NOT USE IT WITHOUT A VPN IF YOU DON\'T KNOW WHAT YOU\'RE DOING.\n4. Now use that source to start torrenting.</string>
+    <string name="answer_18">De reden dat dit gebeurt, is waarschijnlijk omdat je de standaardbrowser niet gebruikt.\n\n&gt;Je moet Chrome als standaardbrowser instellen om in te loggen op Anilist.\n\n&gt;Het duurt een paar seconden voordat de inlogknop wijzigingen weergeeft.\n\nAls dit niet werkt, ben je mogelijk IP-geblokkeerd door Anilist of heeft je ISP Anilist zelf geblokkeerd. Wij denken dat dit zeer onwaarschijnlijk is, dus open [Anilist](https://anilist.co) in je browser om te zien of dit het geval is.</string>
+    <string name="question_19">Wat is torrent? Hoe gebruik ik het?</string>
+    <string name="answer_19">Torrent of formeel bekend als BitTorrent is een internetcommunicatieprotocol voor peer-to-peer bestandsoverdracht. Een torrentnetwerk gebruikt geen gecentraliseerde server om bestanden te hosten. Het deelt bestanden op een gedecentraliseerde manier. Een torrentnetwerk heeft twee soorten peers. Seeders en Leechers.\n\n• Seeders: Dit zijn peers die het downloaden hebben voltooid en het volledige bestand hebben. Nu delen ze dit bestand met andere peers, wat seeden wordt genoemd. Een torrent kan niet werken zonder minstens één seeder. Hoe meer seeders een torrent heeft, hoe beter.\n\n• Leechers: Dit zijn peers die momenteel het bestand aan het downloaden zijn. Als ze momenteel 40&#37; hebben gedownload, zullen ze die 40&#37; delen met andere peers die erom vragen.\n\nIn tegenstelling tot een gecentraliseerde server, hebben torrents geen bandbreedtebeperking. Je kunt je bestanden van honderden seeders krijgen met de hoogste mogelijke snelheid die je internet kan bieden. Maar veel ISP\'s beperken torrents om ze langzamer te maken omdat het veeleisend is voor hun infrastructuur. Gebruik een VPN om dit te omzeilen.\n\n• Hoe torrents te gebruiken:\n\n1. Installeer de Torrent Add-on van \`Dantotsu &gt; Instellingen &gt; Add-ons &gt; Torrent Add-on.\`\n2. Zoek een bron die torrents aanbiedt.\n3. GEBRUIK EEN VPN. Het gebruik van een VPN tijdens het torrenten heeft alleen maar voordelen. Zonder een VPN wordt je IP-adres blootgesteld, zal je ISP je netwerk beperken en kun je mogelijk een boete krijgen als je in een eerstewereldland woont. GEBRUIK HET NIET ZONDER EEN VPN ALS JE NIET WEET WAT JE DOET.\n4. Gebruik nu die bron om te beginnen met torrenten.</string>
     <string name="subscribed_notification">Geabonneerd! Ontvang meldingen wanneer nieuwe afleveringen worden uitgebracht op %1$s.</string>
     <string name="unsubscribed_notification">Geabonneerd, je ontvangt geen meldingen meer.</string>
     <string name="episode_plural">Afleveringen</string>
@@ -631,7 +629,7 @@
     <string name="installed_manga">Geïnstalleerde Manga</string>
     <string name="color_picker">Kleurkiezer</string>
     <string name="random_selection">Willekeurige Selectie</string>
-    <string name="listed_in_library">Listed in Library</string>
+    <string name="listed_in_library">Geregistreerd in bibliotheek</string>
     <string name="incognito_mode">Incognitomodus</string>
     <string name="appwidget_text">VOORBEELD</string>
     <string name="configure">Configureren</string>
@@ -842,8 +840,8 @@
     <string name="use_unique_theme_for_each_item_desc">Gebruik de kleur van de banner van de media</string>
     <string name="use_custom_theme_desc">Gebruik je eigen kleur voor het thema</string>
     <string name="color_picker_desc">Kies een kleur</string>
-    <string name="hide_private">Hide private Media from home screen</string>
-    <string name="hide_private_desc">Long click \"Continue Watching\" to access</string>
+    <string name="hide_private">Verberg privé media van startscherm</string>
+    <string name="hide_private_desc">Lang klikken op \"Doorgaan met kijken\" om toegang te krijgen</string>
     <string name="torrent_addon">Torrent Add-on</string>
     <string name="enable_torrent">Torrent inschakelen</string>
     <string name="anime_downloader_addon">Anime Downloader Add-on</string>
@@ -855,7 +853,7 @@
     <string name="install_addon">Add-on installeren</string>
     <string name="download_addon_not_found">Add-on niet gevonden</string>
     <string name="image">Afbeelding</string>
-    <string name="clear_history">Clear History</string>
+    <string name="clear_history">Geschiedenis wissen</string>
     <string name="failed_ext_install_conflict">Installatie van de extensie is mislukt vanwege een conflict</string>
     <string name="reading">AAN HET LEZEN</string>
     <string name="watching">AAN HET KIJKEN</string>
