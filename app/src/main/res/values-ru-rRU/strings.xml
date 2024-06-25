@@ -371,6 +371,8 @@
     <string name="use_alarm_manager_reliable">Use Alarm Manager for reliable Notifications</string>
     <string name="use_alarm_manager_confirm">Using Alarm Manger can help fight against battery optimization, but may consume more battery. It also requires the Alarm Manager permission.</string>
     <string name="use">Use</string>
+    <string name="remove_all_subscriptions">Remove All Subscriptions</string>
+    <string name="remove_all_subscriptions_desc">Are you sure you want to remove all subscriptions for %1$s?</string>
     <string name="checking_subscriptions">Уведомление о проверке подписок</string>
     <string name="subscriptions_checking_time_s">Частота проверки подписок: %1$s</string>
     <string name="subscriptions_checking_time">Частота проверки подписок</string>
