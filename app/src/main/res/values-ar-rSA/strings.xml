@@ -61,8 +61,7 @@
         <item>إعادة القراءة</item>
         <item>الكل</item>
     </string-array>
-    <string name="no_notifications">لا مزيد من الإشعارات</string>
-    <string name="no_activities">لا يوجد فعاليات اخري</string>
+    <string name="nothing_here">Nothing here</string>
     <string name="followers">المتابعين</string>
     <string name="write_a_message">اكتب رسالة</string>
     <string name="status">الحالة</string>
