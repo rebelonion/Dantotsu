@@ -61,8 +61,7 @@
         <item>পুনৰ পড়া</item>
         <item>সকল</item>
     </string-array>
-    <string name="no_notifications">আৰু কোনো অধিসূচনা নাই </string>
-    <string name="no_activities">অধিক ক্ৰিয়াকলাপ নাই</string>
+    <string name="nothing_here">Nothing here</string>
     <string name="followers">অনুসৰণকাৰী</string>
     <string name="write_a_message">এটা বাৰ্তা লিখক</string>
     <string name="status">ষ্টেটাছ</string>
