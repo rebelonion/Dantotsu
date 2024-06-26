@@ -61,8 +61,7 @@
         <item>फिर से पढ़ना</item>
         <item>सभी</item>
     </string-array>
-    <string name="no_notifications">कोई और सूचना नहीं</string>
-    <string name="no_activities">कोई और गतिविधियाँ नहीं हैं</string>
+    <string name="nothing_here">Nothing here</string>
     <string name="followers">अनुयायियों</string>
     <string name="write_a_message">संदेश लिखें</string>
     <string name="status">स्थिति</string>
