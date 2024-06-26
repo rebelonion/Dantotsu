@@ -61,8 +61,7 @@
         <item>再読み込み</item>
         <item>全て</item>
     </string-array>
-    <string name="no_notifications">No more notifications</string>
-    <string name="no_activities">これ以上のアクティビティはありません</string>
+    <string name="nothing_here">Nothing here</string>
     <string name="followers">Followers</string>
     <string name="write_a_message">メッセージを書く</string>
     <string name="status">ステータス</string>
