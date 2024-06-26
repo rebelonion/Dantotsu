@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.util.AttributeSet
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -16,7 +15,6 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
-import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.FragmentActivity
 import ani.dantotsu.R
 import ani.dantotsu.blurImage
@@ -32,6 +30,7 @@ import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.profile.User
 import ani.dantotsu.profile.UsersDialogFragment
 import ani.dantotsu.profile.activity.ActivityItemBuilder
+import ani.dantotsu.profile.activity.RepliesBottomDialog
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString

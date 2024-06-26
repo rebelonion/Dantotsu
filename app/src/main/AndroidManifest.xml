@@ -201,7 +201,7 @@
             android:name=".others.imagesearch.ImageSearchActivity"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".util.MarkdownCreatorActivity"
+            android:name=".util.ActivityMarkdownCreator"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".parsers.ParserTestActivity" />
         <activity

@@ -81,11 +81,11 @@ class SettingsExtensionsActivity : AppCompatActivity() {
                         view.repositoryItem.text =
                             item.removePrefix("https://raw.githubusercontent.com/")
                         view.repositoryItem.setOnClickListener {
-                            AlertDialog.Builder(context, R.style.MyPopup)
-                                .setTitle(R.string.rem_repository).setMessage(item)
-                                .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
-                                    val repos =
-                                        PrefManager.getVal<Set<String>>(repoList).minus(item)
+                            context.customAlertDialog().apply {
+                                setTitle(R.string.rem_repository)
+                                setMessage(item)
+                                setPosButton(R.string.ok) {
+                                    val repos = PrefManager.getVal<Set<String>>(repoList).minus(item)
                                     PrefManager.setVal(repoList, repos)
                                     setExtensionOutput(repoInventory, type)
                                     CoroutineScope(Dispatchers.IO).launch {
@@ -93,18 +93,16 @@ class SettingsExtensionsActivity : AppCompatActivity() {
                                             MediaType.ANIME -> {
                                                 animeExtensionManager.findAvailableExtensions()
                                             }
-
                                             MediaType.MANGA -> {
                                                 mangaExtensionManager.findAvailableExtensions()
                                             }
-
                                             else -> {}
                                         }
                                     }
-                                    dialog.dismiss()
-                                }.setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
-                                    dialog.dismiss()
-                                }.create().show()
+                                }
+                                setNegButton(R.string.cancel)
+                                show()
+                            }
                         }
                         view.repositoryItem.setOnLongClickListener {
                             it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
@@ -209,27 +207,27 @@ class SettingsExtensionsActivity : AppCompatActivity() {
                             val editText = dialogView.userAgentTextBox.apply {
                                 hint = getString(R.string.manga_add_repository)
                             }
-                            val alertDialog = AlertDialog.Builder(context, R.style.MyPopup)
-                                .setTitle(R.string.manga_add_repository).setView(dialogView.root)
-                                .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                            context.customAlertDialog().apply {
+                                setTitle(R.string.manga_add_repository)
+                                setCustomView(dialogView.root)
+                                setPosButton(R.string.ok) {
                                     if (!editText.text.isNullOrBlank()) processUserInput(
                                         editText.text.toString(),
                                         MediaType.MANGA,
                                         it.attachView
                                     )
-                                    dialog.dismiss()
-                                }.setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
-                                    dialog.dismiss()
-                                }.create()
+                                }
+                                setNegButton(R.string.cancel)
+                                attach { dialog ->
+                                    processEditorAction(
+                                        dialog,
+                                        editText,
+                                        MediaType.MANGA,
+                                        it.attachView
+                                    )
+                                }
+                            }.show()
 
-                            processEditorAction(
-                                alertDialog,
-                                editText,
-                                MediaType.MANGA,
-                                it.attachView
-                            )
-                            alertDialog.show()
-                            alertDialog.window?.setDimAmount(0.8f)
                         },
                         attach = {
                             setExtensionOutput(it.attachView, MediaType.MANGA)
@@ -258,24 +256,18 @@ class SettingsExtensionsActivity : AppCompatActivity() {
                             val dialogView = DialogUserAgentBinding.inflate(layoutInflater)
                             val editText = dialogView.userAgentTextBox
                             editText.setText(PrefManager.getVal<String>(PrefName.DefaultUserAgent))
-                            val alertDialog = AlertDialog.Builder(context, R.style.MyPopup)
-                                .setTitle(R.string.user_agent).setView(dialogView.root)
-                                .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
-                                    PrefManager.setVal(
-                                        PrefName.DefaultUserAgent,
-                                        editText.text.toString()
-                                    )
-                                    dialog.dismiss()
-                                }.setNeutralButton(getString(R.string.reset)) { dialog, _ ->
+                            context.customAlertDialog().apply {
+                                setTitle(R.string.user_agent)
+                                setCustomView(dialogView.root)
+                                setPosButton(R.string.ok) {
+                                    PrefManager.setVal(PrefName.DefaultUserAgent, editText.text.toString())
+                                }
+                                setNeutralButton(R.string.reset) {
                                     PrefManager.removeVal(PrefName.DefaultUserAgent)
                                     editText.setText("")
-                                    dialog.dismiss()
-                                }.setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
-                                    dialog.dismiss()
-                                }.create()
-
-                            alertDialog.show()
-                            alertDialog.window?.setDimAmount(0.8f)
+                                }
+                                setNegButton(R.string.cancel)
+                            }.show()
                         }
                     ),
                     Settings(

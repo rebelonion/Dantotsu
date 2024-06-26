@@ -28,6 +28,7 @@ import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.toast
+import ani.dantotsu.util.customAlertDialog
 import com.google.android.material.slider.Slider.OnChangeListener
 import kotlin.math.roundToInt
 
@@ -100,20 +101,19 @@ class PlayerSettingsActivity : AppCompatActivity() {
                 R.string.default_playback_speed,
                 speedsName[PrefManager.getVal(PrefName.DefaultSpeed)]
             )
-        val speedDialog = AlertDialog.Builder(this, R.style.MyPopup)
-            .setTitle(getString(R.string.default_speed))
         binding.playerSettingsSpeed.setOnClickListener {
-            val dialog =
-                speedDialog.setSingleChoiceItems(
+            customAlertDialog().apply {
+                setTitle(getString(R.string.default_speed))
+                singleChoiceItems(
                     speedsName,
                     PrefManager.getVal(PrefName.DefaultSpeed)
-                ) { dialog, i ->
+                ) { i ->
                     PrefManager.setVal(PrefName.DefaultSpeed, i)
                     binding.playerSettingsSpeed.text =
                         getString(R.string.default_playback_speed, speedsName[i])
-                    dialog.dismiss()
-                }.show()
-            dialog.window?.setDimAmount(0.8f)
+                }
+                show()
+            }
         }
 
         binding.playerSettingsCursedSpeeds.isChecked = PrefManager.getVal(PrefName.CursedSpeeds)
@@ -278,17 +278,17 @@ class PlayerSettingsActivity : AppCompatActivity() {
         }
 
         val resizeModes = arrayOf("Original", "Zoom", "Stretch")
-        val resizeDialog = AlertDialog.Builder(this, R.style.MyPopup)
-            .setTitle(getString(R.string.default_resize_mode))
         binding.playerResizeMode.setOnClickListener {
-            val dialog = resizeDialog.setSingleChoiceItems(
-                resizeModes,
-                PrefManager.getVal<Int>(PrefName.Resize)
-            ) { dialog, count ->
-                PrefManager.setVal(PrefName.Resize, count)
-                dialog.dismiss()
-            }.show()
-            dialog.window?.setDimAmount(0.8f)
+            customAlertDialog().apply {
+                setTitle(getString(R.string.default_resize_mode))
+                singleChoiceItems(
+                    resizeModes,
+                    PrefManager.getVal<Int>(PrefName.Resize)
+                ) { count ->
+                    PrefManager.setVal(PrefName.Resize, count)
+                }
+                show()
+            }
         }
 
         fun toggleSubOptions(isChecked: Boolean) {
@@ -332,18 +332,18 @@ class PlayerSettingsActivity : AppCompatActivity() {
                 "Blue",
                 "Magenta"
             )
-        val primaryColorDialog = AlertDialog.Builder(this, R.style.MyPopup)
-            .setTitle(getString(R.string.primary_sub_color))
         binding.videoSubColorPrimary.setOnClickListener {
-            val dialog = primaryColorDialog.setSingleChoiceItems(
-                colorsPrimary,
-                PrefManager.getVal(PrefName.PrimaryColor)
-            ) { dialog, count ->
-                PrefManager.setVal(PrefName.PrimaryColor, count)
-                dialog.dismiss()
-                updateSubPreview()
-            }.show()
-            dialog.window?.setDimAmount(0.8f)
+            customAlertDialog().apply {
+                setTitle(getString(R.string.primary_sub_color))
+                singleChoiceItems(
+                    colorsPrimary,
+                    PrefManager.getVal(PrefName.PrimaryColor)
+                ) { count ->
+                    PrefManager.setVal(PrefName.PrimaryColor, count)
+                    updateSubPreview()
+                }
+                show()
+            }
         }
         val colorsSecondary = arrayOf(
             "Black",
@@ -359,32 +359,32 @@ class PlayerSettingsActivity : AppCompatActivity() {
             "Magenta",
             "Transparent"
         )
-        val secondaryColorDialog = AlertDialog.Builder(this, R.style.MyPopup)
-            .setTitle(getString(R.string.outline_sub_color))
         binding.videoSubColorSecondary.setOnClickListener {
-            val dialog = secondaryColorDialog.setSingleChoiceItems(
-                colorsSecondary,
-                PrefManager.getVal(PrefName.SecondaryColor)
-            ) { dialog, count ->
-                PrefManager.setVal(PrefName.SecondaryColor, count)
-                dialog.dismiss()
-                updateSubPreview()
-            }.show()
-            dialog.window?.setDimAmount(0.8f)
+            customAlertDialog().apply {
+                setTitle(getString(R.string.outline_sub_color))
+                singleChoiceItems(
+                    colorsSecondary,
+                    PrefManager.getVal(PrefName.SecondaryColor)
+                ) { count ->
+                    PrefManager.setVal(PrefName.SecondaryColor, count)
+                    updateSubPreview()
+                }
+                show()
+            }
         }
         val typesOutline = arrayOf("Outline", "Shine", "Drop Shadow", "None")
-        val outlineDialog = AlertDialog.Builder(this, R.style.MyPopup)
-            .setTitle(getString(R.string.outline_type))
         binding.videoSubOutline.setOnClickListener {
-            val dialog = outlineDialog.setSingleChoiceItems(
-                typesOutline,
-                PrefManager.getVal(PrefName.Outline)
-            ) { dialog, count ->
-                PrefManager.setVal(PrefName.Outline, count)
-                dialog.dismiss()
-                updateSubPreview()
-            }.show()
-            dialog.window?.setDimAmount(0.8f)
+            customAlertDialog().apply {
+                setTitle(getString(R.string.outline_type))
+                singleChoiceItems(
+                    typesOutline,
+                    PrefManager.getVal(PrefName.Outline)
+                ) { count ->
+                    PrefManager.setVal(PrefName.Outline, count)
+                    updateSubPreview()
+                }
+                show()
+            }
         }
         val colorsSubBackground = arrayOf(
             "Transparent",
@@ -400,18 +400,18 @@ class PlayerSettingsActivity : AppCompatActivity() {
             "Blue",
             "Magenta"
         )
-        val subBackgroundDialog = AlertDialog.Builder(this, R.style.MyPopup)
-            .setTitle(getString(R.string.sub_background_color_select))
         binding.videoSubColorBackground.setOnClickListener {
-            val dialog = subBackgroundDialog.setSingleChoiceItems(
-                colorsSubBackground,
-                PrefManager.getVal(PrefName.SubBackground)
-            ) { dialog, count ->
-                PrefManager.setVal(PrefName.SubBackground, count)
-                dialog.dismiss()
-                updateSubPreview()
-            }.show()
-            dialog.window?.setDimAmount(0.8f)
+            customAlertDialog().apply {
+                setTitle(getString(R.string.sub_background_color_select))
+                singleChoiceItems(
+                    colorsSubBackground,
+                    PrefManager.getVal(PrefName.SubBackground)
+                ) { count ->
+                    PrefManager.setVal(PrefName.SubBackground, count)
+                    updateSubPreview()
+                }
+                show()
+            }
         }
 
         val colorsSubWindow = arrayOf(
@@ -428,18 +428,18 @@ class PlayerSettingsActivity : AppCompatActivity() {
             "Blue",
             "Magenta"
         )
-        val subWindowDialog = AlertDialog.Builder(this, R.style.MyPopup)
-            .setTitle(getString(R.string.sub_window_color_select))
         binding.videoSubColorWindow.setOnClickListener {
-            val dialog = subWindowDialog.setSingleChoiceItems(
-                colorsSubWindow,
-                PrefManager.getVal(PrefName.SubWindow)
-            ) { dialog, count ->
-                PrefManager.setVal(PrefName.SubWindow, count)
-                dialog.dismiss()
-                updateSubPreview()
-            }.show()
-            dialog.window?.setDimAmount(0.8f)
+            customAlertDialog().apply {
+                setTitle(getString(R.string.sub_window_color_select))
+                singleChoiceItems(
+                    colorsSubWindow,
+                    PrefManager.getVal(PrefName.SubWindow)
+                ) { count ->
+                    PrefManager.setVal(PrefName.SubWindow, count)
+                    updateSubPreview()
+                }
+                show()
+            }
         }
 
         binding.videoSubAlpha.value = PrefManager.getVal(PrefName.SubAlpha)
@@ -459,18 +459,18 @@ class PlayerSettingsActivity : AppCompatActivity() {
             "Levenim MT Bold",
             "Blocky"
         )
-        val fontDialog = AlertDialog.Builder(this, R.style.MyPopup)
-            .setTitle(getString(R.string.subtitle_font))
         binding.videoSubFont.setOnClickListener {
-            val dialog = fontDialog.setSingleChoiceItems(
-                fonts,
-                PrefManager.getVal(PrefName.Font)
-            ) { dialog, count ->
-                PrefManager.setVal(PrefName.Font, count)
-                dialog.dismiss()
-                updateSubPreview()
-            }.show()
-            dialog.window?.setDimAmount(0.8f)
+            customAlertDialog().apply {
+                setTitle(getString(R.string.subtitle_font))
+                singleChoiceItems(
+                    fonts,
+                    PrefManager.getVal(PrefName.Font)
+                ) { count ->
+                    PrefManager.setVal(PrefName.Font, count)
+                    updateSubPreview()
+                }
+                show()
+            }
         }
         binding.subtitleFontSize.setText(PrefManager.getVal<Int>(PrefName.FontSize).toString())
         binding.subtitleFontSize.setOnEditorActionListener { _, actionId, _ ->

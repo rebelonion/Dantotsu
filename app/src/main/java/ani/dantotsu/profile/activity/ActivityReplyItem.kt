@@ -15,7 +15,7 @@ import ani.dantotsu.profile.User
 import ani.dantotsu.profile.UsersDialogFragment
 import ani.dantotsu.snackString
 import ani.dantotsu.util.AniMarkdown.Companion.getBasicAniHTML
-import ani.dantotsu.util.MarkdownCreatorActivity
+import ani.dantotsu.util.ActivityMarkdownCreator
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.viewbinding.BindableItem
 import kotlinx.coroutines.CoroutineScope
@@ -81,7 +81,7 @@ class ActivityReplyItem(
         binding.activityReply.setOnClickListener {
             ContextCompat.startActivity(
                 context,
-                Intent(context, MarkdownCreatorActivity::class.java)
+                Intent(context, ActivityMarkdownCreator::class.java)
                     .putExtra("type", "replyActivity")
                     .putExtra("parentId", parentId)
                     .putExtra("other", "@${reply.user.name} "),
@@ -92,7 +92,7 @@ class ActivityReplyItem(
         binding.activityEdit.setOnClickListener {
             ContextCompat.startActivity(
                 context,
-                Intent(context, MarkdownCreatorActivity::class.java)
+                Intent(context, ActivityMarkdownCreator::class.java)
                     .putExtra("type", "replyActivity")
                     .putExtra("parentId", parentId)
                     .putExtra("other", reply.text)

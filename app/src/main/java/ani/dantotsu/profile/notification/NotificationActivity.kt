@@ -20,7 +20,7 @@ import ani.dantotsu.profile.notification.NotificationFragment.Companion.Notifica
 import nl.joery.animatedbottombar.AnimatedBottomBar
 
 class NotificationActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityNotificationBinding
+    lateinit var binding: ActivityNotificationBinding
     private var selected: Int = 0
     lateinit var navBar: AnimatedBottomBar
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,8 +38,8 @@ class NotificationActivity : AppCompatActivity() {
             bottomMargin = navBarHeight
         }
         val tabs = listOf(
-            Pair(R.drawable.ic_round_movie_filter_24, "Media"),
             Pair(R.drawable.ic_round_person_24, "User"),
+            Pair(R.drawable.ic_round_movie_filter_24, "Media"),
             Pair(R.drawable.ic_round_notifications_active_24, "Subs"),
             Pair(R.drawable.ic_round_comment_24, "Comments")
         )
@@ -49,7 +49,6 @@ class NotificationActivity : AppCompatActivity() {
         val getOne = intent.getIntExtra("activityId", -1)
         if (getOne != -1) navBar.isVisible = false
         binding.notificationViewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle, getOne)
-        binding.notificationViewPager.setOffscreenPageLimit(4)
         binding.notificationViewPager.setCurrentItem(selected, false)
         navBar.selectTabAt(selected)
         navBar.setOnTabSelectListener(object : AnimatedBottomBar.OnTabSelectListener {
@@ -84,8 +83,8 @@ class NotificationActivity : AppCompatActivity() {
         override fun getItemCount(): Int = if (id != -1) 1 else 4
 
         override fun createFragment(position: Int): Fragment = when (position) {
-            0 -> NotificationFragment.newInstance(if (id != -1) NotificationType.ONE else NotificationType.MEDIA, id)
-            1 -> NotificationFragment.newInstance(NotificationType.USER)
+            0 -> NotificationFragment.newInstance(NotificationType.USER)
+            1 -> NotificationFragment.newInstance(if (id != -1) NotificationType.ONE else NotificationType.MEDIA, id)
             2 -> NotificationFragment.newInstance(NotificationType.SUBSCRIPTION)
             3 -> NotificationFragment.newInstance(NotificationType.COMMENT)
             else -> NotificationFragment.newInstance(NotificationType.MEDIA)

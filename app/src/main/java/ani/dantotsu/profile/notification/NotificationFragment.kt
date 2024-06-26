@@ -46,8 +46,10 @@ class NotificationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        type = arguments?.getSerializableCompat<NotificationType>("type") as NotificationType
-        getID = arguments?.getInt("id") ?: -1
+        arguments?.let {
+            getID = it.getInt("id")
+            type = it.getSerializableCompat<NotificationType>("type") as NotificationType
+        }
         binding.notificationRecyclerView.adapter = adapter
         binding.notificationRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.notificationProgressBar.isVisible = true
@@ -158,47 +160,31 @@ class NotificationFragment : Fragment() {
                 !binding.notificationRecyclerView.canScrollVertically(1)
     }
 
-    fun onClick(
-        id: Int,
-        optional: Int?,
-        type: NotificationClickType
-    ) {
-        when (type) {
-            NotificationClickType.USER -> {
-                ContextCompat.startActivity(
-                    requireContext(), Intent(requireContext(), ProfileActivity::class.java)
-                        .putExtra("userId", id), null
-                )
+    fun onClick(id: Int, optional: Int?, type: NotificationClickType) {
+        val intent = when (type) {
+            NotificationClickType.USER -> Intent(requireContext(), ProfileActivity::class.java).apply {
+                putExtra("userId", id)
             }
 
-            NotificationClickType.MEDIA -> {
-                ContextCompat.startActivity(
-                    requireContext(), Intent(requireContext(), MediaDetailsActivity::class.java)
-                        .putExtra("mediaId", id), null
-                )
+            NotificationClickType.MEDIA -> Intent(requireContext(), MediaDetailsActivity::class.java).apply {
+                putExtra("mediaId", id)
             }
 
-            NotificationClickType.ACTIVITY -> {
-                ContextCompat.startActivity(
-                    requireContext(), Intent(requireContext(), FeedActivity::class.java)
-                        .putExtra("activityId", id), null
-                )
+            NotificationClickType.ACTIVITY -> Intent(requireContext(), FeedActivity::class.java).apply {
+                putExtra("activityId", id)
             }
 
-            NotificationClickType.COMMENT -> {
-                ContextCompat.startActivity(
-                    requireContext(), Intent(requireContext(), MediaDetailsActivity::class.java)
-                        .putExtra("FRAGMENT_TO_LOAD", "COMMENTS")
-                        .putExtra("mediaId", id)
-                        .putExtra("commentId", optional ?: -1),
-                    null
-                )
-
+            NotificationClickType.COMMENT -> Intent(requireContext(), MediaDetailsActivity::class.java).apply {
+                putExtra("FRAGMENT_TO_LOAD", "COMMENTS")
+                putExtra("mediaId", id)
+                putExtra("commentId", optional ?: -1)
             }
 
-            NotificationClickType.UNDEFINED -> {
-                // Do nothing
-            }
+            NotificationClickType.UNDEFINED -> null
+        }
+
+        intent?.let {
+            ContextCompat.startActivity(requireContext(), it, null)
         }
     }
 
@@ -206,18 +192,12 @@ class NotificationFragment : Fragment() {
         super.onResume()
         if (this::binding.isInitialized) {
             binding.root.requestLayout()
-            binding.root.setBaseline((activity as NotificationActivity).navBar)
         }
     }
 
     companion object {
-        enum class NotificationClickType {
-            USER, MEDIA, ACTIVITY, COMMENT, UNDEFINED
-        }
-
-        enum class NotificationType {
-            MEDIA, USER, SUBSCRIPTION, COMMENT, ONE
-        }
+        enum class NotificationClickType { USER, MEDIA, ACTIVITY, COMMENT, UNDEFINED }
+        enum class NotificationType { MEDIA, USER, SUBSCRIPTION, COMMENT, ONE }
 
         fun newInstance(type: NotificationType, id: Int = -1): NotificationFragment {
             return NotificationFragment().apply {

@@ -1,92 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="false">
+    android:fitsSystemWindows="false"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <LinearLayout
+        android:id="@+id/markdownCreatorToolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <FrameLayout
-            android:id="@+id/markdownCreatorToolbar"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+        <ImageView
+            android:id="@+id/markdownCreatorBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginStart="12dp"
+            android:src="@drawable/ic_round_arrow_back_ios_new_24"
+            app:tint="?attr/colorOnBackground"
+            tools:ignore="ContentDescription" />
 
-            <ImageView
-                android:id="@+id/markdownCreatorBack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_marginStart="12dp"
-                android:src="@drawable/ic_round_arrow_back_ios_new_24"
-                app:tint="?attr/colorOnBackground"
-                tools:ignore="ContentDescription" />
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
 
-            <TextView
-                android:id="@+id/markdownCreatorTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="44dp"
-                android:ellipsize="end"
-                android:fontFamily="@font/poppins_bold"
-                android:gravity="center|start"
-                android:singleLine="true"
-                android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
-                android:textColor="?attr/colorOnBackground"
-                android:textSize="18sp"
-                tools:text="@string/placeholder" />
+        <CheckBox
+            android:id="@+id/privateCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="8dp"
+            android:visibility="gone"
+            android:contentDescription="@string/preview"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:text="@string/private_mode"
+            tools:ignore="ContentDescription" />
 
-            <Button
-                android:id="@+id/createButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"
-                android:fontFamily="@font/poppins_bold"
-                android:maxLines="1"
-                android:text="@string/publish"
-                app:cornerRadius="16dp"
-                tools:ignore="ButtonStyle" />
-        </FrameLayout>
+        <CheckBox
+            android:id="@+id/previewCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/preview"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:text="@string/preview"
+            tools:ignore="ContentDescription" />
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:fillViewport="true">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <EditText
-                    android:id="@+id/editText"
-                    android:layout_width="match_parent"
-                    android:layout_height="590dp"
-                    android:fontFamily="@font/poppins"
-                    android:inputType="textMultiLine"
-                    android:padding="16dp"
-                    android:nestedScrollingEnabled="true"
-                    android:gravity="top|start"
-                    android:textColor="?attr/colorOnBackground"
-                    android:textIsSelectable="true"
-                    android:textSize="12sp"
-                    android:hint="@string/reply_hint"
-                    tools:ignore="LabelFor" />
-            </LinearLayout>
-        </ScrollView>
+        <ImageButton
+            android:id="@+id/createButton"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/ic_round_send_24"
+            tools:ignore="ContentDescription"
+            tools:visibility="visible" />
     </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <EditText
+                android:id="@+id/editText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:gravity="top|start"
+                android:hint="@string/reply_hint"
+                android:inputType="textMultiLine"
+                android:nestedScrollingEnabled="true"
+                android:padding="16dp"
+                android:textColor="?attr/colorOnBackground"
+                android:textIsSelectable="true"
+                android:textSize="18sp"
+                tools:ignore="LabelFor" />
+        </LinearLayout>
+    </ScrollView>
 
     <LinearLayout
         android:id="@+id/markdownOptionsContainer"
@@ -99,155 +106,170 @@
         android:windowSoftInputMode="adjustResize">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/formatBold"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
                 android:padding="6dp"
-                android:layout_marginEnd="10dp"
                 android:src="@drawable/format_bold_24"
                 app:tint="?attr/colorOnBackground"
                 tools:ignore="ContentDescription" />
 
             <ImageView
                 android:id="@+id/formatItalic"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
                 android:padding="6dp"
-                android:layout_marginEnd="10dp"
                 android:src="@drawable/format_italic_24"
                 app:tint="?attr/colorOnBackground"
                 tools:ignore="ContentDescription" />
 
             <ImageView
                 android:id="@+id/formatStrikethrough"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
                 android:padding="6dp"
-                android:layout_marginEnd="10dp"
                 android:src="@drawable/format_strikethrough_24"
                 app:tint="?attr/colorOnBackground"
                 tools:ignore="ContentDescription" />
 
             <ImageView
                 android:id="@+id/formatSpoiler"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
                 android:padding="6dp"
-                android:layout_marginEnd="10dp"
                 android:src="@drawable/format_spoiler_24"
                 app:tint="?attr/colorOnBackground"
                 tools:ignore="ContentDescription" />
 
             <ImageView
                 android:id="@+id/formatLink"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
                 android:padding="6dp"
-                android:layout_marginEnd="10dp"
                 android:src="@drawable/format_link_24"
                 app:tint="?attr/colorOnBackground"
                 tools:ignore="ContentDescription" />
 
             <ImageView
                 android:id="@+id/formatImage"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
                 android:padding="6dp"
-                android:layout_marginEnd="10dp"
                 android:src="@drawable/format_image_24"
                 app:tint="?attr/colorOnBackground"
                 tools:ignore="ContentDescription" />
 
             <ImageView
                 android:id="@+id/formatYoutube"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:padding="6dp"
-                android:layout_marginEnd="10dp"
                 android:src="@drawable/format_youtube_24"
                 app:tint="?attr/colorOnBackground"
                 tools:ignore="ContentDescription" />
 
-            <ImageView
-                android:id="@+id/formatVideo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="6dp"
-                android:layout_marginEnd="10dp"
-                android:src="@drawable/format_video_24"
-                app:tint="?attr/colorOnBackground"
-                tools:ignore="ContentDescription" />
+
         </LinearLayout>
+
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            
+
             <ImageView
                 android:id="@+id/formatListOrdered"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
                 android:padding="6dp"
-                android:layout_marginEnd="10dp"
                 android:src="@drawable/format_list_numbered_24"
                 app:tint="?attr/colorOnBackground"
                 tools:ignore="ContentDescription" />
 
             <ImageView
                 android:id="@+id/formatListUnordered"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
                 android:padding="6dp"
-                android:layout_marginEnd="10dp"
                 android:src="@drawable/format_list_bulleted_24"
                 app:tint="?attr/colorOnBackground"
                 tools:ignore="ContentDescription" />
 
             <ImageView
                 android:id="@+id/formatTitle"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
                 android:padding="6dp"
-                android:layout_marginEnd="10dp"
                 android:src="@drawable/format_title_24"
                 app:tint="?attr/colorOnBackground"
                 tools:ignore="ContentDescription" />
 
             <ImageView
                 android:id="@+id/formatCenter"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
                 android:padding="6dp"
-                android:layout_marginEnd="10dp"
                 android:src="@drawable/format_align_center_24"
                 app:tint="?attr/colorOnBackground"
                 tools:ignore="ContentDescription" />
 
             <ImageView
                 android:id="@+id/formatQuote"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
                 android:padding="6dp"
-                android:layout_marginEnd="10dp"
                 android:src="@drawable/format_quote_24"
                 app:tint="?attr/colorOnBackground"
                 tools:ignore="ContentDescription" />
 
             <ImageView
                 android:id="@+id/formatCode"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
                 android:padding="6dp"
-                android:layout_marginEnd="10dp"
                 android:src="@drawable/format_code_24"
+                app:tint="?attr/colorOnBackground"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/formatVideo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="6dp"
+                android:src="@drawable/format_video_24"
                 app:tint="?attr/colorOnBackground"
                 tools:ignore="ContentDescription" />
         </LinearLayout>
     </LinearLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</LinearLayout>

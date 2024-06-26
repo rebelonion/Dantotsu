@@ -854,7 +854,7 @@ fun savePrefsToDownloads(
         }
     )
 }
-
+@SuppressLint("StringFormatMatches")
 fun savePrefs(serialized: String, path: String, title: String, context: Context): File? {
     var file = File(path, "$title.ani")
     var counter = 1
@@ -874,6 +874,7 @@ fun savePrefs(serialized: String, path: String, title: String, context: Context)
     }
 }
 
+@SuppressLint("StringFormatMatches")
 fun savePrefs(
     serialized: String,
     path: String,
@@ -920,7 +921,7 @@ fun shareImage(title: String, bitmap: Bitmap, context: Context) {
     intent.putExtra(Intent.EXTRA_STREAM, contentUri)
     context.startActivity(Intent.createChooser(intent, "Share $title"))
 }
-
+@SuppressLint("StringFormatMatches")
 fun saveImage(image: Bitmap, path: String, imageFileName: String): File? {
     val imageFile = File(path, "$imageFileName.png")
     return try {
@@ -1500,7 +1501,6 @@ fun buildMarkwon(
                         }
                         return false
                     }
-
                     override fun onLoadFailed(
                         e: GlideException?,
                         model: Any?,
