@@ -61,8 +61,7 @@
         <item>Ponowne czytanie</item>
         <item>Wszystko</item>
     </string-array>
-    <string name="no_notifications">Brak kolejnych powiadomień</string>
-    <string name="no_activities">Brak innych wpisów</string>
+    <string name="nothing_here">Nothing here</string>
     <string name="followers">Obserwujący</string>
     <string name="write_a_message">Napisz wiadomość</string>
     <string name="status">STATUS</string>
