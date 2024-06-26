@@ -61,8 +61,7 @@
         <item>Перечитываю</item>
         <item>Все</item>
     </string-array>
-    <string name="no_notifications">No more notifications</string>
-    <string name="no_activities">Больше нет активности</string>
+    <string name="nothing_here">Nothing here</string>
     <string name="followers">Followers</string>
     <string name="write_a_message">Написать сообщение</string>
     <string name="status">СТАТУС</string>
