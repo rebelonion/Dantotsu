@@ -60,7 +60,7 @@ class ActivityFragment : Fragment() {
         binding.feedRefresh.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             bottomMargin = navBarHeight
         }
-        binding.emptyTextView.text = getString(R.string.no_activities)
+        binding.emptyTextView.text = getString(R.string.nothing_here)
         lifecycleScope.launch {
             getList()
             if (adapter.itemCount == 0) {

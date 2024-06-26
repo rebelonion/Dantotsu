@@ -51,6 +51,7 @@ class FeedActivity : AppCompatActivity() {
         binding.notificationBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
         val getOne = intent.getIntExtra("activityId", -1)
         if (getOne != -1) { navBar.visibility = View.GONE }
+        binding.notificationViewPager.isUserInputEnabled = false
         binding.notificationViewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle, getOne)
         binding.notificationViewPager.setOffscreenPageLimit(4)
         binding.notificationViewPager.setCurrentItem(selected, false)
@@ -63,13 +64,7 @@ class FeedActivity : AppCompatActivity() {
                 newTab: AnimatedBottomBar.Tab
             ) {
                 selected = newIndex
-                binding.notificationViewPager.setCurrentItem(selected, true)
-            }
-        })
-        binding.notificationViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                navBar.selectTabAt(position)
+                binding.notificationViewPager.setCurrentItem(selected, false)
             }
         })
     }
