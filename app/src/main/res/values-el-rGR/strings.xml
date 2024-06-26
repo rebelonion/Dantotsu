@@ -61,8 +61,7 @@
         <item>Ξαναδιαβάζω</item>
         <item>Όλα</item>
     </string-array>
-    <string name="no_notifications">Όχι άλλες ειδοποιήσεις</string>
-    <string name="no_activities">Δεν υπάρχουν άλλες δραστηριότητες</string>
+    <string name="nothing_here">Nothing here</string>
     <string name="followers">Ακόλουθη</string>
     <string name="write_a_message">Γράψτε ένα μήνυμα</string>
     <string name="status">Κατάσταση</string>
