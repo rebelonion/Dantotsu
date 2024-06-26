@@ -61,8 +61,7 @@
         <item>Tekrar Okunuyor</item>
         <item>Hepsi</item>
     </string-array>
-    <string name="no_notifications">Başka bildirim yok</string>
-    <string name="no_activities">Baika aktivite yok</string>
+    <string name="nothing_here">Nothing here</string>
     <string name="followers">Takipçiler</string>
     <string name="write_a_message">Mesaj Yaz</string>
     <string name="status">DURUM</string>
