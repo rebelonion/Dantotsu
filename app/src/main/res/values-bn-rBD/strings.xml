@@ -61,8 +61,7 @@
         <item>পুনরালোচনা</item>
         <item>সব</item>
     </string-array>
-    <string name="no_notifications">নটিফিকেশন বন্ধ</string>
-    <string name="no_activities">No more activities</string>
+    <string name="nothing_here">Nothing here</string>
     <string name="followers">অনুসারী</string>
     <string name="write_a_message">Write a Message</string>
     <string name="status">অবস্থা</string>
