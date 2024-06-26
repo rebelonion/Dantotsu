@@ -61,8 +61,7 @@
         <item>重新阅读</item>
         <item>全部</item>
     </string-array>
-    <string name="no_notifications">无更多通知</string>
-    <string name="no_activities">没有更多活动</string>
+    <string name="nothing_here">Nothing here</string>
     <string name="followers">关注者</string>
     <string name="write_a_message">写消息</string>
     <string name="status">状态</string>
