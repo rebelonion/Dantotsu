@@ -61,8 +61,7 @@
         <item>Relecture</item>
         <item>Tous</item>
     </string-array>
-    <string name="no_notifications">Plus de notifications</string>
-    <string name="no_activities">Plus d\'activités</string>
+    <string name="nothing_here">Nothing here</string>
     <string name="followers">Abonnés</string>
     <string name="write_a_message">Écrire un message</string>
     <string name="status">État</string>
