@@ -61,8 +61,7 @@
         <item>다시 읽기 중</item>
         <item>모두</item>
     </string-array>
-    <string name="no_notifications">더 이상 알림이 없습니다</string>
-    <string name="no_activities">활동이 더 이상 없습니다</string>
+    <string name="nothing_here">Nothing here</string>
     <string name="followers">팔로워</string>
     <string name="write_a_message">메시지 작성</string>
     <string name="status">상태</string>
