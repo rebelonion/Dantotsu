@@ -61,8 +61,7 @@
         <item>Rilexuar</item>
         <item>Te Gjitha</item>
     </string-array>
-    <string name="no_notifications">Nuk ka më njoftime</string>
-    <string name="no_activities">Nuk ka më aktivitete</string>
+    <string name="nothing_here">Nothing here</string>
     <string name="followers">Ndjekësit</string>
     <string name="write_a_message">Shkruaj një Mesazh</string>
     <string name="status">STATUSI</string>
