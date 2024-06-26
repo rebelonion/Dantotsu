@@ -61,8 +61,7 @@
         <item>Opnieuw aan het Lezen</item>
         <item>Alle</item>
     </string-array>
-    <string name="no_notifications">Geen meldingen meer</string>
-    <string name="no_activities">Geen activiteiten meer</string>
+    <string name="nothing_here">Nothing here</string>
     <string name="followers">Volgers</string>
     <string name="write_a_message">Schrijf een Bericht</string>
     <string name="status">STATUS</string>
