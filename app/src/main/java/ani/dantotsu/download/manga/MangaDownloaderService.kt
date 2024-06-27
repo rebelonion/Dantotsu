@@ -32,6 +32,7 @@ import ani.dantotsu.media.manga.MangaReadFragment.Companion.ACTION_DOWNLOAD_STAR
 import ani.dantotsu.media.manga.MangaReadFragment.Companion.EXTRA_CHAPTER_NUMBER
 import ani.dantotsu.snackString
 import ani.dantotsu.util.Logger
+import ani.dantotsu.util.NumberConverter.Companion.ofLength
 import com.anggrayudi.storage.file.deleteRecursively
 import com.anggrayudi.storage.file.forceDelete
 import com.anggrayudi.storage.file.openOutputStream
@@ -235,7 +236,7 @@ class MangaDownloaderService : Service() {
                         }
 
                         if (bitmap != null) {
-                            saveToDisk("$index.jpg", outputDir, bitmap)
+                            saveToDisk("${index.ofLength(3)}.jpg", outputDir, bitmap)
                         }
                         farthest++
 

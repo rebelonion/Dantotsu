@@ -47,5 +47,9 @@ class NumberConverter {
             val intBits = java.lang.Float.floatToIntBits(number)
             return Integer.toBinaryString(intBits)
         }
+
+        fun Int.ofLength(length: Int): String {
+            return this.toString().padStart(length, '0')
+        }
     }
 }

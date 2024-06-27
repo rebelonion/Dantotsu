@@ -91,17 +91,16 @@ class AnilistHomeViewModel : ViewModel() {
 
     fun getHidden(): LiveData<ArrayList<Media>> = hidden
 
-    @Suppress("UNCHECKED_CAST")
     suspend fun initHomePage() {
         val res = Anilist.query.initHomePage()
-        res["currentAnime"]?.let { animeContinue.postValue(it as ArrayList<Media>?) }
-        res["favoriteAnime"]?.let { animeFav.postValue(it as ArrayList<Media>?) }
-        res["plannedAnime"]?.let { animePlanned.postValue(it as ArrayList<Media>?) }
-        res["currentManga"]?.let { mangaContinue.postValue(it as ArrayList<Media>?) }
-        res["favoriteManga"]?.let { mangaFav.postValue(it as ArrayList<Media>?) }
-        res["plannedManga"]?.let { mangaPlanned.postValue(it as ArrayList<Media>?) }
-        res["recommendations"]?.let { recommendation.postValue(it as ArrayList<Media>?) }
-        res["hidden"]?.let { hidden.postValue(it as ArrayList<Media>?) }
+        res["currentAnime"]?.let { animeContinue.postValue(it) }
+        res["favoriteAnime"]?.let { animeFav.postValue(it) }
+        res["currentAnimePlanned"]?.let { animePlanned.postValue(it) }
+        res["currentManga"]?.let { mangaContinue.postValue(it) }
+        res["favoriteManga"]?.let { mangaFav.postValue(it) }
+        res["currentMangaPlanned"]?.let { mangaPlanned.postValue(it) }
+        res["recommendations"]?.let { recommendation.postValue(it) }
+        res["hidden"]?.let { hidden.postValue(it) }
     }
 
     suspend fun loadMain(context: FragmentActivity) {

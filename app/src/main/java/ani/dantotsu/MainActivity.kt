@@ -313,7 +313,6 @@ class MainActivity : AppCompatActivity() {
             mainViewPager.adapter =
                 ViewPagerAdapter(supportFragmentManager, lifecycle)
             mainViewPager.setPageTransformer(ZoomOutPageTransformer())
-            mainViewPager.offscreenPageLimit = 1
             navbar.selectTabAt(selectedOption)
             navbar.setOnTabSelectListener(object :
                 AnimatedBottomBar.OnTabSelectListener {

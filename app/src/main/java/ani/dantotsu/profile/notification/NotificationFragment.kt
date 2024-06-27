@@ -20,7 +20,11 @@ import ani.dantotsu.notifications.comment.CommentStore
 import ani.dantotsu.notifications.subscription.SubscriptionStore
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.profile.activity.FeedActivity
-import ani.dantotsu.setBaseline
+import ani.dantotsu.profile.notification.NotificationFragment.Companion.NotificationType.COMMENT
+import ani.dantotsu.profile.notification.NotificationFragment.Companion.NotificationType.MEDIA
+import ani.dantotsu.profile.notification.NotificationFragment.Companion.NotificationType.ONE
+import ani.dantotsu.profile.notification.NotificationFragment.Companion.NotificationType.SUBSCRIPTION
+import ani.dantotsu.profile.notification.NotificationFragment.Companion.NotificationType.USER
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import com.xwray.groupie.GroupieAdapter
@@ -29,8 +33,8 @@ import kotlinx.coroutines.launch
 
 
 class NotificationFragment : Fragment() {
-    private lateinit var type : NotificationType
-    private var getID : Int = -1
+    private lateinit var type: NotificationType
+    private var getID: Int = -1
     private lateinit var binding: FragmentNotificationsBinding
     private var adapter: GroupieAdapter = GroupieAdapter()
     private var currentPage = 1
@@ -53,12 +57,10 @@ class NotificationFragment : Fragment() {
         binding.notificationRecyclerView.adapter = adapter
         binding.notificationRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.notificationProgressBar.isVisible = true
-        binding.emptyTextView.text = getString(R.string.no_notifications)
+        binding.emptyTextView.text = getString(R.string.nothing_here)
         lifecycleScope.launch {
             getList()
-            if (adapter.itemCount == 0) {
-                binding.emptyTextView.isVisible = true
-            }
+
             binding.notificationProgressBar.isVisible = false
         }
         binding.notificationSwipeRefresh.setOnRefreshListener {
@@ -87,13 +89,16 @@ class NotificationFragment : Fragment() {
 
     private suspend fun getList() {
         val list = when (type) {
-            NotificationType.ONE -> getNotificationsFiltered(false) { it.id == getID }
-            NotificationType.MEDIA -> getNotificationsFiltered(type = true) { it.media != null }
-            NotificationType.USER -> getNotificationsFiltered { it.media == null }
-            NotificationType.SUBSCRIPTION -> getSubscriptions()
-            NotificationType.COMMENT -> getComments()
+            ONE -> getNotificationsFiltered(false) { it.id == getID }
+            MEDIA -> getNotificationsFiltered(type = true) { it.media != null }
+            USER -> getNotificationsFiltered { it.media == null }
+            SUBSCRIPTION -> getSubscriptions()
+            COMMENT -> getComments()
         }
-        adapter.addAll(list.map { NotificationItem(it, ::onClick) })
+        adapter.addAll(list.map { NotificationItem(it, type, adapter, ::onClick) })
+        if (adapter.itemCount == 0) {
+            binding.emptyTextView.isVisible = true
+        }
     }
 
     private suspend fun getNotificationsFiltered(
@@ -114,8 +119,11 @@ class NotificationFragment : Fragment() {
             PrefName.SubscriptionNotificationStore,
             null
         ) ?: listOf()
-        return list.sortedByDescending { (it.time / 1000L).toInt() }
-            .filter { it.image != null }.map {
+
+        return list
+            .sortedByDescending { (it.time / 1000L).toInt() }
+            .filter { it.image != null } // to remove old data
+            .map {
                 Notification(
                     it.type,
                     System.currentTimeMillis().toInt(),
@@ -162,19 +170,31 @@ class NotificationFragment : Fragment() {
 
     fun onClick(id: Int, optional: Int?, type: NotificationClickType) {
         val intent = when (type) {
-            NotificationClickType.USER -> Intent(requireContext(), ProfileActivity::class.java).apply {
+            NotificationClickType.USER -> Intent(
+                requireContext(),
+                ProfileActivity::class.java
+            ).apply {
                 putExtra("userId", id)
             }
 
-            NotificationClickType.MEDIA -> Intent(requireContext(), MediaDetailsActivity::class.java).apply {
+            NotificationClickType.MEDIA -> Intent(
+                requireContext(),
+                MediaDetailsActivity::class.java
+            ).apply {
                 putExtra("mediaId", id)
             }
 
-            NotificationClickType.ACTIVITY -> Intent(requireContext(), FeedActivity::class.java).apply {
+            NotificationClickType.ACTIVITY -> Intent(
+                requireContext(),
+                FeedActivity::class.java
+            ).apply {
                 putExtra("activityId", id)
             }
 
-            NotificationClickType.COMMENT -> Intent(requireContext(), MediaDetailsActivity::class.java).apply {
+            NotificationClickType.COMMENT -> Intent(
+                requireContext(),
+                MediaDetailsActivity::class.java
+            ).apply {
                 putExtra("FRAGMENT_TO_LOAD", "COMMENTS")
                 putExtra("mediaId", id)
                 putExtra("commentId", optional ?: -1)
@@ -187,6 +207,7 @@ class NotificationFragment : Fragment() {
             ContextCompat.startActivity(requireContext(), it, null)
         }
     }
+
 
     override fun onResume() {
         super.onResume()

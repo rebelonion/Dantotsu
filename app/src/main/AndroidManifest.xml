@@ -202,7 +202,7 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".util.ActivityMarkdownCreator"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize|stateVisible" />
         <activity android:name=".parsers.ParserTestActivity" />
         <activity
             android:name=".media.ReviewActivity"
