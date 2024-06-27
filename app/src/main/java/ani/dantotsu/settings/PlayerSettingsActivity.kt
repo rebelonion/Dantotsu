@@ -1,6 +1,7 @@
 package ani.dantotsu.settings
 
 import android.app.AlertDialog
+import android.app.Dialog
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.Build
@@ -31,7 +32,6 @@ import ani.dantotsu.toast
 import ani.dantotsu.util.customAlertDialog
 import com.google.android.material.slider.Slider.OnChangeListener
 import kotlin.math.roundToInt
-
 
 class PlayerSettingsActivity : AppCompatActivity() {
     lateinit var binding: ActivityPlayerSettingsBinding
@@ -318,6 +318,61 @@ class PlayerSettingsActivity : AppCompatActivity() {
             toggleSubOptions(isChecked)
         }
         toggleSubOptions(binding.subSwitch.isChecked)
+        val subLanguages = arrayOf(
+            "Albanian",
+            "Arabic",
+            "Bosnian",
+            "Bulgarian",
+            "Chinese",
+            "Croatian",
+            "Czech",
+            "Danish",
+            "Dutch",
+            "English",
+            "Estonian",
+            "Finnish",
+            "French",
+            "Georgian",
+            "German",
+            "Greek",
+            "Hebrew",
+            "Hindi",
+            "Indonesian",
+            "Irish",
+            "Italian",
+            "Japanese",
+            "Korean",
+            "Lithuanian",
+            "Luxembourgish",
+            "Macedonian",
+            "Mongolian",
+            "Norwegian",
+            "Polish",
+            "Portuguese",
+            "Punjabi",
+            "Romanian",
+            "Russian",
+            "Serbian",
+            "Slovak",
+            "Slovenian",
+            "Spanish",
+            "Turkish",
+            "Ukrainian",
+            "Urdu",
+            "Vietnamese",
+        )
+        val subLanguageDialog = AlertDialog.Builder(this, R.style.MyPopup)
+            .setTitle(getString(R.string.subtitle_langauge))
+        binding.videoSubLanguage.setOnClickListener {
+            val dialog = subLanguageDialog.setSingleChoiceItems(
+                subLanguages,
+                PrefManager.getVal(PrefName.SubLanguage)
+            ) { dialog, count ->
+                PrefManager.setVal(PrefName.SubLanguage, count)
+                dialog.dismiss()
+            }.show()
+            dialog.window?.setDimAmount(0.8f)
+        }
         val colorsPrimary =
             arrayOf(
                 "Black",
