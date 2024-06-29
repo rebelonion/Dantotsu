@@ -6,6 +6,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.core.widget.addTextChangedListener
 import ani.dantotsu.R
@@ -42,7 +43,7 @@ class ActivityMarkdownCreator : AppCompatActivity() {
         BOLD("****", 2, R.id.formatBold),
         ITALIC("**", 1, R.id.formatItalic),
         STRIKETHROUGH("~~~~", 2, R.id.formatStrikethrough),
-        SPOILER("~||~", 2, R.id.formatSpoiler),
+        SPOILER("~!!~", 2, R.id.formatSpoiler),
         LINK("[Placeholder](%s)", 0, R.id.formatLink),
         IMAGE("img(%s)", 0, R.id.formatImage),
         YOUTUBE("youtube(%s)", 0, R.id.formatYoutube),
@@ -267,9 +268,13 @@ class ActivityMarkdownCreator : AppCompatActivity() {
     private fun previewMarkdown(preview: Boolean) {
         val markwon = buildMarkwon(this, false, anilist = true)
         if (preview) {
+            binding.editText.isVisible = false
             binding.editText.isEnabled = false
-            markwon.setMarkdown(binding.editText, text)
+            binding.markdownPreview.isVisible = true
+            markwon.setMarkdown(binding.markdownPreview, AniMarkdown.getBasicAniHTML(text))
         } else {
+            binding.editText.isVisible = true
+            binding.markdownPreview.isVisible = false
             binding.editText.setText(text)
             binding.editText.isEnabled = true
             val markwonEditor = MarkwonEditor.create(markwon)

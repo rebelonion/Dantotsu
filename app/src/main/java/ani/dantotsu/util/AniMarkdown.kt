@@ -1,12 +1,13 @@
 package ani.dantotsu.util
 
+import ani.dantotsu.getYoutubeId
 import ani.dantotsu.util.ColorEditor.Companion.toCssColor
 
 class AniMarkdown { //istg anilist has the worst api
     companion object {
-        private fun convertNestedImageToHtml(markdown: String): String {
+        private fun String.convertNestedImageToHtml(): String {
             val regex = """\[!\[(.*?)]\((.*?)\)]\((.*?)\)""".toRegex()
-            return regex.replace(markdown) { matchResult ->
+            return regex.replace(this) { matchResult ->
                 val altText = matchResult.groupValues[1]
                 val imageUrl = matchResult.groupValues[2]
                 val linkUrl = matchResult.groupValues[3]
@@ -14,26 +15,49 @@ class AniMarkdown { //istg anilist has the worst api
             }
         }
 
-        private fun convertImageToHtml(markdown: String): String {
+        private fun String.convertImageToHtml(): String {
             val regex = """!\[(.*?)]\((.*?)\)""".toRegex()
-            return regex.replace(markdown) { matchResult ->
+            val anilistRegex = """img\(.*?\)""".toRegex()
+            val markdownImage = regex.replace(this) { matchResult ->
                 val altText = matchResult.groupValues[1]
                 val imageUrl = matchResult.groupValues[2]
                 """<img src="$imageUrl" alt="$altText">"""
             }
+            return anilistRegex.replace(markdownImage) { matchResult ->
+                val imageUrl = matchResult.groupValues[1]
+                """<img src="$imageUrl" alt="Image">"""
+            }
         }
 
-        private fun convertLinkToHtml(markdown: String): String {
+        private fun String.convertLinkToHtml(): String {
             val regex = """\[(.*?)]\((.*?)\)""".toRegex()
-            return regex.replace(markdown) { matchResult ->
+            return regex.replace(this) { matchResult ->
                 val linkText = matchResult.groupValues[1]
                 val linkUrl = matchResult.groupValues[2]
                 """<a href="$linkUrl">$linkText</a>"""
             }
         }
 
-        private fun replaceLeftovers(html: String): String {
-            return html.replace("&nbsp;", " ")
+        private fun String.convertYoutubeToHtml(): String {
+            val regex = """<div class='youtube' id='(.*?)'></div>""".toRegex()
+            return regex.replace(this) { matchResult ->
+                val url = matchResult.groupValues[1]
+                val id = getYoutubeId(url)
+                if (id.isNotEmpty()) {
+                    """<div>
+                    <a href="https://www.youtube.com/watch?v=$id"><img src="https://i3.ytimg.com/vi/$id/maxresdefault.jpg" alt="$url"></a>
+                    <align center>
+                    <a href="https://www.youtube.com/watch?v=$id">Youtube Link</a>
+                    </align>
+                    </div>""".trimIndent()
+                } else {
+                    """<a href="$url">Youtube Video</a>"""
+                }
+            }
+        }
+
+        private fun String.replaceLeftovers(): String {
+            return this.replace("&nbsp;", " ")
                 .replace("&amp;", "&")
                 .replace("&lt;", "<")
                 .replace("&gt;", ">")
@@ -46,18 +70,29 @@ class AniMarkdown { //istg anilist has the worst api
                 .replace("\n", "<br>")
         }
 
-        private fun underlineToHtml(html: String): String {
-            return html.replace("(?s)___(.*?)___".toRegex(), "<br><em><strong>$1</strong></em><br>")
+        private fun String.underlineToHtml(): String {
+            return this.replace("(?s)___(.*?)___".toRegex(), "<br><em><strong>$1</strong></em><br>")
                 .replace("(?s)__(.*?)__".toRegex(), "<br><strong>$1</strong><br>")
                 .replace("(?s)\\s+_([^_]+)_\\s+".toRegex(), "<em>$1</em>")
         }
 
+        private fun String.convertCenterToHtml(): String {
+            val regex = """~~~(.*?)~~~""".toRegex()
+            return regex.replace(this) { matchResult ->
+                val centerText = matchResult.groupValues[1]
+                """<align center>$centerText</align>"""
+            }
+        }
+
         fun getBasicAniHTML(html: String): String {
-            val step0 = convertNestedImageToHtml(html)
-            val step1 = convertImageToHtml(step0)
-            val step2 = convertLinkToHtml(step1)
-            val step3 = replaceLeftovers(step2)
-            return underlineToHtml(step3)
+            return html
+                .convertNestedImageToHtml()
+                .convertImageToHtml()
+                .convertLinkToHtml()
+                .convertYoutubeToHtml()
+                .convertCenterToHtml()
+                .replaceLeftovers()
+                .underlineToHtml()
         }
 
         fun getFullAniHTML(html: String, textColor: Int): String {
