@@ -61,7 +61,7 @@
         <item>Erneut lesen</item>
         <item>Alle</item>
     </string-array>
-    <string name="nothing_here">Nothing here</string>
+    <string name="nothing_here">Nichts hier</string>
     <string name="followers">Follower</string>
     <string name="write_a_message">Nachricht schreiben</string>
     <string name="status">STATUS</string>
@@ -367,8 +367,8 @@
     <string name="use_alarm_manager_reliable">Verwenden Sie Alarm Manager für zuverlässige Benachrichtigungen</string>
     <string name="use_alarm_manager_confirm">Die Verwendung des Alarmmanagers kann bei der Batterieoptimierung helfen, verbraucht aber möglicherweise mehr Batterie. Außerdem ist die Berechtigung \"Alarmmanager\" erforderlich.</string>
     <string name="use">Verwenden Sie</string>
-    <string name="remove_all_subscriptions">Remove All Subscriptions</string>
-    <string name="remove_all_subscriptions_desc">Are you sure you want to remove all subscriptions for %1$s?</string>
+    <string name="remove_all_subscriptions">Alle Abonnements entfernen</string>
+    <string name="remove_all_subscriptions_desc">Sind Sie sicher, dass Sie alle Abonnements für %1$s entfernen möchten?</string>
     <string name="checking_subscriptions">Benachrichtigung zur Überprüfung von Abonnements</string>
     <string name="subscriptions_checking_time_s">Häufigkeit der Aktualisierung von Abonnements: %1$s</string>
     <string name="subscriptions_checking_time">Häufigkeit der Aktualisierung von Abonnements</string>
