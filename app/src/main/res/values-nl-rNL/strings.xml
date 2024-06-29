@@ -61,7 +61,7 @@
         <item>Opnieuw aan het Lezen</item>
         <item>Alle</item>
     </string-array>
-    <string name="nothing_here">Nothing here</string>
+    <string name="nothing_here">Niets hier</string>
     <string name="followers">Volgers</string>
     <string name="write_a_message">Schrijf een Bericht</string>
     <string name="status">STATUS</string>
@@ -366,8 +366,8 @@
     <string name="use_alarm_manager_reliable">Gebruik Alarmbeheerder voor betrouwbare meldingen</string>
     <string name="use_alarm_manager_confirm">Het gebruik van Alarmbeheerder kan helpen bij het bestrijden van batterijoptimalisatie, maar kan meer batterij verbruiken. Het vereist ook de machtiging van de Alarmbeheerder.</string>
     <string name="use">Gebruiken</string>
-    <string name="remove_all_subscriptions">Remove All Subscriptions</string>
-    <string name="remove_all_subscriptions_desc">Are you sure you want to remove all subscriptions for %1$s?</string>
+    <string name="remove_all_subscriptions">Verwijder alle abonnementen</string>
+    <string name="remove_all_subscriptions_desc">Weet u zeker dat u alle abonnementen voor %1$s wilt verwijderen?</string>
     <string name="checking_subscriptions">Melding voor het controleren van abonnementen</string>
     <string name="subscriptions_checking_time_s">Frequentie van updates van abonnementen: %1$s</string>
     <string name="subscriptions_checking_time">Frequentie van updates van abonnementen</string>
@@ -387,7 +387,7 @@
     <string name="error_message">Fout: %1$s</string>
     <string name="install_step">Stap: %1$s</string>
     <string name="review">Beoordelen</string>
-    <string name="reviews">Recensies</string>
+    <string name="reviews">Beoordelingen</string>
     <string name="discord_nothing_button">Alleen de eerste knop weergeven</string>
     <string name="discord_dantotsu_button">Toon Dantotsu in de tweede knop</string>
     <string name="discord_anilist_button">Toon je AniList-profiel in plaats daarvan</string>
@@ -643,7 +643,7 @@
     <string name="requires_android_12">Vereist Android 12+</string>
     <string name="share_username_in_crash_reports">Gebruikersnaam delen</string>
     <string name="pinned_sources">Vastgezette Bronnen</string>
-    <string name="backup_restore">Back-up en Herstel</string>
+    <string name="backup_restore">Backup en Herstellen</string>
     <string name="restore_settings">Instellingen Importeren</string>
     <string name="restore_settings_underline"><u>Instellingen Herstellen</u></string>
     <string name="try_internal_cast_experimental">Probeer Interne Cast (Experimenteel)</string>
