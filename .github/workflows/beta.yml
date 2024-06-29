@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: true
-      SKIP_BUILD: false
+      SKIP_BUILD: true
 
     steps:
     - name: Checkout repo
@@ -136,16 +136,19 @@ jobs:
         contributor_colors["rebelonion"]="#d4e5ed"
         hex_to_decimal() { printf '%d' "0x${1#"#"}"; }
         
-        # Count recent commits and create an associative array
+        # Get commit counts for all authors on the dev branch
         declare -A recent_commit_counts
         while read -r count name; do
+            # Remove leading spaces and quotes from the name
+            name=$(echo "$name" | sed -e 's/^[[:space:]]*//' -e 's/^"//' -e 's/"$//')
             recent_commit_counts["$name"]=$count
-        done < <(echo "$COMMIT_LOG" | sed 's/%0A/\n/g' | grep -oP '(?<=~)[^[]*' | sort | uniq -c | sort -rn)
+        done < <(git shortlog -s -n dev)
+        
         # Fetch contributors from GitHub
         contributors=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
                        "https://api.github.com/repos/${{ github.repository }}/contributors")
         
-        # Create a sorted list of contributors based on recent commit counts
+        # Create a sorted list of contributors based on commit counts
         sorted_contributors=$(for login in $(echo "$contributors" | jq -r '.[].login'); do
             user_info=$(fetch_user_details "$login")
             name=$(echo "$user_info" | cut -d'|' -f1)
@@ -157,7 +160,7 @@ jobs:
         developers=""
         committers_count=0
         max_commits=0
-        top_contributor=""
+        top_contributors=()
         top_contributor_count=0
         top_contributor_avatar=""
         embed_color=$default_color
@@ -184,9 +187,6 @@ jobs:
               top_contributor_count=$((top_contributor_count + 1))
               embed_color=$default_color
             fi
-            
-            # Get commit count for this contributor on the dev branch
-            branch_commit_count=$(git rev-list --count dev --author="$name")
             
             extra_info="${additional_info[$name]}"
             if [ -n "$extra_info" ]; then
