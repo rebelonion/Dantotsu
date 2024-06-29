@@ -61,7 +61,7 @@
         <item>Перечитываю</item>
         <item>Все</item>
     </string-array>
-    <string name="nothing_here">Nothing here</string>
+    <string name="nothing_here">Здесь ничего нет</string>
     <string name="followers">Followers</string>
     <string name="write_a_message">Написать сообщение</string>
     <string name="status">СТАТУС</string>
@@ -366,8 +366,8 @@
     <string name="use_alarm_manager_reliable">Use Alarm Manager for reliable Notifications</string>
     <string name="use_alarm_manager_confirm">Using Alarm Manger can help fight against battery optimization, but may consume more battery. It also requires the Alarm Manager permission.</string>
     <string name="use">Use</string>
-    <string name="remove_all_subscriptions">Remove All Subscriptions</string>
-    <string name="remove_all_subscriptions_desc">Are you sure you want to remove all subscriptions for %1$s?</string>
+    <string name="remove_all_subscriptions">Удалить все подписки</string>
+    <string name="remove_all_subscriptions_desc">Вы уверены, что хотите удалить все подписки для %1$s?</string>
     <string name="checking_subscriptions">Уведомление о проверке подписок</string>
     <string name="subscriptions_checking_time_s">Частота проверки подписок: %1$s</string>
     <string name="subscriptions_checking_time">Частота проверки подписок</string>
@@ -645,7 +645,7 @@
     <string name="pinned_sources">Закрепленные источники</string>
     <string name="backup_restore">Резервное копирование и восстановление</string>
     <string name="restore_settings">Импорт настроек</string>
-    <string name="restore_settings_underline"><u>Импорт настроек</u></string>
+    <string name="restore_settings_underline"><u>Восстановить настройки</u></string>
     <string name="try_internal_cast_experimental">Попробуйте внутренний метач (экспериментальный)</string>
     <string name="comments">Комментарии</string>
     <string name="newest">Новые</string>
