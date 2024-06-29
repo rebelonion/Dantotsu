@@ -61,7 +61,7 @@
         <item>Rilexuar</item>
         <item>Te Gjitha</item>
     </string-array>
-    <string name="nothing_here">Nothing here</string>
+    <string name="nothing_here">Asgjë këtu</string>
     <string name="followers">Ndjekësit</string>
     <string name="write_a_message">Shkruaj një Mesazh</string>
     <string name="status">STATUSI</string>
@@ -370,8 +370,8 @@
     <string name="use_alarm_manager_reliable">Përdor Menaxherin e Alarmeve për njoftimet e besueshme</string>
     <string name="use_alarm_manager_confirm">Përdorimi i Menaxherit të Alarmeve mund të ndihmojë në luftën kundër optimizimit të baterisë, por mund të konsumojë më shumë bateri. Gjithashtu kërkon lejen e Menaxherit të Alarmit.</string>
     <string name="use">Përdor</string>
-    <string name="remove_all_subscriptions">Remove All Subscriptions</string>
-    <string name="remove_all_subscriptions_desc">Are you sure you want to remove all subscriptions for %1$s?</string>
+    <string name="remove_all_subscriptions">Hiq të gjitha abonimet</string>
+    <string name="remove_all_subscriptions_desc">A jeni i sigurt që doni të hiqni të gjitha abonimet për %1$s?</string>
     <string name="checking_subscriptions">Njoftimi për Kontrollin e Abonimeve</string>
     <string name="subscriptions_checking_time_s">Frekuenca e Përditësimit të Abonimeve : %1$s</string>
     <string name="subscriptions_checking_time">Frekuenca e Përditësimit të Abonimeve</string>
@@ -648,7 +648,7 @@
     <string name="share_username_in_crash_reports">Ndani emrin e përdoruesit</string>
     <string name="pinned_sources">Burime të ngjitur</string>
     <string name="backup_restore">Kopje dhe Rivendosje</string>
-    <string name="restore_settings">Importo Cilësimet</string>
+    <string name="restore_settings">Import Settings</string>
     <string name="restore_settings_underline"><u>Rivendos Cilësimet</u></string>
     <string name="try_internal_cast_experimental">Provoni Transmetimin e Brendshëm (Eksperimental)</string>
     <string name="comments">Komente</string>
