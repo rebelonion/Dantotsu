@@ -61,7 +61,7 @@
         <item>Releyendo</item>
         <item>Todo</item>
     </string-array>
-    <string name="nothing_here">Nothing here</string>
+    <string name="nothing_here">Nada por aquí</string>
     <string name="followers">Seguidores</string>
     <string name="write_a_message">Escribe un mensaje</string>
     <string name="status">Estado</string>
@@ -364,8 +364,8 @@
     <string name="use_alarm_manager_reliable">Utiliza el gestor de alarmas para notificaciones confiables</string>
     <string name="use_alarm_manager_confirm">El uso de opción Administrador de Alarma puede ayudar a luchar contra la optimización de la batería, pero puede consumir más batería. También requiere el permiso Administrador de Alarma.</string>
     <string name="use">Utilizar</string>
-    <string name="remove_all_subscriptions">Remove All Subscriptions</string>
-    <string name="remove_all_subscriptions_desc">Are you sure you want to remove all subscriptions for %1$s?</string>
+    <string name="remove_all_subscriptions">Eliminar todas las suscripciones</string>
+    <string name="remove_all_subscriptions_desc">¿Seguro que quieres eliminar todas las suscripciones para %1$s?</string>
     <string name="checking_subscriptions">Notificación para revisar suscripciones</string>
     <string name="subscriptions_checking_time_s">Frecuencia de actualización de suscripciones: %1$s</string>
     <string name="subscriptions_checking_time">Frecuencia de actualización de suscripciones</string>
@@ -385,7 +385,7 @@
     <string name="error_message">Error: %1$s</string>
     <string name="install_step">Pasó: %1$s</string>
     <string name="review">Revisar</string>
-    <string name="reviews">Reseñas</string>
+    <string name="reviews">Opiniones</string>
     <string name="discord_nothing_button">Mostrar solo el primer botón</string>
     <string name="discord_dantotsu_button">Mostrar dantotsu en el segundo botón</string>
     <string name="discord_anilist_button">Muestra tu perfil de AniList en su lugar</string>
@@ -641,9 +641,9 @@
     <string name="requires_android_12">Requiere Android 12+</string>
     <string name="share_username_in_crash_reports">Compartir nombre de usuario</string>
     <string name="pinned_sources">Fuentes fijadas</string>
-    <string name="backup_restore">Respaldo y restauración</string>
+    <string name="backup_restore">Copia de seguridad y restauración</string>
     <string name="restore_settings">Importar configuraciones</string>
-    <string name="restore_settings_underline"><u>Importar configuraciones</u></string>
+    <string name="restore_settings_underline"><u>Restaurar configuraciones</u></string>
     <string name="try_internal_cast_experimental">Intenta transmitir internamente (Experimental)</string>
     <string name="comments">Comentarios</string>
     <string name="newest">Más reciente</string>
