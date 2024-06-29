@@ -61,7 +61,7 @@
         <item>Rileggendo</item>
         <item>Tutto</item>
     </string-array>
-    <string name="nothing_here">Nothing here</string>
+    <string name="nothing_here">Niente qui</string>
     <string name="followers">Followers</string>
     <string name="write_a_message">Scrivi un Messaggio</string>
     <string name="status">STATO</string>
@@ -366,8 +366,8 @@
     <string name="use_alarm_manager_reliable">Usa il gestore delle allarmi per notifiche affidabili</string>
     <string name="use_alarm_manager_confirm">L\'utilizzo del Gestore delle Allarmi può aiutare a combattere l\'ottimizzazione della batteria, ma potrebbe consumare più batteria. Richiede anche il permesso del Gestore delle Allarmi.</string>
     <string name="use">Usa</string>
-    <string name="remove_all_subscriptions">Remove All Subscriptions</string>
-    <string name="remove_all_subscriptions_desc">Are you sure you want to remove all subscriptions for %1$s?</string>
+    <string name="remove_all_subscriptions">Rimuovi tutte le sottoscrizioni</string>
+    <string name="remove_all_subscriptions_desc">Sei sicuro di voler rimuovere tutte le sottoscrizioni per %1$s?</string>
     <string name="checking_subscriptions">Notifica per il controllo delle iscrizioni</string>
     <string name="subscriptions_checking_time_s">Frequenza di aggiornamento delle iscrizioni: %1$s</string>
     <string name="subscriptions_checking_time">Frequenza di aggiornamento delle iscrizioni</string>
