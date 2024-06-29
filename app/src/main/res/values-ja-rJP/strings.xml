@@ -61,7 +61,7 @@
         <item>再読み込み</item>
         <item>全て</item>
     </string-array>
-    <string name="nothing_here">Nothing here</string>
+    <string name="nothing_here">ここには何もありません</string>
     <string name="followers">Followers</string>
     <string name="write_a_message">メッセージを書く</string>
     <string name="status">ステータス</string>
@@ -366,8 +366,8 @@
     <string name="use_alarm_manager_reliable">Use Alarm Manager for reliable Notifications</string>
     <string name="use_alarm_manager_confirm">Using Alarm Manger can help fight against battery optimization, but may consume more battery. It also requires the Alarm Manager permission.</string>
     <string name="use">Use</string>
-    <string name="remove_all_subscriptions">Remove All Subscriptions</string>
-    <string name="remove_all_subscriptions_desc">Are you sure you want to remove all subscriptions for %1$s?</string>
+    <string name="remove_all_subscriptions">すべてのサブスクリプションを削除</string>
+    <string name="remove_all_subscriptions_desc">すべてのサブスクリプションを削除してもよろしいですか %1$s のために?</string>
     <string name="checking_subscriptions">購読の確認に関する通知</string>
     <string name="subscriptions_checking_time_s">購読の更新頻度：%1$s</string>
     <string name="subscriptions_checking_time">購読の更新頻度</string>
@@ -643,8 +643,8 @@
     <string name="requires_android_12">Android 12以上が必要です</string>
     <string name="share_username_in_crash_reports">クラッシュレポートにユーザー名を共有する</string>
     <string name="pinned_sources">ピン留めされたソース</string>
-    <string name="backup_restore">バックアップと復元</string>
-    <string name="restore_settings">設定のインポート</string>
+    <string name="backup_restore">バックアップとリストア</string>
+    <string name="restore_settings">設定をインポート</string>
     <string name="restore_settings_underline"><u>設定を復元</u></string>
     <string name="try_internal_cast_experimental">内部キャストを試す（実験的）</string>
     <string name="comments">コメント</string>
