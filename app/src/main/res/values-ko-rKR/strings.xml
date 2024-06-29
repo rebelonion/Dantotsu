@@ -61,7 +61,7 @@
         <item>다시 읽기 중</item>
         <item>모두</item>
     </string-array>
-    <string name="nothing_here">Nothing here</string>
+    <string name="nothing_here">여기 아무것도 없습니다</string>
     <string name="followers">팔로워</string>
     <string name="write_a_message">메시지 작성</string>
     <string name="status">상태</string>
@@ -366,8 +366,8 @@
     <string name="use_alarm_manager_reliable">Use Alarm Manager for reliable Notifications</string>
     <string name="use_alarm_manager_confirm">Using Alarm Manger can help fight against battery optimization, but may consume more battery. It also requires the Alarm Manager permission.</string>
     <string name="use">Use</string>
-    <string name="remove_all_subscriptions">Remove All Subscriptions</string>
-    <string name="remove_all_subscriptions_desc">Are you sure you want to remove all subscriptions for %1$s?</string>
+    <string name="remove_all_subscriptions">모든 구독 삭제</string>
+    <string name="remove_all_subscriptions_desc">모든 구독을 제거하시겠습니까 %1$s를 위해?</string>
     <string name="checking_subscriptions">구독 확인 알림</string>
     <string name="subscriptions_checking_time_s">구독 업데이트 빈도: %1$s</string>
     <string name="subscriptions_checking_time">구독 업데이트 빈도</string>
