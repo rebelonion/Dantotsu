@@ -61,7 +61,7 @@
         <item>Relendo</item>
         <item>Todos</item>
     </string-array>
-    <string name="nothing_here">Nothing here</string>
+    <string name="nothing_here">Nada aqui</string>
     <string name="followers">Seguidores</string>
     <string name="write_a_message">Escrever uma mensagem</string>
     <string name="status">STATUS</string>
@@ -366,8 +366,8 @@
     <string name="use_alarm_manager_reliable">Usar o Alarm Manager para Notificações Confiáveis</string>
     <string name="use_alarm_manager_confirm">Usar o Alarm Manager pode ajudar a combater à otimização de bateria, mas pode gastá-la mais. Também requere a permissão do Alarm Manager.</string>
     <string name="use">Usar</string>
-    <string name="remove_all_subscriptions">Remove All Subscriptions</string>
-    <string name="remove_all_subscriptions_desc">Are you sure you want to remove all subscriptions for %1$s?</string>
+    <string name="remove_all_subscriptions">Remover todas as assinaturas</string>
+    <string name="remove_all_subscriptions_desc">Tem certeza de que deseja remover todas as assinaturas para %1$s?</string>
     <string name="checking_subscriptions">Notificação para Verificar Inscrições</string>
     <string name="subscriptions_checking_time_s">Frequência de Atualização de Inscrições: %1$s</string>
     <string name="subscriptions_checking_time">Frequência de Atualização de Inscrições</string>
@@ -387,7 +387,7 @@
     <string name="error_message">Erro: %1$s</string>
     <string name="install_step">Passo: %1$s</string>
     <string name="review">Análise</string>
-    <string name="reviews">Análises</string>
+    <string name="reviews">Avaliações</string>
     <string name="discord_nothing_button">Exibir apenas o primeiro botão</string>
     <string name="discord_dantotsu_button">Exibir Dantotsu no segundo botão</string>
     <string name="discord_anilist_button">Exibir seu perfil AniList</string>
@@ -643,7 +643,7 @@
     <string name="requires_android_12">Requer Android 12+</string>
     <string name="share_username_in_crash_reports">Compartilhar nome de usuário</string>
     <string name="pinned_sources">Fontes Fixadas</string>
-    <string name="backup_restore">Backup e Restaurar</string>
+    <string name="backup_restore">Backup e Restauração</string>
     <string name="restore_settings">Importar Configurações</string>
     <string name="restore_settings_underline"><u>Restaurar Configurações</u></string>
     <string name="try_internal_cast_experimental">Tentar Transmissão Interna (Experimental)</string>
