@@ -137,12 +137,19 @@ jobs:
         
         # Count recent commits and create an associative array
         declare -A recent_commit_counts
+        echo "Debug: Processing COMMIT_LOG:"
+        echo "$COMMIT_LOG"
         while read -r count name; do
             recent_commit_counts["$name"]=$count
+            echo "Debug: Commit count for $name: $count"
         done < <(echo "$COMMIT_LOG" | sed 's/%0A/\n/g' | grep -oP '(?<=~)[^[]*' | sort | uniq -c | sort -rn)
+        
+        echo "Debug: Fetching contributors from GitHub"
         # Fetch contributors from GitHub
         contributors=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
                        "https://api.github.com/repos/${{ github.repository }}/contributors")
+        echo "Debug: Contributors response:"
+        echo "$contributors"
         
         # Create a sorted list of contributors based on recent commit counts
         sorted_contributors=$(for login in $(echo "$contributors" | jq -r '.[].login'); do
@@ -183,9 +190,17 @@ jobs:
               top_contributor_count=$((top_contributor_count + 1))
               embed_color=$default_color
             fi
+            echo "Debug top contributors:"
+            echo "$top_contributors"
             
             # Get commit count for this contributor on the dev branch
             branch_commit_count=$(git rev-list --count dev --author="$login")
+            
+            # Debug: Print recent_commit_counts
+            echo "Debug: recent_commit_counts contents:"
+            for key in "${!recent_commit_counts[@]}"; do
+              echo "$key: ${recent_commit_counts[$key]}"
+            done
             
             extra_info="${additional_info[$name]}"
             if [ -n "$extra_info" ]; then
@@ -263,6 +278,8 @@ jobs:
                         ],
                         "attachments": []
                       }')
+        echo "Debug: Final Discord payload:"
+        echo "$discord_data"
         
         # Send Discord message
         curl -H "Content-Type: application/json" \
