@@ -136,24 +136,26 @@ jobs:
         contributor_colors["rebelonion"]="#d4e5ed"
         hex_to_decimal() { printf '%d' "0x${1#"#"}"; }
         
-        # Get commit counts for all authors on the dev branch
+        # Get commit counts for authors since last run
         declare -A recent_commit_counts
         while read -r count name; do
             # Remove leading spaces and quotes from the name
             name=$(echo "$name" | sed -e 's/^[[:space:]]*//' -e 's/^"//' -e 's/"$//')
             recent_commit_counts["$name"]=$count
-        done < <(git shortlog -s -n dev)
+        done < <(git shortlog -s -n $LAST_SHA..HEAD)
         
         # Fetch contributors from GitHub
         contributors=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
                        "https://api.github.com/repos/${{ github.repository }}/contributors")
         
-        # Create a sorted list of contributors based on commit counts
+        # Create a sorted list of contributors based on recent commit counts
         sorted_contributors=$(for login in $(echo "$contributors" | jq -r '.[].login'); do
             user_info=$(fetch_user_details "$login")
             name=$(echo "$user_info" | cut -d'|' -f1)
             count=${recent_commit_counts["$name"]:-0}
-            echo "$count|$login"
+            if [ $count -gt 0 ]; then
+                echo "$count|$login"
+            fi
         done | sort -rn | cut -d'|' -f2)
         
         # Initialize needed variables
@@ -196,7 +198,7 @@ jobs:
             # Construct the developer entry
             developer_entry="◗ **${name}** ${extra_info}
         - Github: [${login}](https://github.com/${login})
-        - Commits: ${branch_commit_count}"
+        - Commits: ${commit_count}"
 
             # Add the entry to developers, with a newline if it's not the first entry
             if [ -n "$developers" ]; then
