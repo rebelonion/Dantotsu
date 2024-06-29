@@ -130,20 +130,17 @@ jobs:
         # Decimal color codes for contributors
         declare -A contributor_colors
         default_color="#ff25f9"
-        contributor_colors["ibo"]="#ff9b46"
+        contributor_colors["ibo"]="#ff7500"
         contributor_colors["aayush262"]="#5d689d"
         contributor_colors["Sadwhy"]="#ff7e95"
         contributor_colors["rebelonion"]="#d4e5ed"
         hex_to_decimal() { printf '%d' "0x${1#"#"}"; }
         
-        # Get commit counts for authors since last run
+        # Count recent commits and create an associative array
         declare -A recent_commit_counts
         while read -r count name; do
-            # Remove leading spaces and quotes from the name
-            name=$(echo "$name" | sed -e 's/^[[:space:]]*//' -e 's/^"//' -e 's/"$//')
             recent_commit_counts["$name"]=$count
-        done < <(git shortlog -s -n $LAST_SHA..HEAD)
-        
+        done < <(echo "$COMMIT_LOG" | sed 's/%0A/\n/g' | grep -oP '(?<=~)[^[]*' | sort | uniq -c | sort -rn)
         # Fetch contributors from GitHub
         contributors=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
                        "https://api.github.com/repos/${{ github.repository }}/contributors")
@@ -153,16 +150,14 @@ jobs:
             user_info=$(fetch_user_details "$login")
             name=$(echo "$user_info" | cut -d'|' -f1)
             count=${recent_commit_counts["$name"]:-0}
-            if [ $count -gt 0 ]; then
-                echo "$count|$login"
-            fi
+            echo "$count|$login"
         done | sort -rn | cut -d'|' -f2)
         
         # Initialize needed variables
         developers=""
         committers_count=0
         max_commits=0
-        top_contributors=()
+        top_contributor=""
         top_contributor_count=0
         top_contributor_avatar=""
         embed_color=$default_color
@@ -190,6 +185,9 @@ jobs:
               embed_color=$default_color
             fi
             
+            # Get commit count for this contributor on the dev branch
+            branch_commit_count=$(git rev-list --count dev --author="$login")
+            
             extra_info="${additional_info[$name]}"
             if [ -n "$extra_info" ]; then
               extra_info=$(echo "$extra_info" | sed 's/\\n/\n- /g')
@@ -198,7 +196,7 @@ jobs:
             # Construct the developer entry
             developer_entry="◗ **${name}** ${extra_info}
         - Github: [${login}](https://github.com/${login})
-        - Commits: ${commit_count}"
+        - Commits: ${branch_commit_count}"
 
             # Add the entry to developers, with a newline if it's not the first entry
             if [ -n "$developers" ]; then
