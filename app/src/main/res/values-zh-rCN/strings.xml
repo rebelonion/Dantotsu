@@ -61,7 +61,7 @@
         <item>重新阅读</item>
         <item>全部</item>
     </string-array>
-    <string name="nothing_here">Nothing here</string>
+    <string name="nothing_here">这里什么都没有</string>
     <string name="followers">关注者</string>
     <string name="write_a_message">写消息</string>
     <string name="status">状态</string>
@@ -366,8 +366,8 @@
     <string name="use_alarm_manager_reliable">使用智能闹钟获得可靠的通知</string>
     <string name="use_alarm_manager_confirm">使用智能闹钟可以帮助对抗电池优化，但可能会消耗更多电量。它还需要后台白名单权限。</string>
     <string name="use">使用</string>
-    <string name="remove_all_subscriptions">Remove All Subscriptions</string>
-    <string name="remove_all_subscriptions_desc">Are you sure you want to remove all subscriptions for %1$s?</string>
+    <string name="remove_all_subscriptions">删除所有订阅</string>
+    <string name="remove_all_subscriptions_desc">您确定要删除 %1$s 的所有订阅吗?</string>
     <string name="checking_subscriptions">检查订阅的通知</string>
     <string name="subscriptions_checking_time_s">订阅更新频率：%1$s</string>
     <string name="subscriptions_checking_time">订阅更新频率</string>
@@ -645,7 +645,7 @@
     <string name="pinned_sources">固定的来源</string>
     <string name="backup_restore">备份和恢复</string>
     <string name="restore_settings">导入设置</string>
-    <string name="restore_settings_underline"><u>导入设置</u></string>
+    <string name="restore_settings_underline"><u>恢复设置</u></string>
     <string name="try_internal_cast_experimental">尝试内部投射（实验性）</string>
     <string name="comments">评论</string>
     <string name="newest">最新</string>
