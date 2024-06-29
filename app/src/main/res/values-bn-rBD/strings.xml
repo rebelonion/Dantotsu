@@ -61,7 +61,7 @@
         <item>পুনরালোচনা</item>
         <item>সব</item>
     </string-array>
-    <string name="nothing_here">Nothing here</string>
+    <string name="nothing_here">এখানে কিছু নেই</string>
     <string name="followers">অনুসারী</string>
     <string name="write_a_message">Write a Message</string>
     <string name="status">অবস্থা</string>
@@ -366,8 +366,8 @@
     <string name="use_alarm_manager_reliable">আ্যলার্ম মেনেজার ব্যবহারজো বিশস্ত নটিফিকেশন এর জন্য</string>
     <string name="use_alarm_manager_confirm">আ্যলার্ম ম্যানেজার ব্যবহার বেটারি অপ্টিমাইজেশান এর বিরুদ্ধে সাহায্য করতে পারে, তবে আরো বেটারি খরচ করতে পারে। এটার আ্যলার্ম ম্যানেজার অনুমতি ও প্রয়োজন হয়.</string>
     <string name="use">ব্যবহার</string>
-    <string name="remove_all_subscriptions">Remove All Subscriptions</string>
-    <string name="remove_all_subscriptions_desc">Are you sure you want to remove all subscriptions for %1$s?</string>
+    <string name="remove_all_subscriptions">সব সাবস্ক্রিপশন সরান</string>
+    <string name="remove_all_subscriptions_desc">আপনি কি নিশ্চিত যে আপনি সমস্ত সাবস্ক্রিপশন সরাতে চান %1$s এর জন্য?</string>
     <string name="checking_subscriptions">সাবস্ক্রিপশন চেক করার জন্য নোটিফিকেশন</string>
     <string name="subscriptions_checking_time_s">সাবস্ক্রিপশন আপডেট সময়: %1$s</string>
     <string name="subscriptions_checking_time">সাবস্ক্রিপশন আপডেট সময়</string>
@@ -388,7 +388,7 @@
     <string name="error_message">ভূল %1$s</string>
     <string name="install_step">ধাপ %1$s</string>
     <string name="review">পুনরায় দেখুন</string>
-    <string name="reviews">পর্যালোচনা</string>
+    <string name="reviews">রিভিউ</string>
     <string name="discord_nothing_button">শুধুমাত্র প্রথম বাটনটি দেখাবেন</string>
     <string name="discord_dantotsu_button">দান্ততসু কে দ্বিতিয় বাটন এ দেখাও</string>
     <string name="discord_anilist_button">আমার আনিলিস্ত প্রফাইল টি এর বিপরিতে দেখাও</string>
@@ -653,7 +653,7 @@
     <string name="pinned_sources">পিন্ড উত্স</string>
     <string name="backup_restore">ব্যাকআপ এবং পুনরুদ্ধার</string>
     <string name="restore_settings">সেটিংস আমদানি করুন</string>
-    <string name="restore_settings_underline"><u>সেটিংস আমদানি করুন</u></string>
+    <string name="restore_settings_underline"><u>সেটিংস পুনরুদ্ধার করুন</u></string>
     <string name="try_internal_cast_experimental">আন্তরিক কাস্ট চেষ্টা করুন (পরীক্ষামূলক)</string>
     <string name="comments">মন্তব্য</string>
     <string name="newest">নতুন</string>
