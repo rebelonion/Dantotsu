@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import ani.dantotsu.R
 import ani.dantotsu.databinding.ItemExtensionBinding
 import ani.dantotsu.notifications.subscription.SubscriptionHelper
+import ani.dantotsu.util.customAlertDialog
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.viewbinding.BindableItem
 
@@ -26,14 +27,13 @@ class SubscriptionSource(
         binding.extensionNameTextView.text = parserName
         updateSubscriptionCount()
         binding.extensionSubscriptions.visibility = View.VISIBLE
-
-        binding.extensionSubscriptions.setOnClickListener(null)
         binding.root.setOnClickListener {
             isExpanded = !isExpanded
             toggleSubscriptions()
         }
-        binding.subscriptionCount.setOnClickListener {
+        binding.root.setOnLongClickListener {
             showRemoveAllSubscriptionsDialog(it.context)
+            true
         }
         binding.extensionIconImageView.visibility = View.VISIBLE
         val layoutParams = binding.extensionIconImageView.layoutParams as ViewGroup.MarginLayoutParams
@@ -58,14 +58,13 @@ class SubscriptionSource(
     }
 
     private fun showRemoveAllSubscriptionsDialog(context: Context) {
-        AlertDialog.Builder(context, R.style.MyPopup)
-            .setTitle(R.string.remove_all_subscriptions)
-            .setMessage(context.getString(R.string.remove_all_subscriptions_desc, parserName))
-            .setPositiveButton(R.string.apply) { _, _ ->
-                removeAllSubscriptions()
-            }
-            .setNegativeButton(R.string.cancel, null)
-            .show()
+        context.customAlertDialog().apply{
+            setTitle(R.string.remove_all_subscriptions)
+            setMessage(R.string.remove_all_subscriptions_desc, parserName)
+            setPosButton(R.string.ok) { removeAllSubscriptions() }
+            setNegButton(R.string.cancel)
+            show()
+        }
     }
 
     private fun removeAllSubscriptions() {
