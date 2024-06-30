@@ -45,6 +45,20 @@
                     android:src="@drawable/linear_gradient_bg"
                     tools:ignore="ContentDescription" />
 
+                <ImageView
+                    android:id="@+id/editProfileBanner"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_gravity="end|bottom"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:contentDescription="@string/edit_profile"
+                    app:srcCompat="@drawable/ic_round_add_circle_24"
+                    tools:tint="@color/transparent"
+                    android:visibility="visible">
+                </ImageView>
+
+
                 <LinearLayout
                     android:id="@+id/profileUserDataContainer"
                     android:layout_width="wrap_content"
@@ -53,25 +67,42 @@
                     android:layout_marginBottom="8dp"
                     android:orientation="vertical">
 
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/profileUserAvatarContainer"
-                        android:layout_width="82dp"
-                        android:layout_height="82dp"
-                        android:layout_gravity="center"
-                        android:backgroundTint="@color/transparent"
-                        app:cardCornerRadius="64dp"
-                        app:strokeColor="@color/transparent">
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal">
 
-                        <com.google.android.material.imageview.ShapeableImageView
-                            android:id="@+id/profileUserAvatar"
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/profileUserAvatarContainer"
                             android:layout_width="82dp"
                             android:layout_height="82dp"
                             android:layout_gravity="center"
-                            app:srcCompat="@drawable/ic_round_add_circle_24"
-                            tools:ignore="ContentDescription,ImageContrastCheck"
-                            tools:tint="@color/transparent" />
+                            android:backgroundTint="@color/transparent"
+                            app:cardCornerRadius="64dp"
+                            app:strokeColor="@color/transparent">
 
-                    </com.google.android.material.card.MaterialCardView>
+                            <com.google.android.material.imageview.ShapeableImageView
+                                android:id="@+id/profileUserAvatar"
+                                android:layout_width="82dp"
+                                android:layout_height="82dp"
+                                android:layout_gravity="center"
+                                app:srcCompat="@drawable/ic_round_add_circle_24"
+                                tools:ignore="ContentDescription,ImageContrastCheck"
+                                tools:tint="@color/transparent" />
+
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <ImageView
+                            android:id="@+id/editProfileAvatar"
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
+                            android:layout_gravity="end|bottom"
+                            android:contentDescription="@string/edit_profile"
+                            app:srcCompat="@drawable/ic_round_add_circle_24"
+                            tools:tint="@color/transparent"
+                            android:visibility="visible">
+                        </ImageView>
+                    </FrameLayout>
 
                     <TextView
                         android:id="@+id/profileUserName"

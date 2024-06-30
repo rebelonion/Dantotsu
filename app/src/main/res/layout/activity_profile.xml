@@ -35,6 +35,31 @@
             tools:ignore="SpeakableTextPresentCheck" />
     </LinearLayout>
 
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/editProfileSave"
+        android:layout_width="122dp"
+        android:layout_height="46dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="26dp"
+        android:layout_marginBottom="46dp"
+        android:backgroundTint="?attr/colorPrimary"
+        android:baselineAligned="false"
+        android:visibility="gone"
+        app:cardCornerRadius="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/publish"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:textColor="?android:colorBackground"
+            android:textSize="16sp">
+
+        </TextView>
+
+    </com.google.android.material.card.MaterialCardView>
 
     <nl.joery.animatedbottombar.AnimatedBottomBar
         android:id="@+id/profileNavBar"

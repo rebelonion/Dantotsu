@@ -12,6 +12,69 @@
         android:nestedScrollingEnabled="true"
         android:orientation="vertical">
 
+    <LinearLayout
+        android:id="@+id/imageStatsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:visibility="gone">
+
+        <TextView
+            android:id="@+id/avatarStatsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:fontFamily="@font/poppins_bold"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:text="Avatar"
+            android:textSize="16sp"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/avatarStats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="32dp"
+            android:fontFamily="@font/poppins_bold"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:text="Allowed Formats: JPEG, PNG. Max size: 3mb. Optimal dimensions: 230x230"
+            android:alpha="0.58"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/bannerStatsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="32dp"
+            android:fontFamily="@font/poppins_bold"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:text="Banner"
+            android:textSize="16sp"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/BannerStats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="32dp"
+            android:fontFamily="@font/poppins_bold"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:text="Allowed Formats: JPEG, PNG. Max size: 6mb. Optimal dimensions: 1700x330"
+            android:alpha="0.58"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
+
+    </LinearLayout>
 
         <LinearLayout
             android:id="@+id/userStatsContainer"
@@ -195,13 +258,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:ellipsize="end"
                 android:nestedScrollingEnabled="true"
                 android:padding="16dp"
                 android:textAlignment="textStart"
                 tools:text="@string/slogan" />
+
+            <EditText
+                android:id="@+id/profileUserBioEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:textSize="16sp"
+                android:background="@null"
+                android:inputType="textMultiLine"
+                android:minLines="5"
+                android:maxLines="10"
+                android:visibility="gone"/>
         </LinearLayout>
 
         <LinearLayout
