@@ -22,6 +22,7 @@ import ani.dantotsu.R
 import ani.dantotsu.blurImage
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.Query
+import ani.dantotsu.copyToClipboard
 import ani.dantotsu.databinding.ActivityProfileBinding
 import ani.dantotsu.databinding.ItemProfileAppBarBinding
 import ani.dantotsu.initActivity
@@ -152,11 +153,20 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                         popup.setOnMenuItemClickListener { item ->
                             when (item.itemId) {
                                 R.id.action_view_on_anilist -> {
-                                    openLinkInBrowser("https://anilist.co/user/${user.name}")
+                                    openLinkInBrowser(getString(R.string.anilist_link, user.name))
                                     true
                                 }
-
-
+                                R.id.action_share_profile -> {
+                                    val shareIntent = Intent(Intent.ACTION_SEND)
+                                    shareIntent.type = "text/plain"
+                                    shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.anilist_link, user.name))
+                                    startActivity(Intent.createChooser(shareIntent, "Share Profile"))
+                                    true
+                                }
+                                R.id.action_copy_user_id -> {
+                                    copyToClipboard(user.id.toString(), true)
+                                    true
+                                }
                                 else -> false
                             }
                         }
@@ -169,6 +179,9 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                         user.avatar?.medium ?: ""
                     )
                     profileUserName.text = user.name
+                    profileUserName.setOnClickListener {
+                        copyToClipboard(profileUserName.text.toString(), true)
+                    }
                     val bannerAnimations: ImageView =
                         if (PrefManager.getVal(PrefName.BannerAnimations)) profileBannerImage else profileBannerImageNoKen
 
