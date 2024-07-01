@@ -160,6 +160,9 @@
             android:name=".settings.SettingsAddonActivity"
             android:parentActivityName=".MainActivity" />
         <activity
+            android:name=".settings.SettingsAnilistActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
             android:name=".settings.SettingsMangaActivity"
             android:parentActivityName=".MainActivity" />
         <activity

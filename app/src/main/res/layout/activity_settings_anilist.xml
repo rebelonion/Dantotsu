@@ -68,7 +68,7 @@
             android:layout_marginHorizontal="16dp"
             android:alpha="0.58"
             android:fontFamily="@font/poppins_bold"
-            android:text="@string/selected_language" />
+            android:text="@string/selected_title_language" />
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
@@ -84,7 +84,44 @@
             app:startIconDrawable="@drawable/ic_round_dns_24">
 
             <AutoCompleteTextView
-                android:id="@+id/settingsAnilistLanguage"
+                android:id="@+id/settings_anilist_title_language"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppins_bold"
+                android:freezesText="false"
+                android:inputType="none"
+                android:padding="8dp"
+                android:text="@string/placeholder"
+                android:textAllCaps="true"
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="14sp"
+                tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:alpha="0.58"
+            android:fontFamily="@font/poppins_bold"
+            android:text="@string/selected_staff_language" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="8dp"
+            app:boxCornerRadiusBottomEnd="8dp"
+            app:boxCornerRadiusBottomStart="8dp"
+            app:boxCornerRadiusTopEnd="8dp"
+            app:boxCornerRadiusTopStart="8dp"
+            app:hintAnimationEnabled="true"
+            app:startIconDrawable="@drawable/ic_round_dns_24">
+
+            <AutoCompleteTextView
+                android:id="@+id/settingsAnilistStaffLanguage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

@@ -42,8 +42,34 @@ class AnilistQueries {
     suspend fun getUserData(): Boolean {
         val response: Query.Viewer?
         measureTimeMillis {
-            response =
-                executeQuery("""{Viewer{name options{displayAdultContent}avatar{medium}bannerImage id mediaListOptions{rowOrder animeList{sectionOrder customLists}mangaList{sectionOrder customLists}}statistics{anime{episodesWatched}manga{chaptersRead}}unreadNotificationCount}}""")
+            response = executeQuery("""
+            {
+                Viewer {
+                    name
+                    options {
+                        restrictMessagesToFollowing
+                        displayAdultContent
+                        airingNotifications
+                        staffNameLanguage
+                        titleLanguage
+                        timezone
+                    }
+                    avatar { medium }
+                    bannerImage
+                    id
+                    mediaListOptions {
+                        rowOrder
+                        animeList { sectionOrder customLists }
+                        mangaList { sectionOrder customLists }
+                    }
+                    statistics {
+                        anime { episodesWatched }
+                        manga { chaptersRead }
+                    }
+                    unreadNotificationCount
+                }
+            }
+        """)
         }.also { println("time : $it") }
         val user = response?.data?.user ?: return false
 
@@ -60,6 +86,14 @@ class AnilistQueries {
         val unread = PrefManager.getVal<Int>(PrefName.UnreadCommentNotifications)
         Anilist.unreadNotificationCount += unread
         Anilist.initialized = true
+
+        user.options?.let {
+            PrefManager.setVal(PrefName.AnilistTitleLanguage, it.titleLanguage)
+            PrefManager.setVal(PrefName.AnilistStaffNameLanguage, it.staffNameLanguage)
+            PrefManager.setVal(PrefName.AnilistDisplayAdultContent, it.displayAdultContent)
+            PrefManager.setVal(PrefName.AnilistAiringNotifications, it.airingNotifications)
+            PrefManager.setVal(PrefName.AnilistRestrictMessagesToFollowing, it.restrictMessagesToFollowing)
+        }
         return true
     }
 

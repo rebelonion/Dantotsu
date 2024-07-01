@@ -74,7 +74,7 @@ data class User(
 @Serializable
 data class UserOptions(
     // The language the user wants to see media titles in
-    // @SerialName("titleLanguage") var titleLanguage: UserTitleLanguage?,
+    @SerialName("titleLanguage") var titleLanguage: UserTitleLanguage?,
 
     // Whether the user has enabled viewing of 18+ content
     @SerialName("displayAdultContent") var displayAdultContent: Boolean?,
@@ -94,11 +94,11 @@ data class UserOptions(
     //    // Minutes between activity for them to be merged together. 0 is Never, Above 2 weeks (20160 mins) is Always.
     //    @SerialName("activityMergeTime") var activityMergeTime: Int?,
     //
-    //    // The language the user wants to see staff and character names in
-    //    // @SerialName("staffNameLanguage") var staffNameLanguage: UserStaffNameLanguage?,
+    // The language the user wants to see staff and character names in
+    @SerialName("staffNameLanguage") var staffNameLanguage: UserStaffNameLanguage?,
     //
-    //    // Whether the user only allow messages from users they follow
-    //    @SerialName("restrictMessagesToFollowing") var restrictMessagesToFollowing: Boolean?,
+    // Whether the user only allow messages from users they follow
+    @SerialName("restrictMessagesToFollowing") var restrictMessagesToFollowing: Boolean?,
 
     // The list activity types the user has disabled from being created from list updates
     // @SerialName("disabledListActivity") var disabledListActivity: List<ListActivityOption>?,
@@ -118,6 +118,28 @@ data class UserStatisticTypes(
     @SerialName("anime") var anime: UserStatistics?,
     @SerialName("manga") var manga: UserStatistics?
 )
+
+@Serializable
+enum class UserTitleLanguage {
+    @SerialName("ENGLISH")
+    ENGLISH,
+
+    @SerialName("ROMAJI")
+    ROMAJI,
+
+    @SerialName("NATIVE")
+    NATIVE
+}
+
+@Serializable
+enum class UserStaffNameLanguage {
+    @SerialName("ENGLISH")
+    ENGLISH,
+    @SerialName("ROMAJI")
+    ROMAJI,
+    @SerialName("NATIVE")
+    NATIVE
+}
 
 @Serializable
 data class UserStatistics(
