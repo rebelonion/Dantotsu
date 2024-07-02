@@ -22,6 +22,12 @@ class SettingsAnilistActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsAnilistBinding
     private lateinit var anilistMutations: AnilistMutations
 
+    enum class Format {
+        ENGLISH,
+        ROMANJI,
+        NATIVE
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ThemeManager(this).applyTheme()
@@ -61,29 +67,10 @@ class SettingsAnilistActivity : AppCompatActivity() {
                 "Native (進撃の巨人)"
             )
 
-            val staffNameLang = listOf(
-                "Romaji, Western Order (Killua Zoldyck)",
-                "Romaji (Zoldyck Killua)",
-                "Native (キルア=ゾルディック)"
-            )
+            val currentTitleLang = PrefManager.getVal<String>(PrefName.AnilistTitleLanguage)
+            val titleFormat = Format.entries.firstOrNull { it.name == currentTitleLang } ?: Format.ENGLISH
 
-            val currentTitleLang = PrefManager.getVal(PrefName.AnilistTitleLanguage, "ENGLISH")
-            val currentStaffNameLang = PrefManager.getVal(PrefName.AnilistStaffNameLanguage, "ENGLISH")
-
-            val titleLangIndex = when (currentTitleLang) {
-                "ENGLISH" -> 0
-                "ROMAJI" -> 1
-                "NATIVE" -> 2
-                else -> 0
-            }
-            val staffNameLangIndex = when (currentStaffNameLang) {
-                "ENGLISH" -> 0
-                "ROMAJI" -> 1
-                "NATIVE" -> 2
-                else -> 0
-            }
-
-            settingsAnilistTitleLanguage.setText(titleLang[titleLangIndex])
+            settingsAnilistTitleLanguage.setText(titleLang[titleFormat.ordinal])
             settingsAnilistTitleLanguage.setAdapter(
                 ArrayAdapter(context, R.layout.item_dropdown, titleLang)
             )
@@ -101,7 +88,17 @@ class SettingsAnilistActivity : AppCompatActivity() {
                 settingsAnilistTitleLanguage.clearFocus()
             }
 
-            settingsAnilistStaffLanguage.setText(staffNameLang[staffNameLangIndex])
+
+            val staffNameLang = listOf(
+                "Romaji, Western Order (Killua Zoldyck)",
+                "Romaji (Zoldyck Killua)",
+                "Native (キルア=ゾルディック)"
+            )
+
+            val currentStaffNameLang = PrefManager.getVal<String>(PrefName.AnilistStaffNameLanguage)
+            val staffNameFormat = Format.entries.firstOrNull { it.name == currentStaffNameLang } ?: Format.ENGLISH
+
+            settingsAnilistStaffLanguage.setText(staffNameLang[staffNameFormat.ordinal])
             settingsAnilistStaffLanguage.setAdapter(
                 ArrayAdapter(context, R.layout.item_dropdown, staffNameLang)
             )
@@ -119,7 +116,6 @@ class SettingsAnilistActivity : AppCompatActivity() {
                 settingsAnilistStaffLanguage.clearFocus()
             }
 
-            // Fetch and set other settings
             val displayAdultContent = PrefManager.getVal(PrefName.AnilistDisplayAdultContent, false)
             val airingNotifications = PrefManager.getVal(PrefName.AnilistAiringNotifications, false)
             val restrictMessagesToFollowing = PrefManager.getVal(PrefName.AnilistRestrictMessagesToFollowing, false)

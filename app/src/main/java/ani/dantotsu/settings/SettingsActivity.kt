@@ -18,6 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.BuildConfig
 import ani.dantotsu.R
+import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.copyToClipboard
 import ani.dantotsu.databinding.ActivitySettingsBinding
 import ani.dantotsu.initActivity
@@ -159,7 +160,10 @@ class SettingsActivity : AppCompatActivity() {
                         desc = getString(R.string.alsettings_desc),
                         icon = R.drawable.ic_anilist,
                         onClick = {
-                            startActivity(Intent(context, SettingsAnilistActivity::class.java))
+                            lifecycleScope.launch {
+                                Anilist.query.getUserData()
+                                startActivity(Intent(context, SettingsAnilistActivity::class.java))
+                            }
                         },
                         isActivity = true
                     ),
