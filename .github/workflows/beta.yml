@@ -108,7 +108,7 @@ jobs:
           path: "app/build/outputs/apk/google/alpha/app-google-alpha.apk"
 
     - name: Create GitHub Release
-      if: ${{ env.SKIP_BUILD != 'true' && github.repo =! 'rebelonion/Dantotsu' }}
+      if: ${{ env.SKIP_BUILD != 'true' && github.repo != 'rebelonion/Dantotsu' }}
       uses: softprops/action-gh-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
