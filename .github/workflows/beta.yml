@@ -98,15 +98,20 @@ jobs:
           ./gradlew assembleGoogleAlpha;
         fi
           
-    - name: Upload a Build Artifact
+    - name: Upload Artifact or Create Release
       if: ${{ env.SKIP_BUILD != 'true' }}
-      uses: actions/upload-artifact@v4
+      uses: softprops/action-gh-release@v1
       with:
-          name: Dantotsu
-          retention-days: 5
-          compression-level: 9
-          path: "app/build/outputs/apk/google/alpha/app-google-alpha.apk"
-            
+        files: app/build/outputs/apk/google/alpha/app-google-alpha.apk
+        tag_name: ${{ env.VERSION }}
+        name: ${{ github.repository == 'rebelonion/Dantotsu' && 'Dantotsu' || format('Release {0}', env.VERSION) }}
+        body_path: ${{ github.repository != 'rebelonion/Dantotsu' && 'commit_log.txt' || '' }}
+        draft: false
+        prerelease: false
+        generate_release_notes: ${{ github.repository == 'rebelonion/Dantotsu' }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
     - name: Upload APK to Discord and Telegram
       shell: bash
       run: |
@@ -125,6 +130,7 @@ jobs:
         declare -A additional_info
         additional_info["ibo"]="\n Discord: <@951737931159187457>\n AniList: [takarealist112](<https://anilist.co/user/takarealist112/>)"
         additional_info["aayush262"]="\n Discord: <@918825160654598224>\n AniList: [aayush262](<https://anilist.co/user/aayush262/>)"
+        additional_info["rebelonion"]="\n Discord: <@714249925248024617>\n AniList: [rebelonion](<https://anilist.co/user/rebelonion/>)\n PornHub: [rebelonion](<https://www.cornhub.com/model/rebelonion>)"
         
         # Decimal color codes for contributors
         declare -A contributor_colors
