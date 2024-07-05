@@ -8,12 +8,14 @@ import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
+import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.databinding.ActivitySettingsAnilistBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.connections.anilist.AnilistMutations
+import ani.dantotsu.restartApp
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import kotlinx.coroutines.launch
@@ -24,7 +26,7 @@ class SettingsAnilistActivity : AppCompatActivity() {
 
     enum class Format {
         ENGLISH,
-        ROMANJI,
+        ROMAJI,
         NATIVE
     }
 
@@ -67,7 +69,7 @@ class SettingsAnilistActivity : AppCompatActivity() {
                 "Native (進撃の巨人)"
             )
 
-            val currentTitleLang = PrefManager.getVal<String>(PrefName.AnilistTitleLanguage)
+            val currentTitleLang = Anilist.titleLanguage
             val titleFormat = Format.entries.firstOrNull { it.name == currentTitleLang } ?: Format.ENGLISH
 
             settingsAnilistTitleLanguage.setText(titleLang[titleFormat.ordinal])
@@ -83,7 +85,8 @@ class SettingsAnilistActivity : AppCompatActivity() {
                 }
                 lifecycleScope.launch {
                     anilistMutations.updateSettings(titleLanguage = selectedLanguage)
-                    PrefManager.setVal(PrefName.AnilistTitleLanguage, selectedLanguage)
+                    Anilist.titleLanguage = selectedLanguage
+                    restartApp()
                 }
                 settingsAnilistTitleLanguage.clearFocus()
             }
@@ -95,7 +98,7 @@ class SettingsAnilistActivity : AppCompatActivity() {
                 "Native (キルア=ゾルディック)"
             )
 
-            val currentStaffNameLang = PrefManager.getVal<String>(PrefName.AnilistStaffNameLanguage)
+            val currentStaffNameLang = Anilist.staffNameLanguage
             val staffNameFormat = Format.entries.firstOrNull { it.name == currentStaffNameLang } ?: Format.ENGLISH
 
             settingsAnilistStaffLanguage.setText(staffNameLang[staffNameFormat.ordinal])
@@ -111,14 +114,15 @@ class SettingsAnilistActivity : AppCompatActivity() {
                 }
                 lifecycleScope.launch {
                     anilistMutations.updateSettings(staffNameLanguage = selectedLanguage)
-                    PrefManager.setVal(PrefName.AnilistStaffNameLanguage, selectedLanguage)
+                    Anilist.staffNameLanguage = selectedLanguage
+                    restartApp()
                 }
                 settingsAnilistStaffLanguage.clearFocus()
             }
 
-            val displayAdultContent = PrefManager.getVal(PrefName.AnilistDisplayAdultContent, false)
-            val airingNotifications = PrefManager.getVal(PrefName.AnilistAiringNotifications, false)
-            val restrictMessagesToFollowing = PrefManager.getVal(PrefName.AnilistRestrictMessagesToFollowing, false)
+            val displayAdultContent = Anilist.adult
+            val airingNotifications = Anilist.airingNotifications
+            val restrictMessagesToFollowing = Anilist.restrictMessagesToFollowing
 
             binding.settingsRecyclerView.adapter = SettingsAdapter(
                 arrayListOf(
@@ -131,7 +135,8 @@ class SettingsAnilistActivity : AppCompatActivity() {
                         switch = { isChecked, _ ->
                             lifecycleScope.launch {
                                 anilistMutations.updateSettings(airingNotifications = isChecked)
-                                PrefManager.setVal(PrefName.AnilistAiringNotifications, isChecked)
+                                Anilist.airingNotifications = isChecked
+                                restartApp()
                             }
                         }
                     ),
@@ -144,7 +149,8 @@ class SettingsAnilistActivity : AppCompatActivity() {
                         switch = { isChecked, _ ->
                             lifecycleScope.launch {
                                 anilistMutations.updateSettings(displayAdultContent = isChecked)
-                                PrefManager.setVal(PrefName.AnilistDisplayAdultContent, isChecked)
+                                Anilist.adult = isChecked
+                                restartApp()
                             }
                         }
                     ),
@@ -157,7 +163,8 @@ class SettingsAnilistActivity : AppCompatActivity() {
                         switch = { isChecked, _ ->
                             lifecycleScope.launch {
                                 anilistMutations.updateSettings(restrictMessagesToFollowing = isChecked)
-                                PrefManager.setVal(PrefName.AnilistRestrictMessagesToFollowing, isChecked)
+                                Anilist.restrictMessagesToFollowing = isChecked
+                                restartApp()
                             }
                         }
                     ),

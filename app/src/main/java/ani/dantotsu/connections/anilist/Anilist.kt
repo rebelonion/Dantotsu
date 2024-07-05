@@ -22,7 +22,7 @@ object Anilist {
 
     var token: String? = null
     var username: String? = null
-    var adult: Boolean = false
+
     var userid: Int? = null
     var avatar: String? = null
     var bg: String? = null
@@ -36,6 +36,11 @@ object Anilist {
     var rateLimitReset: Long = 0
 
     var initialized = false
+    var adult: Boolean = false
+    var titleLanguage: String? = null
+    var staffNameLanguage: String? = null
+    var airingNotifications: Boolean = false
+    var restrictMessagesToFollowing: Boolean = false
 
     val sortBy = listOf(
         "SCORE_DESC",

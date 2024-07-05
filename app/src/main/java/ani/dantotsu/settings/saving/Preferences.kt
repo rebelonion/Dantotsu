@@ -48,13 +48,8 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     AdultOnly(Pref(Location.General, Boolean::class, false)),
 
     // Anilist Settings
-    AnilistTitleLanguage(Pref(Location.General, String::class, "ENGLISH")),
-    AnilistDisplayAdultContent(Pref(Location.General, Boolean::class, false)),
-    AnilistAiringNotifications(Pref(Location.General, Boolean::class, false)),
     AnilistTimezone(Pref(Location.General, String::class, "(GMT+00:00) London")),
     AnilistActivityMergeTime(Pref(Location.General, Int::class, 0)),
-    AnilistStaffNameLanguage(Pref(Location.General, String::class, "ROMAJI")),
-    AnilistRestrictMessagesToFollowing(Pref(Location.General, Boolean::class, false)),
     AnilistDisabledListActivity(Pref(Location.General, Set::class, setOf<String>())),
 
     //User Interface

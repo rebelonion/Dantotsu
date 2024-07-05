@@ -42,8 +42,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginEnd="10dp"
                 android:layout_marginTop="32dp"
+                android:layout_marginEnd="10dp"
                 android:layout_marginBottom="32dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/poppins_bold"
@@ -62,79 +62,93 @@
 
         </LinearLayout>
 
-        <TextView
+        <ani.dantotsu.others.Xpandable
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:alpha="0.58"
-            android:fontFamily="@font/poppins_bold"
-            android:text="@string/selected_title_language" />
+            android:orientation="vertical">
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginBottom="8dp"
-            app:boxCornerRadiusBottomEnd="8dp"
-            app:boxCornerRadiusBottomStart="8dp"
-            app:boxCornerRadiusTopEnd="8dp"
-            app:boxCornerRadiusTopStart="8dp"
-            app:hintAnimationEnabled="true"
-            app:startIconDrawable="@drawable/ic_round_dns_24">
-
-            <AutoCompleteTextView
-                android:id="@+id/settingsAnilistTitleLanguage"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_marginHorizontal="16dp"
+                android:alpha="0.58"
                 android:fontFamily="@font/poppins_bold"
-                android:freezesText="false"
-                android:inputType="none"
-                android:padding="8dp"
-                android:text="@string/placeholder"
-                android:textAllCaps="true"
-                android:textColor="?android:attr/textColorSecondary"
-                android:textSize="14sp"
-                tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:text="something" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:alpha="0.58"
-            android:fontFamily="@font/poppins_bold"
-            android:text="@string/selected_staff_language" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginBottom="8dp"
-            app:boxCornerRadiusBottomEnd="8dp"
-            app:boxCornerRadiusBottomStart="8dp"
-            app:boxCornerRadiusTopEnd="8dp"
-            app:boxCornerRadiusTopStart="8dp"
-            app:hintAnimationEnabled="true"
-            app:startIconDrawable="@drawable/ic_round_dns_24">
-
-            <AutoCompleteTextView
-                android:id="@+id/settingsAnilistStaffLanguage"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_marginHorizontal="16dp"
+                android:alpha="0.58"
                 android:fontFamily="@font/poppins_bold"
-                android:freezesText="false"
-                android:inputType="none"
-                android:padding="8dp"
-                android:text="@string/placeholder"
-                android:textAllCaps="true"
-                android:textColor="?android:attr/textColorSecondary"
-                android:textSize="14sp"
-                tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:text="@string/selected_title_language" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="8dp"
+                app:boxCornerRadiusBottomEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusTopStart="8dp"
+                app:hintAnimationEnabled="true"
+                app:startIconDrawable="@drawable/ic_round_dns_24">
+
+                <AutoCompleteTextView
+                    android:id="@+id/settingsAnilistTitleLanguage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins_bold"
+                    android:freezesText="false"
+                    android:inputType="none"
+                    android:padding="8dp"
+                    android:text="@string/placeholder"
+                    android:textAllCaps="true"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="14sp"
+                    tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:alpha="0.58"
+                android:fontFamily="@font/poppins_bold"
+                android:text="@string/selected_staff_language" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="8dp"
+                app:boxCornerRadiusBottomEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusTopStart="8dp"
+                app:hintAnimationEnabled="true"
+                app:startIconDrawable="@drawable/ic_round_dns_24">
+
+                <AutoCompleteTextView
+                    android:id="@+id/settingsAnilistStaffLanguage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins_bold"
+                    android:freezesText="false"
+                    android:inputType="none"
+                    android:padding="8dp"
+                    android:text="@string/placeholder"
+                    android:textAllCaps="true"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="14sp"
+                    tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </ani.dantotsu.others.Xpandable>
 
         <ani.dantotsu.FadingEdgeRecyclerView
             android:id="@+id/settingsRecyclerView"

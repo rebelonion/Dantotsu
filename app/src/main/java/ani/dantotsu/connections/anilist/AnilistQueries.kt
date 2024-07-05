@@ -88,11 +88,10 @@ class AnilistQueries {
         Anilist.initialized = true
 
         user.options?.let {
-            PrefManager.setVal(PrefName.AnilistTitleLanguage, it.titleLanguage)
-            PrefManager.setVal(PrefName.AnilistStaffNameLanguage, it.staffNameLanguage)
-            PrefManager.setVal(PrefName.AnilistDisplayAdultContent, it.displayAdultContent)
-            PrefManager.setVal(PrefName.AnilistAiringNotifications, it.airingNotifications)
-            PrefManager.setVal(PrefName.AnilistRestrictMessagesToFollowing, it.restrictMessagesToFollowing)
+            Anilist.titleLanguage = it.titleLanguage.toString()
+            Anilist.staffNameLanguage = it.staffNameLanguage.toString()
+            Anilist.airingNotifications = it.airingNotifications ?: false
+            Anilist.restrictMessagesToFollowing = it.restrictMessagesToFollowing ?: false
         }
         return true
     }
