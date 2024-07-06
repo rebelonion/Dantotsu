@@ -163,11 +163,11 @@ object Anilist {
         "3 Point Smiley :)",
     )
 
-    val RowOrder = listOf(
-        "Score",
-        "Title",
-        "Last Updated",
-        "Last Added",
+    val rowOrderMap = mapOf(
+        "Score" to "score",
+        "Title" to "title",
+        "Last Updated" to "updatedAt",
+        "Last Added" to "id"
     )
 
     private val cal: Calendar = Calendar.getInstance()

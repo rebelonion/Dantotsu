@@ -72,7 +72,7 @@ class AnilistMutations {
                 ${displayAdultContent?.let { """"displayAdultContent":$it""" } ?: ""}
                 ${restrictMessagesToFollowing?.let { """"restrictMessagesToFollowing":$it""" } ?: ""}
                 ${scoreFormat?.let { """"scoreFormat":"$it"""" } ?: ""}
-                ${rowOrder?.let { """"rowOrder":$it""" } ?: ""}
+                ${rowOrder?.let { """"rowOrder":"$it"""" } ?: ""}
             }
         """.trimIndent().replace("\n", "").replace("""    """, "").replace(",}", "}")
 

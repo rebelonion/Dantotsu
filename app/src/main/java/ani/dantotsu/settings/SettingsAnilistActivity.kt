@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.Anilist.ScoreFormat
+import ani.dantotsu.connections.anilist.Anilist.rowOrderMap
 import ani.dantotsu.connections.anilist.Anilist.staffNameLang
 import ani.dantotsu.connections.anilist.Anilist.titleLang
 import ani.dantotsu.connections.anilist.AnilistMutations
@@ -123,6 +124,22 @@ class SettingsAnilistActivity : AppCompatActivity() {
                     restartApp()
                 }
                 settingsAnilistScoreFormat.clearFocus()
+            }
+
+            val currentRowOrder = rowOrderMap.entries.firstOrNull { it.value == Anilist.rowOrder }?.key ?: "Score"
+            settingsAnilistRowOrder.setText(currentRowOrder)
+            settingsAnilistRowOrder.setAdapter(
+                ArrayAdapter(context, R.layout.item_dropdown, rowOrderMap.keys.toList())
+            )
+            settingsAnilistRowOrder.setOnItemClickListener { _, _, i, _ ->
+                val selectedDisplayOrder = rowOrderMap.keys.toList()[i]
+                val selectedApiOrder = rowOrderMap[selectedDisplayOrder] ?: "score"
+                lifecycleScope.launch {
+                    anilistMutations.updateSettings(rowOrder = selectedApiOrder)
+                    Anilist.rowOrder = selectedApiOrder
+                    restartApp()
+                }
+                settingsAnilistRowOrder.clearFocus()
             }
 
             val currentTimezone = Anilist.timezone?.let { Anilist.getDisplayTimezone(it) } ?: "(GMT+00:00) London"
