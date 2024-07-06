@@ -134,8 +134,7 @@ jobs:
         # Prepare Discord embed
         fetch_user_details() {
           local login=$1
-          user_details=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-                         "https://api.github.com/users/$login")
+          user_details=$(curl -s "https://api.github.com/users/$login")
           name=$(echo "$user_details" | jq -r '.name // .login')
           login=$(echo "$user_details" | jq -r '.login')
           avatar_url=$(echo "$user_details" | jq -r '.avatar_url')
@@ -168,8 +167,7 @@ jobs:
         
         echo "Debug: Fetching contributors from GitHub"
         # Fetch contributors from GitHub
-        contributors=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-                       "https://api.github.com/repos/${{ github.repository }}/contributors")
+        contributors=$(curl -s "https://api.github.com/repos/${{ github.repository }}/contributors")
         echo "Debug: Contributors response:"
         echo "$contributors"
         
