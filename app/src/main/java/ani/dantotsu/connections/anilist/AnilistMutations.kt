@@ -39,8 +39,8 @@ class AnilistMutations {
                     staffNameLanguage: ${"$"}staffNameLanguage,
                     activityMergeTime: ${"$"}activityMergeTime,
                     airingNotifications: ${"$"}airingNotifications,
-                    displayAdultContent: ${"$"}displayAdultContent
-                    restrictMessagesToFollowing: ${"$"}restrictMessagesToFollowing.
+                    displayAdultContent: ${"$"}displayAdultContent,
+                    restrictMessagesToFollowing: ${"$"}restrictMessagesToFollowing,
                     scoreFormat: ${"$"}scoreFormat,
                     rowOrder: ${"$"}rowOrder,
                 ) {
@@ -71,7 +71,7 @@ class AnilistMutations {
                 ${airingNotifications?.let { """"airingNotifications":$it""" } ?: ""}
                 ${displayAdultContent?.let { """"displayAdultContent":$it""" } ?: ""}
                 ${restrictMessagesToFollowing?.let { """"restrictMessagesToFollowing":$it""" } ?: ""}
-                ${scoreFormat?.let { """"scoreFormat":$it""" } ?: ""}
+                ${scoreFormat?.let { """"scoreFormat":"$it"""" } ?: ""}
                 ${rowOrder?.let { """"rowOrder":$it""" } ?: ""}
             }
         """.trimIndent().replace("\n", "").replace("""    """, "").replace(",}", "}")
