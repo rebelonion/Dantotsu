@@ -184,7 +184,7 @@ data class Favourites(
 @Serializable
 data class MediaListOptions(
     // The score format the user is using for media lists
-    @SerialName("scoreFormat") var scoreFormat: String?,
+    @SerialName("scoreFormat") var scoreFormat: ScoreFormat?,
 
     // The default order list rows should be displayed in
     @SerialName("rowOrder") var rowOrder: String?,
@@ -195,14 +195,19 @@ data class MediaListOptions(
     // The user's manga list options
     @SerialName("mangaList") var mangaList: MediaListTypeOptions?,
 )
+
 @Serializable
 enum class ScoreFormat {
-    @SerialName("ENGLISH")
-    ENGLISH,
-    @SerialName("ROMAJI")
-    ROMAJI,
-    @SerialName("NATIVE")
-    NATIVE
+    @SerialName("POINT_100")
+    POINT_100,
+    @SerialName("POINT_10_DECIMAL")
+    POINT_10_DECIMAL,
+    @SerialName("POINT_10")
+    POINT_10,
+    @SerialName("POINT_5")
+    POINT_5,
+    @SerialName("POINT_3")
+    POINT_3,
 }
 
 @Serializable

@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
+import ani.dantotsu.connections.anilist.Anilist.ScoreFormat
 import ani.dantotsu.connections.anilist.Anilist.staffNameLang
 import ani.dantotsu.connections.anilist.Anilist.titleLang
 import ani.dantotsu.connections.anilist.AnilistMutations
@@ -24,10 +25,18 @@ class SettingsAnilistActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsAnilistBinding
     private lateinit var anilistMutations: AnilistMutations
 
-    enum class Format {
+    enum class FormatLang {
         ENGLISH,
         ROMAJI,
         NATIVE
+    }
+
+    enum class FormatScore {
+        POINT_100,
+        POINT_10_DECIMAL,
+        POINT_10,
+        POINT_5,
+        POINT_3,
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +59,7 @@ class SettingsAnilistActivity : AppCompatActivity() {
             }
 
             val currentTitleLang = Anilist.titleLanguage
-            val titleFormat = Format.entries.firstOrNull { it.name == currentTitleLang } ?: Format.ENGLISH
+            val titleFormat = FormatLang.entries.firstOrNull { it.name == currentTitleLang } ?: FormatLang.ENGLISH
 
             settingsAnilistTitleLanguage.setText(titleLang[titleFormat.ordinal])
             settingsAnilistTitleLanguage.setAdapter(
@@ -72,7 +81,7 @@ class SettingsAnilistActivity : AppCompatActivity() {
             }
 
             val currentStaffNameLang = Anilist.staffNameLanguage
-            val staffNameFormat = Format.entries.firstOrNull { it.name == currentStaffNameLang } ?: Format.ENGLISH
+            val staffNameFormat = FormatLang.entries.firstOrNull { it.name == currentStaffNameLang } ?: FormatLang.ENGLISH
 
             settingsAnilistStaffLanguage.setText(staffNameLang[staffNameFormat.ordinal])
             settingsAnilistStaffLanguage.setAdapter(
@@ -94,6 +103,44 @@ class SettingsAnilistActivity : AppCompatActivity() {
             }
 
             val currentScoreFormat = Anilist.scoreFormat
+            val scoreFormat = FormatScore.entries.firstOrNull{ it.name == currentScoreFormat } ?: FormatScore.POINT_100
+            settingsAnilistScoreFormat.setText(ScoreFormat[scoreFormat.ordinal])
+            settingsAnilistScoreFormat.setAdapter(
+                ArrayAdapter(context, R.layout.item_dropdown, ScoreFormat)
+            )
+            settingsAnilistScoreFormat.setOnItemClickListener { _, _, i, _ ->
+                val selectedFormat = when (i) {
+                    0 -> "POINT_100"
+                    1 -> "POINT_10_DECIMAL"
+                    2 -> "POINT_10"
+                    3 -> "POINT_5"
+                    4 -> "POINT_3"
+                    else -> "POINT_100"
+                }
+                lifecycleScope.launch {
+                    anilistMutations.updateSettings(scoreFormat = selectedFormat)
+                    Anilist.scoreFormat = selectedFormat
+                    restartApp()
+                }
+                settingsAnilistScoreFormat.clearFocus()
+            }
+
+            val currentTimezone = Anilist.timezone?.let { Anilist.getDisplayTimezone(it) } ?: "(GMT+00:00) London"
+            settingsAnilistTimezone.setText(currentTimezone)
+            settingsAnilistTimezone.setAdapter(
+                ArrayAdapter(context, R.layout.item_dropdown, Anilist.timeZone)
+            )
+            settingsAnilistTimezone.setOnItemClickListener { _, _, i, _ ->
+                val selectedTimezone = Anilist.timeZone[i]
+                val apiTimezone = Anilist.getApiTimezone(selectedTimezone)
+                lifecycleScope.launch {
+                    anilistMutations.updateSettings(timezone = apiTimezone)
+                    Anilist.timezone = apiTimezone
+                    restartApp()
+                }
+                settingsAnilistTimezone.clearFocus()
+            }
+
             val displayAdultContent = Anilist.adult
             val airingNotifications = Anilist.airingNotifications
 

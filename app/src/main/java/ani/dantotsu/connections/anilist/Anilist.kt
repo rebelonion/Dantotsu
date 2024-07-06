@@ -6,6 +6,7 @@ import android.net.Uri
 import androidx.browser.customtabs.CustomTabsIntent
 import ani.dantotsu.R
 import ani.dantotsu.client
+import ani.dantotsu.connections.anilist.api.ScoreFormat
 import ani.dantotsu.connections.comments.CommentsAPI
 import ani.dantotsu.currContext
 import ani.dantotsu.openLinkInBrowser
@@ -15,6 +16,8 @@ import ani.dantotsu.snackString
 import ani.dantotsu.toast
 import ani.dantotsu.util.Logger
 import java.util.Calendar
+import java.util.Locale
+import kotlin.math.abs
 
 object Anilist {
     val query: AnilistQueries = AnilistQueries()
@@ -106,17 +109,39 @@ object Anilist {
     )
 
     val timeZone = listOf(
+        "(GMT-11:00) Pago Pago",
+        "(GMT-10:00) Hawaii Time",
+        "(GMT-09:00) Alaska Time",
+        "(GMT-08:00) Pacific Time",
+        "(GMT-07:00) Mountain Time",
         "(GMT-06:00) Central Time",
         "(GMT-05:00) Eastern Time",
-        "(GMT-04:00) Atlantic Time",
-        "(GMT-01:00) Central Time",
+        "(GMT-04:00) Atlantic Time - Halifax",
+        "(GMT-03:00) Sao Paulo",
+        "(GMT-02:00) Mid-Atlantic",
+        "(GMT-01:00) Azores",
         "(GMT+00:00) London",
         "(GMT+01:00) Berlin",
+        "(GMT+02:00) Helsinki",
+        "(GMT+03:00) Istanbul",
         "(GMT+04:00) Dubai",
+        "(GMT+04:30) Kabul",
+        "(GMT+05:00) Maldives",
         "(GMT+05:30) India Standard Time",
+        "(GMT+05:45) Kathmandu",
         "(GMT+06:00) Dhaka",
+        "(GMT+06:30) Cocos",
         "(GMT+07:00) Bangkok",
+        "(GMT+08:00) Hong Kong",
+        "(GMT+08:30) Pyongyang",
         "(GMT+09:00) Tokyo",
+        "(GMT+09:30) Central Time - Darwin",
+        "(GMT+10:00) Eastern Time - Brisbane",
+        "(GMT+10:30) Central Time - Adelaide",
+        "(GMT+11:00) Eastern Time - Melbourne, Sydney",
+        "(GMT+12:00) Nauru",
+        "(GMT+13:00) Auckland",
+        "(GMT+14:00) Kiritimati",
     )
 
     val titleLang = listOf(
@@ -154,6 +179,31 @@ object Anilist {
         6, 7, 8 -> 2
         9, 10, 11 -> 3
         else -> 0
+    }
+
+    fun getDisplayTimezone(apiTimezone: String): String {
+        val parts = apiTimezone.split(":") // Split the string into hours and minutes
+        if (parts.size != 2) return "(GMT+00:00) London" // Default if format is incorrect
+
+        val hours = parts[0].toIntOrNull() ?: 0
+        val minutes = parts[1].toIntOrNull() ?: 0
+        val sign = if (hours >= 0) "+" else "-"
+        val formattedHours = String.format(Locale.US, "%02d", abs(hours))
+        val formattedMinutes = String.format(Locale.US, "%02d", minutes)
+
+        val searchString = "(GMT$sign$formattedHours:$formattedMinutes)"
+        return timeZone.find { it.contains(searchString) } ?: "(GMT+00:00) London"
+    }
+
+    fun getApiTimezone(displayTimezone: String): String {
+        val regex = """\(GMT([+-])(\d{2}):(\d{2})\)""".toRegex()
+        val matchResult = regex.find(displayTimezone)
+        return if (matchResult != null) {
+            val (sign, hours, minutes) = matchResult.destructured
+            "${if (sign == "+") "" else "-"}$hours$minutes"
+        } else {
+            "00:00"
+        }
     }
 
     private fun getSeason(next: Boolean): Pair<String, Int> {
