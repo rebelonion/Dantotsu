@@ -6,7 +6,6 @@ import android.net.Uri
 import androidx.browser.customtabs.CustomTabsIntent
 import ani.dantotsu.R
 import ani.dantotsu.client
-import ani.dantotsu.connections.anilist.api.ScoreFormat
 import ani.dantotsu.connections.comments.CommentsAPI
 import ani.dantotsu.currContext
 import ani.dantotsu.openLinkInBrowser
@@ -182,8 +181,8 @@ object Anilist {
     }
 
     fun getDisplayTimezone(apiTimezone: String): String {
-        val parts = apiTimezone.split(":") // Split the string into hours and minutes
-        if (parts.size != 2) return "(GMT+00:00) London" // Default if format is incorrect
+        val parts = apiTimezone.split(":")
+        if (parts.size != 2) return "(GMT+00:00) London"
 
         val hours = parts[0].toIntOrNull() ?: 0
         val minutes = parts[1].toIntOrNull() ?: 0
@@ -200,7 +199,8 @@ object Anilist {
         val matchResult = regex.find(displayTimezone)
         return if (matchResult != null) {
             val (sign, hours, minutes) = matchResult.destructured
-            "${if (sign == "+") "" else "-"}$hours$minutes"
+            val formattedSign = if (sign == "+") "" else "-"
+            "$formattedSign$hours:$minutes"
         } else {
             "00:00"
         }
