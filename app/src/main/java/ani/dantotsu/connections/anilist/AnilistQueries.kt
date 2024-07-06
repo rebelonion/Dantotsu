@@ -47,12 +47,13 @@ class AnilistQueries {
                 Viewer {
                     name
                     options {
-                        restrictMessagesToFollowing
-                        displayAdultContent
-                        airingNotifications
-                        staffNameLanguage
-                        titleLanguage
                         timezone
+                        titleLanguage
+                        staffNameLanguage
+                        activityMergeTime
+                        airingNotifications
+                        displayAdultContent
+                        restrictMessagesToFollowing
                     }
                     avatar { medium }
                     bannerImage

@@ -160,7 +160,7 @@ object Anilist {
         "10 Point Decimal (5.5/10)",
         "10 Point (5/10)",
         "5 Star (3/5)",
-        "3 Point Smiley :)",
+        "3 Point Smiley :)"
     )
 
     val rowOrderMap = mapOf(
@@ -168,6 +168,22 @@ object Anilist {
         "Title" to "title",
         "Last Updated" to "updatedAt",
         "Last Added" to "id"
+    )
+
+    val activityMergeTimeMap = mapOf(
+        "Never" to 0,
+        "30 mins" to 30,
+        "69 mins" to 69,
+        "1 hour" to 60,
+        "2 hours" to 120,
+        "3 hours" to 180,
+        "6 hours" to 360,
+        "12 hours" to 720,
+        "1 day" to 1440,
+        "2 days" to 2880,
+        "3 days" to 4320,
+        "1 week" to 10080,
+        "Always" to 20160
     )
 
     private val cal: Calendar = Calendar.getInstance()

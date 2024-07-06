@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.Anilist.ScoreFormat
+import ani.dantotsu.connections.anilist.Anilist.activityMergeTimeMap
 import ani.dantotsu.connections.anilist.Anilist.rowOrderMap
 import ani.dantotsu.connections.anilist.Anilist.staffNameLang
 import ani.dantotsu.connections.anilist.Anilist.titleLang
@@ -101,6 +102,23 @@ class SettingsAnilistActivity : AppCompatActivity() {
                     restartApp()
                 }
                 settingsAnilistStaffLanguage.clearFocus()
+            }
+
+            val currentMergeTimeDisplay = activityMergeTimeMap.entries.firstOrNull { it.value == Anilist.activityMergeTime }?.key
+                ?: "${Anilist.activityMergeTime} mins"
+            settingsAnilistActivityMergeTime.setText(currentMergeTimeDisplay)
+            settingsAnilistActivityMergeTime.setAdapter(
+                ArrayAdapter(context, R.layout.item_dropdown, activityMergeTimeMap.keys.toList())
+            )
+            settingsAnilistActivityMergeTime.setOnItemClickListener { _, _, i, _ ->
+                val selectedDisplayTime = activityMergeTimeMap.keys.toList()[i]
+                val selectedApiTime = activityMergeTimeMap[selectedDisplayTime] ?: 0
+                lifecycleScope.launch {
+                    anilistMutations.updateSettings(activityMergeTime = selectedApiTime)
+                    Anilist.activityMergeTime = selectedApiTime
+                    restartApp()
+                }
+                settingsAnilistActivityMergeTime.clearFocus()
             }
 
             val currentScoreFormat = Anilist.scoreFormat
