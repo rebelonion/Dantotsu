@@ -41,6 +41,10 @@ object Anilist {
     var staffNameLanguage: String? = null
     var airingNotifications: Boolean = false
     var restrictMessagesToFollowing: Boolean = false
+    var scoreFormat: String? = null
+    var rowOrder: String? = null
+    var activityMergeTime: Int? = null
+    var timezone: String? = null
 
     val sortBy = listOf(
         "SCORE_DESC",
@@ -99,6 +103,47 @@ object Anilist {
 
     val authorRoles = listOf(
         "Original Creator", "Story & Art", "Story"
+    )
+
+    val timeZone = listOf(
+        "(GMT-06:00) Central Time",
+        "(GMT-05:00) Eastern Time",
+        "(GMT-04:00) Atlantic Time",
+        "(GMT-01:00) Central Time",
+        "(GMT+00:00) London",
+        "(GMT+01:00) Berlin",
+        "(GMT+04:00) Dubai",
+        "(GMT+05:30) India Standard Time",
+        "(GMT+06:00) Dhaka",
+        "(GMT+07:00) Bangkok",
+        "(GMT+09:00) Tokyo",
+    )
+
+    val titleLang = listOf(
+        "English (Attack on Titan)",
+        "Romaji (Shingeki no Kyojin)",
+        "Native (進撃の巨人)"
+    )
+
+    val staffNameLang = listOf(
+        "Romaji, Western Order (Killua Zoldyck)",
+        "Romaji (Zoldyck Killua)",
+        "Native (キルア=ゾルディック)"
+    )
+
+    val ScoreFormat = listOf(
+        "100 Point (55/100)",
+        "10 Point Decimal (5.5/10)",
+        "10 Point (5/10)",
+        "5 Star (3/5)",
+        "3 Point Smiley :)",
+    )
+
+    val RowOrder = listOf(
+        "Score",
+        "Title",
+        "Last Updated",
+        "Last Added",
     )
 
     private val cal: Calendar = Calendar.getInstance()

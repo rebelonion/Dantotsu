@@ -17,7 +17,9 @@ class AnilistMutations {
         activityMergeTime: Int? = null,
         airingNotifications: Boolean? = null,
         displayAdultContent: Boolean? = null,
-        restrictMessagesToFollowing: Boolean? = null
+        restrictMessagesToFollowing: Boolean? = null,
+        scoreFormat: String? = null,
+        rowOrder: String? = null,
     ) {
         val query = """
             mutation (
@@ -26,8 +28,10 @@ class AnilistMutations {
                 ${"$"}staffNameLanguage: UserStaffNameLanguage,
                 ${"$"}activityMergeTime: Int,
                 ${"$"}airingNotifications: Boolean,
-                ${"$"}displayAdultContent: Boolean
-                ${"$"}restrictMessagesToFollowing: Boolean
+                ${"$"}displayAdultContent: Boolean,
+                ${"$"}restrictMessagesToFollowing: Boolean,
+                ${"$"}scoreFormat: ScoreFormat,
+                ${"$"}rowOrder: String
             ) {
                 UpdateUser(
                     timezone: ${"$"}timezone,
@@ -36,7 +40,9 @@ class AnilistMutations {
                     activityMergeTime: ${"$"}activityMergeTime,
                     airingNotifications: ${"$"}airingNotifications,
                     displayAdultContent: ${"$"}displayAdultContent
-                    restrictMessagesToFollowing: ${"$"}restrictMessagesToFollowing
+                    restrictMessagesToFollowing: ${"$"}restrictMessagesToFollowing.
+                    scoreFormat: ${"$"}scoreFormat,
+                    rowOrder: ${"$"}rowOrder,
                 ) {
                     id
                     options {
@@ -47,6 +53,10 @@ class AnilistMutations {
                         airingNotifications
                         displayAdultContent
                         restrictMessagesToFollowing
+                    }
+                    mediaListOptions {
+                      scoreFormat
+                      rowOrder
                     }
                 }
             }
@@ -61,6 +71,8 @@ class AnilistMutations {
                 ${airingNotifications?.let { """"airingNotifications":$it""" } ?: ""}
                 ${displayAdultContent?.let { """"displayAdultContent":$it""" } ?: ""}
                 ${restrictMessagesToFollowing?.let { """"restrictMessagesToFollowing":$it""" } ?: ""}
+                ${scoreFormat?.let { """"scoreFormat":$it""" } ?: ""}
+                ${rowOrder?.let { """"rowOrder":$it""" } ?: ""}
             }
         """.trimIndent().replace("\n", "").replace("""    """, "").replace(",}", "}")
 

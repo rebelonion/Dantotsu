@@ -88,11 +88,11 @@ data class UserOptions(
     //    // Notification options
     //    // @SerialName("notificationOptions") var notificationOptions: List<NotificationOption>?,
     //
-    //    // The user's timezone offset (Auth user only)
-    //    @SerialName("timezone") var timezone: String?,
+    // The user's timezone offset (Auth user only)
+    @SerialName("timezone") var timezone: String?,
     //
-    //    // Minutes between activity for them to be merged together. 0 is Never, Above 2 weeks (20160 mins) is Always.
-    //    @SerialName("activityMergeTime") var activityMergeTime: Int?,
+    // Minutes between activity for them to be merged together. 0 is Never, Above 2 weeks (20160 mins) is Always.
+    @SerialName("activityMergeTime") var activityMergeTime: Int?,
     //
     // The language the user wants to see staff and character names in
     @SerialName("staffNameLanguage") var staffNameLanguage: UserStaffNameLanguage?,
@@ -123,10 +123,8 @@ data class UserStatisticTypes(
 enum class UserTitleLanguage {
     @SerialName("ENGLISH")
     ENGLISH,
-
     @SerialName("ROMAJI")
     ROMAJI,
-
     @SerialName("NATIVE")
     NATIVE
 }
@@ -197,6 +195,15 @@ data class MediaListOptions(
     // The user's manga list options
     @SerialName("mangaList") var mangaList: MediaListTypeOptions?,
 )
+@Serializable
+enum class ScoreFormat {
+    @SerialName("ENGLISH")
+    ENGLISH,
+    @SerialName("ROMAJI")
+    ROMAJI,
+    @SerialName("NATIVE")
+    NATIVE
+}
 
 @Serializable
 data class MediaListTypeOptions(

@@ -69,16 +69,20 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:alpha="0.58"
+                android:layout_height="64dp"
+                android:layout_marginTop="8dp"
                 android:fontFamily="@font/poppins_bold"
-                android:text="something" />
+                android:gravity="center_vertical"
+                android:paddingHorizontal="32dp"
+                android:text="@string/anime_manga"
+                android:textColor="?attr/colorSecondary"
+                app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
+                tools:ignore="TextContrastCheck" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
+                android:layout_marginHorizontal="32dp"
                 android:alpha="0.58"
                 android:fontFamily="@font/poppins_bold"
                 android:text="@string/selected_title_language" />
@@ -87,7 +91,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
+                android:layout_marginHorizontal="32dp"
                 android:layout_marginBottom="8dp"
                 app:boxCornerRadiusBottomEnd="8dp"
                 app:boxCornerRadiusBottomStart="8dp"
@@ -115,7 +119,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
+                android:layout_marginHorizontal="32dp"
                 android:alpha="0.58"
                 android:fontFamily="@font/poppins_bold"
                 android:text="@string/selected_staff_language" />
@@ -124,7 +128,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
+                android:layout_marginHorizontal="32dp"
                 android:layout_marginBottom="8dp"
                 app:boxCornerRadiusBottomEnd="8dp"
                 app:boxCornerRadiusBottomStart="8dp"
@@ -148,17 +152,205 @@
                     android:textSize="14sp"
                     tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="32dp"
+                android:alpha="0.58"
+                android:fontFamily="@font/poppins_bold"
+                android:text="@string/selected_merge_time" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="32dp"
+                android:layout_marginBottom="8dp"
+                app:boxCornerRadiusBottomEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusTopStart="8dp"
+                app:hintAnimationEnabled="true"
+                app:startIconDrawable="@drawable/ic_round_dns_24">
+
+                <AutoCompleteTextView
+                    android:id="@+id/settingsAnilistMergeTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins_bold"
+                    android:freezesText="false"
+                    android:inputType="none"
+                    android:padding="8dp"
+                    android:text="@string/placeholder"
+                    android:textAllCaps="true"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="14sp"
+                    tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ani.dantotsu.FadingEdgeRecyclerView
+                android:id="@+id/settingsRecyclerView1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="14dp"
+                android:layout_marginHorizontal="32dp"
+                android:nestedScrollingEnabled="false"
+                android:requiresFadingEdge="vertical"
+                tools:itemCount="2"
+                tools:listitem="@layout/item_settings" />
         </ani.dantotsu.others.Xpandable>
 
+        <ani.dantotsu.others.Xpandable
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/poppins_bold"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="32dp"
+            android:text="@string/list_settings"
+            android:textColor="?attr/colorSecondary"
+            app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
+            tools:ignore="TextContrastCheck" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="32dp"
+                android:alpha="0.58"
+                android:fontFamily="@font/poppins_bold"
+                android:text="@string/selected_score_format" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="32dp"
+                android:layout_marginBottom="8dp"
+                app:boxCornerRadiusBottomEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusTopStart="8dp"
+                app:hintAnimationEnabled="true"
+                app:startIconDrawable="@drawable/ic_round_dns_24">
+
+                <AutoCompleteTextView
+                    android:id="@+id/settingsAnilistScoreFormat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins_bold"
+                    android:freezesText="false"
+                    android:inputType="none"
+                    android:padding="8dp"
+                    android:text="@string/placeholder"
+                    android:textAllCaps="true"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="14sp"
+                    tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="32dp"
+                android:alpha="0.58"
+                android:fontFamily="@font/poppins_bold"
+                android:text="@string/selected_row_order" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="32dp"
+                android:layout_marginBottom="8dp"
+                app:boxCornerRadiusBottomEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusTopStart="8dp"
+                app:hintAnimationEnabled="true"
+                app:startIconDrawable="@drawable/ic_round_dns_24">
+
+                <AutoCompleteTextView
+                    android:id="@+id/settingsAnilistRowOrder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins_bold"
+                    android:freezesText="false"
+                    android:inputType="none"
+                    android:padding="8dp"
+                    android:text="@string/placeholder"
+                    android:textAllCaps="true"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="14sp"
+                    tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </ani.dantotsu.others.Xpandable>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_bold"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="32dp"
+            android:paddingTop="20dp"
+            android:text="@string/other"
+            android:textColor="?attr/colorSecondary"
+            tools:ignore="TextContrastCheck" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginHorizontal="32dp"
+            android:alpha="0.58"
+            android:fontFamily="@font/poppins_bold"
+            android:text="@string/selected_time_zone" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="32dp"
+            android:layout_marginBottom="8dp"
+            app:boxCornerRadiusBottomEnd="8dp"
+            app:boxCornerRadiusBottomStart="8dp"
+            app:boxCornerRadiusTopEnd="8dp"
+            app:boxCornerRadiusTopStart="8dp"
+            app:hintAnimationEnabled="true"
+            app:startIconDrawable="@drawable/ic_round_dns_24">
+
+            <AutoCompleteTextView
+                android:id="@+id/settingsAnilistTimeZone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppins_bold"
+                android:freezesText="false"
+                android:inputType="none"
+                android:padding="8dp"
+                android:text="@string/placeholder"
+                android:textAllCaps="true"
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="14sp"
+                tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+
         <ani.dantotsu.FadingEdgeRecyclerView
-            android:id="@+id/settingsRecyclerView"
+            android:id="@+id/settingsRecyclerView2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="24dp"
+            android:layout_marginHorizontal="32dp"
             android:nestedScrollingEnabled="false"
             android:requiresFadingEdge="vertical"
-            tools:itemCount="5"
+            tools:itemCount="1"
             tools:listitem="@layout/item_settings" />
-
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

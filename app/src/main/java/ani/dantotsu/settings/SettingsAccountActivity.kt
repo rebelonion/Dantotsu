@@ -1,14 +1,18 @@
 package ani.dantotsu.settings
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
 import android.view.View
+import android.widget.ArrayAdapter
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.updateLayoutParams
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.discord.Discord
@@ -19,6 +23,7 @@ import ani.dantotsu.loadImage
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.others.CustomBottomDialog
+import ani.dantotsu.restartApp
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.startMainActivity
@@ -26,6 +31,7 @@ import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
+import kotlinx.coroutines.launch
 
 class SettingsAccountActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsAccountsBinding
@@ -202,6 +208,25 @@ class SettingsAccountActivity : AppCompatActivity() {
             }
             reload()
         }
-    }
+        binding.settingsRecyclerView.adapter = SettingsAdapter(
+            arrayListOf(
+                Settings(
+                    type = 1,
+                    name = getString(R.string.anilist_settings),
+                    desc = getString(R.string.alsettings_desc),
+                    icon = R.drawable.ic_anilist,
+                    onClick = {
+                        lifecycleScope.launch {
+                            Anilist.query.getUserData()
+                            startActivity(Intent(context, SettingsAnilistActivity::class.java))
+                        }
+                    },
+                    isActivity = true
+                ),
+            )
+        )
+        binding.settingsRecyclerView.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
+    }
 }

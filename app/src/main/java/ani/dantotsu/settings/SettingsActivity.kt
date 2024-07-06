@@ -18,7 +18,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.BuildConfig
 import ani.dantotsu.R
-import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.copyToClipboard
 import ani.dantotsu.databinding.ActivitySettingsBinding
 import ani.dantotsu.initActivity
@@ -151,19 +150,6 @@ class SettingsActivity : AppCompatActivity() {
                         icon = R.drawable.ic_round_restaurant_24,
                         onClick = {
                             startActivity(Intent(context, SettingsAddonActivity::class.java))
-                        },
-                        isActivity = true
-                    ),
-                    Settings(
-                        type = 1,
-                        name = getString(R.string.anilist_settings),
-                        desc = getString(R.string.alsettings_desc),
-                        icon = R.drawable.ic_anilist,
-                        onClick = {
-                            lifecycleScope.launch {
-                                Anilist.query.getUserData()
-                                startActivity(Intent(context, SettingsAnilistActivity::class.java))
-                            }
                         },
                         isActivity = true
                     ),

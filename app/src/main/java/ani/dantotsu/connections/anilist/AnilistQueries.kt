@@ -58,6 +58,7 @@ class AnilistQueries {
                     bannerImage
                     id
                     mediaListOptions {
+                        scoreFormat
                         rowOrder
                         animeList { sectionOrder customLists }
                         mangaList { sectionOrder customLists }
@@ -92,6 +93,12 @@ class AnilistQueries {
             Anilist.staffNameLanguage = it.staffNameLanguage.toString()
             Anilist.airingNotifications = it.airingNotifications ?: false
             Anilist.restrictMessagesToFollowing = it.restrictMessagesToFollowing ?: false
+            Anilist.timezone = it.timezone
+            Anilist.activityMergeTime = it.activityMergeTime
+        }
+        user.mediaListOptions?.let {
+            Anilist.scoreFormat = it.scoreFormat.toString()
+            Anilist.rowOrder = it.rowOrder
         }
         return true
     }

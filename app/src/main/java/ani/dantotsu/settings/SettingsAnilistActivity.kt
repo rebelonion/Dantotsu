@@ -9,15 +9,15 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
+import ani.dantotsu.connections.anilist.Anilist.staffNameLang
+import ani.dantotsu.connections.anilist.Anilist.titleLang
+import ani.dantotsu.connections.anilist.AnilistMutations
 import ani.dantotsu.databinding.ActivitySettingsAnilistBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.navBarHeight
+import ani.dantotsu.restartApp
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
-import ani.dantotsu.connections.anilist.AnilistMutations
-import ani.dantotsu.restartApp
-import ani.dantotsu.settings.saving.PrefManager
-import ani.dantotsu.settings.saving.PrefName
 import kotlinx.coroutines.launch
 
 class SettingsAnilistActivity : AppCompatActivity() {
@@ -49,26 +49,6 @@ class SettingsAnilistActivity : AppCompatActivity() {
                 onBackPressedDispatcher.onBackPressed()
             }
 
-            val timeZone = listOf(
-                "(GMT-06:00) Central Time",
-                "(GMT-05:00) Eastern Time",
-                "(GMT-04:00) Atlantic Time",
-                "(GMT-01:00) Central Time",
-                "(GMT+00:00) London",
-                "(GMT+01:00) Berlin",
-                "(GMT+04:00) Dubai",
-                "(GMT+05:30) India Standard Time",
-                "(GMT+06:00) Dhaka",
-                "(GMT+07:00) Bangkok",
-                "(GMT+09:00) Tokyo",
-            )
-
-            val titleLang = listOf(
-                "English (Attack on Titan)",
-                "Romaji (Shingeki no Kyojin)",
-                "Native (進撃の巨人)"
-            )
-
             val currentTitleLang = Anilist.titleLanguage
             val titleFormat = Format.entries.firstOrNull { it.name == currentTitleLang } ?: Format.ENGLISH
 
@@ -90,13 +70,6 @@ class SettingsAnilistActivity : AppCompatActivity() {
                 }
                 settingsAnilistTitleLanguage.clearFocus()
             }
-
-
-            val staffNameLang = listOf(
-                "Romaji, Western Order (Killua Zoldyck)",
-                "Romaji (Zoldyck Killua)",
-                "Native (キルア=ゾルディック)"
-            )
 
             val currentStaffNameLang = Anilist.staffNameLanguage
             val staffNameFormat = Format.entries.firstOrNull { it.name == currentStaffNameLang } ?: Format.ENGLISH
@@ -120,11 +93,11 @@ class SettingsAnilistActivity : AppCompatActivity() {
                 settingsAnilistStaffLanguage.clearFocus()
             }
 
+            val currentScoreFormat = Anilist.scoreFormat
             val displayAdultContent = Anilist.adult
             val airingNotifications = Anilist.airingNotifications
-            val restrictMessagesToFollowing = Anilist.restrictMessagesToFollowing
 
-            binding.settingsRecyclerView.adapter = SettingsAdapter(
+            binding.settingsRecyclerView1.adapter = SettingsAdapter(
                 arrayListOf(
                     Settings(
                         type = 2,
@@ -154,25 +127,33 @@ class SettingsAnilistActivity : AppCompatActivity() {
                             }
                         }
                     ),
-                    Settings(
-                        type = 2,
-                        name = getString(R.string.restrict_messages),
-                        desc = getString(R.string.restrict_messages_desc),
-                        icon = R.drawable.ic_round_lock_open_24,
-                        isChecked = restrictMessagesToFollowing,
-                        switch = { isChecked, _ ->
-                            lifecycleScope.launch {
-                                anilistMutations.updateSettings(restrictMessagesToFollowing = isChecked)
-                                Anilist.restrictMessagesToFollowing = isChecked
-                                restartApp()
-                            }
-                        }
-                    ),
                 )
             )
-            binding.settingsRecyclerView.layoutManager =
+            binding.settingsRecyclerView1.layoutManager =
                 LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         }
+
+        binding.settingsRecyclerView2.adapter = SettingsAdapter(
+            arrayListOf(
+                Settings(
+                    type = 2,
+                    name = getString(R.string.restrict_messages),
+                    desc = getString(R.string.restrict_messages_desc),
+                    icon = R.drawable.ic_round_lock_open_24,
+                    isChecked = Anilist.restrictMessagesToFollowing,
+                    switch = { isChecked, _ ->
+                        lifecycleScope.launch {
+                            anilistMutations.updateSettings(restrictMessagesToFollowing = isChecked)
+                            Anilist.restrictMessagesToFollowing = isChecked
+                            restartApp()
+                        }
+                    }
+                ),
+            )
+        )
+        binding.settingsRecyclerView2.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
     }
 }
