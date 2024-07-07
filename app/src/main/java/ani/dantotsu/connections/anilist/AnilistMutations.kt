@@ -1,12 +1,19 @@
 package ani.dantotsu.connections.anilist
 
+import android.util.Log
+import ani.dantotsu.client
 import ani.dantotsu.connections.anilist.Anilist.executeQuery
 import ani.dantotsu.connections.anilist.api.FuzzyDate
 import ani.dantotsu.connections.anilist.api.Query
 import ani.dantotsu.connections.anilist.api.ToggleLike
 import ani.dantotsu.currContext
+import ani.dantotsu.util.Logger
 import com.google.gson.Gson
+import eu.kanade.tachiyomi.network.NetworkHelper
 import kotlinx.serialization.json.JsonObject
+import org.checkerframework.checker.regex.qual.Regex
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 
 class AnilistMutations {
 
@@ -154,17 +161,47 @@ class AnilistMutations {
     }
 
     suspend fun saveUserAvatar(base64Avatar: String): JsonObject? {
-        val imageFormat = getImageFormat(base64Avatar)
-        val base64WithPrefix = "data:image/$imageFormat;base64,${base64Avatar.removePrefix("data:image/$imageFormat;base64,")}"
-        val query = "mutation(\$avatar: String) { SaveUserAvatar(avatar: \$avatar) { id avatar { large medium } } }"
-        val variables = """{"avatar":"$base64WithPrefix"}"""
-        return executeQuery(query, variables)
+        val cookies = mutableMapOf<String, String>()
+        val _cookies = Injekt.get<NetworkHelper>().cookieJar.manager
+        _cookies?.getCookie("https://anilist.co/user/${Anilist.userid}")?.split(";")?.forEach {
+            val pieces = it.split('=')
+            val name = it.split('=')[0].trim()
+            cookies[name] = pieces.takeLast(pieces.size - 1).asReversed().joinToString("=").trim()
+        }
+        val regexPattern = """window\.al_token\s*=\s*".*?"""".toRegex()
+        val xsrf = regexPattern.find(
+            client.get(
+                "https://anilist.co/settings", headers = mapOf(
+                    "Authorization" to "Bearer ${Anilist.token}",
+                    "Accept" to "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+                    "Cookie" to "laravel_session=${cookies["laravel_session"]}"
+                )
+            ).text
+        )?.value?.substringAfter('"')?.substringBefore('"')
+
+        /*
+mutation($avatar:String){SaveUserAvatar(avatar:$avatar){id avatar{large medium}}}
+         */
+        val query =
+            "mutation(\$avatar:String){SaveUserAvatar(avatar:\$avatar){id avatar{large medium}}}\n"
+        val variables = """{"avatar":"$base64Avatar"}"""
+        Log.d("IMAGE", "$query\n$variables")
+        val queryResult: JsonObject? = executeQuery(
+            query,
+            variables,
+            useToken = true,
+            extraHeaders = mapOf("schema" to "internal", "x-csrf-token" to (xsrf ?: ""), "content-type" to "application/json")
+        )
+        Log.d("QUERY RESULT", queryResult.toString())
+        return queryResult
     }
 
     suspend fun saveUserBanner(base64Banner: String): JsonObject? {
         val imageFormat = getImageFormat(base64Banner)
-        val base64WithPrefix = "data:image/$imageFormat;base64,${base64Banner.removePrefix("data:image/$imageFormat;base64,")}"
-        val query = "mutation(\$banner: String) { SaveUserBanner(banner: \$banner) { id bannerImage } }"
+        val base64WithPrefix =
+            "data:image/$imageFormat;base64,${base64Banner.removePrefix("data:image/$imageFormat;base64,")}"
+        val query =
+            "mutation(\$banner: String) { SaveUserBanner(banner: \$banner) { id bannerImage } }"
         val variables = """{"banner":"$base64WithPrefix"}"""
         return executeQuery(query, variables)
     }

@@ -14,6 +14,10 @@ import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.toast
 import ani.dantotsu.util.Logger
+import eu.kanade.tachiyomi.network.NetworkHelper
+import okhttp3.Cookie
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import java.util.Calendar
 
 object Anilist {
@@ -163,7 +167,8 @@ object Anilist {
         force: Boolean = false,
         useToken: Boolean = true,
         show: Boolean = false,
-        cache: Int? = null
+        cache: Int? = null,
+        extraHeaders: Map<String, String>? = null
     ): T? {
         return try {
             if (show) Logger.log("Anilist Query: $query")
@@ -182,10 +187,23 @@ object Anilist {
 
             if (token != null || force) {
                 if (token != null && useToken) headers["Authorization"] = "Bearer $token"
+                val _cookies =
+                    Injekt.get<NetworkHelper>().cookieJar.manager?.getCookie("https://anilist.co/user/${Anilist.userid}")
+                val cookies = mutableMapOf<String, String>()
+                _cookies?.split(";")?.forEach {
+                    val pieces = it.split('=')
+                    val name = it.split('=')[0].trim()
+                    cookies[name] =
+                        pieces.takeLast(pieces.size - 1).asReversed().joinToString("=").trim()
+                }
+
+                Logger.log(extraHeaders.toString())
+                Logger.log(cookies.toString())
 
                 val json = client.post(
                     "https://graphql.anilist.co/",
-                    headers,
+                    (extraHeaders
+                        ?: mapOf()) + headers + mapOf("Cookie" to "laravel_session=${cookies["laravel_session"]}"),
                     data = data,
                     cacheTime = cache ?: 10
                 )

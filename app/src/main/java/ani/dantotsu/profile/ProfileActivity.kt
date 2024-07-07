@@ -129,6 +129,10 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                 })
 
                 bindingProfileAppBar = ItemProfileAppBarBinding.bind(binding.root).apply {
+                    val intent = Intent(context, CookieCatcher::class.java)
+                        .putExtra("url", "https://anilist.co/user/${Anilist.userid}")
+                        .putExtra("headers", "{\"Authorization: ${Anilist.token}\"")
+                    ContextCompat.startActivity(context, intent, null)
                     binding.profileProgressBar.visibility = View.GONE
                     editProfileAvatar.visibility = View.GONE
                     editProfileBanner.visibility = View.GONE
@@ -296,7 +300,7 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
         )
 
         viewIds.forEach { viewId ->
-            findViewById<View>(viewId).apply {
+            findViewById<View>(viewId)?.apply {
                 visibility = if (visibility == View.VISIBLE) View.GONE else View.VISIBLE
             }
         }
@@ -335,7 +339,6 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
     }
 
     private fun saveProfileImages() {
-        val avatarBitmap = (bindingProfileAppBar.profileUserAvatar.drawable as? BitmapDrawable)?.bitmap
         val bannerBitmap = (bindingProfileAppBar.profileBannerImage.drawable as? BitmapDrawable)?.bitmap
 
         if (avatarBitmap != null && bannerBitmap != null) {
@@ -368,14 +371,19 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
 
     private fun bitmapToBase64(bitmap: Bitmap): String {
         val outputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-        val base64 = Base64.encodeToString(outputStream.toByteArray(), Base64.NO_WRAP)
         val imageFormat = when (bitmap.config) {
             Bitmap.Config.ARGB_8888 -> "png"
             Bitmap.Config.RGB_565 -> "png"
             Bitmap.Config.ALPHA_8 -> "png"
             else -> "jpeg"
         }
+        bitmap.compress(
+            if (imageFormat == "png") Bitmap.CompressFormat.PNG else Bitmap.CompressFormat.JPEG,
+            100,
+            outputStream
+        )
+        val base64 = Base64.encodeToString(outputStream.toByteArray(), Base64.NO_WRAP)
+
         return "data:image/$imageFormat;base64,$base64"
     }
 
