@@ -49,8 +49,6 @@ object Anilist {
     var timezone: String? = null
     var animeCustomLists: List<String>? = null
     var mangaCustomLists: List<String>? = null
-    var animeSplitCompletedSectionByFormat: Boolean = false
-    var mangaSplitCompletedSectionByFormat: Boolean = false
 
     val sortBy = listOf(
         "SCORE_DESC",

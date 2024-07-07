@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
 import androidx.core.view.updateLayoutParams
@@ -25,6 +24,7 @@ import ani.dantotsu.restartApp
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.toast
+import ani.dantotsu.util.customAlertDialog
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.launch
@@ -264,6 +264,7 @@ class SettingsAnilistActivity : AppCompatActivity() {
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
     }
+
     private fun addCustomListItem(listName: String, container: LinearLayout, isAnime: Boolean) {
         val customListItemView = layoutInflater.inflate(R.layout.item_custom_list, container, false)
         val textInputLayout = customListItemView.findViewById<TextInputLayout>(R.id.customListItem)
@@ -279,15 +280,15 @@ class SettingsAnilistActivity : AppCompatActivity() {
                 }
 
                 if (listExists) {
-                    AlertDialog.Builder(this@SettingsAnilistActivity, R.style.MyPopup)
-                        .setTitle(getString(R.string.delete_custom_list))
-                        .setMessage(getString(R.string.delete_custom_list_confirm, name))
-                        .setPositiveButton(getString(R.string.delete)) { _, _ ->
+                    customAlertDialog().apply {
+                        setTitle(getString(R.string.delete_custom_list))
+                        setMessage(getString(R.string.delete_custom_list_confirm, name))
+                        setPosButton(getString(R.string.delete)) {
                             deleteCustomList(name, isAnime)
                             container.removeView(customListItemView)
                         }
-                        .setNegativeButton(getString(R.string.cancel), null)
-                        .show()
+                        setNegButton(getString(R.string.cancel))
+                    }.show()
                 } else {
                     container.removeView(customListItemView)
                 }

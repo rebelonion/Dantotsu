@@ -43,36 +43,8 @@ class AnilistQueries {
     suspend fun getUserData(): Boolean {
         val response: Query.Viewer?
         measureTimeMillis {
-            response = executeQuery("""
-            {
-                Viewer {
-                    name
-                    options {
-                        timezone
-                        titleLanguage
-                        staffNameLanguage
-                        activityMergeTime
-                        airingNotifications
-                        displayAdultContent
-                        restrictMessagesToFollowing
-                    }
-                    avatar { medium }
-                    bannerImage
-                    id
-                    mediaListOptions {
-                        scoreFormat
-                        rowOrder
-                        animeList { sectionOrder customLists splitCompletedSectionByFormat }
-                        mangaList { sectionOrder customLists splitCompletedSectionByFormat }
-                    }
-                    statistics {
-                        anime { episodesWatched }
-                        manga { chaptersRead }
-                    }
-                    unreadNotificationCount
-                }
-            }
-        """)
+            response = executeQuery(
+                """{Viewer{name options{timezone titleLanguage staffNameLanguage activityMergeTime airingNotifications displayAdultContent restrictMessagesToFollowing} avatar{medium} bannerImage id mediaListOptions{scoreFormat rowOrder animeList{customLists} mangaList{customLists}} statistics{anime{episodesWatched} manga{chaptersRead}} unreadNotificationCount}}""")
         }.also { println("time : $it") }
         val user = response?.data?.user ?: return false
 
@@ -104,12 +76,10 @@ class AnilistQueries {
 
             it.animeList?.let { animeList ->
                 Anilist.animeCustomLists = animeList.customLists
-                Anilist.animeSplitCompletedSectionByFormat = animeList.splitCompletedSectionByFormat ?: false
             }
 
             it.mangaList?.let { mangaList ->
                 Anilist.mangaCustomLists = mangaList.customLists
-                Anilist.mangaSplitCompletedSectionByFormat = mangaList.splitCompletedSectionByFormat ?: false
             }
         }
         return true

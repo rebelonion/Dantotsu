@@ -215,8 +215,8 @@ data class MediaListTypeOptions(
     // The order each list should be displayed in
     @SerialName("sectionOrder") var sectionOrder: List<String>?,
 
-    // If the completed sections of the list should be separated by format
-    @SerialName("splitCompletedSectionByFormat") var splitCompletedSectionByFormat: Boolean?,
+    //    // If the completed sections of the list should be separated by format
+    //    @SerialName("splitCompletedSectionByFormat") var splitCompletedSectionByFormat: Boolean?,
 
     // The names of the user's custom lists
     @SerialName("customLists") var customLists: List<String>?,
