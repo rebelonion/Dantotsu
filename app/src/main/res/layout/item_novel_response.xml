@@ -38,7 +38,7 @@
                     android:indeterminate="true" />
 
                 <ImageView
-                    android:id="@+id/itemEpisodeImage"
+                    android:id="@+id/itemMediaImage"
                     android:layout_width="108dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"

@@ -23,6 +23,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     CheckUpdate(Pref(Location.General, Boolean::class, true)),
     VerboseLogging(Pref(Location.General, Boolean::class, false)),
     DohProvider(Pref(Location.General, Int::class, 0)),
+    HidePrivate(Pref(Location.General, Boolean::class, false)),
     DefaultUserAgent(
         Pref(
             Location.General,
@@ -196,6 +197,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     SubscriptionNotificationStore(Pref(Location.Irrelevant, List::class, listOf<SubscriptionStore>())),
     UnreadCommentNotifications(Pref(Location.Irrelevant, Int::class, 0)),
     DownloadsDir(Pref(Location.Irrelevant, String::class, "")),
+    OC(Pref(Location.Irrelevant, Boolean::class, false)),
     RefreshStatus(Pref(Location.Irrelevant, Boolean::class, false)),
 
     //Protected

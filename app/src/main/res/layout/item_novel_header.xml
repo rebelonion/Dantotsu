@@ -25,7 +25,7 @@
         app:startIconDrawable="@drawable/ic_round_source_24">
 
         <AutoCompleteTextView
-            android:id="@+id/animeSource"
+            android:id="@+id/mediaSource"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

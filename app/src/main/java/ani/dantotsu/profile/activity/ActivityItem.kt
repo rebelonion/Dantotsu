@@ -11,7 +11,6 @@ import ani.dantotsu.buildMarkwon
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.Activity
 import ani.dantotsu.databinding.ItemActivityBinding
-import ani.dantotsu.home.status.RepliesBottomDialog
 import ani.dantotsu.loadImage
 import ani.dantotsu.profile.User
 import ani.dantotsu.profile.UsersDialogFragment
@@ -29,9 +28,8 @@ import kotlinx.coroutines.withContext
 
 class ActivityItem(
     private val activity: Activity,
-    val clickCallback: (Int, type: String) -> Unit,
     private val parentAdapter: GroupieAdapter,
-    private val fragActivity: FragmentActivity
+    val clickCallback: (Int, type: String) -> Unit,
 ) : BindableItem<ItemActivityBinding>() {
     private lateinit var binding: ItemActivityBinding
 
@@ -54,14 +52,14 @@ class ActivityItem(
         }
         binding.activityRepliesContainer.setOnClickListener {
             RepliesBottomDialog.newInstance(activity.id)
-                .show(fragActivity.supportFragmentManager, "replies")
+                .show((context as  FragmentActivity).supportFragmentManager, "replies")
         }
         binding.replyCount.text = activity.replyCount.toString()
         binding.activityReplies.setColorFilter(ContextCompat.getColor(binding.root.context, R.color.bg_opp))
         binding.activityLikeContainer.setOnLongClickListener {
             UsersDialogFragment().apply {
                 userList(userList)
-                show(fragActivity.supportFragmentManager, "dialog")
+                show((context as  FragmentActivity).supportFragmentManager, "dialog")
             }
             true
         }

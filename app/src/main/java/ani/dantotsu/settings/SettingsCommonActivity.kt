@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.databinding.ActivitySettingsCommonBinding
+import ani.dantotsu.databinding.DialogSetPasswordBinding
 import ani.dantotsu.databinding.DialogUserAgentBinding
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.initActivity
@@ -37,6 +38,7 @@ import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.toast
 import ani.dantotsu.util.LauncherWrapper
 import ani.dantotsu.util.StoragePermissions
+import ani.dantotsu.util.customAlertDialog
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -160,18 +162,16 @@ class SettingsCommonActivity : AppCompatActivity() {
                         icon = R.drawable.ic_download_24,
                         onClick = {
                             val managers = arrayOf("Default", "1DM", "ADM")
-                            val downloadManagerDialog =
-                                AlertDialog.Builder(context, R.style.MyPopup)
-                                    .setTitle(R.string.download_manager)
-                            var downloadManager: Int = PrefManager.getVal(PrefName.DownloadManager)
-                            val dialog = downloadManagerDialog.setSingleChoiceItems(
-                                managers, downloadManager
-                            ) { dialog, count ->
-                                downloadManager = count
-                                PrefManager.setVal(PrefName.DownloadManager, downloadManager)
-                                dialog.dismiss()
-                            }.show()
-                            dialog.window?.setDimAmount(0.8f)
+                            customAlertDialog().apply {
+                                setTitle(getString(R.string.download_manager))
+                                singleChoiceItems(
+                                    managers,
+                                    PrefManager.getVal(PrefName.DownloadManager)
+                                ) { count ->
+                                    PrefManager.setVal(PrefName.DownloadManager, count)
+                                }
+                                show()
+                            }
                         }
                     ),
                     Settings(
@@ -180,90 +180,67 @@ class SettingsCommonActivity : AppCompatActivity() {
                         desc = getString(R.string.app_lock_desc),
                         icon = R.drawable.ic_round_lock_open_24,
                         onClick = {
-                            val passwordDialog = AlertDialog.Builder(context, R.style.MyPopup)
-                                .setTitle(R.string.app_lock)
-                                .setView(R.layout.dialog_set_password)
-                                .setPositiveButton(R.string.ok) { dialog, _ ->
-                                    val passwordInput =
-                                        (dialog as AlertDialog).findViewById<EditText>(R.id.passwordInput)
-                                    val confirmPasswordInput =
-                                        dialog.findViewById<EditText>(R.id.confirmPasswordInput)
-                                    val forgotPasswordCheckbox =
-                                        dialog.findViewById<CheckBox>(R.id.forgotPasswordCheckbox)
-                                    if (forgotPasswordCheckbox?.isChecked == true) {
+                            customAlertDialog().apply {
+                                val view = DialogSetPasswordBinding.inflate(layoutInflater)
+                                setTitle(R.string.app_lock)
+                                setCustomView(view.root)
+                                setPosButton(R.string.ok) {
+                                    if (view.forgotPasswordCheckbox.isChecked) {
                                         PrefManager.setVal(PrefName.OverridePassword, true)
                                     }
-
-                                    val password = passwordInput?.text.toString()
-                                    val confirmPassword = confirmPasswordInput?.text.toString()
-
+                                    val password = view.passwordInput.text.toString()
+                                    val confirmPassword = view.confirmPasswordInput.text.toString()
                                     if (password == confirmPassword && password.isNotEmpty()) {
                                         PrefManager.setVal(PrefName.AppPassword, password)
-                                        if (dialog.findViewById<CheckBox>(R.id.biometricCheckbox)?.isChecked == true) {
+                                        if (view.biometricCheckbox.isChecked) {
                                             val canBiometricPrompt =
                                                 BiometricManager.from(applicationContext)
-                                                    .canAuthenticate(
-                                                        BiometricManager.Authenticators.BIOMETRIC_WEAK
-                                                    ) == BiometricManager.BIOMETRIC_SUCCESS
+                                                    .canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK) == BiometricManager.BIOMETRIC_SUCCESS
+
                                             if (canBiometricPrompt) {
                                                 val biometricPrompt =
-                                                    BiometricPromptUtils.createBiometricPrompt(
-                                                        this@SettingsCommonActivity
-                                                    ) { _ ->
+                                                    BiometricPromptUtils.createBiometricPrompt(this@SettingsCommonActivity) { _ ->
                                                         val token = UUID.randomUUID().toString()
                                                         PrefManager.setVal(
                                                             PrefName.BiometricToken,
                                                             token
                                                         )
                                                         toast(R.string.success)
-                                                        dialog.dismiss()
                                                     }
                                                 val promptInfo =
-                                                    BiometricPromptUtils.createPromptInfo(
-                                                        this@SettingsCommonActivity
-                                                    )
+                                                    BiometricPromptUtils.createPromptInfo(this@SettingsCommonActivity)
                                                 biometricPrompt.authenticate(promptInfo)
                                             }
+
                                         } else {
                                             PrefManager.setVal(PrefName.BiometricToken, "")
                                             toast(R.string.success)
-                                            dialog.dismiss()
                                         }
                                     } else {
                                         toast(R.string.password_mismatch)
                                     }
                                 }
-                                .setNegativeButton(R.string.cancel) { dialog, _ ->
-                                    dialog.dismiss()
-                                }
-                                .setNeutralButton(R.string.remove) { dialog, _ ->
+                                setNegButton(R.string.cancel)
+                                setNeutralButton(R.string.remove){
                                     PrefManager.setVal(PrefName.AppPassword, "")
                                     PrefManager.setVal(PrefName.BiometricToken, "")
                                     PrefManager.setVal(PrefName.OverridePassword, false)
                                     toast(R.string.success)
-                                    dialog.dismiss()
                                 }
-                                .create()
-
-                            passwordDialog.window?.setDimAmount(0.8f)
-                            passwordDialog.setOnShowListener {
-                                passwordDialog.findViewById<EditText>(R.id.passwordInput)
-                                    ?.requestFocus()
-                                val biometricCheckbox =
-                                    passwordDialog.findViewById<CheckBox>(R.id.biometricCheckbox)
-                                val forgotPasswordCheckbox =
-                                    passwordDialog.findViewById<CheckBox>(R.id.forgotPasswordCheckbox)
-                                val canAuthenticate =
-                                    BiometricManager.from(applicationContext).canAuthenticate(
-                                        BiometricManager.Authenticators.BIOMETRIC_WEAK
-                                    ) == BiometricManager.BIOMETRIC_SUCCESS
-                                biometricCheckbox?.isVisible = canAuthenticate
-                                biometricCheckbox?.isChecked =
-                                    PrefManager.getVal(PrefName.BiometricToken, "").isNotEmpty()
-                                forgotPasswordCheckbox?.isChecked =
-                                    PrefManager.getVal(PrefName.OverridePassword)
+                                setOnShowListener {
+                                    view.passwordInput.requestFocus()
+                                    val canAuthenticate =
+                                        BiometricManager.from(applicationContext).canAuthenticate(
+                                            BiometricManager.Authenticators.BIOMETRIC_WEAK
+                                        ) == BiometricManager.BIOMETRIC_SUCCESS
+                                    view.biometricCheckbox.isVisible = canAuthenticate
+                                    view.biometricCheckbox.isChecked =
+                                        PrefManager.getVal(PrefName.BiometricToken, "").isNotEmpty()
+                                    view.forgotPasswordCheckbox.isChecked =
+                                        PrefManager.getVal(PrefName.OverridePassword)
+                                }
+                                show()
                             }
-                            passwordDialog.show()
                         }
 
                     ),
@@ -328,10 +305,10 @@ class SettingsCommonActivity : AppCompatActivity() {
                         desc = getString(R.string.change_download_location_desc),
                         icon = R.drawable.ic_round_source_24,
                         onClick = {
-                            val dialog = AlertDialog.Builder(context, R.style.MyPopup)
-                                .setTitle(R.string.change_download_location)
-                                .setMessage(R.string.download_location_msg)
-                                .setPositiveButton(R.string.ok) { dialog, _ ->
+                            context.customAlertDialog().apply{
+                                setTitle(R.string.change_download_location)
+                                setMessage(R.string.download_location_msg)
+                                setPosButton(R.string.ok){
                                     val oldUri = PrefManager.getVal<String>(PrefName.DownloadsDir)
                                     launcher.registerForCallback { success ->
                                         if (success) {
@@ -354,12 +331,10 @@ class SettingsCommonActivity : AppCompatActivity() {
                                         }
                                     }
                                     launcher.launch()
-                                    dialog.dismiss()
-                                }.setNeutralButton(R.string.cancel) { dialog, _ ->
-                                    dialog.dismiss()
-                                }.create()
-                            dialog.window?.setDimAmount(0.8f)
-                            dialog.show()
+                                }
+                                setNegButton(R.string.cancel)
+                                show()
+                            }
                         }
                     ),
                     Settings(
@@ -370,6 +345,17 @@ class SettingsCommonActivity : AppCompatActivity() {
                         isChecked = PrefManager.getVal(PrefName.ContinueMedia),
                         switch = { isChecked, _ ->
                             PrefManager.setVal(PrefName.ContinueMedia, isChecked)
+                        }
+                    ),
+                    Settings(
+                        type = 2,
+                        name = getString(R.string.hide_private),
+                        desc = getString(R.string.hide_private_desc),
+                        icon = R.drawable.ic_round_remove_red_eye_24,
+                        isChecked = PrefManager.getVal(PrefName.HidePrivate),
+                        switch = { isChecked, _ ->
+                            PrefManager.setVal(PrefName.HidePrivate, isChecked)
+                            restartApp()
                         }
                     ),
                     Settings(

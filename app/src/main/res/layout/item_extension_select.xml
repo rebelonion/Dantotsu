@@ -4,7 +4,6 @@
     android:id="@+id/extensionCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/colorSurface"
     android:orientation="horizontal"
     android:paddingTop="10dp"
     android:paddingBottom="10dp">

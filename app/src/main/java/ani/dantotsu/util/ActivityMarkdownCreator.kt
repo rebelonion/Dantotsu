@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.core.widget.addTextChangedListener
 import ani.dantotsu.R
@@ -16,6 +16,7 @@ import ani.dantotsu.databinding.ActivityMarkdownCreatorBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.openLinkInBrowser
+import ani.dantotsu.others.AndroidBug5497Workaround
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.toast
@@ -42,7 +43,7 @@ class ActivityMarkdownCreator : AppCompatActivity() {
         BOLD("****", 2, R.id.formatBold),
         ITALIC("**", 1, R.id.formatItalic),
         STRIKETHROUGH("~~~~", 2, R.id.formatStrikethrough),
-        SPOILER("||", 2, R.id.formatSpoiler),
+        SPOILER("~!!~", 2, R.id.formatSpoiler),
         LINK("[Placeholder](%s)", 0, R.id.formatLink),
         IMAGE("img(%s)", 0, R.id.formatImage),
         YOUTUBE("youtube(%s)", 0, R.id.formatYoutube),
@@ -68,6 +69,7 @@ class ActivityMarkdownCreator : AppCompatActivity() {
             bottomMargin += navBarHeight
         }
         setContentView(binding.root)
+        AndroidBug5497Workaround.assistActivity(this) {}
 
         val params = binding.createButton.layoutParams as ViewGroup.MarginLayoutParams
         params.marginEnd = 16 * resources.displayMetrics.density.toInt()
@@ -120,12 +122,11 @@ class ActivityMarkdownCreator : AppCompatActivity() {
                 toast(getString(R.string.cannot_be_empty))
                 return@setOnClickListener
             }
-            AlertDialog.Builder(this, R.style.MyPopup).apply {
+            customAlertDialog().apply {
                 setTitle(R.string.warning)
                 setMessage(R.string.post_to_anilist_warning)
-                setPositiveButton(R.string.ok) { _, _ ->
+                setPosButton(R.string.ok) {
                     launchIO {
-
                         val isEdit = editId != -1
                         val success = when (type) {
                             "activity" -> if (isEdit) {
@@ -139,7 +140,6 @@ class ActivityMarkdownCreator : AppCompatActivity() {
                             } else {
                                 Anilist.mutation.postReply(parentId, text)
                             }
-
                             "message" -> if (isEdit) {
                                 Anilist.mutation.postMessage(userId, text, editId)
                             } else {
@@ -152,11 +152,12 @@ class ActivityMarkdownCreator : AppCompatActivity() {
                         finish()
                     }
                 }
-                setNeutralButton(R.string.open_rules) { _, _ ->
+                setNeutralButton(R.string.open_rules) {
                     openLinkInBrowser("https://anilist.co/forum/thread/14")
                 }
-                setNegativeButton(R.string.cancel, null)
-            }.show()
+                setNegButton(R.string.cancel)
+                show()
+            }
         }
 
         binding.previewCheckbox.setOnClickListener {
@@ -267,9 +268,13 @@ class ActivityMarkdownCreator : AppCompatActivity() {
     private fun previewMarkdown(preview: Boolean) {
         val markwon = buildMarkwon(this, false, anilist = true)
         if (preview) {
+            binding.editText.isVisible = false
             binding.editText.isEnabled = false
-            markwon.setMarkdown(binding.editText, text)
+            binding.markdownPreview.isVisible = true
+            markwon.setMarkdown(binding.markdownPreview, AniMarkdown.getBasicAniHTML(text))
         } else {
+            binding.editText.isVisible = true
+            binding.markdownPreview.isVisible = false
             binding.editText.setText(text)
             binding.editText.isEnabled = true
             val markwonEditor = MarkwonEditor.create(markwon)

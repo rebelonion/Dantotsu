@@ -7,7 +7,7 @@
     tools:context=".media.anime.AnimeWatchFragment">
 
     <TextView
-        android:id="@+id/animeNotSupported"
+        android:id="@+id/mediaNotSupported"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -31,7 +31,7 @@
         tools:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/animeSourceRecycler"
+        android:id="@+id/mediaSourceRecycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
@@ -39,7 +39,7 @@
         android:paddingEnd="24dp"
         android:paddingBottom="128dp"
         tools:itemCount="1"
-        tools:listitem="@layout/item_anime_watch" />
+        tools:listitem="@layout/item_media_source" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/ScrollTop"

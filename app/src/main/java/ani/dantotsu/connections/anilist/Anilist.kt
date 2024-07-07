@@ -312,6 +312,7 @@ object Anilist {
                 )
                 val remaining = json.headers["X-RateLimit-Remaining"]?.toIntOrNull() ?: -1
                 Logger.log("Remaining requests: $remaining")
+                println("Remaining requests: $remaining")
                 if (json.code == 429) {
                     val retry = json.headers["Retry-After"]?.toIntOrNull() ?: -1
                     val passedLimitReset = json.headers["X-RateLimit-Reset"]?.toLongOrNull() ?: 0

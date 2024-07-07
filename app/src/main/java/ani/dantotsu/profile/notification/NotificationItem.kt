@@ -8,21 +8,74 @@ import ani.dantotsu.connections.anilist.api.Notification
 import ani.dantotsu.connections.anilist.api.NotificationType
 import ani.dantotsu.databinding.ItemNotificationBinding
 import ani.dantotsu.loadImage
-import ani.dantotsu.profile.notification.NotificationFragment.Companion.NotificationClickType
+import ani.dantotsu.notifications.comment.CommentStore
+import ani.dantotsu.notifications.subscription.SubscriptionStore
 import ani.dantotsu.profile.activity.ActivityItemBuilder
+import ani.dantotsu.profile.notification.NotificationFragment.Companion.NotificationClickType
+import ani.dantotsu.profile.notification.NotificationFragment.Companion.NotificationType.COMMENT
+import ani.dantotsu.profile.notification.NotificationFragment.Companion.NotificationType.SUBSCRIPTION
 import ani.dantotsu.setAnimation
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.toPx
+import ani.dantotsu.util.customAlertDialog
+import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.viewbinding.BindableItem
 
 class NotificationItem(
     private val notification: Notification,
-    val clickCallback: (Int, Int?, NotificationClickType) -> Unit
-) : BindableItem<ItemNotificationBinding>() {
+    val type: NotificationFragment.Companion.NotificationType,
+    val parentAdapter: GroupieAdapter,
+    val clickCallback: (Int, Int?, NotificationClickType) -> Unit,
+
+    ) : BindableItem<ItemNotificationBinding>() {
     private lateinit var binding: ItemNotificationBinding
     override fun bind(viewBinding: ItemNotificationBinding, position: Int) {
         binding = viewBinding
         setAnimation(binding.root.context, binding.root)
         setBinding()
+    }
+
+    fun dialog() {
+        when (type) {
+            COMMENT, SUBSCRIPTION -> {
+                binding.root.context.customAlertDialog().apply {
+                    setTitle(R.string.delete)
+                    setMessage(ActivityItemBuilder.getContent(notification))
+                    setPosButton(R.string.yes) {
+                        when (type) {
+                            COMMENT -> {
+                                val list = PrefManager.getNullableVal<List<CommentStore>>(
+                                    PrefName.CommentNotificationStore,
+                                    null
+                                ) ?: listOf()
+                                val newList = list.filter { it.commentId != notification.commentId }
+                                PrefManager.setVal(PrefName.CommentNotificationStore, newList)
+                                parentAdapter.remove(this@NotificationItem)
+
+                            }
+
+                            SUBSCRIPTION -> {
+                                val list = PrefManager.getNullableVal<List<SubscriptionStore>>(
+                                    PrefName.SubscriptionNotificationStore,
+                                    null
+                                ) ?: listOf()
+                                val newList = list.filter { (it.time / 1000L).toInt() != notification.createdAt}
+                                PrefManager.setVal(PrefName.SubscriptionNotificationStore, newList)
+                                parentAdapter.remove(this@NotificationItem)
+                            }
+
+                            else -> {}
+                        }
+                    }
+                    setNegButton(R.string.no)
+                    show()
+                }
+            }
+
+            else -> {}
+        }
+
     }
 
     override fun getLayout(): Int {
@@ -33,7 +86,11 @@ class NotificationItem(
         return ItemNotificationBinding.bind(view)
     }
 
-    private fun image(user: Boolean = false, commentNotification: Boolean = false, newRelease: Boolean = false) {
+    private fun image(
+        user: Boolean = false,
+        commentNotification: Boolean = false,
+        newRelease: Boolean = false
+    ) {
 
         val cover = if (user) notification.user?.bannerImage
             ?: notification.user?.avatar?.medium else notification.media?.bannerImage
@@ -347,6 +404,14 @@ class NotificationItem(
                     )
                 }
             }
+        }
+        binding.notificationCoverUser.setOnLongClickListener {
+            dialog()
+            true
+        }
+        binding.notificationBannerImage.setOnLongClickListener {
+            dialog()
+            true
         }
     }
 

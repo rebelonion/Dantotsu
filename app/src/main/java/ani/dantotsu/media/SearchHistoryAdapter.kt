@@ -49,6 +49,12 @@ class SearchHistoryAdapter(private val type: String, private val searchClicked: 
         PrefManager.setVal(historyType, searchHistory)
     }
 
+    fun clearHistory() {
+        searchHistory?.clear()
+        PrefManager.setVal(historyType, searchHistory)
+        submitList(searchHistory?.toList())
+    }
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int

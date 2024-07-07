@@ -129,7 +129,6 @@
             android:textSize="12sp"
             tools:visibility="visible"
             tools:ignore="HardcodedText" />
-
         <TextView
             android:id="@+id/activityDelete"
             android:layout_width="wrap_content"
