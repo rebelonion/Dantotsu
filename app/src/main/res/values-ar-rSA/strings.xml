@@ -61,7 +61,7 @@
         <item>إعادة القراءة</item>
         <item>الكل</item>
     </string-array>
-    <string name="nothing_here">Nothing here</string>
+    <string name="nothing_here">مفيش حاجه هنا</string>
     <string name="followers">المتابعين</string>
     <string name="write_a_message">اكتب رسالة</string>
     <string name="status">الحالة</string>
@@ -588,7 +588,7 @@
     <string name="question_18">لا أستطيع تسجيل الدخول إلى \"Anilist\".</string>
     <string name="answer_18">ربما يكون سبب حدوث ذلك هو أنك لا تستخدم المتصفح الافتراضي.\n\n&gt;يجب عليك تعيين Chrome كمتصفحك الافتراضي لتسجيل الدخول إلى Anilist.\n\n&gt;يستغرق زر تسجيل الدخول بضع ثوانٍ لعرض التغييرات.\n\nإذا لم ينجح الأمر، فمن المحتمل أن يتم حظر عنوان IP الخاص بك من Anilist أو أن مزود خدمة الإنترنت الخاص بك قام بحظر Anilist بأنفسهم. نعتقد أن هذا غير مرجح إلى حد كبير، لذا افتح [Anilist](https://anilist.co) في متصفحك لمعرفة ما إذا كان هذا هو الحال.</string>
     <string name="question_19">ما هو التورنت؟ كيف يمكنني استخدامه؟</string>
-    <string name="answer_19">Torrent or formally known as BitTorrent is an internet communication protocol for peer\-to\-peer file sharing. A torrent network doesn\'t use a centralised server to host files. It shares files in a decentralised manner. A torrent network has two types of peers. Seeders &amp; Leachers.\n\n• Seeders : These are peers who completed downloading and has the full file. And now they are sharing this file to other peers which is called seeding. A torrent cannot work without at least one seeder. The more seeder a torrent has, the better.\n\n• Leachers : These are peers who are currently downloading the file. If they currently have 40&#37; downloaded then they will share the 40&#37; to any other peers who requests it.\n\nUnlike a centralised server, torrents have no bandwidth limit. You can get your files from hundreds of seeders at the highest possible speed your internet can offer. But many ISP throttle torrent to slow them down because it\'s demanding on their infrastructure. Use a VPN to circumvent this.\n\n• How to use torrents :\n\n1. Install the Torrent Add-on from \`Dantotsu &gt; Settings &gt; Add-ons &gt; Torrent Add-on.\` \n2. Get a source that provides torrents.\n3. USE A VPN. Using VPN while torrenting only has upsides. Without a VPN your IP address will be exposed, your ISP will throttle your network and you could possibly be fined if you live in a country first world country. DO NOT USE IT WITHOUT A VPN IF YOU DON\'T KNOW WHAT YOU\'RE DOING.\n4. Now use that source to start torrenting.</string>
+    <string name="answer_19">التورنت أو المعروف رسميًا بـ BitTorrent هو بروتوكول اتصال عبر الإنترنت لمشاركة الملفات بين الأقران (peer-to-peer). لا يستخدم شبكة التورنت خادم مركزي لاستضافة الملفات. بل يشارك الملفات بطريقة لامركزية. تحتوي شبكة التورنت على نوعين من الأقران: المُزودون والمُحملون.\n\n• المُزودون: هؤلاء هم الأقران الذين أكملوا تنزيل الملف بالكامل. وهم الآن يشاركون هذا الملف مع الأقران الآخرين ويُطلق على ذلك \"التزويد\". لا يمكن أن تعمل شبكة التورنت بدون وجود مُزود واحد على الأقل. وكلما زاد عدد المُزودين للتورنت، كلما كان ذلك أفضل.\n\n• المُحملون: هؤلاء هم الأقران الذين يقومون بتنزيل الملف حاليًا. إذا كان لديهم حاليًا 40&#37; من الملف تم تنزيله، فإنهم سيشاركون هذه النسبة مع أي أقران آخرين يطلبونها.\n\nعلى عكس الخادم المركزي، لا تمتلك شبكة التورنت حدًا لعرض النطاق الترددي. يمكنك الحصول على ملفاتك من مئات المُزودين بأعلى سرعة ممكنة يوفرها اتصال الإنترنت لديك. لكن العديد من مزودي خدمة الإنترنت يقومون بخنق سرعة التورنت لإبطائه لأنه يستهلك بنية تحتية كبيرة. استخدم VPN لتجاوز هذا.\n\n• كيفية استخدام التورنت:\n\nقم بتثبيت إضافة التورنت من `Dantotsu &gt; Settings &gt; Add-ons &gt; Torrent Add-on.` ثم احصل على مصدر يوفر التورنت.\n استخدم VPN. استخدام VPN أثناء استخدام التورنت له فوائد فقط. بدون VPN سيكون عنوان IP الخاص بك مكشوفًا، وسيقوم مزود خدمة الإنترنت بخنق شبكتك وقد تتعرض لغرامة إذا كنت تعيش في دولة من العالم الأول. لا تستخدمه بدون VPN إذا كنت لا تعرف ما تفعله.\n الآن استخدم هذا المصدر لبدء التورنت.</string>
     <string name="subscribed_notification">تم الاشتراك! ستتلقى الإخطارات عندما يتم إصدار حلقات جديدة على %1$s.</string>
     <string name="unsubscribed_notification">تم إلغاء الاشتراك، لن تتلقى أي إشعارات.</string>
     <string name="episode_plural">الحلقات</string>
@@ -631,7 +631,7 @@
     <string name="installed_manga">تم تحميل المناجا</string>
     <string name="color_picker">محدد الألوان</string>
     <string name="random_selection">التحديد العشوائي</string>
-    <string name="listed_in_library">Listed in Library</string>
+    <string name="listed_in_library">موجود في المكتبة</string>
     <string name="incognito_mode">الوضع المخفي</string>
     <string name="appwidget_text">مثال</string>
     <string name="configure">تعديل</string>
@@ -842,8 +842,8 @@
     <string name="use_unique_theme_for_each_item_desc">استخدم اللون من خلفية الوسائط</string>
     <string name="use_custom_theme_desc">استخدم اللون الخاص بك لمظهر التطبيق</string>
     <string name="color_picker_desc">اختر اللون</string>
-    <string name="hide_private">Hide private Media from home screen</string>
-    <string name="hide_private_desc">Long click \"Continue Watching\" to access</string>
+    <string name="hide_private">إخفاء المحتوي الخاص من الشاشة الرئيسية</string>
+    <string name="hide_private_desc">انقر لفترة طويلة على \"اكمل المشاهدة\" للوصول إليه</string>
     <string name="torrent_addon">إضافة التورنت</string>
     <string name="enable_torrent">تفعيل التورنت</string>
     <string name="anime_downloader_addon">تطبيق إضافي لتنزيل الأنمي</string>
@@ -855,7 +855,7 @@
     <string name="install_addon">تثبيت التطبيق الإضافي</string>
     <string name="download_addon_not_found">التطبيق الإضافي غير موجود</string>
     <string name="image">صوره</string>
-    <string name="clear_history">Clear History</string>
+    <string name="clear_history">مسح سجل البحث</string>
     <string name="failed_ext_install_conflict">فشل تثبيت الامتداد بسبب تعارض</string>
     <string name="reading">جاري القراءة</string>
     <string name="watching">جاري المشاهدة</string>
