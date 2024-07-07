@@ -21,7 +21,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.R
 import ani.dantotsu.copyToClipboard
-import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ActivityExtensionsBinding
 import ani.dantotsu.databinding.DialogRepositoriesBinding
 import ani.dantotsu.databinding.ItemRepositoryBinding
@@ -327,7 +326,7 @@ class ExtensionsActivity : AppCompatActivity() {
                 val alertDialog = AlertDialog.Builder(this@ExtensionsActivity, R.style.MyPopup)
                     .setTitle(R.string.edit_repositories)
                     .setView(dialogView.root)
-                    .setPositiveButton(getString(R.string.add)) { _, _ ->
+                    .setPositiveButton(getString(R.string.add_list)) { _, _ ->
                         if (!dialogView.repositoryTextBox.text.isNullOrBlank())
                             processUserInput(dialogView.repositoryTextBox.text.toString(), type)
                     }

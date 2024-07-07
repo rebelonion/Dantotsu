@@ -122,7 +122,7 @@
                             android:marqueeRepeatLimit="marquee_forever"
                             android:padding="8dp"
                             android:singleLine="true"
-                            android:text="@string/add"
+                            android:text="@string/add_list"
                             android:textAllCaps="true"
                             android:textColor="?attr/colorSecondary"
                             android:textSize="14sp"

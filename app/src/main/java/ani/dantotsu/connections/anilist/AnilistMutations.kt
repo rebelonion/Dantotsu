@@ -127,6 +127,51 @@ class AnilistMutations {
         ANIME, MANGA, CHARACTER, STAFF, STUDIO
     }
 
+    suspend fun deleteCustomList(name: String, type: String): Boolean {
+        val query = """
+            mutation (${"$"}name: String, ${"$"}type: MediaType) {
+                DeleteCustomList(customList: ${"$"}name, type: ${"$"}type) {
+                    deleted
+                }
+            }
+        """.trimIndent()
+        val variables = """
+            {
+                "name": "$name",
+                "type": "$type"
+            }
+        """.trimIndent()
+        val result = executeQuery<JsonObject>(query, variables)
+        return result?.get("errors") == null
+    }
+
+    suspend fun updateCustomLists(animeCustomLists: List<String>?, mangaCustomLists: List<String>?): Boolean {
+        val query = """
+            mutation (${"$"}animeListOptions: MediaListOptionsInput, ${"$"}mangaListOptions: MediaListOptionsInput) {
+                UpdateUser(animeListOptions: ${"$"}animeListOptions, mangaListOptions: ${"$"}mangaListOptions) {
+                    mediaListOptions {
+                        animeList {
+                            customLists
+                        }
+                        mangaList {
+                            customLists
+                        }
+                    }
+                }
+            }
+        """.trimIndent()
+        val variables = """
+            {
+                ${animeCustomLists?.let { """"animeListOptions": {"customLists": ${Gson().toJson(it)}}""" } ?: ""}
+                ${if (animeCustomLists != null && mangaCustomLists != null) "," else ""}
+                ${mangaCustomLists?.let { """"mangaListOptions": {"customLists": ${Gson().toJson(it)}}""" } ?: ""}
+            }
+        """.trimIndent().replace("\n", "").replace("""    """, "").replace(",}", "}")
+
+        val result = executeQuery<JsonObject>(query, variables)
+        return result?.get("errors") == null
+    }
+
     suspend fun editList(
         mediaID: Int,
         progress: Int? = null,
@@ -237,7 +282,8 @@ class AnilistMutations {
     }
 
     suspend fun toggleFollow(id: Int): Query.ToggleFollow? {
-        return executeQuery<Query.ToggleFollow>("""
+        return executeQuery<Query.ToggleFollow>(
+            """
             mutation {
                 ToggleFollow(userId: $id) {
                     id
@@ -249,7 +295,8 @@ class AnilistMutations {
     }
 
     suspend fun toggleLike(id: Int, type: String): ToggleLike? {
-        return executeQuery<ToggleLike>("""
+        return executeQuery<ToggleLike>(
+            """
             mutation Like {
                 ToggleLikeV2(id: $id, type: $type) {
                     __typename

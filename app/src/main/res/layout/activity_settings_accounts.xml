@@ -265,7 +265,7 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/settingsImageSwitcher"
+                android:id="@+id/settingsPresenceSwitcher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/discord_rich_presence"

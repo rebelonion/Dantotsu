@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
 import android.view.View
-import android.widget.ArrayAdapter
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.TextView
@@ -23,7 +22,6 @@ import ani.dantotsu.loadImage
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.others.CustomBottomDialog
-import ani.dantotsu.restartApp
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.startMainActivity
@@ -117,6 +115,7 @@ class SettingsAccountActivity : AppCompatActivity() {
                 } else {
                     settingsAnilistAvatar.setImageResource(R.drawable.ic_round_person_24)
                     settingsAnilistUsername.visibility = View.GONE
+                    settingsRecyclerView.visibility = View.GONE
                     settingsAnilistLogin.setText(R.string.login)
                     settingsAnilistLogin.setOnClickListener {
                         Anilist.loginIntent(context)
@@ -148,7 +147,7 @@ class SettingsAccountActivity : AppCompatActivity() {
                         reload()
                     }
 
-                    settingsImageSwitcher.visibility = View.VISIBLE
+                    settingsPresenceSwitcher.visibility = View.VISIBLE
                     var initialStatus = when (PrefManager.getVal<String>(PrefName.DiscordStatus)) {
                         "online" -> R.drawable.discord_status_online
                         "idle" -> R.drawable.discord_status_idle
@@ -156,11 +155,11 @@ class SettingsAccountActivity : AppCompatActivity() {
                         "invisible" -> R.drawable.discord_status_invisible
                         else -> R.drawable.discord_status_online
                     }
-                    settingsImageSwitcher.setImageResource(initialStatus)
+                    settingsPresenceSwitcher.setImageResource(initialStatus)
 
                     val zoomInAnimation =
                         AnimationUtils.loadAnimation(context, R.anim.bounce_zoom)
-                    settingsImageSwitcher.setOnClickListener {
+                    settingsPresenceSwitcher.setOnClickListener {
                         var status = "online"
                         initialStatus = when (initialStatus) {
                             R.drawable.discord_status_online -> {
@@ -187,16 +186,16 @@ class SettingsAccountActivity : AppCompatActivity() {
                         }
 
                         PrefManager.setVal(PrefName.DiscordStatus, status)
-                        settingsImageSwitcher.setImageResource(initialStatus)
-                        settingsImageSwitcher.startAnimation(zoomInAnimation)
+                        settingsPresenceSwitcher.setImageResource(initialStatus)
+                        settingsPresenceSwitcher.startAnimation(zoomInAnimation)
                     }
-                    settingsImageSwitcher.setOnLongClickListener {
+                    settingsPresenceSwitcher.setOnLongClickListener {
                         it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
                         DiscordDialogFragment().show(supportFragmentManager, "dialog")
                         true
                     }
                 } else {
-                    settingsImageSwitcher.visibility = View.GONE
+                    settingsPresenceSwitcher.visibility = View.GONE
                     settingsDiscordAvatar.setImageResource(R.drawable.ic_round_person_24)
                     settingsDiscordUsername.visibility = View.GONE
                     settingsDiscordLogin.setText(R.string.login)

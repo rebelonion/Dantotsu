@@ -292,6 +292,69 @@
                     android:textSize="14sp"
                     tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="32dp"
+                android:alpha="0.58"
+                android:fontFamily="@font/poppins_bold"
+                android:text="@string/custom_anime_list" />
+
+            <LinearLayout
+                android:id="@+id/animeCustomListsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="32dp"
+                android:orientation="vertical" />
+
+            <ImageButton
+                android:id="@+id/addAnimeListButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/custom_anime_list"
+                android:layout_marginHorizontal="36dp"
+                android:layout_marginVertical="12dp"
+                android:src="@drawable/ic_circle_add"
+                android:background="?android:attr/selectableItemBackground"
+                app:tint="?attr/colorPrimary"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="32dp"
+                android:alpha="0.58"
+                android:fontFamily="@font/poppins_bold"
+                android:text="@string/custom_manga_list" />
+
+            <LinearLayout
+                android:id="@+id/mangaCustomListsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="32dp"
+                android:orientation="vertical" />
+
+            <ImageButton
+                android:id="@+id/addMangaListButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/custom_manga_list"
+                android:layout_marginHorizontal="36dp"
+                android:layout_marginVertical="12dp"
+                android:src="@drawable/ic_circle_add"
+                android:background="?android:attr/selectableItemBackground"
+                app:tint="?attr/colorPrimary"/>
+
+            <Button
+                android:id="@+id/SettingsAnilistCustomListSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="32dp"
+                android:layout_gravity="end"
+                android:fontFamily="@font/poppins_bold"
+                android:text="@string/save" />
+
         </ani.dantotsu.others.Xpandable>
 
         <TextView

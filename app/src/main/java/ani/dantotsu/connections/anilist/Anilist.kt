@@ -47,6 +47,10 @@ object Anilist {
     var rowOrder: String? = null
     var activityMergeTime: Int? = null
     var timezone: String? = null
+    var animeCustomLists: List<String>? = null
+    var mangaCustomLists: List<String>? = null
+    var animeSplitCompletedSectionByFormat: Boolean = false
+    var mangaSplitCompletedSectionByFormat: Boolean = false
 
     val sortBy = listOf(
         "SCORE_DESC",
@@ -183,7 +187,8 @@ object Anilist {
         "2 days" to 2880,
         "3 days" to 4320,
         "1 week" to 10080,
-        "Always" to 20160
+        "2 weeks" to 20160,
+        "Always" to 29160
     )
 
     private val cal: Calendar = Calendar.getInstance()

@@ -3,7 +3,10 @@ package ani.dantotsu.settings
 import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.LinearLayout
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.children
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +24,9 @@ import ani.dantotsu.navBarHeight
 import ani.dantotsu.restartApp
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.toast
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.launch
 
 class SettingsAnilistActivity : AppCompatActivity() {
@@ -160,6 +166,26 @@ class SettingsAnilistActivity : AppCompatActivity() {
                 settingsAnilistRowOrder.clearFocus()
             }
 
+            val containers = listOf(binding.animeCustomListsContainer, binding.mangaCustomListsContainer)
+            val customLists = listOf(Anilist.animeCustomLists, Anilist.mangaCustomLists)
+            val buttons = listOf(binding.addAnimeListButton, binding.addMangaListButton)
+
+            containers.forEachIndexed { index, container ->
+                customLists[index]?.forEach { listName ->
+                    addCustomListItem(listName, container, index == 0)
+                }
+            }
+
+            buttons.forEachIndexed { index, button ->
+                button.setOnClickListener {
+                    addCustomListItem("", containers[index], index == 0)
+                }
+            }
+
+            binding.SettingsAnilistCustomListSave.setOnClickListener {
+                saveCustomLists()
+            }
+
             val currentTimezone = Anilist.timezone?.let { Anilist.getDisplayTimezone(it) } ?: "(GMT+00:00) London"
             settingsAnilistTimezone.setText(currentTimezone)
             settingsAnilistTimezone.setAdapter(
@@ -237,5 +263,77 @@ class SettingsAnilistActivity : AppCompatActivity() {
         binding.settingsRecyclerView2.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
+    }
+    private fun addCustomListItem(listName: String, container: LinearLayout, isAnime: Boolean) {
+        val customListItemView = layoutInflater.inflate(R.layout.item_custom_list, container, false)
+        val textInputLayout = customListItemView.findViewById<TextInputLayout>(R.id.customListItem)
+        val editText = textInputLayout.editText as? TextInputEditText
+        editText?.setText(listName)
+        textInputLayout.setEndIconOnClickListener {
+            val name = editText?.text.toString()
+            if (name.isNotEmpty()) {
+                val listExists = if (isAnime) {
+                    Anilist.animeCustomLists?.contains(name) ?: false
+                } else {
+                    Anilist.mangaCustomLists?.contains(name) ?: false
+                }
+
+                if (listExists) {
+                    AlertDialog.Builder(this@SettingsAnilistActivity, R.style.MyPopup)
+                        .setTitle(getString(R.string.delete_custom_list))
+                        .setMessage(getString(R.string.delete_custom_list_confirm, name))
+                        .setPositiveButton(getString(R.string.delete)) { _, _ ->
+                            deleteCustomList(name, isAnime)
+                            container.removeView(customListItemView)
+                        }
+                        .setNegativeButton(getString(R.string.cancel), null)
+                        .show()
+                } else {
+                    container.removeView(customListItemView)
+                }
+            } else {
+                container.removeView(customListItemView)
+            }
+        }
+        container.addView(customListItemView)
+    }
+
+    private fun deleteCustomList(name: String, isAnime: Boolean) {
+        lifecycleScope.launch {
+            val type = if (isAnime) "ANIME" else "MANGA"
+            val success = anilistMutations.deleteCustomList(name, type)
+            if (success) {
+                if (isAnime) {
+                    Anilist.animeCustomLists = Anilist.animeCustomLists?.filter { it != name }
+                } else {
+                    Anilist.mangaCustomLists = Anilist.mangaCustomLists?.filter { it != name }
+                }
+                toast("Custom list deleted")
+            } else {
+                toast("Failed to delete custom list")
+            }
+        }
+    }
+
+    private fun saveCustomLists() {
+        val animeCustomLists = binding.animeCustomListsContainer.children
+            .mapNotNull { (it.findViewById<TextInputLayout>(R.id.customListItem).editText as? TextInputEditText)?.text?.toString() }
+            .filter { it.isNotEmpty() }
+            .toList()
+        val mangaCustomLists = binding.mangaCustomListsContainer.children
+            .mapNotNull { (it.findViewById<TextInputLayout>(R.id.customListItem).editText as? TextInputEditText)?.text?.toString() }
+            .filter { it.isNotEmpty() }
+            .toList()
+
+        lifecycleScope.launch {
+            val success = anilistMutations.updateCustomLists(animeCustomLists, mangaCustomLists)
+            if (success) {
+                Anilist.animeCustomLists = animeCustomLists
+                Anilist.mangaCustomLists = mangaCustomLists
+                toast("Custom lists saved")
+            } else {
+                toast("Failed to save custom lists")
+            }
+        }
     }
 }

@@ -66,7 +66,7 @@
     <string name="empty">All caught up, when New?</string>
     <string name="action_settings">Settings</string>
 
-    <string name="add">Add to List</string>
+    <string name="add_list">Add to List</string>
     <string name="list_editor">List Editor</string>
     <string name="add_fav">Add to Favourites</string>
     <string name="notifications">Notifications</string>
@@ -337,6 +337,10 @@
     <string name="selected_score_format">Scoring System</string>
     <string name="selected_time_zone">Timezone</string>
     <string name="selected_row_order">Default List Order</string>
+    <string name="custom_anime_list">Custom Anime Lists</string>
+    <string name="custom_manga_list">Custom Manga Lists</string>
+    <string name="delete_custom_list">Delete Custom List</string>
+    <string name="delete_custom_list_confirm">Are you sure you want to delete %1$s ?</string>
     <string name="keep_screen_on">Keep Screen On</string>
     <string name="layout">Layout</string>
     <string name="spaced_pages">Spaced Pages</string>

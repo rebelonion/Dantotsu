@@ -61,8 +61,8 @@ class AnilistQueries {
                     mediaListOptions {
                         scoreFormat
                         rowOrder
-                        animeList { sectionOrder customLists }
-                        mangaList { sectionOrder customLists }
+                        animeList { sectionOrder customLists splitCompletedSectionByFormat }
+                        mangaList { sectionOrder customLists splitCompletedSectionByFormat }
                     }
                     statistics {
                         anime { episodesWatched }
@@ -100,6 +100,16 @@ class AnilistQueries {
         user.mediaListOptions?.let {
             Anilist.scoreFormat = it.scoreFormat.toString()
             Anilist.rowOrder = it.rowOrder
+
+            it.animeList?.let { animeList ->
+                Anilist.animeCustomLists = animeList.customLists
+                Anilist.animeSplitCompletedSectionByFormat = animeList.splitCompletedSectionByFormat ?: false
+            }
+
+            it.mangaList?.let { mangaList ->
+                Anilist.mangaCustomLists = mangaList.customLists
+                Anilist.mangaSplitCompletedSectionByFormat = mangaList.splitCompletedSectionByFormat ?: false
+            }
         }
         return true
     }
