@@ -703,6 +703,8 @@
     <string name="blur_banners">模糊横幅</string>
     <string name="blur">模糊</string>
     <string name="hide_scroll_bar">隐藏滚动条</string>
+    <string name="share_profile">Share Profile</string>
+    <string name="copy_user_id">Copy user ID</string>
     <string name="anilist_notification_filters">过滤通知</string>
     <string name="anilist_notifications_checking_time">Anilist 通知检查频率：%1$s</string>
     <string name="comment_notification_checking_time">评论通知检查频率：%1$s</string>
