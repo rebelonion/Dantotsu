@@ -3,7 +3,7 @@ name: Build APK and Notify Discord
 on:
   push:
     branches:
-      - ${{ github.repository == 'rebelonion/Dantotsu' && 'dev' || '**' }}
+      - dev
     paths-ignore:
       - '**/README.md'
     tags:
