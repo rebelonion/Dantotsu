@@ -3,7 +3,7 @@ name: Build APK and Notify Discord
 on:
   push:
     branches:
-      - dev
+      - ${{ github.repository == 'rebelonion/Dantotsu' && 'dev' || '**' }}
     paths-ignore:
       - '**/README.md'
     tags:
@@ -16,7 +16,7 @@ jobs:
       contents: write
     env:
       CI: true
-      SKIP_BUILD: true
+      SKIP_BUILD: false
 
     steps:
     - name: Checkout repo
@@ -54,6 +54,7 @@ jobs:
         # Debugging: Print the variable to check its content
         echo "$COMMIT_LOGS"
         echo "$COMMIT_LOGS" > commit_log.txt
+        echo "Branch: $BRANCH_NAME"
       shell: /usr/bin/bash -e {0}
       env:
         CI: true
@@ -116,17 +117,15 @@ jobs:
       uses: softprops/action-gh-release@v2.0.6
       with:
         files: app/build/outputs/apk/google/alpha/app-google-alpha.apk
-        name: Alpha Build ${{ env.VERSION }}
         tag_name: v${{ env.VERSION }}
+        name: Build {{ env.VERSION }} from ${{ env.BRANCH_NAME }}
         body: |
-          New Alpha Build ${{ env.VERSION }} released!
-
-          Changelog:
+          Commits:
           ${{ env.COMMIT_LOG }}
-        prerelease: true
+        prerelease: false
+        make_latest: true
         generate_release_notes: true
         fail_on_unmatched_files: true
-        make_latest: true
         
     - name: Upload APK to Discord and Telegram
       shell: bash
