@@ -122,10 +122,10 @@ jobs:
       uses: softprops/action-gh-release@v2.0.6
       with:
         files: app/build/outputs/apk/google/alpha/app-google-alpha.apk
-        name: Alpha Build ${{ env.VERSION }} - ${{ env.BRANCH }}
+        name: ${{ env.BRANCH }} build ${{ env.VERSION }}
         tag_name: v${{ env.VERSION }}
         body: |
-          New Alpha Build ${{ env.VERSION }} released on branch ${{ env.BRANCH }}!
+          New Alpha Build ${{ env.VERSION }} released on branch ${{ env.BRANCH }} :)
 
           Commits:
           ${{ env.COMMIT_LOG }}
