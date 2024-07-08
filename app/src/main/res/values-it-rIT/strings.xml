@@ -703,6 +703,8 @@
     <string name="blur_banners">Banner sfocati</string>
     <string name="blur">Sfocatura</string>
     <string name="hide_scroll_bar">Nascondi la barra di scorrimento</string>
+    <string name="share_profile">Share Profile</string>
+    <string name="copy_user_id">Copy user ID</string>
     <string name="anilist_notification_filters">Filtri di notifica Anilist</string>
     <string name="anilist_notifications_checking_time">Frequenza di aggiornamento delle notifiche Anilist : %1$s</string>
     <string name="comment_notification_checking_time">Frequenza di aggiornamento delle notifiche dei commenti : %1$s</string>
