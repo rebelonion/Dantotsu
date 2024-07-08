@@ -704,6 +704,8 @@
     <string name="blur_banners">Bannières Floues</string>
     <string name="blur">Flou</string>
     <string name="hide_scroll_bar">Masquer la Barre de Défilement</string>
+    <string name="share_profile">Share Profile</string>
+    <string name="copy_user_id">Copy user ID</string>
     <string name="anilist_notification_filters">Filtrer les notifications</string>
     <string name="anilist_notifications_checking_time">Fréquence de mise à jour des notifications Anilist : %1$s</string>
     <string name="comment_notification_checking_time">Fréquence de mise à jour des notifications de commentaires : %1$s</string>
