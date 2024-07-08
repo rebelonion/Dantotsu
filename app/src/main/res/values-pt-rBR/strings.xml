@@ -703,6 +703,8 @@
     <string name="blur_banners">Desfocar Banners</string>
     <string name="blur">Desfoque</string>
     <string name="hide_scroll_bar">Esconder Barra de Rolagem</string>
+    <string name="share_profile">Share Profile</string>
+    <string name="copy_user_id">Copy user ID</string>
     <string name="anilist_notification_filters">Filtrar Notificações</string>
     <string name="anilist_notifications_checking_time">Frequência de atualização de notificações do Anilist: %1$s</string>
     <string name="comment_notification_checking_time">Frequência de atualização de notificações de comentários: %1$s</string>
