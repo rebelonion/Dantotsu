@@ -74,7 +74,7 @@ data class User(
 @Serializable
 data class UserOptions(
     // The language the user wants to see media titles in
-    // @SerialName("titleLanguage") var titleLanguage: UserTitleLanguage?,
+    @SerialName("titleLanguage") var titleLanguage: UserTitleLanguage?,
 
     // Whether the user has enabled viewing of 18+ content
     @SerialName("displayAdultContent") var displayAdultContent: Boolean?,
@@ -88,17 +88,17 @@ data class UserOptions(
     //    // Notification options
     //    // @SerialName("notificationOptions") var notificationOptions: List<NotificationOption>?,
     //
-    //    // The user's timezone offset (Auth user only)
-    //    @SerialName("timezone") var timezone: String?,
+    // The user's timezone offset (Auth user only)
+    @SerialName("timezone") var timezone: String?,
     //
-    //    // Minutes between activity for them to be merged together. 0 is Never, Above 2 weeks (20160 mins) is Always.
-    //    @SerialName("activityMergeTime") var activityMergeTime: Int?,
+    // Minutes between activity for them to be merged together. 0 is Never, Above 2 weeks (20160 mins) is Always.
+    @SerialName("activityMergeTime") var activityMergeTime: Int?,
     //
-    //    // The language the user wants to see staff and character names in
-    //    // @SerialName("staffNameLanguage") var staffNameLanguage: UserStaffNameLanguage?,
+    // The language the user wants to see staff and character names in
+    @SerialName("staffNameLanguage") var staffNameLanguage: UserStaffNameLanguage?,
     //
-    //    // Whether the user only allow messages from users they follow
-    //    @SerialName("restrictMessagesToFollowing") var restrictMessagesToFollowing: Boolean?,
+    // Whether the user only allow messages from users they follow
+    @SerialName("restrictMessagesToFollowing") var restrictMessagesToFollowing: Boolean?,
 
     // The list activity types the user has disabled from being created from list updates
     // @SerialName("disabledListActivity") var disabledListActivity: List<ListActivityOption>?,
@@ -118,6 +118,26 @@ data class UserStatisticTypes(
     @SerialName("anime") var anime: UserStatistics?,
     @SerialName("manga") var manga: UserStatistics?
 )
+
+@Serializable
+enum class UserTitleLanguage {
+    @SerialName("ENGLISH")
+    ENGLISH,
+    @SerialName("ROMAJI")
+    ROMAJI,
+    @SerialName("NATIVE")
+    NATIVE
+}
+
+@Serializable
+enum class UserStaffNameLanguage {
+    @SerialName("ENGLISH")
+    ENGLISH,
+    @SerialName("ROMAJI")
+    ROMAJI,
+    @SerialName("NATIVE")
+    NATIVE
+}
 
 @Serializable
 data class UserStatistics(
@@ -164,7 +184,7 @@ data class Favourites(
 @Serializable
 data class MediaListOptions(
     // The score format the user is using for media lists
-    @SerialName("scoreFormat") var scoreFormat: String?,
+    @SerialName("scoreFormat") var scoreFormat: ScoreFormat?,
 
     // The default order list rows should be displayed in
     @SerialName("rowOrder") var rowOrder: String?,
@@ -177,12 +197,26 @@ data class MediaListOptions(
 )
 
 @Serializable
+enum class ScoreFormat {
+    @SerialName("POINT_100")
+    POINT_100,
+    @SerialName("POINT_10_DECIMAL")
+    POINT_10_DECIMAL,
+    @SerialName("POINT_10")
+    POINT_10,
+    @SerialName("POINT_5")
+    POINT_5,
+    @SerialName("POINT_3")
+    POINT_3,
+}
+
+@Serializable
 data class MediaListTypeOptions(
     // The order each list should be displayed in
     @SerialName("sectionOrder") var sectionOrder: List<String>?,
 
-    // If the completed sections of the list should be separated by format
-    @SerialName("splitCompletedSectionByFormat") var splitCompletedSectionByFormat: Boolean?,
+    //    // If the completed sections of the list should be separated by format
+    //    @SerialName("splitCompletedSectionByFormat") var splitCompletedSectionByFormat: Boolean?,
 
     // The names of the user's custom lists
     @SerialName("customLists") var customLists: List<String>?,

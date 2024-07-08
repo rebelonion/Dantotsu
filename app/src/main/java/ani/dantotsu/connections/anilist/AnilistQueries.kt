@@ -43,8 +43,8 @@ class AnilistQueries {
     suspend fun getUserData(): Boolean {
         val response: Query.Viewer?
         measureTimeMillis {
-            response =
-                executeQuery("""{Viewer{name options{displayAdultContent}avatar{medium}bannerImage id mediaListOptions{rowOrder animeList{sectionOrder customLists}mangaList{sectionOrder customLists}}statistics{anime{episodesWatched}manga{chaptersRead}}unreadNotificationCount}}""")
+            response = executeQuery(
+                """{Viewer{name options{timezone titleLanguage staffNameLanguage activityMergeTime airingNotifications displayAdultContent restrictMessagesToFollowing} avatar{medium} bannerImage id mediaListOptions{scoreFormat rowOrder animeList{customLists} mangaList{customLists}} statistics{anime{episodesWatched} manga{chaptersRead}} unreadNotificationCount}}""")
         }.also { println("time : $it") }
         val user = response?.data?.user ?: return false
 
@@ -61,6 +61,27 @@ class AnilistQueries {
         val unread = PrefManager.getVal<Int>(PrefName.UnreadCommentNotifications)
         Anilist.unreadNotificationCount += unread
         Anilist.initialized = true
+
+        user.options?.let {
+            Anilist.titleLanguage = it.titleLanguage.toString()
+            Anilist.staffNameLanguage = it.staffNameLanguage.toString()
+            Anilist.airingNotifications = it.airingNotifications ?: false
+            Anilist.restrictMessagesToFollowing = it.restrictMessagesToFollowing ?: false
+            Anilist.timezone = it.timezone
+            Anilist.activityMergeTime = it.activityMergeTime
+        }
+        user.mediaListOptions?.let {
+            Anilist.scoreFormat = it.scoreFormat.toString()
+            Anilist.rowOrder = it.rowOrder
+
+            it.animeList?.let { animeList ->
+                Anilist.animeCustomLists = animeList.customLists
+            }
+
+            it.mangaList?.let { mangaList ->
+                Anilist.mangaCustomLists = mangaList.customLists
+            }
+        }
         return true
     }
 

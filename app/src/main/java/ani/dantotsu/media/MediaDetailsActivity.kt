@@ -293,7 +293,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                 binding.mediaTotal.visibility = View.VISIBLE
                 binding.mediaAddToList.text = userStatus
             } else {
-                binding.mediaAddToList.setText(R.string.add)
+                binding.mediaAddToList.setText(R.string.add_list)
             }
             total()
             binding.mediaAddToList.setOnClickListener {

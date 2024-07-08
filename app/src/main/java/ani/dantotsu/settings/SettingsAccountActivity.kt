@@ -1,5 +1,6 @@
 package ani.dantotsu.settings
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
 import android.view.View
@@ -9,6 +10,8 @@ import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.updateLayoutParams
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.discord.Discord
@@ -26,6 +29,7 @@ import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
+import kotlinx.coroutines.launch
 
 class SettingsAccountActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsAccountsBinding
@@ -111,6 +115,7 @@ class SettingsAccountActivity : AppCompatActivity() {
                 } else {
                     settingsAnilistAvatar.setImageResource(R.drawable.ic_round_person_24)
                     settingsAnilistUsername.visibility = View.GONE
+                    settingsRecyclerView.visibility = View.GONE
                     settingsAnilistLogin.setText(R.string.login)
                     settingsAnilistLogin.setOnClickListener {
                         Anilist.loginIntent(context)
@@ -142,7 +147,7 @@ class SettingsAccountActivity : AppCompatActivity() {
                         reload()
                     }
 
-                    settingsImageSwitcher.visibility = View.VISIBLE
+                    settingsPresenceSwitcher.visibility = View.VISIBLE
                     var initialStatus = when (PrefManager.getVal<String>(PrefName.DiscordStatus)) {
                         "online" -> R.drawable.discord_status_online
                         "idle" -> R.drawable.discord_status_idle
@@ -150,11 +155,11 @@ class SettingsAccountActivity : AppCompatActivity() {
                         "invisible" -> R.drawable.discord_status_invisible
                         else -> R.drawable.discord_status_online
                     }
-                    settingsImageSwitcher.setImageResource(initialStatus)
+                    settingsPresenceSwitcher.setImageResource(initialStatus)
 
                     val zoomInAnimation =
                         AnimationUtils.loadAnimation(context, R.anim.bounce_zoom)
-                    settingsImageSwitcher.setOnClickListener {
+                    settingsPresenceSwitcher.setOnClickListener {
                         var status = "online"
                         initialStatus = when (initialStatus) {
                             R.drawable.discord_status_online -> {
@@ -181,16 +186,16 @@ class SettingsAccountActivity : AppCompatActivity() {
                         }
 
                         PrefManager.setVal(PrefName.DiscordStatus, status)
-                        settingsImageSwitcher.setImageResource(initialStatus)
-                        settingsImageSwitcher.startAnimation(zoomInAnimation)
+                        settingsPresenceSwitcher.setImageResource(initialStatus)
+                        settingsPresenceSwitcher.startAnimation(zoomInAnimation)
                     }
-                    settingsImageSwitcher.setOnLongClickListener {
+                    settingsPresenceSwitcher.setOnLongClickListener {
                         it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
                         DiscordDialogFragment().show(supportFragmentManager, "dialog")
                         true
                     }
                 } else {
-                    settingsImageSwitcher.visibility = View.GONE
+                    settingsPresenceSwitcher.visibility = View.GONE
                     settingsDiscordAvatar.setImageResource(R.drawable.ic_round_person_24)
                     settingsDiscordUsername.visibility = View.GONE
                     settingsDiscordLogin.setText(R.string.login)
@@ -202,6 +207,25 @@ class SettingsAccountActivity : AppCompatActivity() {
             }
             reload()
         }
-    }
+        binding.settingsRecyclerView.adapter = SettingsAdapter(
+            arrayListOf(
+                Settings(
+                    type = 1,
+                    name = getString(R.string.anilist_settings),
+                    desc = getString(R.string.alsettings_desc),
+                    icon = R.drawable.ic_anilist,
+                    onClick = {
+                        lifecycleScope.launch {
+                            Anilist.query.getUserData()
+                            startActivity(Intent(context, AnilistSettingsActivity::class.java))
+                        }
+                    },
+                    isActivity = true
+                ),
+            )
+        )
+        binding.settingsRecyclerView.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
+    }
 }
