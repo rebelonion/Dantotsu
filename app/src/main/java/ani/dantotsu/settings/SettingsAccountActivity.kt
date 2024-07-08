@@ -217,7 +217,7 @@ class SettingsAccountActivity : AppCompatActivity() {
                     onClick = {
                         lifecycleScope.launch {
                             Anilist.query.getUserData()
-                            startActivity(Intent(context, SettingsAnilistActivity::class.java))
+                            startActivity(Intent(context, AnilistSettingsActivity::class.java))
                         }
                     },
                     isActivity = true

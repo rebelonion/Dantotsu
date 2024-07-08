@@ -29,7 +29,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.launch
 
-class SettingsAnilistActivity : AppCompatActivity() {
+class AnilistSettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsAnilistBinding
     private lateinit var anilistMutations: AnilistMutations
 
