@@ -706,6 +706,8 @@
     <string name="blur_banners">ضبابية الخلفية</string>
     <string name="blur">الضبابية</string>
     <string name="hide_scroll_bar">إخفاء شريط التمرير</string>
+    <string name="share_profile">Share Profile</string>
+    <string name="copy_user_id">Copy user ID</string>
     <string name="anilist_notification_filters">تصفية الإشعارات</string>
     <string name="anilist_notifications_checking_time">تحديث اشعارات \"Anilist\" كل : %1$s</string>
     <string name="comment_notification_checking_time">تحديث اشعارات التعليقات كل : %1$s</string>
