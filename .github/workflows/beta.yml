@@ -125,7 +125,7 @@ jobs:
         name: ${{ env.BRANCH }} build ${{ env.VERSION }}
         tag_name: v${{ env.VERSION }}
         body: |
-          New Alpha Build ${{ env.VERSION }} released on branch ${{ env.BRANCH }} :)
+          New Pretester Build ${{ env.VERSION }} released on branch "${{ env.BRANCH }}" :)
 
           Commits:
           ${{ env.COMMIT_LOG }}
