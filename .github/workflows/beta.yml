@@ -18,7 +18,7 @@ jobs:
       contents: write
     env:
       CI: true
-      SKIP_BUILD: true
+      SKIP_BUILD: false
 
     steps:
     - name: Checkout repo
@@ -56,6 +56,10 @@ jobs:
         # Debugging: Print the variable to check its content
         echo "$COMMIT_LOGS"
         echo "$COMMIT_LOGS" > commit_log.txt
+        # Extract branch name from github.ref
+        BRANCH=${{ github.ref }}
+        BRANCH=${BRANCH#refs/heads/}
+        echo "BRANCH=${BRANCH}" >> $GITHUB_ENV
       shell: /usr/bin/bash -e {0}
       env:
         CI: true
