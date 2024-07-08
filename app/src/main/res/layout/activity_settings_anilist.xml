@@ -83,7 +83,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="32dp"
-                android:alpha="0.58"
                 android:fontFamily="@font/poppins_bold"
                 android:text="@string/selected_title_language" />
 
@@ -120,7 +119,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="32dp"
-                android:alpha="0.58"
                 android:fontFamily="@font/poppins_bold"
                 android:text="@string/selected_staff_language" />
 
@@ -157,7 +155,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="32dp"
-                android:alpha="0.58"
                 android:fontFamily="@font/poppins_bold"
                 android:text="@string/selected_merge_time" />
 
@@ -223,7 +220,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="32dp"
-                android:alpha="0.58"
                 android:fontFamily="@font/poppins_bold"
                 android:text="@string/selected_score_format" />
 
@@ -260,7 +256,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="32dp"
-                android:alpha="0.58"
                 android:fontFamily="@font/poppins_bold"
                 android:text="@string/selected_row_order" />
 
@@ -297,7 +292,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="32dp"
-                android:alpha="0.58"
                 android:fontFamily="@font/poppins_bold"
                 android:text="@string/custom_anime_list" />
 
@@ -324,7 +318,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="32dp"
-                android:alpha="0.58"
                 android:fontFamily="@font/poppins_bold"
                 android:text="@string/custom_manga_list" />
 
@@ -373,7 +366,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginHorizontal="32dp"
-            android:alpha="0.58"
             android:fontFamily="@font/poppins_bold"
             android:text="@string/selected_time_zone" />
 

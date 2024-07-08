@@ -11,12 +11,15 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
-import ani.dantotsu.connections.anilist.Anilist.ScoreFormat
 import ani.dantotsu.connections.anilist.Anilist.activityMergeTimeMap
 import ani.dantotsu.connections.anilist.Anilist.rowOrderMap
+import ani.dantotsu.connections.anilist.Anilist.scoreFormats
 import ani.dantotsu.connections.anilist.Anilist.staffNameLang
 import ani.dantotsu.connections.anilist.Anilist.titleLang
 import ani.dantotsu.connections.anilist.AnilistMutations
+import ani.dantotsu.connections.anilist.api.ScoreFormat
+import ani.dantotsu.connections.anilist.api.UserStaffNameLanguage
+import ani.dantotsu.connections.anilist.api.UserTitleLanguage
 import ani.dantotsu.databinding.ActivitySettingsAnilistBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.navBarHeight
@@ -32,20 +35,6 @@ import kotlinx.coroutines.launch
 class AnilistSettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsAnilistBinding
     private lateinit var anilistMutations: AnilistMutations
-
-    enum class FormatLang {
-        ENGLISH,
-        ROMAJI,
-        NATIVE
-    }
-
-    enum class FormatScore {
-        POINT_100,
-        POINT_10_DECIMAL,
-        POINT_10,
-        POINT_5,
-        POINT_3,
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,7 +56,7 @@ class AnilistSettingsActivity : AppCompatActivity() {
             }
 
             val currentTitleLang = Anilist.titleLanguage
-            val titleFormat = FormatLang.entries.firstOrNull { it.name == currentTitleLang } ?: FormatLang.ENGLISH
+            val titleFormat = UserTitleLanguage.entries.firstOrNull { it.name == currentTitleLang } ?: UserTitleLanguage.ENGLISH
 
             settingsAnilistTitleLanguage.setText(titleLang[titleFormat.ordinal])
             settingsAnilistTitleLanguage.setAdapter(
@@ -89,7 +78,7 @@ class AnilistSettingsActivity : AppCompatActivity() {
             }
 
             val currentStaffNameLang = Anilist.staffNameLanguage
-            val staffNameFormat = FormatLang.entries.firstOrNull { it.name == currentStaffNameLang } ?: FormatLang.ENGLISH
+            val staffNameFormat = UserStaffNameLanguage.entries.firstOrNull { it.name == currentStaffNameLang } ?: UserStaffNameLanguage.ROMAJI_WESTERN
 
             settingsAnilistStaffLanguage.setText(staffNameLang[staffNameFormat.ordinal])
             settingsAnilistStaffLanguage.setAdapter(
@@ -97,10 +86,10 @@ class AnilistSettingsActivity : AppCompatActivity() {
             )
             settingsAnilistStaffLanguage.setOnItemClickListener { _, _, i, _ ->
                 val selectedLanguage = when (i) {
-                    0 -> "ENGLISH"
+                    0 -> "ROMAJI_WESTERN"
                     1 -> "ROMAJI"
                     2 -> "NATIVE"
-                    else -> "ENGLISH"
+                    else -> "ROMAJI_WESTERN"
                 }
                 lifecycleScope.launch {
                     anilistMutations.updateSettings(staffNameLanguage = selectedLanguage)
@@ -128,10 +117,10 @@ class AnilistSettingsActivity : AppCompatActivity() {
             }
 
             val currentScoreFormat = Anilist.scoreFormat
-            val scoreFormat = FormatScore.entries.firstOrNull{ it.name == currentScoreFormat } ?: FormatScore.POINT_100
-            settingsAnilistScoreFormat.setText(ScoreFormat[scoreFormat.ordinal])
+            val scoreFormat = ScoreFormat.entries.firstOrNull{ it.name == currentScoreFormat } ?: ScoreFormat.POINT_100
+            settingsAnilistScoreFormat.setText(scoreFormats[scoreFormat.ordinal])
             settingsAnilistScoreFormat.setAdapter(
-                ArrayAdapter(context, R.layout.item_dropdown, ScoreFormat)
+                ArrayAdapter(context, R.layout.item_dropdown, scoreFormats)
             )
             settingsAnilistScoreFormat.setOnItemClickListener { _, _, i, _ ->
                 val selectedFormat = when (i) {
@@ -186,7 +175,7 @@ class AnilistSettingsActivity : AppCompatActivity() {
                 saveCustomLists()
             }
 
-            val currentTimezone = Anilist.timezone?.let { Anilist.getDisplayTimezone(it) } ?: "(GMT+00:00) London"
+            val currentTimezone = Anilist.timezone?.let { Anilist.getDisplayTimezone(it, context) } ?: context.getString(R.string.selected_no_time_zone)
             settingsAnilistTimezone.setText(currentTimezone)
             settingsAnilistTimezone.setAdapter(
                 ArrayAdapter(context, R.layout.item_dropdown, Anilist.timeZone)
