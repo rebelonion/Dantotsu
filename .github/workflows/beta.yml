@@ -3,7 +3,7 @@ name: Build APK and Notify Discord
 on:
   push:
     branches:
-      - dev
+      - ${{ github.repository == 'rebelonion/Dantotsu' && 'dev' || '**' }}
     paths-ignore:
       - '**/README.md'
     tags:
@@ -16,7 +16,7 @@ jobs:
       contents: write
     env:
       CI: true
-      SKIP_BUILD: false
+      SKIP_BUILD: true
 
     steps:
     - name: Checkout repo
@@ -54,7 +54,6 @@ jobs:
         # Debugging: Print the variable to check its content
         echo "$COMMIT_LOGS"
         echo "$COMMIT_LOGS" > commit_log.txt
-        echo "Branch: $BRANCH_NAME"
       shell: /usr/bin/bash -e {0}
       env:
         CI: true
@@ -104,7 +103,7 @@ jobs:
         fi
           
     - name: Upload a Build Artifact
-      if: ${{ env.SKIP_BUILD != 'true' && github.repo == 'rebelonion/Dantotsu' }}
+      if: ${{ env.SKIP_BUILD != 'true' && github.repository == 'rebelonion/Dantotsu' }}
       uses: actions/upload-artifact@v4
       with:
           name: Dantotsu
@@ -113,13 +112,15 @@ jobs:
           path: "app/build/outputs/apk/google/alpha/app-google-alpha.apk"
 
     - name: Create GitHub Release
-      if: ${{ env.SKIP_BUILD != 'true' && github.repo != 'rebelonion/Dantotsu' }}
+      if: ${{ env.SKIP_BUILD != 'true' && github.repository != 'rebelonion/Dantotsu' }}
       uses: softprops/action-gh-release@v2.0.6
       with:
         files: app/build/outputs/apk/google/alpha/app-google-alpha.apk
+        name: Alpha Build ${{ env.VERSION }} - ${{ env.BRANCH }}
         tag_name: v${{ env.VERSION }}
-        name: Build {{ env.VERSION }} from ${{ env.BRANCH_NAME }}
         body: |
+          New Alpha Build ${{ env.VERSION }} released on branch ${{ env.BRANCH }}!
+
           Commits:
           ${{ env.COMMIT_LOG }}
         prerelease: false
