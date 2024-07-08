@@ -703,6 +703,8 @@
     <string name="blur_banners">Θάμπωμα πανό</string>
     <string name="blur">Θάμπωμα</string>
     <string name="hide_scroll_bar">Απόκρυψη Scroll Bar</string>
+    <string name="share_profile">Share Profile</string>
+    <string name="copy_user_id">Copy user ID</string>
     <string name="anilist_notification_filters">Φιλτράρισε της Ειδοποιήσεις</string>
     <string name="anilist_notifications_checking_time">Συχνότητα ενημέρωσης ειδοποιήσεων Anilist : %1$s</string>
     <string name="comment_notification_checking_time">Συχνότητα ενημέρωσης ειδοποιήσεων σχολίων : %1$s</string>
