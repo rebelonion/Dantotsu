@@ -707,6 +707,8 @@
     <string name="blur_banners">Vagëzo Bandat</string>
     <string name="blur">Vagëzo</string>
     <string name="hide_scroll_bar">Fshi shiritin e valëve</string>
+    <string name="share_profile">Share Profile</string>
+    <string name="copy_user_id">Copy user ID</string>
     <string name="anilist_notification_filters">Filtro njoftimet</string>
     <string name="anilist_notifications_checking_time">Frekuenca e përditësimit të njoftimeve të Anilistit: %1$s</string>
     <string name="comment_notification_checking_time">Frekuenca e përditësimit të njoftimeve të komentit: %1$s</string>
