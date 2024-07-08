@@ -703,6 +703,8 @@
     <string name="blur_banners">बैनर को धुंधला करें</string>
     <string name="blur">धुंधलाना</string>
     <string name="hide_scroll_bar">स्क्रॉल बार छुपाएं</string>
+    <string name="share_profile">Share Profile</string>
+    <string name="copy_user_id">Copy user ID</string>
     <string name="anilist_notification_filters">Filter Notifications</string>
     <string name="anilist_notifications_checking_time">एनीलिस्ट अधिसूचनाएँ अपडेट आवृत्ति : %1$s</string>
     <string name="comment_notification_checking_time">टिप्पणी अधिसूचनाएँ अपडेट आवृत्ति : %1$s</string>
