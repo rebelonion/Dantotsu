@@ -295,6 +295,7 @@
     <string name="selected_merge_time">Activity Merge Time</string>
     <string name="selected_score_format">Scoring System</string>
     <string name="selected_time_zone">Timezone</string>
+    <string name="selected_no_time_zone">No Timezone selected</string>
     <string name="selected_row_order">Default List Order</string>
     <string name="custom_anime_list">Custom Anime Lists</string>
     <string name="custom_manga_list">Custom Manga Lists</string>
