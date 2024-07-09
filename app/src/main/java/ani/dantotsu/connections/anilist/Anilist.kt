@@ -157,7 +157,7 @@ object Anilist {
         "Native (キルア=ゾルディック)"
     )
 
-    val ScoreFormat = listOf(
+    val scoreFormats = listOf(
         "100 Point (55/100)",
         "10 Point Decimal (5.5/10)",
         "10 Point (5/10)",
@@ -199,9 +199,10 @@ object Anilist {
         else -> 0
     }
 
-    fun getDisplayTimezone(apiTimezone: String): String {
+    fun getDisplayTimezone(apiTimezone: String, context: Context): String {
+        val noTimezone = context.getString(R.string.selected_no_time_zone)
         val parts = apiTimezone.split(":")
-        if (parts.size != 2) return "(GMT+00:00) London"
+        if (parts.size != 2) return noTimezone
 
         val hours = parts[0].toIntOrNull() ?: 0
         val minutes = parts[1].toIntOrNull() ?: 0
@@ -210,7 +211,7 @@ object Anilist {
         val formattedMinutes = String.format(Locale.US, "%02d", minutes)
 
         val searchString = "(GMT$sign$formattedHours:$formattedMinutes)"
-        return timeZone.find { it.contains(searchString) } ?: "(GMT+00:00) London"
+        return timeZone.find { it.contains(searchString) } ?: noTimezone
     }
 
     fun getApiTimezone(displayTimezone: String): String {

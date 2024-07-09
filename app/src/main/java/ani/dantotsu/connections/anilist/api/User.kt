@@ -131,12 +131,26 @@ enum class UserTitleLanguage {
 
 @Serializable
 enum class UserStaffNameLanguage {
-    @SerialName("ENGLISH")
-    ENGLISH,
+    @SerialName("ROMAJI_WESTERN")
+    ROMAJI_WESTERN,
     @SerialName("ROMAJI")
     ROMAJI,
     @SerialName("NATIVE")
     NATIVE
+}
+
+@Serializable
+enum class ScoreFormat {
+    @SerialName("POINT_100")
+    POINT_100,
+    @SerialName("POINT_10_DECIMAL")
+    POINT_10_DECIMAL,
+    @SerialName("POINT_10")
+    POINT_10,
+    @SerialName("POINT_5")
+    POINT_5,
+    @SerialName("POINT_3")
+    POINT_3,
 }
 
 @Serializable
@@ -195,20 +209,6 @@ data class MediaListOptions(
     // The user's manga list options
     @SerialName("mangaList") var mangaList: MediaListTypeOptions?,
 )
-
-@Serializable
-enum class ScoreFormat {
-    @SerialName("POINT_100")
-    POINT_100,
-    @SerialName("POINT_10_DECIMAL")
-    POINT_10_DECIMAL,
-    @SerialName("POINT_10")
-    POINT_10,
-    @SerialName("POINT_5")
-    POINT_5,
-    @SerialName("POINT_3")
-    POINT_3,
-}
 
 @Serializable
 data class MediaListTypeOptions(
