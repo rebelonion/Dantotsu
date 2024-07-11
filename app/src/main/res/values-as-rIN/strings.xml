@@ -817,12 +817,12 @@
     <string name="extensions_desc">আপোনাৰ বিশ্বাসযোগ্য সংগ্ৰহসমূহ পৰিচালনা কৰক</string>
     <string name="addons_desc">আপোনাৰ এপ্পৰ পৰা অধিক সুবিধা প্ৰাপ্ত কৰক</string>
     <string name="alsettings_desc">আপোনাৰ এনিলিষ্ট ছেটিংছ পৰিবৰ্তন কৰক</string>
-    <string name="airing_notifications">Airing Anime notifications</string>
-    <string name="airing_notifications_desc">Get notified whenever a new episode drops</string>
-    <string name="display_adult_content">18+ Content</string>
-    <string name="display_adult_content_desc">Enable NSFW content</string>
-    <string name="restrict_messages">Restrict messages to following</string>
-    <string name="restrict_messages_desc">Allow only users I follow to message me</string>
+    <string name="airing_notifications">সম্প্ৰচাৰ আনিমে জাননীসমূহ</string>
+    <string name="airing_notifications_desc">যেতিয়াই এটা নতুন খণ্ড হ্ৰাস হয় জাননী প্ৰাপ্ত কৰক</string>
+    <string name="display_adult_content">18+ বিষয়</string>
+    <string name="display_adult_content_desc">18+ বিষয়ক সক্ষম কৰক</string>
+    <string name="restrict_messages">মাত্ৰ অনুসৰণ কৰা ব্যক্তিৰে মেসেজ লাভ কৰক</string>
+    <string name="restrict_messages_desc">মাত্ৰ মই অনুসৰণ কৰা ব্যৱহাৰকাৰীক মেসেজ কৰিবলৈ অনুমতি দিয়ক</string>
     <string name="notifications_desc">আপোনাৰ সমাচাৰ আৰু আপডেট স্বনিৰ্ধাৰণ কৰক</string>
     <string name="about_desc">ডান্তত্সুৰ বিষয়ে অধিক জানক</string>
     <string name="faq_desc">ডান্তত্সুৰ সাধাৰণ প্ৰশ্নসমূহ</string>
@@ -954,6 +954,6 @@
     <string name="enable_forgot_password">পাছৱৰ্ড পাহৰি গৈছে সক্ষম কৰক (10 ছেকেণ্ডৰ বাবে ক্লিয়াৰ বুটামত ধৰি ৰাখক)</string>
     <string name="hide_notification_dot">বিজ্ঞাপনৰ বিন্দু লুকাওক</string>
     <string name="private_mode">ব্যক্তিগত</string>
-    <string name="omega_cursed">you have been Ǫ̴̺̙͎̤̫͓̮̰̿͝M̴͇̤͗́̾̈́̑̍̿̈͌͝Ȅ̴̡̨̛͉̣̙̩̲̣̤̟̪̣̎͗̎̆̒̉͆̆̕ͅͅǴ̸̯̬̗̠̙͛͐̀̈͋̀̈̽́̎̿͘͘͝ͅĀ̶̧̲̀ͅ ̴̢̟͕̜̓̾̓C̶̬̜̰̘̝̱̫͓͙̭̈́͐͋̓̏̈̍̓̀̌̾̚Ư̸̛̤̱̈́͆̽͊͛̐̓́̑͘̕̕͝R̸̨̨͈̬̱̺͕̪̪̘͕͎̂͛́̅̆̓̀͝ͅS̴̨̨̛̩̭̗̹̰̭̥͉̮̝̠̓̔͆̂͊͆̀̈́̅̕͘̚͝È̴̢̛̝͈̳͉͈͒͒̒̄̏̈̈́D̸̢̡̨̜̞̩̼̫̹̗̮͛̀̈̋̾̇̕̕͜ͅ</string>
-    <string name="omega_freed">you have been freed</string>
+    <string name="omega_cursed">তোমাক অমেগা অভিশাপ দিয়া হৈছে</string>
+    <string name="omega_freed">আপোনাক মুক্ত কৰা হৈছে</string>
 </resources>
