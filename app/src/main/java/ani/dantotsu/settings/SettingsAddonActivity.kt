@@ -53,9 +53,9 @@ class SettingsAddonActivity : AppCompatActivity() {
                 bottomMargin = navBarHeight
             }
 
-            binding.addonSettingsBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
+            addonSettingsBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
-            binding.settingsRecyclerView.adapter = SettingsAdapter(
+            settingsRecyclerView.adapter = SettingsAdapter(
                 arrayListOf(
                     Settings(
                         type = 1,
@@ -207,7 +207,7 @@ class SettingsAddonActivity : AppCompatActivity() {
                     )
                 )
             )
-            binding.settingsRecyclerView.layoutManager =
+            settingsRecyclerView.layoutManager =
                 LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         }

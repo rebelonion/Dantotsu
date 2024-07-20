@@ -1,23 +1,18 @@
 package ani.dantotsu.connections.discord
 
+import ani.dantotsu.connections.discord.Discord.token
 import ani.dantotsu.connections.discord.serializers.Activity
 import ani.dantotsu.connections.discord.serializers.Presence
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import okhttp3.OkHttpClient
 import kotlin.coroutines.CoroutineContext
-import ani.dantotsu.client as app
+import java.util.concurrent.TimeUnit.SECONDS
 
 @Suppress("MemberVisibilityCanBePrivate")
 open class RPC(val token: String, val coroutineContext: CoroutineContext) {
-
-    private val json = Json {
-        encodeDefaults = true
-        allowStructuredMapKeys = true
-        ignoreUnknownKeys = true
-    }
 
     enum class Type {
         PLAYING, STREAMING, LISTENING, WATCHING, COMPETING
@@ -27,7 +22,7 @@ open class RPC(val token: String, val coroutineContext: CoroutineContext) {
 
     companion object {
         data class RPCData(
-            val applicationId: String? = null,
+            val applicationId: String,
             val type: Type? = null,
             val activityName: String? = null,
             val details: String? = null,
@@ -39,23 +34,21 @@ open class RPC(val token: String, val coroutineContext: CoroutineContext) {
             val stopTimestamp: Long? = null,
             val buttons: MutableList<Link> = mutableListOf()
         )
-
-        @Serializable
-        data class KizzyApi(val id: String)
-
-        val api = "https://kizzy-api.vercel.app/image?url="
-        private suspend fun String.discordUrl(): String? {
-            if (startsWith("mp:")) return this
-            val json = app.get("$api$this").parsedSafe<KizzyApi>()
-            return json?.id
-        }
-
         suspend fun createPresence(data: RPCData): String {
             val json = Json {
                 encodeDefaults = true
                 allowStructuredMapKeys = true
                 ignoreUnknownKeys = true
             }
+            val client = OkHttpClient.Builder()
+                .connectTimeout(10, SECONDS)
+                .readTimeout(10, SECONDS)
+                .writeTimeout(10, SECONDS)
+                .build()
+
+            val assetApi = RPCExternalAsset(data.applicationId, token!!, client, json)
+            suspend fun String.discordUrl() = assetApi.getDiscordUri(this)
+
             return json.encodeToString(Presence.Response(
                 3,
                 Presence(

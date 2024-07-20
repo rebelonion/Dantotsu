@@ -507,6 +507,8 @@ class Stories @JvmOverloads constructor(
                             leftPanelTouch()
                         } else if (event.x > rightQuarter) {
                             rightPanelTouch()
+                        } else {
+                            resume()
                         }
                     } else {
                         resume()
@@ -523,7 +525,8 @@ class Stories @JvmOverloads constructor(
                     }
                 }
                 val deltaX = event.x - startX
-                if (abs(deltaX) > swipeThreshold) {
+                val deltaY = event.y - startY
+                if (abs(deltaX) > swipeThreshold && !(abs(deltaY) > 10)) {
                     if (deltaX > 0) onStoriesPrevious()
                     else onStoriesCompleted()
                 }

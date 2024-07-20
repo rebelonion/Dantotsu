@@ -400,9 +400,7 @@ class AnilistQueries {
         return media
     }
 
-    private fun continueMediaQuery(type: String, status: String): String {
-        return """ MediaListCollection(userId: ${Anilist.userid}, type: $type, status: $status , sort: UPDATED_TIME ) { lists { entries { progress private score(format:POINT_100) status media { id idMal type isAdult status chapters episodes nextAiringEpisode {episode} meanScore isFavourite format bannerImage coverImage{large} title { english romaji userPreferred } } } } } """
-    }
+
 
     private suspend fun favMedia(anime: Boolean, id: Int? = Anilist.userid): ArrayList<Media> {
         var hasNextPage = true
@@ -428,24 +426,14 @@ class AnilistQueries {
         return responseArray
     }
 
-    private fun favMediaQuery(anime: Boolean, page: Int, id: Int? = Anilist.userid): String {
-        return """User(id:${id}){id favourites{${if (anime) "anime" else "manga"}(page:$page){pageInfo{hasNextPage}edges{favouriteOrder node{id idMal isAdult mediaListEntry{ progress private score(format:POINT_100) status } chapters isFavourite format episodes nextAiringEpisode{episode}meanScore isFavourite format startDate{year month day} title{english romaji userPreferred}type status(version:2)bannerImage coverImage{large}}}}}}"""
-    }
 
-    private fun recommendationQuery(): String {
-        return """ Page(page: 1, perPage:30) { pageInfo { total currentPage hasNextPage } recommendations(sort: RATING_DESC, onList: true) { rating userRating mediaRecommendation { id idMal isAdult mediaListEntry { progress private score(format:POINT_100) status } chapters isFavourite format episodes nextAiringEpisode {episode} popularity meanScore isFavourite format title {english romaji userPreferred } type status(version: 2) bannerImage coverImage { large } } } } """
-    }
-
-    private fun recommendationPlannedQuery(type: String): String {
-        return """ MediaListCollection(userId: ${Anilist.userid}, type: $type, status: PLANNING${if (type == "ANIME") ", sort: MEDIA_POPULARITY_DESC" else ""} ) { lists { entries { media { id mediaListEntry { progress private score(format:POINT_100) status } idMal type isAdult popularity status(version: 2) chapters episodes nextAiringEpisode {episode} meanScore isFavourite format bannerImage coverImage{large} title { english romaji userPreferred } } } } }"""
-    }
 
     suspend fun getUserStatus(): ArrayList<User>? {
         val toShow: List<Boolean> =
             PrefManager.getVal(PrefName.HomeLayout)
         if (toShow.getOrNull(7) != true) return null
         val query = """{Page1:${status(1)}Page2:${status(2)}}"""
-        val response = executeQuery<Query.HomePageMedia>(query, show = true)
+        val response = executeQuery<Query.HomePageMedia>(query)
         val list = mutableListOf<User>()
         val threeDaysAgo = Calendar.getInstance().apply {
             add(Calendar.DAY_OF_MONTH, -3)
@@ -497,7 +485,19 @@ class AnilistQueries {
             return list.toCollection(ArrayList())
         } else return null
     }
+    private fun favMediaQuery(anime: Boolean, page: Int, id: Int? = Anilist.userid): String {
+        return """User(id:${id}){id favourites{${if (anime) "anime" else "manga"}(page:$page){pageInfo{hasNextPage}edges{favouriteOrder node{id idMal isAdult mediaListEntry{ progress private score(format:POINT_100) status } chapters isFavourite format episodes nextAiringEpisode{episode}meanScore isFavourite format startDate{year month day} title{english romaji userPreferred}type status(version:2)bannerImage coverImage{large}}}}}}"""
+    }
+    private fun recommendationQuery(): String {
+        return """ Page(page: 1, perPage:30) { pageInfo { total currentPage hasNextPage } recommendations(sort: RATING_DESC, onList: true) { rating userRating mediaRecommendation { id idMal isAdult mediaListEntry { progress private score(format:POINT_100) status } chapters isFavourite format episodes nextAiringEpisode {episode} popularity meanScore isFavourite format title {english romaji userPreferred } type status(version: 2) bannerImage coverImage { large } } } } """
+    }
 
+    private fun recommendationPlannedQuery(type: String): String {
+        return """ MediaListCollection(userId: ${Anilist.userid}, type: $type, status: PLANNING${if (type == "ANIME") ", sort: MEDIA_POPULARITY_DESC" else ""} ) { lists { entries { media { id mediaListEntry { progress private score(format:POINT_100) status } idMal type isAdult popularity status(version: 2) chapters episodes nextAiringEpisode {episode} meanScore isFavourite format bannerImage coverImage{large} title { english romaji userPreferred } } } } }"""
+    }
+    private fun continueMediaQuery(type: String, status: String): String {
+        return """ MediaListCollection(userId: ${Anilist.userid}, type: $type, status: $status , sort: UPDATED_TIME ) { lists { entries { progress private score(format:POINT_100) status media { id idMal type isAdult status chapters episodes nextAiringEpisode {episode} meanScore isFavourite format bannerImage coverImage{large} title { english romaji userPreferred } } } } } """
+    }
     suspend fun initHomePage(): Map<String, ArrayList<Media>> {
         val removeList = PrefManager.getCustomVal("removeList", setOf<Int>())
         val hidePrivate = PrefManager.getVal<Boolean>(PrefName.HidePrivate)
