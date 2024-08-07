@@ -45,7 +45,7 @@
     <string name="get_recommendations">Guarda/Leggi un po\' di Anime o Manga per ottenere Raccomandazioni</string>
     <string name="empty">Tutto in regola, quando qualcosa di Nuovo?</string>
     <string name="action_settings">Impostazioni</string>
-    <string name="add_list">Add to List</string>
+    <string name="add_list">Aggiungi alla Lista</string>
     <string name="list_editor">Editor di Elenchi</string>
     <string name="add_fav">Aggiungi ai Preferiti</string>
     <string name="notifications">Notifiche</string>
@@ -283,11 +283,11 @@
     <string name="prefer_dub">Preferire gli Anime Doppiati</string>
     <string name="none">Nessuno</string>
     <string name="selected_dns">DNS selezionato</string>
-    <string name="anime_manga">Anime and Manga</string>
-    <string name="list_settings">List Settings</string>
+    <string name="anime_manga">Anime e Manga</string>
+    <string name="list_settings">Impostazioni della Lista</string>
     <string name="dns_info">Cambia se il tuo ISP blocca una qualsiasi fonte</string>
-    <string name="selected_title_language">Selected Title Language</string>
-    <string name="selected_staff_language">Selected Staff Language</string>
+    <string name="selected_title_language">Lingua del Titolo Selezionata</string>
+    <string name="selected_staff_language">Lingua dello Staff Selezionata</string>
     <string name="selected_merge_time">Activity Merge Time</string>
     <string name="selected_score_format">Scoring System</string>
     <string name="selected_time_zone">Timezone</string>
