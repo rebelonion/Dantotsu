@@ -256,20 +256,20 @@
     <string name="app">App</string>
     <string name="immersive_mode">Nascondi la Barra di Stato</string>
     <string name="immersive_modelist">Nascondi la Barra di Stato per la lista</string>
-    <string name="immersive_mode_info">Richiede il Riavvio dell\'App per essere applicato completamente.</string>
-    <string name="home_layout_show">Mostra/Nascondi i layout nella Home</string>
+    <string name="immersive_mode_info">Richiede il riavvio dell\'App per applicare completamente.</string>
+    <string name="home_layout_show">Mostra/Nascondi i Layout su Home</string>
     <string-array name="home_layouts">
         <item>Continua a Guardare</item>
-        <item>Anime Preferito</item>
-        <item>Anime Programmato</item>
+        <item>Anime Preferiti</item>
+        <item>Anime Pianificati</item>
         <item>Continua a Leggere</item>
-        <item>Manga Preferito</item>
-        <item>Manga Programmato</item>
-        <item>Raccomandato</item>
-        <item>Social Feeds</item>
+        <item>Manga Preferiti</item>
+        <item>Manga Pianificati</item>
+        <item>Consigliati</item>
+        <item>Feed Sociali</item>
     </string-array>
     <string name="startUpTab">Scheda di Avvio Predefinita</string>
-    <string name="small_view">Vista Piccola degli Show di Tendenza</string>
+    <string name="small_view">Vista Piccola in Show di Tendenza</string>
     <string name="animations">Animazioni</string>
     <string name="banner_animations">Animazioni dei Banner</string>
     <string name="layout_animations">Animazioni dei Layout</string>
