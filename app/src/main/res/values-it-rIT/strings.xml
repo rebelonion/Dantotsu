@@ -215,12 +215,12 @@
     <string name="sub_background_color_select">Colore dello Sfondo dei Sottotitoli</string>
     <string name="sub_window_color_select">Colore della Finestra dei Sottotitoli</string>
     <string name="sub_window_color_info">"La finestra dei sottotitoli è la parte a sinistra e a destra di essi. (Dove non c'è lo sfondo)"</string>
-    <string name="sub_color_info"><b>Nota:</b> La modifica delle impostazioni di cui sopra ha effetto solo sui sottotitoli soft!</string>
+    <string name="sub_color_info"><b>Nota:</b> La modifica delle impostazioni sopra ha effetto solo sui Sottotitoli Soft!</string>
     <string name="sub_alpha">Trasparenza dei Sottotitoli</string>
     <string name="sub_text_example">Esempio di Sub</string>
     <string name="sub_font_select">Font dei Sottotitoli</string>
     <string name="subtitle_font_size">Dimensione dei Sottotitoli</string>
-    <string name="auto">Auto</string>
+    <string name="auto">Automatico</string>
     <string name="auto_play_next_episode">Autoplay dell\'Episodio Successivo</string>
     <string name="auto_play_next_episode_info">Si disattiva automaticamente se non c\'è interazione con il giocatore dopo 1 ora.</string>
     <string name="auto_skip_fillers">Salto Automatico dei Fillers</string>
