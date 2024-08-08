@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="it">
-    <string name="slogan">La NUOVA migliore app &amp; Anime e Manga per Android.</string>
+    <string name="slogan">La NUOVA Migliore app Anime &amp; Manga per Android.</string>
     <string name="login">Login</string>
     <string name="logout">Logout</string>
     <string name="anilist_link">https://anilist.co/user/%1$s/</string>
     <string name="myanilist_link">https://myanimelist.net/profile/%1$s/</string>
     <string name="discord_link">https://discord.com/users/%1$s/</string>
-    <string name="home">Pagina iniziale</string>
+    <string name="home">Home</string>
     <string name="anime">Anime</string>
-    <string name="browse_anime">Esplora gli Anime</string>
+    <string name="browse_anime">Sfoglia gli Anime</string>
     <string name="manga">Manga</string>
-    <string name="browse_manga">Esplora i Manga</string>
+    <string name="browse_manga">Sfoglia i Manga</string>
     <string name="novels">Romanzi</string>
     <string name="info">Info</string>
     <string name="watch">Guarda</string>
@@ -32,7 +32,7 @@
     <string name="trending_anime">Anime di Tendenza</string>
     <string name="popular_anime">Anime Popolari</string>
     <string name="trending_manga">Manga di Tendenza</string>
-    <string name="trending_novel">Romanzi in Tendenza</string>
+    <string name="trending_novel">Romanzi di Tendenza</string>
     <string name="popular_manga">Manga Popolari</string>
     <string name="username">Nome Utente</string>
     <string name="chapters_read">Capitoli Letti</string>
@@ -41,32 +41,32 @@
     <string name="episodes_watched_n">Episodi\nGuardati</string>
     <string name="continue_reading">Continua a Leggere</string>
     <string name="continue_watching">Continua a Guardare</string>
-    <string name="recommended">Raccomandati</string>
-    <string name="get_recommendations">Guarda/Leggi un po\' di Anime o Manga per ottenere Raccomandazioni</string>
+    <string name="recommended">Consigliati</string>
+    <string name="get_recommendations">Guarda/Leggi degli Anime o Manga per ottenere Consigli</string>
     <string name="empty">Tutto in regola, quando qualcosa di Nuovo?</string>
     <string name="action_settings">Impostazioni</string>
     <string name="add_list">Aggiungi alla Lista</string>
-    <string name="list_editor">Editor di Elenchi</string>
+    <string name="list_editor">Editor della Lista</string>
     <string name="add_fav">Aggiungi ai Preferiti</string>
     <string name="notifications">Notifiche</string>
     <string-array name="keys">
-        <item>Lettura</item>
+        <item>Leggendo</item>
         <item>Guardando</item>
         <item>Completato</item>
         <item>In Pausa</item>
         <item>Droppato</item>
-        <item>Pianificato</item>
+        <item>Pianificando</item>
         <item>Preferiti</item>
         <item>Riguardando</item>
         <item>Rileggendo</item>
-        <item>Tutto</item>
+        <item>Tutti</item>
     </string-array>
     <string name="nothing_here">Niente qui</string>
-    <string name="followers">Followers</string>
+    <string name="followers">Seguaci</string>
     <string name="write_a_message">Scrivi un Messaggio</string>
     <string name="status">STATO</string>
     <string-array name="status_anime">
-        <item>IN PIANIFICA</item>
+        <item>PIANIFICANDO</item>
         <item>GUARDANDO</item>
         <item>COMPLETATO</item>
         <item>RI-GUARDANDO</item>
@@ -74,7 +74,7 @@
         <item>DROPPATO</item>
     </string-array>
     <string-array name="status_manga">
-        <item>IN PIANIFICA</item>
+        <item>PIANIFICANDO</item>
         <item>LEGGENDO</item>
         <item>COMPLETATO</item>
         <item>RI-LEGGENDO</item>
@@ -95,15 +95,15 @@
     <string name="format">Formato</string>
     <string name="status_title">Stato</string>
     <string name="total_eps">Episodi Totali</string>
-    <string name="episodes"> Episodio(i)</string>
-    <string name="chapters"> Capitolo(i)</string>
+    <string name="episodes"> Episodi(o)</string>
+    <string name="chapters"> Capitolo/i</string>
     <string name="total_divider"> | %1$s</string>
     <string name="total_chaps">Capitoli Totali</string>
     <string name="ep_duration">Durata Media</string>
     <string name="min">" min"</string>
     <string name="season">Stagione</string>
     <string name="start_date">Data di Inizio</string>
-    <string name="end_date">Data Finale</string>
+    <string name="end_date">Data di Fine</string>
     <string name="source">Fonte</string>
     <string name="main_studio">Studio</string>
     <string name="genres">Generi</string>
@@ -121,48 +121,52 @@
     <string name="chaps">Capitoli</string>
     <string name="chap">Capitolo</string>
     <string name="wrong"><u>Titolo Errato?</u></string>
-    <string name="source_not_found">Non è emerso nulla da questa fonte.\n Cerchiamo altrove.</string>
-    <string name="download_not_found">I tuoi download si sentono un po\' soli…\n Prova a scaricare qualcosa.</string>
+    <string name="source_not_found">        Non è venuto fuori niente da questa fonte.\n
+        Cerchiamo altrove.
+    </string>
+    <string name="download_not_found">        I tuoi download si sentono un po\' soli…\n
+        Prova a scaricare qualcosa.
+    </string>
     <string name="not_supported">%1$s non è supportato!</string>
     <string name="server_selector">Seleziona il Server</string>
-    <string name="auto_select_server">Selezione Automatica del Server</string>
+    <string name="auto_select_server">Selezionando Automaticamente il Server</string>
     <string name="make_default">Rendi Predefinito</string>
     <string name="filler">Filler</string>
     <string name="adult">Adulto</string>
     <string name="list_only">Solo la Lista</string>
     <string name="tag">Tag</string>
-    <string name="tags">Tags</string>
+    <string name="tags">Tag</string>
     <string name="synonyms">Sinonimi</string>
     <string name="trailer">Trailer</string>
-    <string name="opening">Apertura</string>
-    <string name="ending">Finale</string>
+    <string name="opening">Sigla d\'Apertura</string>
+    <string name="ending">Sigla di Chiusura</string>
     <string name="prequel">Prequel</string>
     <string name="sequel">Sequel</string>
     <string name="anilist_settings">Impostazioni di Anilist</string>
     <string name="extension_settings">Estensioni</string>
-    <string name="downloads">Downloads</string>
+    <string name="downloads">Download</string>
     <string name="offline_mode">Modalità Offline</string>
     <string name="settings">Impostazioni</string>
     <string name="extensions">Estensioni</string>
-    <string name="extension_updates_available">Aggiornamenti dell\'estensioni disponibili</string>
-    <string name="player_settings">Impostazioni Player</string>
-    <string name="recentlyListOnly">Mostra i miei contenuti solo in \"Aggiornamenti recenti\"</string>
+    <string name="extension_updates_available">Aggiornamenti delle estensioni disponibili</string>
+    <string name="player_settings">Impostazioni del Lettore Video</string>
+    <string name="recentlyListOnly">Mostra solo i miei contenuti in \"Aggiornati Recentemente\"</string>
     <string name="download_manager_select">Gestore Download</string>
     <string name="downloadInSd">Download nella scheda SD</string>
     <string name="noSdFound">Non è stata trovata alcuna scheda SD.</string>
     <string name="reader_settings">Impostazioni del Lettore</string>
     <string name="default_source">Fonte Predefinita</string>
-    <string name="show_yt">Link di YouTube</string>
-    <string name="default_ep_view">Layout Predefinito dell\'Episodio</string>
-    <string name="default_chp_view">Impostazioni Predefinite dei Capitoli</string>
+    <string name="show_yt">Link di Youtube</string>
+    <string name="default_ep_view">Layout Predefinito degli Episodi</string>
+    <string name="default_chp_view">Layout Predefinito dei Capitoli</string>
     <string name="ui">Interfaccia Utente</string>
-    <string name="common">Comune</string>
+    <string name="common">Comuni</string>
     <string name="theme">Tema</string>
     <string name="ui_settings">Impostazioni UI</string>
     <string name="about">Informazioni</string>
-    <string name="desc">"    Dantotsu nasce dalle ceneri di Saikou e si basa su un'eleganza semplicistica ma all'avanguardia. È un client solo per Anilist, che consente anche di scaricare Anime in streaming tramite estensioni &amp; Manga.\nDantotsu significa letteralmente \"il meglio del meglio\" in giapponese. Noi vorremmo dire che questa è la migliore applicazione open source per anime e manga su Android, voi che ne dite?"</string>
+    <string name="desc">"    Dantotsu è realizzato dalle ceneri di Saikou e basato su un'eleganza semplice ma all'avanguardia. È un client solo per Anilist, che ti permette anche di scaricare Anime in streaming attraverso estensioni &amp; Manga.\nDantotsu significa letteralmente il \"meglio del meglio\" in giapponese. Beh, ci piacerebbe dire che questa è la migliore app open source per anime e manga su Android, tu cosa diresti?"</string>
     <string name="devs">Sviluppatori/Aiutanti</string>
-    <string name="disclaimer">Dichiarazione di Responsabilità</string>
+    <string name="disclaimer">Avvertenza</string>
     <string name="full_disclaimer">         - Dantotsu di per sé fornisce solo un tracker di anime e manga e non fornisce alcuna capacità di streaming o download di anime o manga.
         \n\n - Dantotsu o uno qualsiasi dei suoi sviluppatori/personale non ospita alcun contenuto all\'interno di Dantotsu. Tutte le immagini e le informazioni sugli anime/manga trovate nell\'app sono prese da varie API pubbliche (AniList, MyAnimeList, Kitsu).
         \n\n - Inoltre, tutti i link agli anime/manga trovati in Dantotsu sono presi da vari plugin di terze parti e non hanno affiliazione con Dantotsu o il suo personale.
@@ -716,7 +720,7 @@
     <string name="blur">Sfocatura</string>
     <string name="hide_scroll_bar">Nascondi la barra di scorrimento</string>
     <string name="share_profile">Condividi Profilo</string>
-    <string name="copy_user_id">Copy user ID</string>
+    <string name="copy_user_id">Copia ID utente</string>
     <string name="anilist_notification_filters">Filtri di notifica Anilist</string>
     <string name="anilist_notifications_checking_time">Frequenza di aggiornamento delle notifiche Anilist : %1$s</string>
     <string name="comment_notification_checking_time">Frequenza di aggiornamento delle notifiche dei commenti : %1$s</string>
@@ -812,13 +816,13 @@
     <string name="manga_desc">Scegli come leggere</string>
     <string name="extensions_desc">Gestisci i tuoi affidabili repository</string>
     <string name="addons_desc">Ottieni più funzionalità dalla tua app</string>
-    <string name="alsettings_desc">Change your AniList settings</string>
-    <string name="airing_notifications">Airing Anime notifications</string>
-    <string name="airing_notifications_desc">Get notified whenever a new episode drops</string>
-    <string name="display_adult_content">18+ Content</string>
-    <string name="display_adult_content_desc">Enable NSFW content</string>
-    <string name="restrict_messages">Restrict messages to following</string>
-    <string name="restrict_messages_desc">Allow only users I follow to message me</string>
+    <string name="alsettings_desc">Cambia le tue impostazioni di AniList</string>
+    <string name="airing_notifications">Notifiche degli Anime in onda</string>
+    <string name="airing_notifications_desc">Vieni notificato quando esce un nuovo episodio</string>
+    <string name="display_adult_content">Contenuto 18+</string>
+    <string name="display_adult_content_desc">Attiva contenuto NSFW</string>
+    <string name="restrict_messages">Limita messaggi ai seguiti</string>
+    <string name="restrict_messages_desc">Permetti solo agli utenti che seguo di messaggiarmi</string>
     <string name="notifications_desc">Personalizza le tue notizie e gli aggiornamenti</string>
     <string name="about_desc">Scopri di più su Dantotsu</string>
     <string name="faq_desc">Domande generali su Dantotsu</string>
@@ -950,6 +954,6 @@
     <string name="enable_forgot_password">Abilita \"Password dimenticata\" (tieni premuto il pulsante di cancellazione per 10 secondi)</string>
     <string name="hide_notification_dot">Nascondi Punto di Notifica</string>
     <string name="private_mode">Privato</string>
-    <string name="omega_cursed">you have been Ǫ̴̺̙͎̤̫͓̮̰̿͝M̴͇̤͗́̾̈́̑̍̿̈͌͝Ȅ̴̡̨̛͉̣̙̩̲̣̤̟̪̣̎͗̎̆̒̉͆̆̕ͅͅǴ̸̯̬̗̠̙͛͐̀̈͋̀̈̽́̎̿͘͘͝ͅĀ̶̧̲̀ͅ ̴̢̟͕̜̓̾̓C̶̬̜̰̘̝̱̫͓͙̭̈́͐͋̓̏̈̍̓̀̌̾̚Ư̸̛̤̱̈́͆̽͊͛̐̓́̑͘̕̕͝R̸̨̨͈̬̱̺͕̪̪̘͕͎̂͛́̅̆̓̀͝ͅS̴̨̨̛̩̭̗̹̰̭̥͉̮̝̠̓̔͆̂͊͆̀̈́̅̕͘̚͝È̴̢̛̝͈̳͉͈͒͒̒̄̏̈̈́D̸̢̡̨̜̞̩̼̫̹̗̮͛̀̈̋̾̇̕̕͜ͅ</string>
-    <string name="omega_freed">you have been freed</string>
+    <string name="omega_cursed">sei stato O̴̢̺͙̼̖̻̩͍̭͔̍̚M̶̨̻͉̲̅́́̑͝E̷̘̳̳̍̈́̿͛̕G̶͓̯͊͋̽̍̃̐̈̓͐̂̀̌̓͂͝A̴̖͔̖̬̖̬̻͇̠͙̗͙̽̌̅͜͠ ̶͈̭̟̫̄̉͂̋͂̕̕͝͠M̶̨͖̦̭̰̣͂͝Ą̴̛͖̥̘͓͇̟́͆́͛̒̇͊̐̂͝L̵̟͉̮̼̠̺͇͎̼̼̮̯̰͛̀̌͛́͊̎͂͋͘͘Ę̶̻̩̗̲̯̫͖̟̙͘͜͝ͅͅD̵̨͙̗̙̮̖̜̂̀̎E̶͖̼̩͕̭̬͖̦̠͗̂̓̍̀̒͠T̵̪̻̝̞̬̻̗̻͙͛̌̅̀͑̆͗̑́̐͘T̵͙͍͉͕̠͔̆̆̓̾͗̈O̷̢͉̮͖̎́̎̔̀̈̇̅̕͠͠</string>
+    <string name="omega_freed">sei stato liberato</string>
 </resources>
