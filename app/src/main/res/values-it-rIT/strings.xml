@@ -167,27 +167,27 @@
     <string name="desc">"    Dantotsu è realizzato dalle ceneri di Saikou e basato su un'eleganza semplice ma all'avanguardia. È un client solo per Anilist, che ti permette anche di scaricare Anime in streaming attraverso estensioni &amp; Manga.\nDantotsu significa letteralmente il \"meglio del meglio\" in giapponese. Beh, ci piacerebbe dire che questa è la migliore app open source per anime e manga su Android, tu cosa diresti?"</string>
     <string name="devs">Sviluppatori/Aiutanti</string>
     <string name="disclaimer">Avvertenza</string>
-    <string name="full_disclaimer">         - Dantotsu di per sé fornisce solo un tracker di anime e manga e non fornisce alcuna capacità di streaming o download di anime o manga.
-        \n\n - Dantotsu o uno qualsiasi dei suoi sviluppatori/personale non ospita alcun contenuto all\'interno di Dantotsu. Tutte le immagini e le informazioni sugli anime/manga trovate nell\'app sono prese da varie API pubbliche (AniList, MyAnimeList, Kitsu).
-        \n\n - Inoltre, tutti i link agli anime/manga trovati in Dantotsu sono presi da vari plugin di terze parti e non hanno affiliazione con Dantotsu o il suo personale.
-        \n\n - Dantotsu o i suoi proprietari non sono responsabili per un uso improprio di qualsiasi contenuto trovato all\'interno o all\'esterno dell\'app e non possono essere ritenuti responsabili per la distribuzione di qualsiasi contenuto trovato all\'interno dell\'app.
-        \n\n - Utilizzando Dantotsu, accetti il fatto che lo sviluppatore dell\'app non è responsabile di alcun contenuto trovato nell\'app. Accetti anche il fatto che non puoi utilizzare Dantotsu per scaricare o trasmettere in streaming alcun contenuto protetto da copyright.
-        \n\n - Se sono coinvolti problemi di violazione del diritto d\'autore su Internet, ti preghiamo di contattare il sito web di origine. Lo sviluppatore non assume alcuna responsabilità legale.
+    <string name="full_disclaimer">         - Dantotsu di per sé fornisce solo un tracker di anime e manga e non fornisce alcuna capacità di trasmettere o scaricare anime o manga.
+        \n\n - Dantotsu o qualsiasi suo sviluppatore/staff non ospita alcun contenuto trovato dentro Dantotsu. Qualsiasi e tutte le immagini ed informazioni di anime/manga trovate nell\'app sono prese da diverse API pubbliche (AniList, MyAnimeList, Kitsu).
+        \n\n - Inoltre, tutti i link di anime/manga trovati in Dantotsu sono presi da diversi plugin di terze parti e non hanno alcuna affiliazione con Dantotsu o il suo staff.
+        \n\n - Dantotsu o i suoi proprietari non sono responsabili per alcun uso improprio di alcun contenuto trovato dentro o fuori l\'app e non possono essere ritenuti responsabili per la distribuzione di alcun contenuto trovato dentro l\'app.
+        \n\n - Usando Dantotsu, rispetti il fatto che lo sviluppatore dell\'app non è responsabile per alcun contenuto trovato nell\'app. Accetti anche il fatto che non è consentito usare Dantotsu per scaricare o trasmettere alcun contenuto protetto da copyright.
+        \n\n - Se sono coinvolti problemi di violazione di internet, per favore contatta il sito della fonte. Lo sviluppatore non si assume alcuna responsabilità legale.
     </string>
     <string name="version_current">Versione %1$s</string>
     <string-array name="tips">
-        <item>È possibile fare un Clic Lungo su un episodio/capitolo per Contrassegnarlo come Letto.</item>
-        <item>Facendo un Clic Lungo sulle Schermate è possibile aprire direttamente l\'Editor di Elenchi.</item>
-        <item>Ci sono altri easter egg nascosti nell\'App.</item>
-        <item>Sfida: Vai in fondo alla classifica degli Anime e dei &amp; Manga più popolari</item>
-        <item>Prova a fare un Click Lungo sul Titolo della Mostra.</item>
+        <item>Puoi fare un Clic Lungo su un episodio/capitolo per Segnarlo come Letto.</item>
+        <item>Fare un Clic Lungo sugli Show può aprire direttamente l\'Editor della Lista.</item>
+        <item>Ci sono alcuni altri easter egg nascosti nell\'App.</item>
+        <item>Sfida: Vai in fondo agli Anime &amp; Manga Popolari</item>
+        <item>Prova a fare un Click Lungo sul Titolo dello Show.</item>
         <item>Dannazione, perché stai sprecando il tuo Tempo?</item>
-        <item>È possibile fare un Clic Lungo per copiare questo Messaggio.</item>
-        <item>ODDIO GUARDA! HAI TROVATO UN EASTER EGG!?</item>
+        <item>Puoi fare un Clic Lungo per copiare questo Messaggio.</item>
+        <item>OMD GUARDA! HAI TROVATO UN EASTER EGG!?</item>
         <item>Sai a chi altro piace questa Animazione?</item>
-        <item>Supporto MAL? Bruh.</item>
+        <item>Supporto MAL? bruh.</item>
         <item>Novels? Più simile a NO vels.</item>
-        <item>Fai un Clic Lungo sul logo per verificare l\'Aggiornamento dell\'App</item>
+        <item>Fai un Clic Lungo sul logo per verificare la presenza di un Aggiornamento dell\'App</item>
     </string-array>
     <string-array name="themes">
         <item>Predefinito</item>
@@ -198,21 +198,21 @@
     </string-array>
     <string name="video">Video</string>
     <string name="video_info">Mostra Info Video</string>
-    <string name="source_info">Mostra Nome Sorgente</string>
-    <string name="video_info_info">Mostra la Risoluzione del video in corso di riproduzione, utile per i server con<b>\"Qualità Multipla\"</b>.</string>
-    <string name="default_quality">Selezione Qualità Automatica</string>
+    <string name="source_info">Mostra Nome Fonte</string>
+    <string name="video_info_info">Mostra la Risoluzione del video in corso di riproduzione, utile per i server con <b>\"Qualità multipla\"</b>.</string>
+    <string name="default_quality">Selezione Automatica della Qualità</string>
     <string name="height">Altezza</string>
     <string name="width">Larghezza</string>
-    <string name="default_quality_info">Utilizza automaticamente la qualità più vicina fornita per impostazione predefinita, applicata SOLO ai server \"Qualità Multipla\". Cambia automaticamente quando si riproduce un video.</string>
+    <string name="default_quality_info">Utilizza automaticamente la qualità più vicina fornita per impostazione predefinita, applicata SOLO ai Server con \"Qualità Multipla\". Cambia automaticamente quando si riproduce un video.</string>
     <string name="default_playback_speed">Velocità di Riproduzione Predefinita: %1$s</string>
     <string name="cursed_speeds">Velocità Maledette</string>
     <string name="resize_mode_button">Modalità Ridimensionamento Predefinita</string>
     <string name="subtitles">Sottotitoli</string>
     <string name="subtitle_toggle">Sottotitoli</string>
-    <string name="primary_sub_color_select">Colore Sottotitoli</string>
-    <string name="secondary_sub_color_select">Colore Contorno Sottotitoli</string>
-    <string name="secondary_sub_outline_type_select">Tipo di Contorno del Sottotitolo</string>
-    <string name="sub_background_color_select">Colore di Sfondo dei Sottotitoli</string>
+    <string name="primary_sub_color_select">Colore dei Sottotitoli</string>
+    <string name="secondary_sub_color_select">Colore del Contorno dei Sottotitoli</string>
+    <string name="secondary_sub_outline_type_select">Tipo del Contorno dei Sottotitoli</string>
+    <string name="sub_background_color_select">Colore dello Sfondo dei Sottotitoli</string>
     <string name="sub_window_color_select">Colore della Finestra dei Sottotitoli</string>
     <string name="sub_window_color_info">"La finestra dei sottotitoli è la parte a sinistra e a destra di essi. (Dove non c'è lo sfondo)"</string>
     <string name="sub_color_info"><b>Nota:</b> La modifica delle impostazioni di cui sopra ha effetto solo sui sottotitoli soft!</string>
