@@ -288,7 +288,7 @@
     <string name="dns_info">Cambia se il tuo ISP blocca una qualsiasi fonte</string>
     <string name="selected_title_language">Lingua del Titolo Selezionata</string>
     <string name="selected_staff_language">Lingua dello Staff Selezionata</string>
-    <string name="selected_merge_time">Activity Merge Time</string>
+    <string name="selected_merge_time">Tempo di Unione dell\'Attività</string>
     <string name="selected_score_format">Scoring System</string>
     <string name="selected_time_zone">Timezone</string>
     <string name="selected_no_time_zone">No Timezone selected</string>
