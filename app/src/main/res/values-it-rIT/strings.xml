@@ -416,9 +416,9 @@
     <string name="long_click_to_check_update">Fai un Clic lungo per controllare gli aggiornamenti dell\'app</string>
     <string name="saved_to_path">Salvato su:\n%s</string>
     <string name="setting_progress">Impostazione del progresso al %1$d</string>
-    <string name="login_anilist_account">Per Favore Accedi con l\'account AniList!</string>
+    <string name="login_anilist_account">Accedi con l\'account AniList Per Favore!</string>
     <string name="congrats_vro">Congratulazioni Vro</string>
-    <string name="please_reload">Per Favore Ricarica.</string>
+    <string name="please_reload">Ricarica Per Favore.</string>
     <string name="copied_text">Copiato \"%1$s\"</string>
     <string name="back_to_exit">Premi nuovamente INDIETRO per uscire</string>
     <string name="no_internet_connection">Nessuna Connessione Internet</string>
@@ -436,57 +436,57 @@
     <string name="first_episode">Questo è il 1° Episodio!</string>
     <string name="reset_auto_update">Fai un clic lungo sul pulsante \"Editor della Lista\" per ripristinare l\'Aggiornamento Automatico</string>
     <string name="autoplay_cancelled">Riproduzione automatica annullata, nessuna interazione per più di 1 Ora.</string>
-    <string name="auto_select_server_error">Impossibile selezionare automaticamente il server, Per favore riprova!</string>
-    <string name="stream_selection_empty">Nessuna fonte di streaming disponibile! Prova con un\'altra fonte.</string>
-    <string name="logging_in_mal">Accesso a MAL</string>
-    <string name="getting_user_data">Recupero dei dati dell\'utente</string>
-    <string name="no_next_episode">Non è stato trovato il prossimo episodio!</string>
+    <string name="auto_select_server_error">Impossibile selezionare automaticamente il server, riprova Per Favore!</string>
+    <string name="stream_selection_empty">Nessuna trasmissione disponibile! Prova un\'altra fonte.</string>
+    <string name="logging_in_mal">Accedendo a MAL</string>
+    <string name="getting_user_data">Ottenendo i Dati dell\'Utente</string>
+    <string name="no_next_episode">Nessun episodio successivo trovato!</string>
     <string name="enable_banner_animations">Prova ad abilitare \"Animazioni Banner\" nelle impostazioni</string>
-    <string name="please_login_anilist">Effettua l\'accesso con Anilist!</string>
+    <string name="please_login_anilist">Accedi con Anilist Per Favore!</string>
     <string name="auto_update_reset">Il progresso dell\'Aggiornamento Automatico è stato ripristinato</string>
-    <string name="cant_wait">Non puoi aspettare, huh? Va bene X(</string>
-    <string name="downloading">Scaricamento…</string>
-    <string name="next_chapter_not_found">Capitolo successivo non trovato</string>
+    <string name="cant_wait">Non puoi aspettare, huh? va bene X(</string>
+    <string name="downloading">Scaricando…</string>
+    <string name="next_chapter_not_found">Capitolo Successivo Non Trovato</string>
     <string name="first_chapter">Questo è il 1° capitolo!</string>
-    <string name="adult_stuff">Contenuto per adulti&#40; &#865;&#176; &#860;&#662; &#865;&#176; &#41;</string>
+    <string name="adult_stuff">Roba per adulti?&#40; &#865;&#176; &#860;&#662; &#865;&#176; &#41;</string>
     <string name="what_did_you_open">Cosa hai aperto?</string>
     <string name="error_getting_data">Errore nel recupero dei dati da Anilist.</string>
-    <string name="empty_response">Risposta vuota! Forse il tuo Internet fa schifo?</string>
+    <string name="empty_response">Risposta vuota! Forse il tuo internet fa schifo?</string>
     <string name="error_loading_mal_user_data">Errore nel caricamento dei dati utente di MAL</string>
     <string name="error_loading_mal_data">Impossibile caricare i dati da MAL</string>
     <string name="error_loading_anilist_user_data">Errore nel caricamento dei dati utente di Anilist</string>
     <string name="episode_not_found">Impossibile trovare l\'episodio : %1$s</string>
-    <string name="list_updated">Elenco aggiornato</string>
-    <string name="deleted_from_list">Eliminato dall\'elenco</string>
-    <string name="no_list_id">Nessun ID elenco trovato…</string>
-    <string name="checking_for_update">Controllo aggiornamenti</string>
+    <string name="list_updated">Lista Aggiornata</string>
+    <string name="deleted_from_list">Eliminato dalla Lista</string>
+    <string name="no_list_id">Nessun ID Lista trovato…</string>
+    <string name="checking_for_update">Controllando gli Aggiornamenti</string>
     <string name="dont_show_again">Non mostrare più per la versione %1$s</string>
-    <string name="no_update_found">Nessun aggiornamento trovato</string>
-    <string name="downloading_update">Download aggiornamento %1$s</string>
-    <string name="permission_required">Per favore, concedi i permessi per accedere a File &amp; Cartelle dalle Impostazioni e riprova.</string>
-    <string name="started_downloading">Avvio download\n%1$s</string>
-    <string name="install_1dm">Per favore installa 1DM</string>
-    <string name="install_adm">Per favore installa ADM</string>
+    <string name="no_update_found">Nessun Aggiornamento Trovato</string>
+    <string name="downloading_update">Download Aggiornamento %1$s</string>
+    <string name="permission_required">Per favore, dai l\'autorizzazione per accedere ai File &amp; Cartelle dalle Impostazioni, &amp; Riprova.</string>
+    <string name="started_downloading">Avvio Download\n%1$s</string>
+    <string name="install_1dm">Installa 1DM per favore</string>
+    <string name="install_adm">Installa ADM per favore</string>
     <string name="error_getting_image_data">Errore nel recupero dei dati dell\'immagine</string>
     <string name="loading_image_failed">Caricamento immagine non riuscito</string>
     <string name="copied_device_info">Informazioni del dispositivo copiate</string>
-    <string name="anilist_down">Sembra che Anilist sia giù, forse prova a usare una VPN o puoi aspettare che ritorni.</string>
+    <string name="anilist_down">Sembra che Anilist non funzioni, forse prova ad usare una VPN o puoi aspettare che ritorni a funzionare.</string>
     <string name="failed_to_load_data">Impossibile caricare i dati salvati di %1$d</string>
     <string name="access_not_available">Impossibile ottenere l\'accesso</string>
     <string name="mal_login_uri_not_found">Accesso MAL: URI non trovato</string>
     <string name="mal_login_code_challenge_not_found">Accesso MAL: codeChallenge non trovato</string>
-    <string name="mal_login_code_not_present">Accesso MAL: codice non presente nell\'URI reindirizzato</string>
-    <string name="refresh_token_load_failed">Token di aggiornamento: impossibile caricare il token salvato</string>
-    <string name="refreshing_token_failed">Aggiornamento del token fallito</string>
+    <string name="mal_login_code_not_present">Accesso MAL: Codice non presente nell\'URI reindirizzato</string>
+    <string name="refresh_token_load_failed">Token di Aggiornamento: Impossibile caricare il token salvato</string>
+    <string name="refreshing_token_failed">Aggiornamento del Token Fallito</string>
     <string name="episode_release_countdown">L\'episodio %1$d sarà rilasciato tra</string>
     <string name="chapter_number">Capitolo %1$d</string>
     <string name="chapter_release_timeout">%1$s è stato disponibile per</string>
-    <string name="time_format">%1$d giorni %2$d ore %3$d minuti %4$d secondi</string>
+    <string name="time_format">%1$d giorni %2$d ore %3$d min %4$d sec</string>
     <string-array name="sort_by">
         <item>Punteggio</item>
         <item>Popolare</item>
-        <item>Trending</item>
-        <item>Nuove uscite</item>
+        <item>Tendenza</item>
+        <item>Nuove Uscite</item>
         <item>A-Z</item>
         <item>Z-A</item>
         <item>Puro dolore</item>
@@ -510,7 +510,7 @@
     <string name="watch_on_dantotsu">Guarda su Dantotsu</string>
     <string name="view_profile_in_dantotsu">Visualizza Profilo in Dantotsu</string>
     <string name="continue_episode">Continua: Episodio %1$s%2$s\n%3$s</string>
-    <string name="filler_tag"> - Riempitivo</string>
+    <string name="filler_tag"> - Filler</string>
     <string name="continue_chapter">Continua: %1$s\n%2$s</string>
     <string name="episode">"Episodio "</string>
     <string name="episode_num">"Episodio %1$s"</string>
@@ -890,7 +890,7 @@
     <string name="you">Tu</string>
     <string name="logout_confirm">Sei sicuro di voler uscire?</string>
     <string name="app_died">APP MORTA</string>
-    <string name="an_unexpected_error_occurred">Si è verificato un errore imprevisto.\nPer favore invia un report di crash allo sviluppatore :)</string>
+    <string name="an_unexpected_error_occurred">Si è verificato un errore imprevisto.\nPer favore, invia una segnalazione di crash allo sviluppatore :)</string>
     <string name="copy_report">Copia report</string>
     <string name="share_as_file">Condividi come file</string>
     <string name="hide_in_home_screen">Nascondi nella schermata home</string>
