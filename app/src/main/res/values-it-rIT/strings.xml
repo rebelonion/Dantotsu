@@ -517,47 +517,47 @@
     <string name="chapter">"Capitolo "</string>
     <string name="chapter_num">"Capitolo %1$s"</string>
     <string name="just_released">- Appena uscito!</string>
-    <string name="checking_subscriptions_title">Controllo delle Sottoscrizioni</string>
-    <string name="user_list">Lista di %1$s %2$s</string>
+    <string name="checking_subscriptions_title">Controllo delle Iscrizioni</string>
+    <string name="user_list">Lista %2$s di %1$s</string>
     <string name="speed">Velocità</string>
-    <string name="auto_update">Aggiornamento Automatico in Corso per %1$s?</string>
+    <string name="auto_update">Aggiorna Automaticamente il progresso per %1$s?</string>
     <string name="continue_from">Continua da %1$s?</string>
-    <string name="title_update_progress">Aggiornare i progressi di AniList?</string>
-    <string name="incognito_will_not_update">La modalità in incognito continuerà a ignorare i progressi.</string>
+    <string name="title_update_progress">Aggiorna il progresso su AniList?</string>
+    <string name="incognito_will_not_update">La modalità in incognito continuerà ad ignorare il progresso.</string>
     <string name="dont_ask_again">"Non chiedere di nuovo per %1$s"</string>
     <string name="default_speed">Velocità Predefinita</string>
     <string name="default_resize_mode">Modalità di Ridimensionamento Predefinita</string>
-    <string name="primary_sub_color">Colore Secondario Primario</string>
-    <string name="outline_sub_color">Sottocolore del Contorno</string>
+    <string name="primary_sub_color">Colore Primario dei Sub</string>
+    <string name="outline_sub_color">Colore del Contorno dei Sub</string>
     <string name="outline_type">Tipo di Contorno</string>
     <string name="subtitle_font">Font dei Sottotitoli</string>
     <string name="yes">Sì</string>
     <string name="no">No</string>
     <string name="ok">OK</string>
-    <string name="reset">Resetta</string>
+    <string name="reset">Ripristina</string>
     <string name="close">Chiudi</string>
     <string name="no_chapter">Nessun Capitolo</string>
-    <string name="content_18">Attiva i contenuti 18+ dalle impostazioni di Anilist</string>
+    <string name="content_18">Attiva i contenuti 18+ dalle tue impostazioni di Anilist</string>
     <string name="available">Disponibile</string>
     <string name="lets_go">Andiamo</string>
     <string name="cope">Affronta</string>
     <string name="watched_num">"Guardato "</string>
-    <string name="read_num">"Leggi "</string>
-    <string name="episodes_out_of">" fuori da "</string>
-    <string name="chapters_out_of">" fuori da "</string>
+    <string name="read_num">"Letti "</string>
+    <string name="episodes_out_of">" su "</string>
+    <string name="chapters_out_of">" su "</string>
     <string name="episodes_total_of">"Totale di "</string>
     <string name="chapters_total_of">"Totale di "</string>
     <string name="no_description_available">"Nessuna Descrizione Disponibile"</string>
     <string-array name="manga_directions">
-        <item>Da Cima a Fondo</item>
+        <item>Dall\'Alto al Basso</item>
         <item>Da Destra a Sinistra</item>
         <item>Dal Basso all\'Alto</item>
         <item>Da Sinistra a Destra</item>
     </string-array>
     <string-array name="manga_layouts">
-        <item>A Pagina</item>
-        <item>Continua a Pagina</item>
-        <item>Continua</item>
+        <item>Impaginato</item>
+        <item>Continuo Impaginato</item>
+        <item>Continuo</item>
     </string-array>
     <string name="selected">Selezionato</string>
     <string name="found">Trovato</string>
@@ -567,23 +567,23 @@
     <string name="male">Maschio</string>
     <string name="female">Femmina</string>
     <string name="question_1">Cosa è Dantotsu?</string>
-    <string name="answer_1">Dantotsu è creato dalle ceneri di Saikou e si basa su un\'eleganza semplice ma all\'avanguardia. È un cliente solo Anilist, che ti permette anche di trasmettere in streaming e scaricare Anime / Manga attraverso estensioni. \n&gt;Dantotsu (断トツ; Dan-totsu) significa letteralmente il migliore tra i migliori in giapponese. Beh, ci piacerebbe dire che questa è la migliore app open source per anime e manga su Android, ma hey, Provalo tu stesso &amp; giudica!</string>
-    <string name="question_2">Quali sono alcune caratteristiche di Dantotsu?</string>
-    <string name="answer_2">Alcune caratteristiche degne di nota di Dantotsu sono\n\n- Modo facile e funzionale sia per guardare anime che leggere manga e light novel, senza pubblicità.\n- Un\'app completamente open source con un\'interfaccia utente piacevole e animazioni\n- Supporto di plugin di terze parti \n- Sincronizza anime e manga in tempo reale con AniList. Categorizza facilmente anime e manga in base al tuo stato attuale. (Alimentato da AniList)\n- Trova tutti gli spettacoli utilizzando un elenco aggiornato e dettagliato di tutti gli anime in tendenza, popolari e in corso in base ai punteggi.\n- Visualizza dettagli estesi su spettacoli anime, film e titoli manga. Offre anche la possibilità di fare il conto alla rovescia per il prossimo episodio di anime in onda. (Alimentato da AniList &amp; MyAnimeList)</string>
-    <string name="question_3">Qual è la differenza tra le versioni Stabile, Beta e Alpha?</string>
-    <string name="answer_3">Una versione Stabile è una versione che è stata testata il più approfonditamente possibile ed è affidabile quanto possiamo renderla.\n\nUna versione Beta è una versione che è destinata a testare nuove funzionalità o fornire correzioni rapide.\n\nUna versione Alpha è simile a una versione beta ma ha molti bug e puoi trovarla solo sul nostro [server discord](https://discord.gg/invite/4HPZ5nAWwM). Viene aggiornato frequentemente ed ha una alta probabilità di rompersi.\n\nSe vuoi un\'app affidabile, scegli la Stabile. Se vuoi le ultime e migliori funzionalità e bug, vai con Alpha.</string>
+    <string name="answer_1">Dantotsu è realizzato dalle ceneri di Saikou e basato su un\'eleganza semplice ma all\'avanguardia. È un client solo per Anilist, che ti permette anche di trasmettere &amp; scaricare Anime / Manga attraverso le estensioni. \n&gt;Dantotsu (断トツ; Dan-totsu) significa letteralmente il meglio del meglio in Giapponese. Beh, ci piacerebbe dire che questa è la migliore app open source per anime e manga su Android, ma hey, Provala tu stesso &amp; giudica!</string>
+    <string name="question_2">Quali sono alcune funzioni di Dantotsu?</string>
+    <string name="answer_2">Alcune funzioni degne di nota di Dantotsu sono\n\n- Modo facile e funzionale sia per guardare anime che leggere manga e light novel, Senza Pubblicità.\n- Un\'app completamente open source con una UI bella &amp; Animazioni\n- Supporto di plugin di terze parti \n- Sincronizza anime e manga in tempo reale con AniList. Categorizza facilmente anime e manga in base al tuo stato attuale. (Alimentato da AniList)\n- Trova tutti gli show utilizzando una lista aggiornata accuratamente e frequentemente di tutti gli anime di tendenza, popolari e in corso in base ai punteggi.\n- Visualizza dettagli approfonditi su show anime, film e titoli manga. È anche in grado di fare il conto alla rovescia per il prossimo episodio degli anime in onda. (Alimentato da AniList &amp; MyAnimeList)</string>
+    <string name="question_3">Qual è la differenza tra le versioni Stabile, Beta &amp; Alpha?</string>
+    <string name="answer_3">Un rilascio Stabile è una versione che è stata testata il più approfonditamente possibile ed è tanto affidabile quanto possiamo renderla.\n\nUn rilascio Beta è una versione che è destinata a testare nuove funzioni o fornire correzioni rapide.\n\nUn rilascio Alpha è come una versione beta ma ha molti bug e puoi trovarla solo sul nostro server [discord](https://discord.gg/invite/4HPZ5nAWwM). Riceve aggiornamenti frequenti ed ha una alta probabilità di rompersi.\n\nSe vuoi un\'app affidabile allora scegli la Stabile. Se vuoi le ultime e migliori funzioni e bug, scegli l\'Alpha.</string>
     <string name="question_4">Dantotsu è disponibile per PC?</string>
-    <string name="answer_4">Attualmente no (sia per Windows che per Linux). Non c\'è alcuna stima su quando sarà disponibile. Ma puoi scaricare qualsiasi emulatore Android e eseguire Dantotsu su di esso. Per gli utenti di Windows 11, possono utilizzare il Sottosistema Windows per Android (WSA) per eseguire Dantotsu in Windows.</string>
+    <string name="answer_4">Attualmente no (sia per Windows che per Linux). Non c\'è alcuna stima su quando sarà disponibile. Ma puoi scaricare qualsiasi un emulatore Android ed eseguire Dantotsu su di esso. Per gli utenti di Windows 11, loro possono utilizzare il Sottosistema Windows per Android (WSA) per eseguire Dantotsu in Windows.</string>
     <string name="question_5">Dantotsu è disponibile per iOS?</string>
     <string name="answer_5">No, il meglio che possiamo fare è intagliare Dantotsu su una mela.</string>
     <string name="question_6">Perché le mie statistiche non si aggiornano?</string>
-    <string name="answer_6">Questo perché si aggiorna ogni 48 ore automaticamente (da Anilist). Se hai davvero bisogno di aggiornare le tue statistiche, puoi forzare l\'aggiornamento delle tue statistiche dopo essere andato a questo [link](https://anilist.co/settings/lists).</string>
+    <string name="answer_6">Questo perché si aggiorna ogni 48 ore automaticamente (da Anilist). Se hai davvero bisogno di aggiornare le tue statistiche, puoi forzare l\'aggiornamento delle tue statistiche dopo essere andato su questo [link](https://anilist.co/settings/lists).</string>
     <string name="question_7">Come scaricare Anime?</string>
-    <string name="answer_7">Ci sono due metodi di download. Interno ed esterno. Se scarichi internamente, allora può essere visualizzato all\'interno dell\'app e il tracciamento funzionerà normalmente. L\'altra opzione è utilizzare un downloader esterno. Richiede un gestore di download per scaricare e un lettore video separato per guardare. I download esterni non possono essere visualizzati all\'interno dell\'app Dantotsu.\n\n• Per scaricare internamente:\n\n1. Tocca il pulsante di download.\n2. La prima volta, ti chiederà di impostare una posizione di download. Tutti i tuoi download saranno memorizzati lì.\n3. Scegli il server e la qualità del video.\n4. Profitto.\n\n• Per scaricare esternamente:\n\n1. Scarica 1DM o ADM da Google Play Store.\n2. Entra nell\'app, concedi l\'accesso alla memoria e imposta le tue preferenze (velocità di download, percorso di download ecc. (opzionale))\n3. Vai ora su \Dantotsu &gt; Impostazioni &gt; Comune &gt; Gestori di download\ e scegli il gestore di download che hai appena configurato.\n4. Vai all\'episodio desiderato e premi sull\'icona di download di qualsiasi server. Potrebbe comparire un popup per impostare nuovamente le tue preferenze, basta premere su \"Download\" e verrà salvato nel percorso indicato.\n\nNota: I download esterni sono possibili anche senza un gestore ma non è consigliato.\n\nNota da Nerd: Gli episodi scaricati internamente sono memorizzati in \{la tua posizione impostata}/Dantotsu/Anime/*\nPuoi cambiare la tua posizione di download nelle impostazioni ma i tuoi episodi scaricati precedentemente non verranno più visualizzati nell\'app.</string>
+    <string name="answer_7">Ci sono due metodi di download. Interno ed esterno. Se scarichi internamente, allora può essere visualizzato all\'interno dell\'app e il tracciamento funzionerà normalmente. L\'altra opzione è di utilizzare un downloader esterno. Richiede un gestore di download per scaricare e un lettore video separato per guardare. I download esterni non possono essere visti all\'interno dell\'app Dantotsu.\n\n•Per scaricare internamente:\n\n1. Tocca il pulsante download.\n2. La prima volta, ti chiederà di impostare una posizione di download. Tutti i tuoi download saranno memorizzati lì.\n3. Scegli il server e la qualità video.\n4. Profitto.\n\n• Per scaricare esternamente:\n\n1. Scarica 1DM o ADM dal Google Play Store.\n2. Entra nell\'app, concedi l\'accesso alla memoria e imposta le tue preferenze (velocità di download, percorso di download ecc(opzionale))\n3. Ora vai su \'Dantotsu &gt; Impostazioni &gt; Comuni &gt; Gestori di Download\' e scegli il gestore di download che hai appena configurato.\n4. Vai al tuo episodio desiderato e premi sull\'icona di download di qualsiasi server. Potrebbe esserci un popup per impostare nuovamente le tue preferenze, basta premere su \"Download\" e verrà salvato nel percorso diretto.\n\nNota: I download esterni sono possibili anche senza un gestore ma non è consigliato.\n\nNota da Nerd: Gli episodi scaricati internamente sono memorizzati in \'{your set location}/Dantotsu/Anime/*`\nPuoi cambiare la tua posizione di download nelle impostazioni ma i tuoi episodi scaricati precedentemente non verranno più visualizzati nell\'app.</string>
     <string name="question_9">Come abilitare i contenuti NSFW?</string>
     <string name="answer_9">Puoi abilitare i contenuti NSFW abilitando i contenuti 18+ da questo [link](https://anilist.co/settings/media). Devi anche abilitare le estensioni NSFW in \`Impostazioni &gt; Estensioni &gt; Estensioni NSFW\` </string>
     <string name="question_10">Come importare le mie liste MAL/Kitsu in Anilist?</string>
-    <string name="answer_10">Ecco come si fa,\n\nEsporta:\n\n1. Vai a questo [link](https://malscraper.azurewebsites.net).\n2. Inserisci il tuo nome utente Kitsu/MAL e scarica entrambe le liste anime e manga. (Saranno in formato XML)\nNota: Devi scrivere il nome utente del tracker che hai selezionato\n\nImporta:\n\n1. Dopo aver esportato la tua lista anime e manga da Kitsu/MAL, vai ora [qui](https://anilist.co/settings/import) \n2. Seleziona/trascina il file XML anime nella casella qui sopra.\n|→ Seleziona/trascina il file XML manga nella casella qui sotto.</string>
+    <string name="answer_10">Ecco come si fa,\n\nEsporta:\n\n1. Vai a questo [link](https://malscraper.azurewebsites.net).\n2. Inserisci il tuo nome utente Kitsu/MAL e scarica entrambe le liste anime e manga. (Saranno in formato XML)\nNota: Devi scrivere il nome utente del tracker che hai selezionato\n\nImporta\n\n1. Dopo aver esportato la tua lista anime e manga da Kitsu/MAL, ora vai [qui](https://anilist.co/settings/import) \n2. Seleziona/trascina il file XML degli anime nella casella sopra.\n|→Seleziona/trascina il file XML dei manga nella casella sotto.</string>
     <string name="question_11">Come importare le mie liste Anilist/Kitsu in MAL?</string>
     <string name="answer_11">Ecco come si fa,\n\nEsporta:\n\n1. Vai a questo [link](https://malscraper.azurewebsites.net/). \n2. Inserisci il tuo nome utente Anilist/Kitsu ID nella casella \'Username/Kitsu User ID\'. \n3. Seleziona il tipo di lista e abilita \'update_on_import\'. \n4. Scarica il file; sarà in formato .xml. Assicurati di scaricare entrambe le liste Anime e Manga.\n\nImporta:\n1. Per importarlo nel tuo account MAL, vai a questo [link](https://myanimelist.net/import.php) e scegli \'Importazione da MyAnimeList\' come tipo di importazione. \n2. Premi su \'Scegli File\' e seleziona il file XML anime/manga della lista scaricata. \n3. Premi su \'Importa Dati\'. \nCongratulazioni, hai appena importato la lista selezionata nel tuo account MAL.</string>
     <string name="question_12">Perché non riesco a trovare un titolo di anime/manga specifico?</string>
