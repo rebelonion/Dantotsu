@@ -362,20 +362,20 @@
     <string name="login_with_anilist">Accedi con Anilist!</string>
     <string name="anilist">Anilist</string>
     <string name="account_help">Come funziona questo\?</string>
-    <string name="full_account_help">Dantotsu è un\'app basata su Anilist, quindi per sincronizzarti con il tuo account MAL, ha bisogno di un account Anilist per effettuare l\'accesso.
-        \nUna volta effettuato l\'accesso con entrambi gli account Anilist e MAL, l\'app aggiornerà automaticamente il tuo account MAL ogni volta che:
+    <string name="full_account_help">        Dantotsu è un\'App Basata su Anilist, quindi per sincronizzarsi con il tuo Account MAL, ha bisogno di un account Anilist per fare l\'accesso.
+        \nUna volta fatto l\'accesso con entrambi gli account Anilist e MAL, l\'app aggiornerà automaticamente il tuo account MAL quando:
         \n- Aggiungi un nuovo Media
-        \n- Modifica un Media
-        \n- Elimina un Media
+        \n- Modifichi un Media
+        \n- Cancelli un Media
 
-        \n\nNota: l\'app non sincronizzerà i vecchi Media da Anilist a MAL, si consiglia di sincronizzarli.
-        \n- Controlla __FAQ__ per _Metodo Semplice_
+        \n\nNota: L\'app non sincronizzerà i vecchi Media da Anilist a MAL, È consigliato sincronizzarli.
+        \n- Controlla il __FAQ__ per il _Metodo Facile_
 
-        \n\nE per _Intermedi_ :
+        \n\nE per gli _Intermedi_ :
         \n- [Come sincronizzare i dati di Anilist con MAL](https://anilist.co/forum/thread/2654)
         \n- [Come sincronizzare i dati di MAL con Anilist](https://anilist.co/forum/thread/3393)
 
-        \n\n_Non è necessario sincronizzare entrambi gli account MAL e Anilist._
+        \n\n_Non è richiesto sincronizzare entrambi gli account MAL e Anilist._
     </string>
     <string name="notification_for_checking_subscriptions">Notifica di controllo delle iscrizioni</string>
     <string name="use_alarm_manager">Usa il gestore delle allarmi</string>
