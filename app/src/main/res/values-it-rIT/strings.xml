@@ -509,14 +509,14 @@
     <string name="read_on_dantotsu">Leggi su Dantotsu</string>
     <string name="watch_on_dantotsu">Guarda su Dantotsu</string>
     <string name="view_profile_in_dantotsu">Visualizza Profilo in Dantotsu</string>
-    <string name="continue_episode">Continua: Episodio %1$s%2$s\n%3$s</string>
+    <string name="continue_episode">Continua : Episodio %1$s%2$s\n%3$s</string>
     <string name="filler_tag"> - Filler</string>
-    <string name="continue_chapter">Continua: %1$s\n%2$s</string>
+    <string name="continue_chapter">Continua : %1$s\n%2$s</string>
     <string name="episode">"Episodio "</string>
     <string name="episode_num">"Episodio %1$s"</string>
     <string name="chapter">"Capitolo "</string>
     <string name="chapter_num">"Capitolo %1$s"</string>
-    <string name="just_released">- Appena rilasciato!</string>
+    <string name="just_released">- Appena uscito!</string>
     <string name="checking_subscriptions_title">Controllo delle Sottoscrizioni</string>
     <string name="user_list">Lista di %1$s %2$s</string>
     <string name="speed">Velocità</string>
