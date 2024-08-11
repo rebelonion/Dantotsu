@@ -642,10 +642,10 @@
     <string name="installed_anime">Anime Installati</string>
     <string name="available_anime">Anime Disponibili</string>
     <string name="installed_manga">Manga installati</string>
-    <string name="color_picker">Selettore del colore</string>
+    <string name="color_picker">Selettore del Colore</string>
     <string name="random_selection">Selezione Casuale</string>
-    <string name="listed_in_library">Elencato nella Biblioteca</string>
-    <string name="incognito_mode">Modalità Incognito</string>
+    <string name="listed_in_library">Elencato nella Libreria</string>
+    <string name="incognito_mode">Modalità in Incognito</string>
     <string name="appwidget_text">ESEMPIO</string>
     <string name="configure">Configura</string>
     <string name="add_widget">Aggiungi widget</string>
