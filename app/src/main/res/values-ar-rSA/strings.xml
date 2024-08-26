@@ -131,7 +131,7 @@
     <string name="server_selector">حدد السيرفر</string>
     <string name="auto_select_server">التحديد التلقائي للخادم</string>
     <string name="make_default">الافتراضي</string>
-    <string name="filler">Filler</string>
+    <string name="filler">غير ضرورية</string>
     <string name="adult">للبالغين</string>
     <string name="list_only">القائمة فقط</string>
     <string name="tag">الخاصية</string>
