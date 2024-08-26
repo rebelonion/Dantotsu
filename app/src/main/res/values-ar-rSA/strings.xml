@@ -131,7 +131,7 @@
     <string name="server_selector">حدد السيرفر</string>
     <string name="auto_select_server">التحديد التلقائي للخادم</string>
     <string name="make_default">الافتراضي</string>
-    <string name="filler">غير ضرورية</string>
+    <string name="filler">غير ضرورية (فلر)</string>
     <string name="adult">للبالغين</string>
     <string name="list_only">القائمة فقط</string>
     <string name="tag">الخاصية</string>
@@ -297,8 +297,8 @@
     <string name="selected_time_zone">منطقة زمنية</string>
     <string name="selected_no_time_zone">لم يتم تحديد منطقة زمنية</string>
     <string name="selected_row_order">ترتيب القائمة الافتراضي</string>
-    <string name="custom_anime_list">Custom Anime Lists</string>
-    <string name="custom_manga_list">Custom Manga Lists</string>
+    <string name="custom_anime_list">قوائم أنمي مخصصة</string>
+    <string name="custom_manga_list">قوائم مانجا مخصصة</string>
     <string name="delete_custom_list">Delete Custom List</string>
     <string name="delete_custom_list_confirm">Are you sure you want to delete %1$s ?</string>
     <string name="keep_screen_on">إبقاء الشاشة قيد التشغيل</string>
