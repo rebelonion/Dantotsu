@@ -11,7 +11,7 @@ import kotlinx.serialization.json.decodeFromJsonElement
 
 object Anify {
     suspend fun fetchAndParseMetadata(id :Int): Map<String, Episode> {
-        val response = client.get("https://api.anify.tv/content-metadata/$id")
+        val response = client.get("https://anify.eltik.cc/content-metadata/$id")
             .parsed<JsonArray>().map {
                 Mapper.json.decodeFromJsonElement<AnifyElement>(it)
             }
