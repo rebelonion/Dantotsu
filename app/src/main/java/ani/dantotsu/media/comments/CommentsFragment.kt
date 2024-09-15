@@ -353,6 +353,7 @@ class CommentsFragment : Fragment() {
             }
         }
     }
+
     @SuppressLint("NotifyDataSetChanged")
     override fun onResume() {
         super.onResume()

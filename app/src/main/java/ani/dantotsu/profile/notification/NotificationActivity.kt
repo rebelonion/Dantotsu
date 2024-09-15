@@ -16,7 +16,8 @@ import ani.dantotsu.initActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
-import ani.dantotsu.profile.notification.NotificationFragment.Companion.NotificationType
+import ani.dantotsu.profile.notification.NotificationFragment.Companion.NotificationType.*
+import ani.dantotsu.profile.notification.NotificationFragment.Companion.newInstance
 import nl.joery.animatedbottombar.AnimatedBottomBar
 
 class NotificationActivity : AppCompatActivity() {
@@ -48,6 +49,7 @@ class NotificationActivity : AppCompatActivity() {
         binding.notificationBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
         val getOne = intent.getIntExtra("activityId", -1)
         if (getOne != -1) navBar.isVisible = false
+        binding.notificationViewPager.isUserInputEnabled = false
         binding.notificationViewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle, getOne)
         binding.notificationViewPager.setCurrentItem(selected, false)
         navBar.selectTabAt(selected)
@@ -59,13 +61,7 @@ class NotificationActivity : AppCompatActivity() {
                 newTab: AnimatedBottomBar.Tab
             ) {
                 selected = newIndex
-                binding.notificationViewPager.setCurrentItem(selected, true)
-            }
-        })
-        binding.notificationViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                navBar.selectTabAt(position)
+                binding.notificationViewPager.setCurrentItem(selected, false)
             }
         })
     }
@@ -83,11 +79,11 @@ class NotificationActivity : AppCompatActivity() {
         override fun getItemCount(): Int = if (id != -1) 1 else 4
 
         override fun createFragment(position: Int): Fragment = when (position) {
-            0 -> NotificationFragment.newInstance(NotificationType.USER)
-            1 -> NotificationFragment.newInstance(if (id != -1) NotificationType.ONE else NotificationType.MEDIA, id)
-            2 -> NotificationFragment.newInstance(NotificationType.SUBSCRIPTION)
-            3 -> NotificationFragment.newInstance(NotificationType.COMMENT)
-            else -> NotificationFragment.newInstance(NotificationType.MEDIA)
+            0 -> newInstance(if (id != -1) ONE else USER, id)
+            1 -> newInstance(MEDIA)
+            2 -> newInstance(SUBSCRIPTION)
+            3 -> newInstance(COMMENT)
+            else -> newInstance(MEDIA)
         }
     }
 }

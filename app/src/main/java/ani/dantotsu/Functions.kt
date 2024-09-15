@@ -68,7 +68,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.AttrRes
-import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -98,6 +97,7 @@ import ani.dantotsu.databinding.ItemCountDownBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.notifications.IncognitoNotificationClickReceiver
+import ani.dantotsu.others.AlignTagHandler
 import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.others.SpoilerPlugin
 import ani.dantotsu.parsers.ShowResponse
@@ -119,8 +119,8 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withC
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.Target
-import com.bumptech.glide.request.target.ViewTarget
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -1449,6 +1449,8 @@ fun openOrCopyAnilistLink(link: String) {
         } else {
             copyToClipboard(link, true)
         }
+    } else if (getYoutubeId(link).isNotEmpty()) {
+        openLinkInYouTube(link)
     } else {
         copyToClipboard(link, true)
     }
@@ -1485,6 +1487,7 @@ fun buildMarkwon(
                     TagHandlerNoOp.create("h1", "h2", "h3", "h4", "h5", "h6", "hr", "pre", "a")
                 )
             }
+            plugin.addHandler(AlignTagHandler())
         })
         .usePlugin(GlideImagesPlugin.create(object : GlideImagesPlugin.GlideStore {
 
@@ -1527,4 +1530,12 @@ fun buildMarkwon(
         }))
         .build()
     return markwon
+}
+
+
+
+fun getYoutubeId(url: String): String {
+    val regex = """(?:youtube\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|(?:youtu\.be|youtube\.com)/)([^"&?/\s]{11})|youtube\.com/""".toRegex()
+    val matchResult = regex.find(url)
+    return matchResult?.groupValues?.getOrNull(1) ?: ""
 }

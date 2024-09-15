@@ -23,12 +23,12 @@ import ani.dantotsu.databinding.ActivitySettingsBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.openLinkInBrowser
-import ani.dantotsu.openLinkInYouTube
 import ani.dantotsu.others.AppUpdater
 import ani.dantotsu.others.CustomBottomDialog
 import ani.dantotsu.pop
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.startMainActivity
 import ani.dantotsu.statusBarHeight
@@ -217,10 +217,14 @@ class SettingsActivity : AppCompatActivity() {
             settingsLogo.setSafeOnClickListener {
                 cursedCounter++
                 (settingsLogo.drawable as Animatable).start()
-                if (cursedCounter % 7 == 0) {
-                    toast(R.string.you_cursed)
-                    openLinkInYouTube(getString(R.string.cursed_yt))
-                    //PrefManager.setVal(PrefName.ImageUrl, !PrefManager.getVal(PrefName.ImageUrl, false))
+                if (cursedCounter % 16 == 0) {
+                    val oldVal: Boolean = PrefManager.getVal(PrefName.OC)
+                    if (!oldVal) {
+                        toast(R.string.omega_cursed)
+                    } else {
+                        toast(R.string.omega_freed)
+                    }
+                    PrefManager.setVal(PrefName.OC, !oldVal)
                 } else {
                     snackString(array[(Math.random() * array.size).toInt()], context)
                 }

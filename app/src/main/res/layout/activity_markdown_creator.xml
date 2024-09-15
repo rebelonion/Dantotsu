@@ -92,6 +92,21 @@
                 android:textIsSelectable="true"
                 android:textSize="18sp"
                 tools:ignore="LabelFor" />
+
+            <TextView
+                android:id="@+id/markdownPreview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:gravity="top|start"
+                android:hint="@string/reply_hint"
+                android:nestedScrollingEnabled="true"
+                android:padding="16dp"
+                android:textColor="?attr/colorOnBackground"
+                android:textIsSelectable="true"
+                android:textSize="18sp"
+                android:visibility="gone"
+                tools:ignore="LabelFor" />
         </LinearLayout>
     </ScrollView>
 

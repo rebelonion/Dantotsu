@@ -49,7 +49,10 @@ class StatusActivity : AppCompatActivity(), StoriesCallback {
         if (activity.getOrNull(position) != null) {
             val startFrom = findFirstNonMatch(watchedActivity, activity[position].activity )
             val startIndex = if ( startFrom > 0) startFrom else 0
-            binding.stories.setStoriesList(activity[position].activity, this, startIndex + 1)
+            binding.stories.setStoriesList(
+                activityList = activity[position].activity,
+                startIndex = startIndex + 1
+            )
         } else {
             Logger.log("index out of bounds for position $position of size ${activity.size}")
             finish()
@@ -92,7 +95,7 @@ class StatusActivity : AppCompatActivity(), StoriesCallback {
             val startFrom = findFirstNonMatch(watchedActivity, activity[position].activity )
             val startIndex= if ( startFrom > 0) startFrom else 0
             binding.stories.startAnimation(slideOutLeft)
-            binding.stories.setStoriesList(activity[position].activity, this, startIndex + 1)
+            binding.stories.setStoriesList(activity[position].activity, startIndex + 1)
             binding.stories.startAnimation(slideInRight)
         } else {
             finish()
@@ -107,7 +110,7 @@ class StatusActivity : AppCompatActivity(), StoriesCallback {
             val startFrom = findFirstNonMatch(watchedActivity, activity[position].activity )
             val startIndex = if ( startFrom > 0) startFrom else 0
             binding.stories.startAnimation(slideOutRight)
-            binding.stories.setStoriesList(activity[position].activity, this, startIndex + 1)
+            binding.stories.setStoriesList(activity[position].activity,startIndex + 1)
             binding.stories.startAnimation(slideInLeft)
         } else {
             finish()

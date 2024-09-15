@@ -66,7 +66,7 @@
     <string name="empty">All caught up, when New?</string>
     <string name="action_settings">Settings</string>
 
-    <string name="add">Add to List</string>
+    <string name="add_list">Add to List</string>
     <string name="list_editor">List Editor</string>
     <string name="add_fav">Add to Favourites</string>
     <string name="notifications">Notifications</string>
@@ -83,8 +83,7 @@
         <item>All</item>
     </string-array>
 
-    <string name="no_notifications">No more notifications</string>
-    <string name="no_activities">No more activities</string>
+    <string name="nothing_here">Nothing here</string>
     <string name="followers">Followers</string>
     <string name="write_a_message">Write a Message</string>
     <string name="status">STATUS</string>
@@ -332,7 +331,20 @@
     <string name="prefer_dub">Prefer Dubbed Anime</string>
     <string name="none">None</string>
     <string name="selected_dns">Selected DNS</string>
+    <string name="anime_manga">Anime and Manga</string>
+    <string name="list_settings">List Settings</string>
     <string name="dns_info">Change if your ISP blocks any source</string>
+    <string name="selected_title_language">Selected Title Language</string>
+    <string name="selected_staff_language">Selected Staff Language</string>
+    <string name="selected_merge_time">Activity Merge Time</string>
+    <string name="selected_score_format">Scoring System</string>
+    <string name="selected_time_zone">Timezone</string>
+    <string name="selected_no_time_zone">No Timezone selected</string>
+    <string name="selected_row_order">Default List Order</string>
+    <string name="custom_anime_list">Custom Anime Lists</string>
+    <string name="custom_manga_list">Custom Manga Lists</string>
+    <string name="delete_custom_list">Delete Custom List</string>
+    <string name="delete_custom_list_confirm">Are you sure you want to delete %1$s ?</string>
     <string name="keep_screen_on">Keep Screen On</string>
     <string name="layout">Layout</string>
     <string name="spaced_pages">Spaced Pages</string>
@@ -391,7 +403,6 @@
     <string name="faq">FAQ</string>
     <string name="accounts">Accounts</string>
     <string name="addons">Add-ons</string>
-    <string name="addons_desc">Get more features out of your app</string>
     <string name="myanimelist">MyAnimeList</string>
     <string name="login_with_anilist">Login with Anilist!</string>
     <string name="anilist">Anilist</string>
@@ -803,6 +814,8 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="blur">Blur</string>
     <string name="hide_scroll_bar">Hide Scroll Bar</string>
     <string name="view_on_anilist" translatable="false">View on AniList</string>
+    <string name="share_profile">Share Profile</string>
+    <string name="copy_user_id" >Copy user ID</string>
     <string name="anilist_notification_filters">Filter Notifications</string>
     <string name="anilist_notifications_checking_time">Anilist notifications update frequency : %1$s</string>
     <string name="comment_notification_checking_time">Comment notifications update frequency : %1$s</string>
@@ -908,11 +921,20 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="unknown_track">\[%1$s\] Unknown</string>
     <string name="accounts_desc">Anilist, MAL and Discord.\nWhat more could you need?</string>
     <string name="theme_desc">Change the vibe of your app</string>
-    <string name="extensions_desc">Manage your reliable repositories</string>
     <string name="common_desc">UI and other mischievous stuff</string>
-    <string name="notifications_desc">Customise your news and updates</string>
     <string name="anime_desc">Choose how you watch</string>
     <string name="manga_desc">Choose how you read</string>
+    <string name="extensions_desc">Manage your reliable repositories</string>
+    <string name="addons_desc">Get more features out of your app</string>
+    <string name="alsettings_desc">Change your AniList settings</string>
+    <string name="airing_notifications">Airing Anime notifications</string>
+    <string name="airing_notifications_desc">Get notified whenever a new episode drops</string>
+    <string name="display_adult_content">18+ Content</string>
+    <string name="display_adult_content_desc">Enable NSFW content</string>
+    <string name="restrict_messages">Restrict messages to following</string>
+    <string name="restrict_messages_desc">Allow only users I follow to message me</string>
+
+    <string name="notifications_desc">Customise your news and updates</string>
     <string name="about_desc">Learn more about Dantotsu</string>
     <string name="faq_desc">General questions about Dantotsu</string>
     <string name="check_app_updates_desc">Check Github for app updates</string>
@@ -966,6 +988,7 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="update_addon">Add-on update available</string>
     <string name="install_addon">Install Add-on</string>
     <string name="download_addon_not_found">Add-on not found</string>
+
     <string name="image">Image</string>
     <string name="clear_history">Clear History</string>
     <string name="failed_ext_install_conflict">Failed to install extension due to conflict</string>
@@ -1043,5 +1066,7 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="enable_forgot_password">Enable Forgot Password (hold clear button for 10 seconds)</string>
     <string name="hide_notification_dot">Hide Notification Dot</string>
     <string name="private_mode">Private</string>
+    <string name="omega_cursed">you have been Ǫ̴̺̙͎̤̫͓̮̰̿͝M̴͇̤͗́̾̈́̑̍̿̈͌͝Ȅ̴̡̨̛͉̣̙̩̲̣̤̟̪̣̎͗̎̆̒̉͆̆̕ͅͅǴ̸̯̬̗̠̙͛͐̀̈͋̀̈̽́̎̿͘͘͝ͅĀ̶̧̲̀ͅ ̴̢̟͕̜̓̾̓C̶̬̜̰̘̝̱̫͓͙̭̈́͐͋̓̏̈̍̓̀̌̾̚Ư̸̛̤̱̈́͆̽͊͛̐̓́̑͘̕̕͝R̸̨̨͈̬̱̺͕̪̪̘͕͎̂͛́̅̆̓̀͝ͅS̴̨̨̛̩̭̗̹̰̭̥͉̮̝̠̓̔͆̂͊͆̀̈́̅̕͘̚͝È̴̢̛̝͈̳͉͈͒͒̒̄̏̈̈́D̸̢̡̨̜̞̩̼̫̹̗̮͛̀̈̋̾̇̕̕͜ͅ</string>
+    <string name="omega_freed">you have been freed</string>
 
 </resources>

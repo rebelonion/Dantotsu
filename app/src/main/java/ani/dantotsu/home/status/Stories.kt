@@ -49,7 +49,6 @@ import kotlin.math.abs
 class Stories @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr), View.OnTouchListener {
-    private lateinit var activity: FragmentActivity
     private lateinit var binding: FragmentStatusBinding
     private lateinit var activityList: List<Activity>
     private lateinit var storiesListener: StoriesCallback
@@ -80,10 +79,9 @@ class Stories @JvmOverloads constructor(
 
 
     fun setStoriesList(
-        activityList: List<Activity>, activity: FragmentActivity, startIndex: Int = 1
+        activityList: List<Activity>, startIndex: Int = 1
     ) {
         this.activityList = activityList
-        this.activity = activity
         this.storyIndex = startIndex
         addLoadingViews(activityList)
     }
@@ -368,7 +366,9 @@ class Stories @JvmOverloads constructor(
                         if (
                             story.status?.contains("completed") == false &&
                             !story.status.contains("plans") &&
-                            !story.status.contains("repeating")
+                            !story.status.contains("repeating")&&
+                            !story.status.contains("paused")&&
+                            !story.status.contains("dropped")
                         ) {
                             "of ${story.media?.title?.userPreferred}"
                         } else {
@@ -389,7 +389,7 @@ class Stories @JvmOverloads constructor(
                             story.media?.id
                         ),
                         ActivityOptionsCompat.makeSceneTransitionAnimation(
-                            activity,
+                            (it.context as FragmentActivity),
                             binding.coverImage,
                             ViewCompat.getTransitionName(binding.coverImage)!!
                         ).toBundle()
@@ -427,7 +427,7 @@ class Stories @JvmOverloads constructor(
         binding.activityReplies.setColorFilter(ContextCompat.getColor(context, R.color.bg_opp))
         binding.activityRepliesContainer.setOnClickListener {
             RepliesBottomDialog.newInstance(story.id)
-                .show(activity.supportFragmentManager, "replies")
+                .show((it.context as FragmentActivity).supportFragmentManager, "replies")
         }
         binding.activityLike.setColorFilter(if (story.isLiked == true) likeColor else notLikeColor)
         binding.activityLikeCount.text = story.likeCount.toString()
@@ -435,10 +435,9 @@ class Stories @JvmOverloads constructor(
             like()
         }
         binding.activityLikeContainer.setOnLongClickListener {
-            val context = activity
             UsersDialogFragment().apply {
                 userList(userList)
-                show(context.supportFragmentManager, "dialog")
+                show((it.context as FragmentActivity).supportFragmentManager, "dialog")
             }
             true
         }
@@ -508,6 +507,8 @@ class Stories @JvmOverloads constructor(
                             leftPanelTouch()
                         } else if (event.x > rightQuarter) {
                             rightPanelTouch()
+                        } else {
+                            resume()
                         }
                     } else {
                         resume()
@@ -524,7 +525,8 @@ class Stories @JvmOverloads constructor(
                     }
                 }
                 val deltaX = event.x - startX
-                if (abs(deltaX) > swipeThreshold) {
+                val deltaY = event.y - startY
+                if (abs(deltaX) > swipeThreshold && !(abs(deltaY) > 10)) {
                     if (deltaX > 0) onStoriesPrevious()
                     else onStoriesCompleted()
                 }

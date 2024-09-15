@@ -19,6 +19,7 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="29" />
@@ -131,10 +132,11 @@
         </activity>
         <activity android:name=".others.calc.CalcActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".settings.FAQActivity" />
-        <activity android:name=".settings.ReaderSettingsActivity" />
+        <activity android:name=".settings.AnilistSettingsActivity"/>
         <activity android:name=".settings.UserInterfaceSettingsActivity" />
         <activity android:name=".settings.PlayerSettingsActivity" />
+        <activity android:name=".settings.ReaderSettingsActivity" />
+        <activity android:name=".settings.FAQActivity" />
         <activity
             android:name=".settings.SettingsActivity"
             android:parentActivityName=".MainActivity" />
@@ -202,7 +204,7 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".util.ActivityMarkdownCreator"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize|stateVisible" />
         <activity android:name=".parsers.ParserTestActivity" />
         <activity
             android:name=".media.ReviewActivity"

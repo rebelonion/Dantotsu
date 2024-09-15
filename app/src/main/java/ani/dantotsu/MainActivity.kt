@@ -2,7 +2,6 @@ package ani.dantotsu
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.drawable.Animatable
@@ -60,11 +59,11 @@ import ani.dantotsu.settings.saving.SharedPreferenceBooleanLiveData
 import ani.dantotsu.settings.saving.internal.PreferenceKeystore
 import ani.dantotsu.settings.saving.internal.PreferencePackager
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.util.AudioHelper
 import ani.dantotsu.util.Logger
 import ani.dantotsu.util.customAlertDialog
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputEditText
 import eu.kanade.domain.source.service.SourcePreferences
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
@@ -313,7 +312,6 @@ class MainActivity : AppCompatActivity() {
             mainViewPager.adapter =
                 ViewPagerAdapter(supportFragmentManager, lifecycle)
             mainViewPager.setPageTransformer(ZoomOutPageTransformer())
-            mainViewPager.offscreenPageLimit = 1
             navbar.selectTabAt(selectedOption)
             navbar.setOnTabSelectListener(object :
                 AnimatedBottomBar.OnTabSelectListener {
@@ -456,7 +454,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
+        if (PrefManager.getVal(PrefName.OC)) {
+            AudioHelper.run(this, R.raw.audio)
+            PrefManager.setVal(PrefName.OC, false)
+        }
         val torrentManager = Injekt.get<TorrentAddonManager>()
         fun startTorrent() {
             if (torrentManager.isAvailable() && PrefManager.getVal(PrefName.TorrentEnabled)) {
