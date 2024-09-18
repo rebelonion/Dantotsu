@@ -159,7 +159,7 @@ dependencies {
     implementation 'ru.beryukhov:flowreactivenetwork:1.0.4'
     implementation 'ca.gosyer:voyager-navigator:1.0.0-rc07'
     implementation 'com.squareup.logcat:logcat:0.1'
-    implementation 'com.github.inorichi.injekt:injekt-core:65b0440'
+    implementation 'uy.kohesive.injekt:injekt-core:1.16.+'
     implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.12'
     implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.12'
     implementation 'com.squareup.okhttp3:okhttp-dnsoverhttps'
