@@ -27,7 +27,7 @@
     <string name="search_results">Resultados da Busca</string>
     <string name="sort_by">Ordenar por</string>
     <string name="genre">Gênero</string>
-    <string name="top_score">Maiores Notas</string>
+    <string name="top_score">Melhores</string>
     <string name="updated">Novos Episódios</string>
     <string name="trending_anime">Animes em Alta</string>
     <string name="popular_anime">Animes Populares</string>
@@ -61,9 +61,9 @@
         <item>Relendo</item>
         <item>Todos</item>
     </string-array>
-    <string name="nothing_here">Nada aqui</string>
+    <string name="nothing_here">Nada por aqui</string>
     <string name="followers">Seguidores</string>
-    <string name="write_a_message">Escrever uma mensagem</string>
+    <string name="write_a_message">Escreva uma mensagem</string>
     <string name="status">STATUS</string>
     <string-array name="status_anime">
         <item>PLANEJANDO</item>
