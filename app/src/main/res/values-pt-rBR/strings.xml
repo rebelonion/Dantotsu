@@ -90,8 +90,8 @@
     <string name="delete">Excluir</string>
     <string name="remove">Remover</string>
     <string name="name">Nome</string>
-    <string name="name_romaji">Nome em Romanji</string>
-    <string name="mean_score">Nota</string>
+    <string name="name_romaji">Nome em Romaji</string>
+    <string name="mean_score">Nota Média</string>
     <string name="format">Formato</string>
     <string name="status_title">Status</string>
     <string name="total_eps">Número de Episódios</string>
@@ -144,7 +144,7 @@
     <string name="offline_mode">Modo Offline</string>
     <string name="settings">Configurações</string>
     <string name="extensions">Extensões</string>
-    <string name="extension_updates_available">Atualizações de extensão disponíveis</string>
+    <string name="extension_updates_available">Algumas extensões têm atualizações</string>
     <string name="player_settings">Configurações do Player</string>
     <string name="recentlyListOnly">Mostrar apenas minha lista em \"Novos Episódios\"</string>
     <string name="download_manager_select">Gerenciador de Download</string>
@@ -160,7 +160,7 @@
     <string name="theme">Tema</string>
     <string name="ui_settings">Configurações da UI</string>
     <string name="about">Sobre</string>
-    <string name="desc">"    Dantotsu foi criado a partir das cinzas do Saikou e baseado em elegância simplista mas de última geração. É um cliente Anilist, que te permite transmitir-baixar Animes e Mangás através de extensões.\nDantotsu literalmente significa o \"melhor dos melhores\" em japonês. Bom, gostaríamos de dizer que é o melhor aplicativo de código aberto para anime e mangá no Android, mas o que você acha?"</string>
+    <string name="desc">"    Dantotsu foi criado a partir das cinzas do Saikou e baseado em elegância simplista mas de última geração. É um cliente Anilist, que te permite transmitir-baixar Animes e Mangás através de extensões.\nDantotsu literalmente significa o \"melhor dos melhores\" em japonês. Bom, gostaríamos de dizer que é o melhor aplicativo open-source para anime e mangá no Android, mas o que você acha?"</string>
     <string name="devs">Desenvolvedores/Ajudantes</string>
     <string name="disclaimer">Aviso</string>
     <string name="full_disclaimer">         - Dantotsu por si só apenas disponibiliza um meio de catalogar mangás e animes e não provém nenhum recurso de streaming ou download de anime ou mangá.
@@ -175,14 +175,14 @@
         <item>Você pode manter pressionado em um episódio/capítulo para marcar como assistido/lido.</item>
         <item>Manter pressionado em um show pode diretamente abrir o Editor de Lista.</item>
         <item>Você pode encontrar alguns outros easter eggs escondidos no app.</item>
-        <item>Um desafio: Chegue no final da página de Animes e Mangás Populares</item>
+        <item>Um desafio: Chegue ao final da página de Animes ou Mangás Populares</item>
         <item>Tente manter pressionado o nome de um show.</item>
         <item>Por que você está perdendo seu tempo com isso?</item>
         <item>Você pode manter pressionado para copiar essa mensagem.</item>
         <item>MEU DEUS, OLHA! VOCÊ ACHOU UM EASTER EGG!?</item>
         <item>Sabe quem mais gosta dessa animação?</item>
         <item>Suporte para MAL? Sério?</item>
-        <item>Novels? ta mais para NO vels.</item>
+        <item>Aqui era para ter uma piada, mas não deu pra traduzir :P (foi mal ae)</item>
         <item>Mantenha a logo pressionada para procurar por atualizações</item>
     </string-array>
     <string-array name="themes">
@@ -193,7 +193,7 @@
         <item> Tema 4</item>
     </string-array>
     <string name="video">Vídeo</string>
-    <string name="video_info">Exibir Informações do Vídeo</string>
+    <string name="video_info">Exibir Informações de Vídeo</string>
     <string name="source_info">Exibir Nome da Fonte</string>
     <string name="video_info_info">Mostra qual é a resolução do vídeo atual, útil para servidores <b>\"Multi Qualidade\"</b>.</string>
     <string name="default_quality">Seleção de Qualidade Automática</string>
@@ -327,7 +327,7 @@
     <string name="other">Outro</string>
     <string name="total_repeats">REPETIÇÕES TOTAIS</string>
     <string name="custom_lists">Listas Personalizadas</string>
-    <string name="donate_desc">Quer apoiar o Desenvolvedor do Dantotsu?\nConsidere uma Doação</string>
+    <string name="donate_desc">Quer apoiar o Desenvolvedor do Dantotsu?\nConsidere fazer uma Doação :D</string>
     <string name="donate_goal">Sem meta de doações no momento</string>
     <string name="filter">Filtro</string>
     <string name="year">Ano</string>
@@ -378,9 +378,9 @@
     <string name="use_alarm_manager_reliable">Usar o Alarm Manager para Notificações Confiáveis</string>
     <string name="use_alarm_manager_confirm">Usar o Alarm Manager pode ajudar a combater à otimização de bateria, mas pode gastá-la mais. Também requere a permissão do Alarm Manager.</string>
     <string name="use">Usar</string>
-    <string name="remove_all_subscriptions">Remover todas as assinaturas</string>
-    <string name="remove_all_subscriptions_desc">Tem certeza de que deseja remover todas as assinaturas para %1$s?</string>
-    <string name="checking_subscriptions">Notificação para Verificar Inscrições</string>
+    <string name="remove_all_subscriptions">Remover todas as inscrições</string>
+    <string name="remove_all_subscriptions_desc">Tem certeza de que deseja remover todas as inscrições para %1$s?</string>
+    <string name="checking_subscriptions">Notificação ao Verificar Inscrições</string>
     <string name="subscriptions_checking_time_s">Frequência de Atualização de Inscrições: %1$s</string>
     <string name="subscriptions_checking_time">Frequência de Atualização de Inscrições</string>
     <string name="subscriptions_info">Quantidade de tempo para o Dantotsu periodicamente procurar por novos Episódios/Capítulos\n(Menos tempo causará maior consumo de bateria)</string>
@@ -398,7 +398,7 @@
     <string name="installed">Instalado</string>
     <string name="error_message">Erro: %1$s</string>
     <string name="install_step">Passo: %1$s</string>
-    <string name="review">Análise</string>
+    <string name="review">Conferir</string>
     <string name="reviews">Avaliações</string>
     <string name="discord_nothing_button">Exibir apenas o primeiro botão</string>
     <string name="discord_dantotsu_button">Exibir Dantotsu no segundo botão</string>
@@ -406,7 +406,7 @@
     <string name="discord_rich_presence">Discord Rich Presence</string>
     <string name="stream_on_dantotsu">Transmitir no Dantotsu</string>
     <string name="view_my_anilist">Ver minha Anilist</string>
-    <string name="jobless_message">CÉUS! É ISSO QUE CHAMAM DE DESEMPREGO?\nVOCÊ CHEGOU AO FIM</string>
+    <string name="jobless_message">CÉUS! É ISSO QUE CHAMAM DE DESEMPREGO?\nVocê chegou ao fim</string>
     <string name="file_manager_not_found">Não foi possível achar um Gerenciador de Arquivos para abrir o cartão SD</string>
     <string name="error_loading_data">Erro carregando dados %1$s</string>
     <string name="long_click_to_check_update">Mantenha pressionado para procurar por atualizações do app</string>
@@ -447,7 +447,7 @@
     <string name="adult_stuff">Conteúdo Adulto?&#40; &#865;&#176; &#860;&#662; &#865;&#176; &#41;</string>
     <string name="what_did_you_open">O que foi que você abriu?</string>
     <string name="error_getting_data">Erro ao obter dados do Anilist.</string>
-    <string name="empty_response">Erro de conexão! Você esperava encontrar um pedido de desculpas, MAS ERA EU, DIO!</string>
+    <string name="empty_response">Resposta Vazia! Erro de conexão? Você esperava encontrar um pedido de desculpas, MAS ERA EU, DIO!</string>
     <string name="error_loading_mal_user_data">Erro ao carregar dados de usuário de MAL</string>
     <string name="error_loading_mal_data">Falha ao carregar dados de MAL</string>
     <string name="error_loading_anilist_user_data">Erro ao carregar dados de usuário de Anilist</string>
@@ -684,7 +684,7 @@
     <string name="following">Seguindo</string>
     <string name="unfollow">Deixar de seguir</string>
     <string name="follows_you">Segue você</string>
-    <string name="mutual">Mútuo</string>
+    <string name="mutual">Amigos</string>
     <string name="success">Sucesso</string>
     <string name="error">Ocorreu um erro</string>
     <string name="error_msg">Erro: %1$s</string>
@@ -756,7 +756,7 @@
     <string name="button_backup">Backup</string>
     <string name="no_location_selected">Nenhuma localização selecionada</string>
     <string name="enjoying_app">Curtindo o App?</string>
-    <string name="consider_donating">Considere uma doação!</string>
+    <string name="consider_donating">Considere fazer uma doação!</string>
     <string name="no_moners">to liso :(</string>
     <string name="you_be_rich">Sem problemas, logo você vai ser rico :prayge:</string>
     <string name="donate">doar :)</string>
@@ -787,7 +787,7 @@
     <string name="trending_manhwa">Manhwas em Alta</string>
     <string name="liked_by">Curtido por</string>
     <string name="adult_only_content">Apenas conteúdo adulto</string>
-    <string name="dir_error">O caminho não pode ser definido</string>
+    <string name="dir_error">O caminho não pôde ser definido</string>
     <string name="dir_access">Acesso aos downloads</string>
     <string name="dir_access_msg">Por favor, escolha uma pasta para salvar seus downloads</string>
     <string name="change_download_location">Mudar Localização dos Downloads</string>
