@@ -846,7 +846,7 @@
     <string name="user_agent_desc">更改您的默认用户代理</string>
     <string name="force_legacy_installer_desc">使用传统安装程序安装扩展（适用于较旧的安卓手机）</string>
     <string name="skip_loading_extension_icons_desc">不加载扩展页面上的图标</string>
-    <string name="NSFWExtention_desc">从搜索中删除 18+ 扩展（可能会删除一些有用的扩展）</string>
+    <string name="NSFWExtention_desc">Enable 18+ extensions from search (May remove some useful extensions)</string>
     <string name="reader_settings_desc">所有与阅读器相关的设置</string>
     <string name="purge_manga_downloads_desc">删除所有已下载的漫画</string>
     <string name="purge_novel_downloads_desc">删除所有已下载的小说</string>
