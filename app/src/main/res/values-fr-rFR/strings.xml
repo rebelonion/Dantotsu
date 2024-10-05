@@ -847,7 +847,7 @@
     <string name="user_agent_desc">Changez votre agent utilisateur par défaut</string>
     <string name="force_legacy_installer_desc">Utilisez l\'ancien programme d\'installation pour installer des extensions (pour les anciens appareils Android)</string>
     <string name="skip_loading_extension_icons_desc">Ne pas charger les icônes d\'extensions sur la page d\'extension</string>
-    <string name="NSFWExtention_desc">Supprimer les extensions 18+ de la recherche (peut supprimer certaines extensions utiles)</string>
+    <string name="NSFWExtention_desc">Enable 18+ extensions from search (May remove some useful extensions)</string>
     <string name="reader_settings_desc">Toutes les configurations liées au lecteur de livre</string>
     <string name="purge_manga_downloads_desc">Supprimer tous les manga téléchargés</string>
     <string name="purge_novel_downloads_desc">Supprimer tous les romans téléchargés</string>
