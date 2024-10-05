@@ -850,7 +850,7 @@
     <string name="user_agent_desc">Varsayılan User Agent\'ı değiştir</string>
     <string name="force_legacy_installer_desc">Eklentileri indirmek için Legacy Installer\'ı kullanın (Eski Android telefonlar içindir)</string>
     <string name="skip_loading_extension_icons_desc">Eklentiler sayfasında eklentilerin ikonlarını yükleme</string>
-    <string name="NSFWExtention_desc">18+ eklentileri aramalardan kaldır (Bazı yararlı eklentilerin kaldırılmasına neden olabilir)</string>
+    <string name="NSFWExtention_desc">Enable 18+ extensions from search (May remove some useful extensions)</string>
     <string name="reader_settings_desc">Okuyucu ile alakalı tüm ayarlar</string>
     <string name="purge_manga_downloads_desc">Tüm indirilen Mangaları sil</string>
     <string name="purge_novel_downloads_desc">Tüm indirilen Romanları sil</string>
