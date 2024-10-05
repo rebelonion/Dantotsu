@@ -846,7 +846,7 @@
     <string name="user_agent_desc">デフォルトのユーザーエージェントを変更する</string>
     <string name="force_legacy_installer_desc">拡張機能をインストールするためにレガシーインストーラーを使用する（古いAndroid端末向け）</string>
     <string name="skip_loading_extension_icons_desc">拡張機能ページのアイコンをロードしない</string>
-    <string name="NSFWExtention_desc">検索から18+の拡張機能を削除します（一部の有用な拡張機能も削除される可能性があります）</string>
+    <string name="NSFWExtention_desc">Enable 18+ extensions from search (May remove some useful extensions)</string>
     <string name="reader_settings_desc">すべてのリーダー関連の設定</string>
     <string name="purge_manga_downloads_desc">すべてのダウンロードしたマンガを削除する</string>
     <string name="purge_novel_downloads_desc">すべてのダウンロードした小説を削除する</string>
