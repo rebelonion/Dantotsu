@@ -844,7 +844,7 @@
     <string name="user_agent_desc">Cambia tu agente de usuario predeterminado</string>
     <string name="force_legacy_installer_desc">Utilice el instalador heredado para instalar extensiones (para teléfonos Android más antiguos)</string>
     <string name="skip_loading_extension_icons_desc">No cargue íconos de extensiones en la página de extensiones</string>
-    <string name="NSFWExtention_desc">Remover extensiones +18 (puede eliminar algunas extensiones útiles)</string>
+    <string name="NSFWExtention_desc">Enable 18+ extensions from search (May remove some useful extensions)</string>
     <string name="reader_settings_desc">Todas las configuraciones relacionadas con el lector</string>
     <string name="purge_manga_downloads_desc">Eliminar todos los mangas descargados</string>
     <string name="purge_novel_downloads_desc">Eliminar todas las novelas descargadas</string>
