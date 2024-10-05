@@ -849,7 +849,7 @@
     <string name="user_agent_desc">قم بتغيير وكيل المستخدم الافتراضي الخاص بك</string>
     <string name="force_legacy_installer_desc">استخدم المثبت القديم لتثبيت الامتدادت (لهواتف الاندرويد القديمة)</string>
     <string name="skip_loading_extension_icons_desc">لا تقم بتحميل أيقونات الامتدادات على صفحة الامتدادات</string>
-    <string name="NSFWExtention_desc">إزالة الامتدادات فوق ال18 سنه من البحث (قد تتم إزالة بعض الإضافات المفيدة)</string>
+    <string name="NSFWExtention_desc">Enable 18+ extensions from search (May remove some useful extensions)</string>
     <string name="reader_settings_desc">جميع الإعدادات المتعلقة بتطبيق القراءة</string>
     <string name="purge_manga_downloads_desc">حذف جميع المانجا التي تم تنزيلها</string>
     <string name="purge_novel_downloads_desc">حذف جميع الروايات التي تم تنزيلها</string>
