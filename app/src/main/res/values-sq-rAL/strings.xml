@@ -850,7 +850,7 @@
     <string name="user_agent_desc">Ndryshoni agjentin tuaj të përdoruesit të parazgjedhur</string>
     <string name="force_legacy_installer_desc">Përdor instaluesin e vjetër për të instaluar shtesat (Për telefonat më të vjetër Android)</string>
     <string name="skip_loading_extension_icons_desc">Mos ngarkoni ikonat e shtesave në faqen e shtesave</string>
-    <string name="NSFWExtention_desc">Hiqni shtesat 18+ nga kërkimi (Mund të hiqni disa shtesa të dobishme)</string>
+    <string name="NSFWExtention_desc">Enable 18+ extensions from search (May remove some useful extensions)</string>
     <string name="reader_settings_desc">Të gjitha cilësimet e lidhura me lexuesin</string>
     <string name="purge_manga_downloads_desc">Fshini të gjitha Mangat e shkarkuara</string>
     <string name="purge_novel_downloads_desc">Fshini të gjitha Novelat e shkarkuara</string>
