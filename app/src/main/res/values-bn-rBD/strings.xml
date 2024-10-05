@@ -854,7 +854,7 @@
     <string name="user_agent_desc">আপনার ডিফল্ট ব্যবহারকারী এজেন্ট পরিবর্তন করুন</string>
     <string name="force_legacy_installer_desc">এক্সটেনশন ইনস্টল করতে পুরোনো অ্যান্ড্রয়েড ফোনের জন্য লেগেসি ইনস্টলার ব্যবহার করুন</string>
     <string name="skip_loading_extension_icons_desc">এক্সটেনশন পেজে এক্সটেনশনগুলির আইকন লোড করা না করুন</string>
-    <string name="NSFWExtention_desc">সার্চ থেকে ১৮+ এক্সটেনশন সরান (কিছু গুরুত্বপূর্ণ এক্সটেনশন সরে যেতে পারে)</string>
+    <string name="NSFWExtention_desc">Enable 18+ extensions from search (May remove some useful extensions)</string>
     <string name="reader_settings_desc">সব রিডার সম্পর্কিত সেটিংস</string>
     <string name="purge_manga_downloads_desc">সমস্ত ডাউনলোড করা ম্যাঙ্গা মুছে ফেলুন</string>
     <string name="purge_novel_downloads_desc">সমস্ত ডাউনলোড করা উপন্যাস মুছে ফেলুন</string>
