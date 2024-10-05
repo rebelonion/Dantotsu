@@ -846,7 +846,7 @@
     <string name="user_agent_desc">Αλλάξτε τον προεπιλεγμένο παράγοντα χρήστη</string>
     <string name="force_legacy_installer_desc">Χρησιμοποιήστε το πρόγραμμα εγκατάστασης παλαιού τύπου για να εγκαταστήσετε επεκτάσεις (Για παλαιότερα τηλέφωνα Android)</string>
     <string name="skip_loading_extension_icons_desc">Μην φορτώνετε εικονίδια επεκτάσεων στη σελίδα επέκτασης</string>
-    <string name="NSFWExtention_desc">Κατάργηση 18+ επεκτάσεων από την αναζήτηση (Μπορεί να αφαιρεθούν ορισμένες χρήσιμες επεκτάσεις)</string>
+    <string name="NSFWExtention_desc">Enable 18+ extensions from search (May remove some useful extensions)</string>
     <string name="reader_settings_desc">Όλες οι ρυθμίσεις που σχετίζονται με τον Αναγνώστη</string>
     <string name="purge_manga_downloads_desc">Διαγραφή όλων των ληφθέντων Manga</string>
     <string name="purge_novel_downloads_desc">Διαγραφή όλων των ληφθέντων Μυθιστορημάτων</string>
