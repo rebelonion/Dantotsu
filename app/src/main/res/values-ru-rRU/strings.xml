@@ -846,7 +846,7 @@
     <string name="user_agent_desc">Измените свой ​​стандартный пользовательский агент</string>
     <string name="force_legacy_installer_desc">Используйте устаревший установщик для установки расширений (для старых телефонов на Android)</string>
     <string name="skip_loading_extension_icons_desc">Не загружать иконки расширений на странице расширений</string>
-    <string name="NSFWExtention_desc">Удалить расширения 18+ из поиска (может удалить некоторые полезные расширения)</string>
+    <string name="NSFWExtention_desc">Enable 18+ extensions from search (May remove some useful extensions)</string>
     <string name="reader_settings_desc">Все настройки, связанные с читалкой</string>
     <string name="purge_manga_downloads_desc">Удалить все загруженные манга</string>
     <string name="purge_novel_downloads_desc">Удалить все загруженные романы</string>
