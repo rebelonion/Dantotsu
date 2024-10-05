@@ -846,7 +846,7 @@
     <string name="user_agent_desc">Verander je standaard gebruikersagent</string>
     <string name="force_legacy_installer_desc">Gebruik de legacy-installateur om extensies te installeren (Voor oudere Android-telefoons)</string>
     <string name="skip_loading_extension_icons_desc">Laad geen pictogrammen van extensies op de extensiepagina</string>
-    <string name="NSFWExtention_desc">Verwijder 18+ extensies uit zoekopdrachten (Kan enkele nuttige extensies verwijderen)</string>
+    <string name="NSFWExtention_desc">Enable 18+ extensions from search (May remove some useful extensions)</string>
     <string name="reader_settings_desc">Alle instellingen met betrekking tot de lezer</string>
     <string name="purge_manga_downloads_desc">Verwijder alle gedownloade Manga</string>
     <string name="purge_novel_downloads_desc">Verwijder alle gedownloade Novels</string>
