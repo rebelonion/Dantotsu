@@ -850,7 +850,7 @@
     <string name="user_agent_desc">আপোনাৰ ডিফল্ট ব্যৱহাৰকাৰী এজেণ্ট সলনি কৰক</string>
     <string name="force_legacy_installer_desc">পুৰাতন এণ্ড্ৰয়ড ফোনসমূহৰ বাবে পুৰাতন ইণ্স্টলাৰ ব্যৱহাৰ কৰক (এক্সটেনছন ইণ্স্টল কৰিবলৈ)</string>
     <string name="skip_loading_extension_icons_desc">এক্সটেনছনৰ পৃষ্ঠাৰ উপৰত চিত্ৰসমূহ ল\'ড নকৰিব</string>
-    <string name="NSFWExtention_desc">Enable 18+ extensions from search (May remove some useful extensions)</string>
+    <string name="NSFWExtention_desc">সন্ধানৰ পৰা ১৮+ এক্সটেনছনসমূহ সামৰ্থবান কৰক (কিছুমান উপযোগী এক্সটেনছনসমূহ আঁতৰাব পাৰে)</string>
     <string name="reader_settings_desc">সকলো পঠনকাৰীৰ সম্পৰ্কীয় ছেটিংসমূহ</string>
     <string name="purge_manga_downloads_desc">সকলো ডাউনল\'ড কৰা মাঙ্গা মচি পাবলৈ</string>
     <string name="purge_novel_downloads_desc">সকলো ডাউনল\'ড কৰা উপন্যাস মচি পাবলৈ</string>
