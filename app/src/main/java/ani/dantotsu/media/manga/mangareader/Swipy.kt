@@ -8,6 +8,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import android.widget.FrameLayout
+import kotlin.math.absoluteValue
 
 class Swipy @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
@@ -40,47 +41,33 @@ class Swipy @JvmOverloads constructor(
     private var initialDown = 0f
     private var initialMotion = 0f
 
-    enum class VerticalPosition {
-        Top,
+    enum class ScrollPosition {
         None,
-        Bottom
+        Start,
+        End,
+        Both
     }
 
-    enum class HorizontalPosition {
-        Left,
-        None,
-        Right
-    }
+    private var scrollPos = ScrollPosition.None
 
-    private var horizontalPos = HorizontalPosition.None
-    private var verticalPos = VerticalPosition.None
+    private fun setScrollPosition() = child?.run {
+        val (top, bottom) = if (vertical)
+            !canScrollVertically(-1) to !canScrollVertically(1)
+        else
+            !canScrollHorizontally(-1) to !canScrollHorizontally(1)
 
-    private fun setChildPosition() {
-        child?.apply {
-            if (vertical) {
-                verticalPos = VerticalPosition.None
-                if (!canScrollVertically(1)) {
-                    verticalPos = VerticalPosition.Bottom
-                }
-                if (!canScrollVertically(-1)) {
-                    verticalPos = VerticalPosition.Top
-                }
-            } else {
-                horizontalPos = HorizontalPosition.None
-                if (!canScrollHorizontally(1)) {
-                    horizontalPos = HorizontalPosition.Right
-                }
-                if (!canScrollHorizontally(-1)) {
-                    horizontalPos = HorizontalPosition.Left
-                }
-            }
+        scrollPos = when {
+            top && !bottom -> ScrollPosition.Start
+            !top && bottom -> ScrollPosition.End
+            top && bottom -> ScrollPosition.Both
+            else -> ScrollPosition.None
         }
     }
 
+
     private fun canChildScroll(): Boolean {
-        setChildPosition()
-        return if (vertical) verticalPos == VerticalPosition.None
-        else horizontalPos == HorizontalPosition.None
+        setScrollPosition()
+        return scrollPos == ScrollPosition.None
     }
 
     private fun onSecondaryPointerUp(ev: MotionEvent) {
@@ -107,6 +94,7 @@ class Swipy @JvmOverloads constructor(
                 if (pointerIndex < 0) {
                     return false
                 }
+
                 initialDown = if (vertical) ev.getY(pointerIndex) else ev.getX(pointerIndex)
             }
 
@@ -147,40 +135,26 @@ class Swipy @JvmOverloads constructor(
 
             MotionEvent.ACTION_MOVE -> {
                 pointerIndex = ev.findPointerIndex(activePointerId)
-                if (pointerIndex < 0) {
-                    //("Got ACTION_MOVE event but have an invalid active pointer id.")
-                    return false
-                }
+                if (pointerIndex < 0) return false
+
                 val pos = if (vertical) ev.getY(pointerIndex) else ev.getX(pointerIndex)
                 startDragging(pos)
-                if (isBeingDragged) {
-                    val overscroll = (
-                            if (vertical)
-                                if (verticalPos == VerticalPosition.Top) pos - initialMotion else initialMotion - pos
-                            else
-                                if (horizontalPos == HorizontalPosition.Left) pos - initialMotion else initialMotion - pos
-                            ) * DRAG_RATE
 
-                    if (overscroll > 0) {
-                        parent.requestDisallowInterceptTouchEvent(true)
-                        if (vertical) {
-                            val totalDragDistance =
-                                Resources.getSystem().displayMetrics.heightPixels / dragDivider
-                            if (verticalPos == VerticalPosition.Top)
-                                topBeingSwiped.invoke(overscroll * 2 / totalDragDistance)
-                            else
-                                bottomBeingSwiped.invoke(overscroll * 2 / totalDragDistance)
-                        } else {
-                            val totalDragDistance =
-                                Resources.getSystem().displayMetrics.widthPixels / dragDivider
-                            if (horizontalPos == HorizontalPosition.Left)
-                                leftBeingSwiped.invoke(overscroll / totalDragDistance)
-                            else
-                                rightBeingSwiped.invoke(overscroll / totalDragDistance)
-                        }
-                    } else {
-                        return false
-                    }
+                if (!isBeingDragged) return false
+
+                val overscroll = getDiff(pos) * DRAG_RATE
+                if (overscroll.absoluteValue <= 0) return false
+
+                parent.requestDisallowInterceptTouchEvent(true)
+
+                if (vertical) {
+                    val dragDistance =
+                        Resources.getSystem().displayMetrics.heightPixels / dragDivider
+                    performSwiping(overscroll, dragDistance, topBeingSwiped, bottomBeingSwiped)
+                } else {
+                    val dragDistance =
+                        Resources.getSystem().displayMetrics.widthPixels / dragDivider
+                    performSwiping(overscroll, dragDistance, leftBeingSwiped, rightBeingSwiped)
                 }
             }
 
@@ -196,11 +170,11 @@ class Swipy @JvmOverloads constructor(
             MotionEvent.ACTION_POINTER_UP -> onSecondaryPointerUp(ev)
             MotionEvent.ACTION_UP -> {
                 if (vertical) {
-                    topBeingSwiped.invoke(0f)
-                    bottomBeingSwiped.invoke(0f)
+                    topBeingSwiped(0f)
+                    bottomBeingSwiped(0f)
                 } else {
-                    rightBeingSwiped.invoke(0f)
-                    leftBeingSwiped.invoke(0f)
+                    rightBeingSwiped(0f)
+                    leftBeingSwiped(0f)
                 }
                 pointerIndex = ev.findPointerIndex(activePointerId)
                 if (pointerIndex < 0) {
@@ -209,12 +183,7 @@ class Swipy @JvmOverloads constructor(
                 }
                 if (isBeingDragged) {
                     val pos = if (vertical) ev.getY(pointerIndex) else ev.getX(pointerIndex)
-                    val overscroll = (
-                            if (vertical)
-                                if (verticalPos == VerticalPosition.Top) pos - initialMotion else initialMotion - pos
-                            else
-                                if (horizontalPos == HorizontalPosition.Left) pos - initialMotion else initialMotion - pos
-                            ) * DRAG_RATE
+                    val overscroll = getDiff(pos) * DRAG_RATE
                     isBeingDragged = false
                     finishSpinner(overscroll)
                 }
@@ -227,34 +196,67 @@ class Swipy @JvmOverloads constructor(
         return true
     }
 
+    private fun getDiff(pos: Float) = when (scrollPos) {
+        ScrollPosition.None -> 0f
+        ScrollPosition.Start, ScrollPosition.Both -> pos - initialMotion
+        ScrollPosition.End -> initialMotion - pos
+    }
+
     private fun startDragging(pos: Float) {
-        val posDiff =
-            if ((vertical && verticalPos == VerticalPosition.Top) || (!vertical && horizontalPos == HorizontalPosition.Left))
-                pos - initialDown
-            else
-                initialDown - pos
+        val posDiff = getDiff(pos).absoluteValue
         if (posDiff > touchSlop && !isBeingDragged) {
             initialMotion = initialDown + touchSlop
             isBeingDragged = true
         }
     }
 
-    private fun finishSpinner(overscrollDistance: Float) {
+    private fun performSwiping(
+        overscrollDistance: Float,
+        totalDragDistance: Int,
+        startBlock: (Float) -> Unit,
+        endBlock: (Float) -> Unit
+    ) {
+        val distance = overscrollDistance * 2 / totalDragDistance
+        when (scrollPos) {
+            ScrollPosition.Start -> startBlock(distance)
+            ScrollPosition.End -> endBlock(distance)
+            ScrollPosition.Both -> {
+                startBlock(distance)
+                endBlock(-distance)
+            }
+            else -> {}
+        }
+    }
 
+    private fun performSwipe(
+        overscrollDistance: Float,
+        totalDragDistance: Int,
+        startBlock: () -> Unit,
+        endBlock: () -> Unit
+    ) {
+        fun check(distance: Float, block: () -> Unit) {
+            if (distance * 2 > totalDragDistance)
+                block.invoke()
+        }
+        when (scrollPos) {
+            ScrollPosition.Start -> check(overscrollDistance) { startBlock() }
+            ScrollPosition.End -> check(overscrollDistance) { endBlock() }
+            ScrollPosition.Both -> {
+                check(overscrollDistance) { startBlock() }
+                check(-overscrollDistance) { endBlock() }
+            }
+
+            else -> {}
+        }
+    }
+
+    private fun finishSpinner(overscrollDistance: Float) {
         if (vertical) {
             val totalDragDistance = Resources.getSystem().displayMetrics.heightPixels / dragDivider
-            if (overscrollDistance * 2 > totalDragDistance)
-                if (verticalPos == VerticalPosition.Top)
-                    onTopSwiped.invoke()
-                else
-                    onBottomSwiped.invoke()
+            performSwipe(overscrollDistance, totalDragDistance, onTopSwiped, onBottomSwiped)
         } else {
             val totalDragDistance = Resources.getSystem().displayMetrics.widthPixels / dragDivider
-            if (overscrollDistance > totalDragDistance)
-                if (horizontalPos == HorizontalPosition.Left)
-                    onLeftSwiped.invoke()
-                else
-                    onRightSwiped.invoke()
+            performSwipe(overscrollDistance, totalDragDistance, onLeftSwiped, onRightSwiped)
         }
     }
 }
