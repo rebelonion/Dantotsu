@@ -256,19 +256,25 @@ class MangaReadAdapter(
                     }
                 }
 
-                // Scanlator
-                mangaScanlatorContainer.isVisible = options.count() > 1
-                scanlatorNo.text = "${options.count()}"
-                mangaScanlatorTop.setOnClickListener {
-                    CustomDialogLayoutBinding.inflate(fragment.layoutInflater)
-                    val dialogView = CustomDialogLayoutBinding.inflate(fragment.layoutInflater)
-                    val checkboxContainer = dialogView.checkboxContainer
-                    val tickAllButton = dialogView.toggleButton
-
+                //Scanlator
+                dialogBinding.animeScanlatorContainer.isVisible = options.count() > 1
+                dialogBinding.scanlatorNo.text = "${options.count()}"
+                
+                // Log the scanlators to debug UI issues
+                Log.d("ScanlatorOptions", "Scanlators count: ${options.count()} - Scanlators: $options")
+                
+                dialogBinding.animeScanlatorTop.setOnClickListener {
+                    val dialogView2 =
+                        LayoutInflater.from(currContext()).inflate(R.layout.custom_dialog_layout, null)
+                    val checkboxContainer =
+                        dialogView2.findViewById<LinearLayout>(R.id.checkboxContainer)
+                    val tickAllButton = dialogView2.findViewById<ImageButton>(R.id.toggleButton)
+                
+                    // Function to get the right image resource for the toggle button
                     fun getToggleImageResource(container: ViewGroup): Int {
                         var allChecked = true
                         var allUnchecked = true
-
+                
                         for (i in 0 until container.childCount) {
                             val checkBox = container.getChildAt(i) as CheckBox
                             if (!checkBox.isChecked) {
