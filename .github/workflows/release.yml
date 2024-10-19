@@ -1,0 +1,87 @@
+name: Make a release draft
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch version name
+        run: |
+          VERSION=$(grep -E -o "versionName \".*\"" app/build.gradle | sed -e 's/versionName //g' | tr -d '"')
+          echo "Version $VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 17
+          cache: gradle
+  
+      - name: Decode Keystore File
+        run: echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > $GITHUB_WORKSPACE/key.keystore
+  
+      - name: List files in the directory
+        run: ls -l
+      
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+  
+      - name: Build with Gradle (Google)
+        run: ./gradlew assembleGoogleRelease -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/key.keystore -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
+
+      - name: Build with Gradle (Fdroid)
+        run: ./gradlew assembleFdroidRelease -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/key.keystore -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
+
+      - name: Move APK and calculate checksum
+        run: |
+          mv app/build/outputs/apk/google/release/app-google-release.apk release-google-${{ env.VERSION }}.apk
+          echo "GOOGLE=$(sha256sum release-google-${{ env.VERSION }}.apk | cut -d' ' -f1)" >> $GITHUB_ENV
+        
+          mv app/build/outputs/apk/fdroid/release/app-fdroid-release.apk release-fdroid-${{ env.VERSION }}.apk
+          echo "FDROID=$(sha256sum release-fdroid-${{ env.VERSION }}.apk | cut -d' ' -f1)" >> $GITHUB_ENV
+
+      - name: Upload Build Artifacts (Google)
+        uses: actions/upload-artifact@v4
+        with:
+          name: Dantotsu-Google
+          path: "release-google-${{ env.VERSION }}.apk"
+
+      - name: Upload Build Artifacts (Fdroid)
+        uses: actions/upload-artifact@v4
+        with:
+          name: Dantotsu-Fdroid
+          path: "release-fdroid-${{ env.VERSION }}.apk"
+
+      - name: Create Release
+        if: github.repository == 'rebelonion/Dantotsu'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.VERSION }}
+          name: Dantotsu ${{ env.VERSION }}
+          body: |
+            ---
+
+            ### Checksums
+
+            | Variant | SHA-256 |
+            | ------- | ------- |
+            | Google Build | ${{ env.GOOGLE }}
+            | Fdroid Build | ${{ env.FDROID }}
+          files: |
+            release-google-${{ env.VERSION }}.apk
+            release-fdroid-${{ env.VERSION }}.apk
+          draft: true
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
