@@ -294,9 +294,9 @@ class ChartBuilder {
             }
         }
 
-        private fun normalizeData(data: List<Number>): List<Number> {
+        private fun normalizeData(data: List<Number>): List<Double> {
             if (data.isEmpty()) {
-                return data
+                return emptyList()
             }
             val max = data.maxOf { it.toDouble() }
             return data.map { (it.toDouble() / max) * 100 }
