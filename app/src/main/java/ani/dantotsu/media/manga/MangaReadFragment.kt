@@ -260,11 +260,19 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
             val chapters = loadedChapters[media.selected!!.sourceIndex]
             if (chapters != null) {
                 headerAdapter.options = getScanlators(chapters)
-                val filteredChapters = chapters // Remove the filtering logic for testing
-
+    
+                // Log scanlators for debugging purposes
+                Log.d("Scanlators", "Scanlators: ${headerAdapter.options}")
+    
+                val filteredChapters = chapters.filterNot { (_, chapter) ->
+                    val isHidden = chapter.scanlator in headerAdapter.hiddenScanlators
+                    Log.d("ScanlatorFilter", "Scanlator: ${chapter.scanlator} hidden: $isHidden")
+                    isHidden
+                }
+    
                 media.manga?.chapters = filteredChapters.toMutableMap()
-
-                //CHIP GROUP
+    
+                // CHIP GROUP
                 val total = filteredChapters.size
                 val divisions = total.toDouble() / 10
                 start = 0
@@ -280,7 +288,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
                     val stored = ceil((total).toDouble() / limit).toInt()
                     val position = clamp(media.selected!!.chip, 0, stored - 1)
                     val last = if (position + 1 == stored) total else (limit * (position + 1))
-                    start = limit * (position)
+                    start = limit * position
                     end = last - 1
                     headerAdapter.updateChips(
                         limit,
@@ -289,22 +297,18 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
                         position
                     )
                 }
-
+    
                 headerAdapter.subscribeButton(true)
                 reload()
             }
         }
     }
-
+    
     private fun getScanlators(chap: MutableMap<String, MangaChapter>?): List<String> {
-        val scanlators = mutableListOf<String>()
-        if (chap != null) {
-            val chapters = chap.values
-            for (chapter in chapters) {
-                scanlators.add(chapter.scanlator ?: "Unknown")
-            }
+        val scanlators = chap?.values?.mapNotNull {
+            it.scanlator?.takeIf { scanlator -> scanlator.isNotBlank() } ?: "Unknown"
         }
-        return scanlators.distinct()
+        return scanlators?.distinct() ?: emptyList()
     }
 
     fun onSourceChange(i: Int): MangaParser {
