@@ -39,19 +39,15 @@ jobs:
     - name: Get Commits Since Last Run
       run: |
         if [ -f last_sha.txt ]; then
-          LAST_SHA=$(cat last_sha.txt)
+        LAST_SHA=$(cat last_sha.txt)
         else
-          LAST_SHA=$(git rev-list --max-parents=0 HEAD)
+            LAST_SHA=$(git rev-list --max-parents=0 HEAD)
         fi
         echo "Commits since $LAST_SHA:"
         # Limit to the last 10 commits
         COMMIT_LOGS=$(git log $LAST_SHA..HEAD -n 10 --pretty=format:"● %s ~%an [֍](https://github.com/${{ github.repository }}/commit/%H)")
         # Replace commit messages with pull request links
-        COMMIT_LOGS=$(echo "$COMMIT_LOGS" | sed -E 's/#([0-9]+)/[#\1](https:\/\/github.com\/rebelonion\/Dantotsu\/pull\/\1)/g')
-        # URL-encode the newline characters for GitHub Actions
-        COMMIT_LOGS="${COMMIT_LOGS//'%'/'%25'}"
-        COMMIT_LOGS="${COMMIT_LOGS//$'\n'/'%0A'}"
-        COMMIT_LOGS="${COMMIT_LOGS//$'\r'/'%0D'}"
+        COMMIT_LOGS=$(echo "$COMMIT_LOGS" | sed -E 's/#([0-9]+)/[#\1](https:\/\/github\.com\/${{ github.repository }}\/pull\/\1)/g')
         # Save to a file instead of an environment variable
         echo "$COMMIT_LOGS" > commit_log.txt
         echo "COMMIT_LOG=${COMMIT_LOGS}" >> $GITHUB_ENV
@@ -60,7 +56,7 @@ jobs:
         BRANCH=${{ github.ref }}
         BRANCH=${BRANCH#refs/heads/}
         echo "BRANCH=${BRANCH}" >> $GITHUB_ENV
-      shell: /usr/bin/bash -e {0}
+        shell: /usr/bin/bash -e {0}
       env:
         CI: true
       continue-on-error: true
@@ -121,17 +117,17 @@ jobs:
       if: ${{ env.SKIP_BUILD != 'true' && github.repository != 'rebelonion/Dantotsu' }}
       uses: softprops/action-gh-release@v2.0.6
       with:
-        files: app/build/outputs/apk/google/alpha/app-google-alpha.apk
-        name: ${{ env.BRANCH }} build ${{ env.VERSION }}
-        tag_name: v${{ env.VERSION }}
-        body: |
-          New Pretester Build ${{ env.VERSION }} released on branch "${{ env.BRANCH }}" :)
-          Commits:
-          $(cat commit_log.txt)
-        prerelease: false
-        make_latest: true
-        generate_release_notes: true
-        fail_on_unmatched_files: true
+          files: app/build/outputs/apk/google/alpha/app-google-alpha.apk
+          name: ${{ env.BRANCH }} build ${{ env.VERSION }}
+          tag_name: v${{ env.VERSION }}
+          body: |
+                New Pretester Build ${{ env.VERSION }} released on branch "${{ env.BRANCH }}" :)
+                Commits:
+                        $(cat commit_log.txt)
+                prerelease: false
+                make_latest: true
+                generate_release_notes: true
+                fail_on_unmatched_files: true
 
     - name: Upload APK to Discord and Telegram
       shell: bash
