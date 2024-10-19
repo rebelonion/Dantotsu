@@ -280,7 +280,7 @@ class MangaChapterAdapter(
                 holder.bind(ep.number, ep.progress)
                 setAnimation(fragment.requireContext(), holder.binding.root)
                 binding.itemChapterNumber.text = ep.number
-
+            
                 if (ep.date != null) {
                     binding.itemChapterDateLayout.visibility = View.VISIBLE
                     binding.itemChapterDate.text = formatDate(ep.date)
@@ -288,19 +288,21 @@ class MangaChapterAdapter(
                 if (ep.scanlator != null) {
                     binding.itemChapterDateLayout.visibility = View.VISIBLE
                     binding.itemChapterScan.text = ep.scanlator.replaceFirstChar {
-                        if (it.isLowerCase()) it.titlecase(
-                            Locale.ROOT
-                        ) else it.toString()
+                        if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString()
                     }
                 }
                 if (formatDate(ep.date) == "" || ep.scanlator == null) {
                     binding.itemChapterDateDivider.visibility = View.GONE
-                } else binding.itemChapterDateDivider.visibility = View.VISIBLE
-
+                } else {
+                    binding.itemChapterDateDivider.visibility = View.VISIBLE
+                }
+            
                 if (ep.progress.isNullOrEmpty()) {
                     binding.itemChapterTitle.visibility = View.GONE
-                } else binding.itemChapterTitle.visibility = View.VISIBLE
-
+                } else {
+                    binding.itemChapterTitle.visibility = View.VISIBLE
+                }
+            
                 if (media.userProgress != null) {
                     if ((MediaNameAdapter.findChapterNumber(ep.number)
                             ?: 9999f) <= media.userProgress!!.toFloat()
