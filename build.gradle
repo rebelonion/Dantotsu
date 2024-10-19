@@ -1,34 +1,176 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
-
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-        maven { url 'https://jitpack.io' }
-    }
-    ext {
-        kotlin_version = '1.9.23'
-        ksp_version = '1.9.10-1.0.13'
-    }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:8.4.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
-        classpath "com.google.devtools.ksp:symbol-processing-api:$ksp_version"
-        classpath "com.google.devtools.ksp:symbol-processing-gradle-plugin:$ksp_version"
-        classpath 'com.google.gms:google-services:4.4.1'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.9'
-    }
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlinx-serialization'
+    id 'org.jetbrains.kotlin.android'
+    id 'com.google.devtools.ksp'
 }
 
-tasks.register('clean', Delete) {
-    delete getLayout().getBuildDirectory()
+def gitCommitHash = providers.exec {
+    commandLine("git", "rev-parse", "--verify", "--short", "HEAD")
+}.standardOutput.asText.get().trim()
+
+android {
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "ani.dantotsu"
+        minSdk 21
+        targetSdk 34
+        versionCode((System.currentTimeMillis() / 60000).toInteger())
+        versionName "3.1.0"
+        versionCode 300100000
+        signingConfig signingConfigs.debug
+
+    }
+
+    flavorDimensions += "store"
+    productFlavors {
+        fdroid {
+            // F-Droid specific configuration
+            dimension "store"
+            versionNameSuffix "-fdroid"
+        }
+        google {
+            // Google Play specific configuration
+            dimension "store"
+            isDefault true
+            apply plugin: 'com.google.gms.google-services'
+            apply plugin: 'com.google.firebase.crashlytics'
+        }
+    }
+
+    buildTypes {
+        alpha {
+            applicationIdSuffix ".beta" // keep as beta by popular request
+            versionNameSuffix "-alpha01-" + gitCommitHash
+            manifestPlaceholders.icon_placeholder = "@mipmap/ic_launcher_alpha"
+            manifestPlaceholders.icon_placeholder_round = "@mipmap/ic_launcher_alpha_round"
+            debuggable System.getenv("CI") == null
+            isDefault true
+        }
+        debug {
+            applicationIdSuffix ".beta"
+            versionNameSuffix "-beta01"
+            manifestPlaceholders.icon_placeholder = "@mipmap/ic_launcher_beta"
+            manifestPlaceholders.icon_placeholder_round = "@mipmap/ic_launcher_beta_round"
+            debuggable false
+        }
+        release {
+            manifestPlaceholders.icon_placeholder = "@mipmap/ic_launcher"
+            manifestPlaceholders.icon_placeholder_round = "@mipmap/ic_launcher_round"
+            debuggable false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-gson.pro', 'proguard-rules.pro'
+        }
+    }
+    buildFeatures {
+        viewBinding true
+        buildConfig true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+        freeCompilerArgs = ["-Xcontext-receivers", "-Xmulti-platform"]
+    }
+    namespace 'ani.dantotsu'
 }
 
+dependencies {
 
-tasks.withType(KotlinJvmCompile).configureEach {
-    compilerOptions {
-        freeCompilerArgs.add("-opt-in=kotlin.RequiresOptIn")
-    }
+//  FireBase
+    googleImplementation platform('com.google.firebase:firebase-bom:33.0.0')
+    googleImplementation 'com.google.firebase:firebase-analytics-ktx:22.0.0'
+    googleImplementation 'com.google.firebase:firebase-crashlytics-ktx:19.0.0'
+//  Core
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.browser:browser:1.8.0'
+    implementation 'androidx.core:core-ktx:1.13.1'
+    implementation 'androidx.fragment:fragment-ktx:1.6.2'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation "androidx.work:work-runtime-ktx:2.9.0"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'com.github.Blatzar:NiceHttp:0.4.4'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3'
+    implementation 'androidx.preference:preference-ktx:1.2.1'
+    implementation 'androidx.webkit:webkit:1.11.0'
+    implementation "com.anggrayudi:storage:1.5.5"
+    implementation "androidx.biometric:biometric:1.1.0"
+
+
+//  Glide
+    ext.glide_version = '4.16.0'
+    api "com.github.bumptech.glide:glide:$glide_version"
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    ksp "com.github.bumptech.glide:ksp:$glide_version"
+    implementation "com.github.bumptech.glide:okhttp3-integration:$glide_version"
+    implementation 'jp.wasabeef:glide-transformations:4.3.0'
+
+//  Exoplayer
+    ext.exo_version = '1.3.1'
+    implementation "androidx.media3:media3-exoplayer:$exo_version"
+    implementation "androidx.media3:media3-ui:$exo_version"
+    implementation "androidx.media3:media3-exoplayer-hls:$exo_version"
+    implementation "androidx.media3:media3-exoplayer-dash:$exo_version"
+    implementation "androidx.media3:media3-datasource-okhttp:$exo_version"
+    implementation "androidx.media3:media3-session:$exo_version"
+//  Media3 Casting
+    implementation "androidx.media3:media3-cast:$exo_version"
+    implementation "androidx.mediarouter:mediarouter:1.7.0"
+
+//  UI
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'com.github.RepoDevil:AnimatedBottomBar:7fcb9af'
+    implementation 'com.flaviofaria:kenburnsview:1.0.7'
+    implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
+    implementation 'com.alexvasilkov:gesture-views:2.8.3'
+    implementation 'com.github.VipulOG:ebook-reader:0.1.6'
+    implementation 'androidx.paging:paging-runtime-ktx:3.2.1'
+    implementation 'com.github.eltos:simpledialogfragments:v3.7'
+    implementation 'com.github.AAChartModel:AAChartCore-Kotlin:7.2.0'
+
+//  Markwon
+    ext.markwon_version = '4.6.2'
+    implementation "io.noties.markwon:core:$markwon_version"
+    implementation "io.noties.markwon:editor:$markwon_version"
+    implementation "io.noties.markwon:ext-strikethrough:$markwon_version"
+    implementation "io.noties.markwon:ext-tables:$markwon_version"
+    implementation "io.noties.markwon:ext-tasklist:$markwon_version"
+    implementation "io.noties.markwon:html:$markwon_version"
+    implementation "io.noties.markwon:image-glide:$markwon_version"
+
+//  Groupie
+    ext.groupie_version = '2.10.1'
+    implementation "com.github.lisawray.groupie:groupie:$groupie_version"
+    implementation "com.github.lisawray.groupie:groupie-viewbinding:$groupie_version"
+
+//  String Matching
+    implementation 'me.xdrop:fuzzywuzzy:1.4.0'
+
+//  Aniyomi
+    implementation 'io.reactivex:rxjava:1.3.8'
+    implementation 'io.reactivex:rxandroid:1.2.1'
+    implementation 'ru.beryukhov:flowreactivenetwork:1.0.4'
+    implementation 'ca.gosyer:voyager-navigator:1.0.0-rc07'
+    implementation 'com.squareup.logcat:logcat:0.1'
+    implementation 'uy.kohesive.injekt:injekt-core:1.16.+'
+    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.12'
+    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.12'
+    implementation 'com.squareup.okhttp3:okhttp-dnsoverhttps'
+    implementation 'com.squareup.okio:okio:3.8.0'
+    implementation 'com.squareup.okhttp3:okhttp-brotli:5.0.0-alpha.12'
+    implementation 'org.jsoup:jsoup:1.16.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json-okio:1.6.3'
+    implementation 'com.jakewharton.rxrelay:rxrelay:1.2.0'
+    implementation 'com.github.tachiyomiorg:unifile:17bec43'
+    implementation 'com.github.gpanther:java-nat-sort:natural-comparator-1.1'
+    implementation 'androidx.preference:preference-ktx:1.2.1'
+    implementation 'app.cash.quickjs:quickjs-android:0.9.2'
+
 }
