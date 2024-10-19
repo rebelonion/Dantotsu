@@ -9,7 +9,9 @@ on:
     paths-ignore:
       - '**/README.md'
     tags:
-    - "v*.*.*"
+      - "v*.*.*"
+      
+  workflow_dispatch:
 
 jobs:
   build:
