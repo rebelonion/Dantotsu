@@ -260,9 +260,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
             val chapters = loadedChapters[media.selected!!.sourceIndex]
             if (chapters != null) {
                 headerAdapter.options = getScanlators(chapters)
-                val filteredChapters = chapters.filterNot { (_, chapter) ->
-                    chapter.scanlator in headerAdapter.hiddenScanlators
-                }
+                val filteredChapters = chapters // Remove the filtering logic for testing
 
                 media.manga?.chapters = filteredChapters.toMutableMap()
 
