@@ -46,6 +46,10 @@ jobs:
         echo "Commits since $LAST_SHA:"
         # Limit to the last 10 commits
         COMMIT_LOGS=$(git log $LAST_SHA..HEAD -n 10 --pretty=format:"● %s ~%an [֍](https://github.com/${{ github.repository }}/commit/%H)")
+        # URL-encode the newline characters for GitHub Actions
+        COMMIT_LOGS="${COMMIT_LOGS//'%'/'%25'}"
+        COMMIT_LOGS="${COMMIT_LOGS//$'\n'/'%0A'}"
+        COMMIT_LOGS="${COMMIT_LOGS//$'\r'/'%0D'}"
         # Replace commit messages with pull request links
         COMMIT_LOGS=$(echo "$COMMIT_LOGS" | sed -E 's/#([0-9]+)/[#\1](https:\/\/github\.com\/${{ github.repository }}\/pull\/\1)/g')
         # Save to a file instead of an environment variable
