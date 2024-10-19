@@ -209,7 +209,7 @@ class ChartBuilder {
             aaOptions.chart?.panning = true
 
             scrollPos?.let {
-                aaOptions.chart?.scrollablePlotArea(AAScrollablePlotArea().scrollPositionX(scrollPos))
+                aaOptions.chart?.scrollablePlotArea(AAScrollablePlotArea().scrollPositionX(scrollPos?.toInt()))
                 aaOptions.chart?.scrollablePlotArea?.minWidth((context.resources.displayMetrics.widthPixels.toFloat() / context.resources.displayMetrics.density) * (namesMax.toFloat() / 18.0f))
             }
             val allStatData = chartPackets.flatMap { it.statData }
