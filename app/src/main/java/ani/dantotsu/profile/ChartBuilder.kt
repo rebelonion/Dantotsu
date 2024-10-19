@@ -219,12 +219,12 @@ class ChartBuilder {
 
             val aaYaxis = AAYAxis().min(coercedMin).max(max)
             val tickInterval = when (max) {
-                in 0.0..10.0 -> 1.0
-                in 10.0..30.0 -> 5.0
-                in 30.0..100.0 -> 10.0
-                in 100.0..1000.0 -> 100.0
-                in 1000.0..10000.0 -> 1000.0
-                else -> 10000.0
+                in 0.0..10.0 -> 1
+                in 10.0..30.0 -> 5
+                in 30.0..100.0 -> 10
+                in 100.0..1000.0 -> 100
+                in 1000.0..10000.0 -> 1000
+                else -> 10000
             }
             aaYaxis.tickInterval(tickInterval)
             aaOptions.yAxis(aaYaxis)
@@ -294,9 +294,9 @@ class ChartBuilder {
             }
         }
 
-        private fun normalizeData(data: List<Number>): List<Number> {
+        private fun normalizeData(data: List<Number>): List<Double> {
             if (data.isEmpty()) {
-                return data
+                return emptyList()
             }
             val max = data.maxOf { it.toDouble() }
             return data.map { (it.toDouble() / max) * 100 }
