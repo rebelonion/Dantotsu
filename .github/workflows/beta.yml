@@ -95,7 +95,7 @@ jobs:
       if: ${{ env.SKIP_BUILD != 'true' }}
       run: chmod +x ./gradlew
 
-    - name: Build with Grad le
+    - name: Build with Gradle
       if: ${{ env.SKIP_BUILD != 'true' }}
       run: |
         if [ "${{ github.repository }}" == "rebelonion/Dantotsu" ]; then
