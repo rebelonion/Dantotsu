@@ -39,7 +39,7 @@ jobs:
     - name: Get Commits Since Last Run
       run: |
         if [ -f last_sha.txt ]; then
-        LAST_SHA=$(cat last_sha.txt)
+          LAST_SHA=$(cat last_sha.txt)
         else
             LAST_SHA=$(git rev-list --max-parents=0 HEAD)
         fi
