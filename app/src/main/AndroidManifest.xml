@@ -376,7 +376,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter android:label="@string/anime_add_repository">   
+            <intent-filter android:label="@string/manga_add_repository">   
 
                 <action android:name="android.intent.action.VIEW" />
 
@@ -388,7 +388,7 @@
                 <data android:host="add-repo" />
             </intent-filter>
 
-            <intent-filter android:label="@string/manga_add_repository">
+            <intent-filter android:label="@string/anime_add_repository">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
