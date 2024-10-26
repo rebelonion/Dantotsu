@@ -492,6 +492,35 @@ class MainActivity : AppCompatActivity() {
         params.updateMargins(bottom = margin.toPx)
     }
 
+    private fun handleDeepLink(intent: Intent) {
+        val action = intent.action
+        val data = intent.data
+
+        if (Intent.ACTION_VIEW == action && data != null) {
+            when (data.scheme) {
+                "tachiyomi" -> {
+                    val host = data.host
+                    val queryParameter = data.getQueryParameter("url")
+
+                    if (host == "add-repo" && queryParameter != null) {
+                        // Handle adding a manga extension repo
+                        navigator.popUntilRoot()
+                        navigator.push(MangaExtensionReposScreen(queryParameter))
+                    }
+                }
+                "aniyomi" -> {
+                    val host = data.host
+                    val queryParameter = data.getQueryParameter("url")
+
+                    if (host == "add-repo" && queryParameter != null) {
+                        // Handle adding an anime extension repo
+                        navigator.push(AnimeExtensionReposScreen(queryParameter))
+                    }
+                }
+            }
+        }
+    }
+
     private fun passwordAlertDialog(callback: (CharArray?) -> Unit) {
         val password = CharArray(16).apply { fill('0') }
 
