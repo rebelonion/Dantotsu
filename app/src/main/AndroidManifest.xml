@@ -376,6 +376,26 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter android:label="@string/manga_add_repository">   
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="tachiyomi" />
+                <data android:host="add-repo" />
+            </intent-filter>
+
+            <intent-filter android:label="@string/anime_add_repository">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="aniyomi" />
+                <data android:host="add-repo" />
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.Main" />
 
