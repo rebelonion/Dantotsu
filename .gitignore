@@ -34,3 +34,6 @@ scripts/
 
 #crowdin
 crowdin.yml
+
+#vscode
+.vscode
