@@ -45,7 +45,7 @@ jobs:
         fi
         echo "Commits since $LAST_SHA:"
         # Accumulate commit logs in a shell variable
-        COMMIT_LOGS=$(git log $LAST_SHA..HEAD --pretty=format:"● %s ~%an [֍](https://github.com/${{ github.repository }}/commit/%H)")
+        COMMIT_LOGS=$(git log $LAST_SHA..HEAD --pretty=format:"● %s ~%an [֍](https://github.com/${{ github.repository }}/commit/%H)" --max-count=20)
         # Replace commit messages with pull request links
         COMMIT_LOGS=$(echo "$COMMIT_LOGS" | sed -E 's/#([0-9]+)/[#\1](https:\/\/github.com\/rebelonion\/Dantotsu\/pull\/\1)/g')
         # URL-encode the newline characters for GitHub Actions
