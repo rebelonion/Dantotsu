@@ -846,7 +846,7 @@
     <string name="user_agent_desc">Altere seu agente de usuário padrão</string>
     <string name="force_legacy_installer_desc">Usar o instalador Legacy para instalar extensões (Para celulares android mais antigos)</string>
     <string name="skip_loading_extension_icons_desc">Não carregar ícones de extensão na página de extensões</string>
-    <string name="NSFWExtention_desc">Enable 18+ extensions from search (May remove some useful extensions)</string>
+    <string name="NSFWExtention_desc">Habilitar extensões 18+ da busca (Pode afetar algumas extensões úteis)</string>
     <string name="reader_settings_desc">Todas as configurações do Leitor</string>
     <string name="purge_manga_downloads_desc">Deletar todos os downloads de Mangá</string>
     <string name="purge_novel_downloads_desc">Deletar todos os downloads de Novel</string>
