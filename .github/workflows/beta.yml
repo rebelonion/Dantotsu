@@ -45,7 +45,7 @@ jobs:
         fi
         echo "Commits since $LAST_SHA:"
         # Accumulate commit logs in a shell variable
-        COMMIT_LOGS=$(git log $LAST_SHA..HEAD --pretty=format:"● %s ~%an [֍](https://github.com/${{ github.repository }}/commit/%H)" --max-count=20)
+        COMMIT_LOGS=$(git log $LAST_SHA..HEAD --pretty=format:"● %s ~%an [֍](https://github.com/${{ github.repository }}/commit/%H)" --max-count=10)
         # Replace commit messages with pull request links
         COMMIT_LOGS=$(echo "$COMMIT_LOGS" | sed -E 's/#([0-9]+)/[#\1](https:\/\/github.com\/rebelonion\/Dantotsu\/pull\/\1)/g')
         # URL-encode the newline characters for GitHub Actions
@@ -153,17 +153,20 @@ jobs:
         additional_info["ibo"]="\n Discord: <@951737931159187457>\n AniList: [takarealist112](<https://anilist.co/user/5790266/>)"
         additional_info["aayush262"]="\n Discord: <@918825160654598224>\n AniList: [aayush262](<https://anilist.co/user/5144645/>)"
         additional_info["rebelonion"]="\n Discord: <@714249925248024617>\n AniList: [rebelonion](<https://anilist.co/user/6077251/>)\n PornHub: [rebelonion](<https://www.cornhub.com/model/rebelonion>)"
+        additional_info["Ankit Grai"]="\n Discord: <@1125628254330560623>\n AniList: [bheshnarayan](<https://anilist.co/user/6417303/>)"
         
         # Decimal color codes for contributors
         declare -A contributor_colors
-        default_color="#ff25f9"
+        default_color="6121629"
+        contributor_colors["grayankit"]="#ff9b46"
         contributor_colors["ibo"]="#ff9b46"
         contributor_colors["aayush262"]="#5d689d"
         contributor_colors["Sadwhy"]="#ff7e95"
         contributor_colors["rebelonion"]="#d4e5ed"
+
         hex_to_decimal() { printf '%d' "0x${1#"#"}"; }
         
-        # Count recent commits and create an associative array
+        # Count recent commits and create an associative array Okay
         declare -A recent_commit_counts
         echo "Debug: Processing COMMIT_LOG:"
         echo "$COMMIT_LOG"
@@ -331,6 +334,17 @@ jobs:
         done)
         telegram_commit_messages="<blockquote>${telegram_commit_messages}</blockquote>"
 
+        # Configuring dev info
+        echo "$developers" > dev_info.txt
+        echo "$developers"
+        # making the file executable
+        chmod +x workflowscripts/tel_parser.sed
+        ./workflowscripts/tel_parser.sed dev_info.txt >> output.txt
+        dev_info_tel=$(< output.txt)
+        
+        telegram_dev_info="<blockquote>${dev_info_tel}</blockquote>"
+        echo "$telegram_dev_info"
+
         # Upload APK to Telegram
         if [ "$SKIP_BUILD" != "true" ]; then
           APK_PATH="app/build/outputs/apk/google/alpha/app-google-alpha.apk"
@@ -342,10 +356,12 @@ jobs:
         
         Commits:
         ${telegram_commit_messages}
+        Dev:
+        ${telegram_dev_info}
         version: ${VERSION}" \
             -F "parse_mode=HTML")
         else
-          echo "Skipping Telegram message and APK upload due to SKIP_BUILD being set to true"
+          echo "skipping because skip build set to true"
         fi
         
       env:
