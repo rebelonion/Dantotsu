@@ -1,15 +1,22 @@
 package ani.dantotsu.media
 
 import android.graphics.Bitmap
+import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.FuzzyDate
 import ani.dantotsu.connections.anilist.api.MediaEdge
 import ani.dantotsu.connections.anilist.api.MediaList
 import ani.dantotsu.connections.anilist.api.MediaStreamingEpisode
 import ani.dantotsu.connections.anilist.api.MediaType
 import ani.dantotsu.connections.anilist.api.Query
+import ani.dantotsu.connections.mal.MAL
 import ani.dantotsu.media.anime.Anime
 import ani.dantotsu.media.manga.Manga
 import ani.dantotsu.profile.User
+import ani.dantotsu.settings.saving.PrefManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.Serializable
 import ani.dantotsu.connections.anilist.api.Media as ApiMedia
 
@@ -128,6 +135,37 @@ data class Media(
 
     fun mainName() = name ?: nameMAL ?: nameRomaji
     fun mangaName() = if (countryOfOrigin != "JP") mainName() else nameRomaji
+}
+
+fun Media?.deleteFromList(
+    scope: CoroutineScope,
+    onSuccess: suspend () -> Unit,
+    onError: suspend (e: Exception) -> Unit,
+    onNotFound: suspend () -> Unit
+) {
+    val id = this?.userListId
+    scope.launch {
+        withContext(Dispatchers.IO) {
+            this@deleteFromList?.let { media ->
+                val _id = id ?: Anilist.query.userMediaDetails(media).userListId;
+                _id?.let { listId ->
+                    try {
+                        Anilist.mutation.deleteList(listId)
+                        MAL.query.deleteList(media.anime != null, media.idMAL)
+
+                        val removeList = PrefManager.getCustomVal("removeList", setOf<Int>())
+                        PrefManager.setCustomVal(
+                            "removeList", removeList.minus(listId)
+                        )
+
+                        onSuccess()
+                    } catch (e: Exception) {
+                        onError(e)
+                    }
+                } ?: onNotFound()
+            }
+        }
+    }
 }
 
 fun emptyMedia() = Media(

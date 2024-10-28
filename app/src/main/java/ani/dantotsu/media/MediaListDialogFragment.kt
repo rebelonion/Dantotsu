@@ -271,29 +271,23 @@ class MediaListDialogFragment : BottomSheetDialogFragment() {
                 }
 
                 binding.mediaListDelete.setOnClickListener {
-                    var id = media!!.userListId
                     scope.launch {
-                        withContext(Dispatchers.IO) {
-                            if (id != null) {
-                                Anilist.mutation.deleteList(id!!)
-                                MAL.query.deleteList(media?.anime != null, media?.idMAL)
-                            } else {
-                                val profile = Anilist.query.userMediaDetails(media!!)
-                                profile.userListId?.let { listId ->
-                                    id = listId
-                                    Anilist.mutation.deleteList(listId)
-                                    MAL.query.deleteList(media?.anime != null, media?.idMAL)
-                                }
+                        media?.deleteFromList(scope, onSuccess = {
+                            Refresh.all()
+                            snackString(getString(R.string.deleted_from_list))
+                            dismissAllowingStateLoss()
+                        }, onError = { e ->
+                            withContext(Dispatchers.Main) {
+                                snackString(
+                                    getString(
+                                        R.string.delete_fail_reason, e.message
+                                    )
+                                )
                             }
-                        }
-                        PrefManager.setCustomVal("removeList", removeList.minus(media?.id))
-                    }
-                    if (id != null) {
-                        Refresh.all()
-                        snackString(getString(R.string.deleted_from_list))
-                        dismissAllowingStateLoss()
-                    } else {
-                        snackString(getString(R.string.no_list_id))
+                        }, onNotFound = {
+                            snackString(getString(R.string.no_list_id))
+                        })
+
                     }
                 }
             }
