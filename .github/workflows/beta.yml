@@ -356,6 +356,8 @@ jobs:
         
         Commits:
         ${telegram_commit_messages}
+        Dev:
+        ${telegram_dev_info}
         version: ${VERSION}" \
             -F "parse_mode=HTML")
         else
