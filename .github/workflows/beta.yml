@@ -166,7 +166,7 @@ jobs:
 
         hex_to_decimal() { printf '%d' "0x${1#"#"}"; }
         
-        # Count recent commits and create an associative array
+        # Count recent commits and create an associative array Okay
         declare -A recent_commit_counts
         echo "Debug: Processing COMMIT_LOG:"
         echo "$COMMIT_LOG"
