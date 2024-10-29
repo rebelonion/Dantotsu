@@ -350,7 +350,8 @@ jobs:
           APK_PATH="app/build/outputs/apk/google/alpha/app-google-alpha.apk"
           response=$(curl -sS -f -X POST \
             "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument" \
-            -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
+            -F "chat_id=-1002117798698" \
+            -F "message_thread_id=7044" \
             -F "document=@$APK_PATH" \
             -F "caption=New Alpha-Build dropped 🔥
         
