@@ -159,22 +159,20 @@ class Swipy @JvmOverloads constructor(
     }
 
     private fun handleDrag(pos: Float) {
-        val overscroll = (pos - initialMotion) * DRAG_RATE
-        if (overscroll > 0) {  // Keep this check
-            parent.requestDisallowInterceptTouchEvent(true)
-            if (vertical) {
-                val totalDragDistance = Resources.getSystem().displayMetrics.heightPixels / dragDivider
-                if (verticalPos == VerticalPosition.Top)
-                    topBeingSwiped.invoke(overscroll * 2 / totalDragDistance)
-                else
-                    bottomBeingSwiped.invoke(overscroll * 2 / totalDragDistance)
-            } else {
-                val totalDragDistance = Resources.getSystem().displayMetrics.widthPixels / dragDivider
-                if (horizontalPos == HorizontalPosition.Left)
-                    leftBeingSwiped.invoke(overscroll / totalDragDistance)
-                else
-                    rightBeingSwiped.invoke(overscroll / totalDragDistance)
-            }
+        val overscroll = abs((pos - initialMotion) * DRAG_RATE)
+        parent.requestDisallowInterceptTouchEvent(true)
+        if (vertical) {
+            val totalDragDistance = Resources.getSystem().displayMetrics.heightPixels / dragDivider
+            if (verticalPos == VerticalPosition.Top)
+                topBeingSwiped.invoke(overscroll * 2 / totalDragDistance)
+            else
+                bottomBeingSwiped.invoke(overscroll * 2 / totalDragDistance)
+        } else {
+            val totalDragDistance = Resources.getSystem().displayMetrics.widthPixels / dragDivider
+            if (horizontalPos == HorizontalPosition.Left)
+                leftBeingSwiped.invoke(overscroll / totalDragDistance)
+            else
+                rightBeingSwiped.invoke(overscroll / totalDragDistance)
         }
     }
 
@@ -183,7 +181,7 @@ class Swipy @JvmOverloads constructor(
             topBeingSwiped.invoke(0f)
             bottomBeingSwiped.invoke(0f)
         } else {
-            rightBeingSwiped.invoke( 0f)
+            rightBeingSwiped.invoke(0f)
             leftBeingSwiped.invoke(0f)
         }
     }
