@@ -18,18 +18,10 @@ object Kitsu {
         val headers = mapOf(
             "Content-Type" to "application/json",
             "Accept" to "application/json",
-            "Accept-Encoding" to "gzip, deflate",
-            "Accept-Language" to "en-US,en;q=0.5",
-            "Host" to "kitsu.app",
-            "Connection" to "keep-alive",
-            "Origin" to "https://kitsu.app",
-            "Sec-Fetch-Dest" to "empty",
-            "Sec-Fetch-Mode" to "cors",
-            "Sec-Fetch-Site" to "cross-site",
         )
         val response = tryWithSuspend {
             val res = client.post(
-                "https://kitsu.app/api/graphql",
+                "https://kitsu.io/api/graphql",
                 headers,
                 data = mapOf("query" to query)
             )
