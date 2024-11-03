@@ -40,6 +40,7 @@ data class Activity(
     @Serializable
     data class Timestamps(
         val start: Long? = null,
+        @SerialName("end")
         val stop: Long? = null
     )
 }

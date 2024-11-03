@@ -72,5 +72,5 @@ object Discord {
     const val small_Image: String =
         "mp:external/9NqpMxXs4ZNQtMG42L7hqINW92GqqDxgxS9Oh0Sp880/%3Fsize%3D48%26quality%3Dlossless%26name%3DDantotsu/https/cdn.discordapp.com/emojis/1167344924874784828.gif"
     const val small_Image_AniList: String =
-        "mp:external/ORoccmSwMX55y1BUmiwf7OH9IlnztoO0MDpsGQnibpw/https/anilist.co/img/icons/icon.svg"
+        "https://anilist.co/img/icons/android-chrome-512x512.png"
 }
