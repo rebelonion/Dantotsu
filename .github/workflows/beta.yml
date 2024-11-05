@@ -224,7 +224,7 @@ jobs:
             echo "$top_contributors"
             
             # Get commit count for this contributor on the dev branch
-            branch_commit_count=$(git rev-list --count dev --author="$login")
+            branch_commit_count=$(git log --author="$login" --author="$name" --oneline | awk '!seen[$0]++' | wc -l)
             
             # Debug: Print recent_commit_counts
             echo "Debug: recent_commit_counts contents:"
