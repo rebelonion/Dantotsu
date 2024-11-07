@@ -4,6 +4,8 @@ import android.content.ComponentName
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -16,7 +18,6 @@ import ani.dantotsu.databinding.ActivitySettingsThemeBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.reloadActivity
-import ani.dantotsu.restartApp
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
@@ -73,7 +74,7 @@ class SettingsThemeActivity : AppCompatActivity(), SimpleDialog.OnDialogResultLi
                 previous = current
                 current.alpha = 1f
                 PrefManager.setVal(PrefName.DarkMode, mode)
-                reloadActivity()
+                reload()
             }
 
             settingsUiAuto.setOnClickListener {
@@ -210,7 +211,9 @@ class SettingsThemeActivity : AppCompatActivity(), SimpleDialog.OnDialogResultLi
 
     fun reload() {
         PrefManager.setCustomVal("reload", true)
-        restartApp()
+        Handler(Looper.getMainLooper()).postDelayed({
+            reloadActivity()
+            finishAndRemoveTask()
+        }, 100)
     }
-
 }

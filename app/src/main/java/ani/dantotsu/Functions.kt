@@ -314,6 +314,7 @@ fun Activity.reloadActivity() {
     Refresh.all()
     finish()
     startActivity(Intent(this, this::class.java))
+    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     initActivity(this)
 }
 
