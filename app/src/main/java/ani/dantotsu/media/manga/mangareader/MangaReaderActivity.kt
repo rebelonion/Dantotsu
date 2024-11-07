@@ -401,8 +401,8 @@ class MangaReaderActivity : AppCompatActivity() {
                 val context = this
                 val offline: Boolean = PrefManager.getVal(PrefName.OfflineMode)
                 val incognito: Boolean = PrefManager.getVal(PrefName.Incognito)
-                val rpcEnabled: Boolean = PrefManger.getVal(PrefName.rpcEnabled)
-                if ((isOnline(context) && !offline) && Discord.token != null && !incognito && rpcEnabled) {
+                val rpcenabled: Boolean = PrefManger.getVal(PrefName.rpcEnabled)
+                if ((isOnline(context) && !offline) && Discord.token != null && !incognito && rpcenabled) {
                     lifecycleScope.launch {
                         val discordMode = PrefManager.getCustomVal("discord_mode", "dantotsu")
                         val buttons = when (discordMode) {

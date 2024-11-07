@@ -218,7 +218,7 @@ class SettingsAccountActivity : AppCompatActivity() {
                         switch = { isChecked, _ ->
                             PrefManager.setVal(PrefName.rpcEnabled, isChecked)
                         },
-                        isEnabled = Discord.token != null
+                        isVisible = Discord.token != null
                    ),
                 Settings(
                     type = 1,
