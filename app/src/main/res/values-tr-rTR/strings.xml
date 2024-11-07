@@ -725,6 +725,8 @@
     <string name="anilist_notifications_checking_time">Anilist bildirimleri güncelleme sıklığı: %1$s</string>
     <string name="comment_notification_checking_time">Yorum bildirimleri güncelleme sıklığı : %1$s</string>
     <string name="activities">Aktiviteler</string>
+    <string name="enable_rpc">Enable Discord RPC</string>
+    <string name="enable_rpc_desc">Display your taste to plebs on Discord!</string>
     <string name="incorrect_password">Hatalı şifre</string>
     <string name="password_cannot_be_empty">Şifre boş olamaz</string>
     <string name="unknown_file_type">Bilinmeyen dosya türü</string>
