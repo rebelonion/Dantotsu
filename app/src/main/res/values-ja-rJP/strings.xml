@@ -721,6 +721,8 @@
     <string name="anilist_notifications_checking_time">AniList通知の確認頻度：%1$s</string>
     <string name="comment_notification_checking_time">コメント通知の確認頻度：%1$s</string>
     <string name="activities">アクティビティ</string>
+    <string name="enable_rpc">Enable Discord RPC</string>
+    <string name="enable_rpc_desc">Display your taste to plebs on Discord!</string>
     <string name="incorrect_password">パスワードが間違っています</string>
     <string name="password_cannot_be_empty">パスワードは空にできません</string>
     <string name="unknown_file_type">不明なファイル形式</string>
