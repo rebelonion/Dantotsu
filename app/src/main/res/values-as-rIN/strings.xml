@@ -725,6 +725,8 @@
     <string name="anilist_notifications_checking_time">এনিলিষ্ট বিজ্ঞপ্তি আপডেট সময়সূচী: %1$s</string>
     <string name="comment_notification_checking_time">মন্তব্য বিজ্ঞপ্তি আপডেট সময়সূচী: %1$s</string>
     <string name="activities">ক্ৰিয়াকলাপসমূহ</string>
+    <string name="enable_rpc">Enable Discord RPC</string>
+    <string name="enable_rpc_desc">Display your taste to plebs on Discord!</string>
     <string name="incorrect_password">ভুল পাছৱাৰ্ড</string>
     <string name="password_cannot_be_empty">পাছৱাৰ্ড খালী হৈ নিব নোৱাৰে</string>
     <string name="unknown_file_type">অজ্ঞাত ফাইল ধৰণ</string>
