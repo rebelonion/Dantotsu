@@ -724,6 +724,8 @@
     <string name="anilist_notifications_checking_time">تحديث اشعارات \"Anilist\" كل : %1$s</string>
     <string name="comment_notification_checking_time">تحديث اشعارات التعليقات كل : %1$s</string>
     <string name="activities">الأنشطة</string>
+    <string name="enable_rpc">Enable Discord RPC</string>
+    <string name="enable_rpc_desc">Display your taste to plebs on Discord!</string>
     <string name="incorrect_password">كلمة السر غير صحيح</string>
     <string name="password_cannot_be_empty">لا يمكن أن تكون كلمة المرور فارغة</string>
     <string name="unknown_file_type">نوع الملف غير معروف</string>
