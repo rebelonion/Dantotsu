@@ -721,6 +721,8 @@
     <string name="anilist_notifications_checking_time">एनीलिस्ट अधिसूचनाएँ अपडेट आवृत्ति : %1$s</string>
     <string name="comment_notification_checking_time">टिप्पणी अधिसूचनाएँ अपडेट आवृत्ति : %1$s</string>
     <string name="activities">गतिविधियाँ</string>
+    <string name="enable_rpc">Enable Discord RPC</string>
+    <string name="enable_rpc_desc">Display your taste to plebs on Discord!</string>
     <string name="incorrect_password">गलत पासवर्ड</string>
     <string name="password_cannot_be_empty">पासवर्ड खाली नहीं हो सकता</string>
     <string name="unknown_file_type">अज्ञात फ़ाइल प्रकार</string>
