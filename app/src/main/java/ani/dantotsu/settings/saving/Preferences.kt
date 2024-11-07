@@ -193,6 +193,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     DownloadsDir(Pref(Location.Irrelevant, String::class, "")),
     OC(Pref(Location.Irrelevant, Boolean::class, false)),
     RefreshStatus(Pref(Location.Irrelevant, Boolean::class, false)),
+    rpcEnabled(Pref(Location.Irrelevant, Boolean::class, true)),
 
     //Protected
     DiscordToken(Pref(Location.Protected, String::class, "")),

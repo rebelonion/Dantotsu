@@ -210,6 +210,17 @@ class SettingsAccountActivity : AppCompatActivity() {
         binding.settingsRecyclerView.adapter = SettingsAdapter(
             arrayListOf(
                 Settings(
+                        type = 2,
+                        name = getString(R.string.enable_rpc),
+                        desc = getString(R.string.enable_rpc_desc),
+                        icon = R.drawable.interests_24,
+                        isChecked = PrefManager.getVal(PrefName.rpcEnabled),
+                        switch = { isChecked, _ ->
+                            PrefManager.setVal(PrefName.rpcEnabled, isChecked)
+                        },
+                        isVisible = Discord.token != null
+                   ),
+                Settings(
                     type = 1,
                     name = getString(R.string.anilist_settings),
                     desc = getString(R.string.alsettings_desc),
