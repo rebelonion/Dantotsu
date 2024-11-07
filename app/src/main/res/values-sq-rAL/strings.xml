@@ -725,6 +725,8 @@
     <string name="anilist_notifications_checking_time">Frekuenca e përditësimit të njoftimeve të Anilistit: %1$s</string>
     <string name="comment_notification_checking_time">Frekuenca e përditësimit të njoftimeve të komentit: %1$s</string>
     <string name="activities">Aktivitetet</string>
+    <string name="enable_rpc">Enable Discord RPC</string>
+    <string name="enable_rpc_desc">Display your taste to plebs on Discord!</string>
     <string name="incorrect_password">Fjalëkalimi i pasaktë</string>
     <string name="password_cannot_be_empty">Fjalëkalimi nuk mund të jetë i zbrazët</string>
     <string name="unknown_file_type">Lloji i panjohur i skedarit</string>
