@@ -722,6 +722,8 @@
     <string name="anilist_notifications_checking_time">AniList 알림 확인 시간: %1$s</string>
     <string name="comment_notification_checking_time">댓글 알림 확인 시간: %1$s</string>
     <string name="activities">활동</string>
+    <string name="enable_rpc">Enable Discord RPC</string>
+    <string name="enable_rpc_desc">Display your taste to plebs on Discord!</string>
     <string name="incorrect_password">잘못된 비밀번호</string>
     <string name="password_cannot_be_empty">비밀번호를 입력해야 합니다</string>
     <string name="unknown_file_type">알 수 없는 파일 유형</string>
