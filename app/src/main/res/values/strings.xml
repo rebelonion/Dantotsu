@@ -820,6 +820,8 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="anilist_notifications_checking_time">Anilist notifications update frequency : %1$s</string>
     <string name="comment_notification_checking_time">Comment notifications update frequency : %1$s</string>
     <string name="activities">Activities</string>
+    <string name="enable_rpc">Enable Discord RPC</string>
+    <string name="enable_rpc_desc">Display your taste to plebs on Discord!</string>
 
     <string name="incorrect_password">Incorrect password</string>
     <string name="password_cannot_be_empty">Password cannot be empty</string>

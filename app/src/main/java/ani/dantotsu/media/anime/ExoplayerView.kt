@@ -1309,7 +1309,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         val ep = episode
         val offline: Boolean = PrefManager.getVal(PrefName.OfflineMode)
         val incognito: Boolean = PrefManager.getVal(PrefName.Incognito)
-        if ((isOnline(context) && !offline) && Discord.token != null && !incognito) {
+        val rpcEnabled: Boolean = PrefManger.getVal(PrefName.rpcEnabled)
+         if ((isOnline(context) && !offline) && Discord.token != null && !incognito && rpcEnabled) {
             lifecycleScope.launch {
                 val discordMode = PrefManager.getCustomVal("discord_mode", "dantotsu")
                 val buttons = when (discordMode) {
