@@ -725,6 +725,8 @@
     <string name="anilist_notifications_checking_time">Frequenza di aggiornamento delle notifiche Anilist : %1$s</string>
     <string name="comment_notification_checking_time">Frequenza di aggiornamento delle notifiche dei commenti : %1$s</string>
     <string name="activities">Attività</string>
+    <string name="enable_rpc">Enable Discord RPC</string>
+    <string name="enable_rpc_desc">Display your taste to plebs on Discord!</string>
     <string name="incorrect_password">Password errata</string>
     <string name="password_cannot_be_empty">La password non può essere vuota</string>
     <string name="unknown_file_type">Tipo di file sconosciuto</string>
