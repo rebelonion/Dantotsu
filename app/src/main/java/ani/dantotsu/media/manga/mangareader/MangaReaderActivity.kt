@@ -58,6 +58,8 @@ import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsViewModel
 import ani.dantotsu.media.MediaNameAdapter
 import ani.dantotsu.media.MediaSingleton
+import ani.dantotsu.media.anime.ExoplayerView
+import ani.dantotsu.media.anime.ExoplayerView.Companion
 import ani.dantotsu.media.manga.MangaCache
 import ani.dantotsu.media.manga.MangaChapter
 import ani.dantotsu.others.ImageViewDialog
@@ -184,6 +186,17 @@ class MangaReaderActivity : AppCompatActivity() {
         binding.mangaReaderBack.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
+
+        @Suppress("UNCHECKED_CAST")
+        val list = (PrefManager.getNullableCustomVal(
+            "continueMangaList",
+            listOf<Int>(),
+            List::class.java
+        ) as List<Int>).toMutableList()
+        if (list.contains(media.id)) list.remove(media.id)
+        list.add(media.id)
+
+        PrefManager.setCustomVal("continueAnimeList", list)
 
         defaultSettings = loadReaderSettings("reader_settings") ?: defaultSettings
 
