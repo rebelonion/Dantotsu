@@ -721,6 +721,8 @@
     <string name="anilist_notifications_checking_time">Частота проверки уведомлений Anilist: %1$s</string>
     <string name="comment_notification_checking_time">Частота проверки уведомлений о комментариях: %1$s</string>
     <string name="activities">Действия</string>
+    <string name="enable_rpc">Enable Discord RPC</string>
+    <string name="enable_rpc_desc">Display your taste to plebs on Discord!</string>
     <string name="incorrect_password">Неправильный пароль</string>
     <string name="password_cannot_be_empty">Пароль не может быть пустым</string>
     <string name="unknown_file_type">Неизвестный тип файла</string>
