@@ -272,7 +272,7 @@ class MangaReaderActivity : AppCompatActivity() {
         if (list.contains(media.id)) list.remove(media.id)
         list.add(media.id)
 
-        PrefManager.setCustomVal("continueAnimeList", list)
+        PrefManager.setCustomVal("continueMangaList", list)
         if (PrefManager.getVal(PrefName.AutoDetectWebtoon) && media.countryOfOrigin != "JP") applyWebtoon(
             defaultSettings
         )
