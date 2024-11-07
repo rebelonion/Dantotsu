@@ -187,16 +187,7 @@ class MangaReaderActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        @Suppress("UNCHECKED_CAST")
-        val list = (PrefManager.getNullableCustomVal(
-            "continueMangaList",
-            listOf<Int>(),
-            List::class.java
-        ) as List<Int>).toMutableList()
-        if (list.contains(media.id)) list.remove(media.id)
-        list.add(media.id)
 
-        PrefManager.setCustomVal("continueAnimeList", list)
 
         defaultSettings = loadReaderSettings("reader_settings") ?: defaultSettings
 
@@ -272,7 +263,16 @@ class MangaReaderActivity : AppCompatActivity() {
             }
         else model.getMedia().value ?: return
         model.setMedia(media)
+        @Suppress("UNCHECKED_CAST")
+        val list = (PrefManager.getNullableCustomVal(
+            "continueMangaList",
+            listOf<Int>(),
+            List::class.java
+        ) as List<Int>).toMutableList()
+        if (list.contains(media.id)) list.remove(media.id)
+        list.add(media.id)
 
+        PrefManager.setCustomVal("continueAnimeList", list)
         if (PrefManager.getVal(PrefName.AutoDetectWebtoon) && media.countryOfOrigin != "JP") applyWebtoon(
             defaultSettings
         )
