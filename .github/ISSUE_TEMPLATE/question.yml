@@ -1,5 +1,5 @@
 name: ❓ Question
-description: Submit a question or query related to Dartotsu.
+description: Submit a question or query related to Dantotsu.
 labels: [question]
 body:
   - type: textarea
@@ -17,7 +17,7 @@ body:
     id: related-features
     attributes:
       label: Related Features (if applicable)
-      description: Mention any specific feature or section of Dartotsu related to your question.
+      description: Mention any specific feature or section of Dantotsu related to your question.
       placeholder: |
         Example: "Settings > Performance"
 
