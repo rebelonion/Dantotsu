@@ -1,5 +1,5 @@
 name: ❓ Question
-description: Submit a question or query related to Dantotsu.
+description: Submit a question or query related to Dantotsu
 labels: [question]
 body:
   - type: textarea
