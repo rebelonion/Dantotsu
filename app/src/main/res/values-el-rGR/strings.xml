@@ -721,8 +721,8 @@
     <string name="anilist_notifications_checking_time">Συχνότητα ενημέρωσης ειδοποιήσεων Anilist : %1$s</string>
     <string name="comment_notification_checking_time">Συχνότητα ενημέρωσης ειδοποιήσεων σχολίων : %1$s</string>
     <string name="activities">Δραστηριότητες</string>
-    <string name="enable_rpc">Enable Discord RPC</string>
-    <string name="enable_rpc_desc">Display your taste to plebs on Discord!</string>
+    <string name="enable_rpc">Ενεργοποίση του Discord RPC</string>
+    <string name="enable_rpc_desc">Δείχνει τη γεύση σας σε plebs στο Discord!</string>
     <string name="incorrect_password">Λάθος κωδικός</string>
     <string name="password_cannot_be_empty">Ο κωδικός πρόσβασης δεν μπορεί να είναι κενός</string>
     <string name="unknown_file_type">Άγνωστος τύπος αρχείου</string>
@@ -848,7 +848,7 @@
     <string name="user_agent_desc">Αλλάξτε τον προεπιλεγμένο παράγοντα χρήστη</string>
     <string name="force_legacy_installer_desc">Χρησιμοποιήστε το πρόγραμμα εγκατάστασης παλαιού τύπου για να εγκαταστήσετε επεκτάσεις (Για παλαιότερα τηλέφωνα Android)</string>
     <string name="skip_loading_extension_icons_desc">Μην φορτώνετε εικονίδια επεκτάσεων στη σελίδα επέκτασης</string>
-    <string name="NSFWExtention_desc">Enable 18+ extensions from search (May remove some useful extensions)</string>
+    <string name="NSFWExtention_desc">Ενεργοποίση 18+ επεκτάσεων από την αναζήτηση (Μπορεί να αφαιρεθούν ορισμένες χρήσιμες επεκτάσεις)</string>
     <string name="reader_settings_desc">Όλες οι ρυθμίσεις που σχετίζονται με τον Αναγνώστη</string>
     <string name="purge_manga_downloads_desc">Διαγραφή όλων των ληφθέντων Manga</string>
     <string name="purge_novel_downloads_desc">Διαγραφή όλων των ληφθέντων Μυθιστορημάτων</string>
