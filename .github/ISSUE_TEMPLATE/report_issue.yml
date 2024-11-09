@@ -1,5 +1,5 @@
 name: 🐛 Issue Report
-description: Report a bug or problem in Dantotsu.
+description: Report a bug or problem in Dantotsu
 labels: [bug]
 body:
   - type: textarea
