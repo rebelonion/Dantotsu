@@ -23,7 +23,7 @@ class Contributors {
                     Mapper.json.decodeFromJsonElement<GithubResponse>(it)
                 }
             res.forEach {
-                if (it.login == "SunglassJerry" || it.login == "itsmechinmoy") return@forEach
+                if (it.login == "SunglassJerry") return@forEach
                 val role = when (it.login) {
                     "rebelonion" -> "Owner & Maintainer"
                     "sneazy-ibo" -> "Contributor & Comment Moderator"
@@ -98,7 +98,7 @@ class Contributors {
                     ),
                     Developer(
                         "hastsu",
-                        "https://cdn.discordapp.com/avatars/602422545077108749/20b4a6efa4314550e4ed51cdbe4fef3d.webp?size=160",
+                        "https://s4.anilist.co/file/anilistcdn/user/avatar/large/b6183359-9os7zUhYdF64.jpg",
                         "Comment Moderator and Arabic Translator",
                         "https://anilist.co/user/6183359"
                     ),
