@@ -96,6 +96,12 @@ class Contributors {
                         "https://anilist.co/user/Dawnusedyeet/"
                     ),
                     Developer(
+                        "Chinmoy",
+                        "https://s4.anilist.co/file/anilistcdn/user/avatar/large/b6110204-nhhnglDW5K7x.png",
+                        "Goth gf",
+                        "https://anilist.co/user/itsmechinmoy/"
+                    ),
+                    Developer(
                         "hastsu",
                         "https://cdn.discordapp.com/avatars/602422545077108749/20b4a6efa4314550e4ed51cdbe4fef3d.webp?size=160",
                         "Comment Moderator and Arabic Translator",
