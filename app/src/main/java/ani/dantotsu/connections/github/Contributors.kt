@@ -91,6 +91,12 @@ class Contributors {
                         "https://anilist.co/user/6049773"
                     ),
                     Developer(
+                        "Dawnusedyeet",
+                        "https://s4.anilist.co/file/anilistcdn/user/avatar/large/b6237399-RHFvRHriXjwS.png",
+                        "Contributor",
+                        "https://anilist.co/user/Dawnusedyeet/"
+                    ),
+                    Developer(
                         "hastsu",
                         "https://s4.anilist.co/file/anilistcdn/user/avatar/large/b6183359-9os7zUhYdF64.jpg",
                         "Comment Moderator and Arabic Translator",
