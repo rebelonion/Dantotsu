@@ -28,6 +28,7 @@ class Contributors {
                     "rebelonion" -> "Owner & Maintainer"
                     "sneazy-ibo" -> "Contributor & Comment Moderator"
                     "WaiWhat" -> "Icon Designer"
+                    "itsmechinmoy" -> "Discord and Telegram Admin/Helper, Comment Moderator & Translator."
                     else -> "Contributor"
                 }
                 developers = developers.plus(
@@ -94,12 +95,6 @@ class Contributors {
                         "https://s4.anilist.co/file/anilistcdn/user/avatar/large/b6237399-RHFvRHriXjwS.png",
                         "Contributor",
                         "https://anilist.co/user/Dawnusedyeet/"
-                    ),
-                    Developer(
-                        "itsmechinmoy",
-                        "https://avatars.githubusercontent.com/u/167056923?v=4",
-                        "Telegram Admin, Comment Moderator, and Contributor",
-                        "https://anilist.co/user/6110204"
                     ),
                     Developer(
                         "hastsu",
