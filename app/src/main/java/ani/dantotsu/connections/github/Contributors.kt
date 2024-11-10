@@ -104,7 +104,7 @@ class Contributors {
                     Developer(
                         "itsmechinmoy",
                         "https://s4.anilist.co/file/anilistcdn/user/avatar/large/b6110204-nhhnglDW5K7x.png",
-                        "Telegram Admin, Comment Moderator, Assamese Translator, Discord Support/Helper, and Dantotsu Contributor. Also, not a fan of the LGHDTV community.",
+                        "Telegram Admin, Comment Moderator, Goth gf",
                         "https://anilist.co/user/6110204"
                     ),
                 )
