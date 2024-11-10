@@ -97,7 +97,7 @@ class Contributors {
                     ),
                     Developer(
                         "itsmechinmoy",
-                        "https://s4.anilist.co/file/anilistcdn/user/avatar/large/b6110204-nhhnglDW5K7x.png",
+                        "https://avatars.githubusercontent.com/u/167056923?v=4",
                         "Telegram Admin, Comment Moderator, Goth gf",
                         "https://anilist.co/user/6110204"
                     ),
