@@ -104,7 +104,7 @@
     <string name="season">Temporada</string>
     <string name="start_date">Data de Início</string>
     <string name="end_date">Data de Término</string>
-    <string name="source">Fonte</string>
+    <string name="source">Origem</string>
     <string name="main_studio">Estúdio</string>
     <string name="genres">Gêneros</string>
     <string name="description">Sinopse</string>
@@ -121,7 +121,9 @@
     <string name="chaps">Capítulos</string>
     <string name="chap">Capítulo</string>
     <string name="wrong"><u>Título Errado?</u></string>
-    <string name="source_not_found">Nada apareceu desta fonte.\n Vamos procurar em outro lugar.</string>
+    <string name="source_not_found">        Não apareceu nada nessa extensão.\n
+        Vamos procurar em outro lugar.
+    </string>
     <string name="download_not_found">Seus downloads estão se sentindo um pouco solitários…\n Tente baixar algo.</string>
     <string name="not_supported">%1$s não é suportado!</string>
     <string name="server_selector">Selecionar Servidor</string>
@@ -151,7 +153,7 @@
     <string name="downloadInSd">Baixar no cartão SD</string>
     <string name="noSdFound">Não foi encontrado um cartão SD.</string>
     <string name="reader_settings">Configurações do Leitor</string>
-    <string name="default_source">Fonte Padrão</string>
+    <string name="default_source">Extensão Padrão</string>
     <string name="show_yt">Link do YouTube</string>
     <string name="default_ep_view">Layout de Episódios Padrão</string>
     <string name="default_chp_view">Layout de Capítulos Padrão</string>
@@ -194,7 +196,7 @@
     </string-array>
     <string name="video">Vídeo</string>
     <string name="video_info">Exibir Informações de Vídeo</string>
-    <string name="source_info">Exibir Nome da Fonte</string>
+    <string name="source_info">Exibir Nome da Extensão</string>
     <string name="video_info_info">Mostra qual é a resolução do vídeo atual, útil para servidores <b>\"Multi Qualidade\"</b>.</string>
     <string name="default_quality">Seleção de Qualidade Automática</string>
     <string name="height">Altura</string>
@@ -285,7 +287,7 @@
     <string name="selected_dns">DNS Selecionado</string>
     <string name="anime_manga">Animes e Mangás</string>
     <string name="list_settings">Configurações de Lista</string>
-    <string name="dns_info">Altere se o seu provedor de internet bloquear alguma fonte</string>
+    <string name="dns_info">Altere se o seu provedor de internet bloquear alguma extensão</string>
     <string name="selected_title_language">Idioma de Títulos Selecionado</string>
     <string name="selected_staff_language">Idioma de Staff Selecionado</string>
     <string name="selected_merge_time">Tempo de Mesclagem de Atividades</string>
@@ -345,7 +347,7 @@
     <string name="planned_manga">Mangás Planejados</string>
     <string name="image_long_clicking">Abrir imagem ao manter pressionado</string>
     <string name="always_continue_content">Sempre continuar itens anteriores</string>
-    <string name="search_source_list">Procurar pela próxima fonte disponível</string>
+    <string name="search_source_list">Procurar pela próxima extensão disponível</string>
     <string name="timestamp_proxy_desc">Útil se você encontrar falhas de Handshake</string>
     <string name="timestamp_proxy">Usar Proxy para Seções Temporais</string>
     <string name="check_app_updates">Procurar por Atualizações</string>
@@ -433,7 +435,7 @@
     <string name="reset_auto_update">Mantenha o botão \"Editor de lista\" pressionado para resetar a Atualização Automática</string>
     <string name="autoplay_cancelled">Reprodução Automática cancelada, não houve interação por mais de 1 hora.</string>
     <string name="auto_select_server_error">Não foi possível selecionar o servidor padrão, Por favor, tente novamente!</string>
-    <string name="stream_selection_empty">Sem servidores disponíveis! Tente outra fonte.</string>
+    <string name="stream_selection_empty">Sem servidores disponíveis! Tente outra extensão.</string>
     <string name="logging_in_mal">Entrando em MAL</string>
     <string name="getting_user_data">Obtendo Dados de Usuário</string>
     <string name="no_next_episode">Próximo episódio não encontrado</string>
@@ -500,7 +502,7 @@
     <string name="type_summary">RESUMO</string>
     <string name="type_alternative">ALTERNATIVO</string>
     <string name="type_other">OUTRO</string>
-    <string name="type_source">FONTE</string>
+    <string name="type_source">ORIGEM</string>
     <string name="type_contains">CONTÉM</string>
     <string name="read_on_dantotsu">Ler no Dantotsu</string>
     <string name="watch_on_dantotsu">Assistir no Dantotsu</string>
