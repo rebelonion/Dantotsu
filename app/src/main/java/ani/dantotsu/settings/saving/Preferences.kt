@@ -46,6 +46,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     IncludeAnimeList(Pref(Location.General, Boolean::class, true)),
     IncludeMangaList(Pref(Location.General, Boolean::class, true)),
     AdultOnly(Pref(Location.General, Boolean::class, false)),
+    CommentsEnabled(Pref(Location.General, Int::class, 0)),
 
     //User Interface
     UseOLED(Pref(Location.UI, Boolean::class, false)),
