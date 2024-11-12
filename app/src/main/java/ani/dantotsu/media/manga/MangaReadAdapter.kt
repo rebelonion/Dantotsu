@@ -40,6 +40,7 @@ import ani.dantotsu.px
 import ani.dantotsu.settings.FAQActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.snackString
 import ani.dantotsu.toast
 import ani.dantotsu.util.customAlertDialog
 import com.google.android.material.chip.Chip
@@ -86,6 +87,27 @@ class MangaReadAdapter(
             )
         }
         val offline = !isOnline(binding.root.context) || PrefManager.getVal(PrefName.OfflineMode)
+        //for removing saved progress
+        binding.sourceTitle.setOnLongClickListener{
+            fragment.requireContext().customAlertDialog().apply {
+                setTitle(" Delete Progress for all chapters of ${media.nameRomaji}")
+                setMessage("This will delete all the locally stored progress for chapters")
+                setPosButton(R.string.ok){
+                    val currentChapters = PrefManager.getAllCustomValsForMedia("${media.id}_Chapter")
+                    currentChapters.forEach { (key) ->
+                        PrefManager.removeCustomVal(key)
+                    }
+                    val currentChapterWithVolume = PrefManager.getAllCustomValsForMedia("${media.id}_Vol")
+                    currentChapterWithVolume.forEach { (key) ->
+                        PrefManager.removeCustomVal(key)
+                    }
+                    snackString("Deleted the progress of Chapters for ${media.nameRomaji}")
+                }
+                setNegButton(R.string.no)
+                show()
+            }
+            true
+        }
 
         binding.mediaSourceNameContainer.isGone = offline
         binding.mediaSourceSettings.isGone = offline
