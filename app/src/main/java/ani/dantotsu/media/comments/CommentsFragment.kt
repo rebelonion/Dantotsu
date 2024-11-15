@@ -568,16 +568,16 @@ class CommentsFragment : Fragment() {
         activity.customAlertDialog().apply{
             setTitle("Commenting Rules")
             .setMessage(
-                "🚨 BREAK ANY RULE = YOU'RE GONE 🚨\n\n" +
+                "🚨 BREAK ANY RULE = YOU'RE GONE\n\n" +
                 "1. NO RACISM, DISCRIMINATION, OR HATE SPEECH\n" +
-                "2️. NO SPAMMING OR SELF-PROMOTION\n" +
-                "3️. ABSOLUTELY NO NSFW CONTENT\n" +
-                "4️. ENGLISH ONLY – NO EXCEPTIONS\n" +
-                "5️. NO IMPERSONATION, HARASSMENT, OR ABUSE\n" +
-                "6️. NO ILLEGAL CONTENT OR DISRESPECT TOWARDS ANY ANIME/FANDOM\n" +
-                "7️. DO NOT REQUEST OR SHARE REPOSITORIES/EXTENSIONS\n" +
-                "8️. SPOILERS ALLOWED ONLY WITH SPOILER TAGS AND A WARNING\n" +
-                "9️. NO SEXUALIZING OR INAPPROPRIATE COMMENTS ABOUT MINOR CHARACTERS\n" +
+                "2. NO SPAMMING OR SELF-PROMOTION\n" +
+                "3. ABSOLUTELY NO NSFW CONTENT\n" +
+                "4. ENGLISH ONLY – NO EXCEPTIONS\n" +
+                "5. NO IMPERSONATION, HARASSMENT, OR ABUSE\n" +
+                "6. NO ILLEGAL CONTENT OR DISRESPECT TOWARDS ANY ANIME/FANDOM\n" +
+                "7. DO NOT REQUEST OR SHARE REPOSITORIES/EXTENSIONS\n" +
+                "8. SPOILERS ALLOWED ONLY WITH SPOILER TAGS AND A WARNING\n" +
+                "9. NO SEXUALIZING OR INAPPROPRIATE COMMENTS ABOUT MINOR CHARACTERS\n" +
                 "10. IF IT'S WRONG, DON'T POST IT!\n\n"
             )
             setPosButton("I Understand") {
