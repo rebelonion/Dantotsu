@@ -567,18 +567,18 @@ class CommentsFragment : Fragment() {
     private fun showCommentRulesDialog() {
         activity.customAlertDialog().apply{
             setTitle("Commenting Rules")
-            setMessage(
-                "I WILL BAN YOU WITHOUT HESITATION\n" +
-                        "1. No racism\n" +
-                        "2. No hate speech\n" +
-                        "3. No spam\n" +
-                        "4. No NSFW content\n" +
-                        "6. ENGLISH ONLY\n" +
-                        "7. No self promotion\n" +
-                        "8. No impersonation\n" +
-                        "9. No harassment\n" +
-                        "10. No illegal content\n" +
-                        "11. Anything you know you shouldn't comment\n"
+            .setMessage(
+                "🚨 BREAK ANY RULE = YOU'RE GONE 🚨\n\n" +
+                "1. NO RACISM, DISCRIMINATION, OR HATE SPEECH\n" +
+                "2️. NO SPAMMING OR SELF-PROMOTION\n" +
+                "3️. ABSOLUTELY NO NSFW CONTENT\n" +
+                "4️. ENGLISH ONLY – NO EXCEPTIONS\n" +
+                "5️. NO IMPERSONATION, HARASSMENT, OR ABUSE\n" +
+                "6️. NO ILLEGAL CONTENT OR DISRESPECT TOWARDS ANY ANIME/FANDOM\n" +
+                "7️. DO NOT REQUEST OR SHARE REPOSITORIES/EXTENSIONS\n" +
+                "8️. SPOILERS ALLOWED ONLY WITH SPOILER TAGS AND A WARNING\n" +
+                "9️. NO SEXUALIZING OR INAPPROPRIATE COMMENTS ABOUT MINOR CHARACTERS\n" +
+                "10. IF IT'S WRONG, DON'T POST IT!\n\n"
             )
             setPosButton("I Understand") {
                 PrefManager.setVal(PrefName.FirstComment, false)
