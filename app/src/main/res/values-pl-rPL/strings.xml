@@ -279,6 +279,7 @@
     <string name="fav_anime">Ulubione Anime</string>
     <string name="fav_manga">Ulubione Mangi</string>
     <string name="restart_app">Zrestartować aplikację?</string>
+    <string name="restart_app_extra">Restart the app to apply changes</string>
     <string name="next">Następny</string>
     <string name="previous">Poprzedni</string>
     <string name="current_page">Bieżąca strona</string>
@@ -663,6 +664,8 @@
     <string name="restore_settings">Importuj ustawienia</string>
     <string name="restore_settings_underline"><u>Przywróć ustawienia</u></string>
     <string name="try_internal_cast_experimental">Wypróbuj wewnętrzną emisję (eksperymentalne)</string>
+    <string name="comments_button">Enable Comments</string>
+    <string name="comments_button_desc">Dantotsu\'s very own comments server</string>
     <string name="comments">Komentarze</string>
     <string name="newest">Najnowsze</string>
     <string name="oldest">Najstarsze</string>
