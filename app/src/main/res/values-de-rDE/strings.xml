@@ -276,6 +276,7 @@
     <string name="fav_anime">Lieblingsanime</string>
     <string name="fav_manga">Lieblingsmanga</string>
     <string name="restart_app">App neu starten?</string>
+    <string name="restart_app_extra">Restart the app to apply changes</string>
     <string name="next">Weiter</string>
     <string name="previous">Zurück</string>
     <string name="current_page">Aktuelle Seite</string>
@@ -660,6 +661,8 @@
     <string name="restore_settings">Einstellungen Importieren</string>
     <string name="restore_settings_underline"><u>Einstellungen wiederherstellen</u></string>
     <string name="try_internal_cast_experimental">Internes Casting ausprobieren (Experimentell)</string>
+    <string name="comments_button">Enable Comments</string>
+    <string name="comments_button_desc">Dantotsu\'s very own comments server</string>
     <string name="comments">Kommentare</string>
     <string name="newest">Neueste</string>
     <string name="oldest">Älteste</string>
