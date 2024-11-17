@@ -157,8 +157,8 @@ jobs:
         
         # Decimal color codes for contributors
         declare -A contributor_colors
-        default_color="6121629"
-        contributor_colors["grayankit"]="#ff9b46"
+        default_color="16721401"
+        contributor_colors["grayankit"]="#350297"
         contributor_colors["ibo"]="#ff9b46"
         contributor_colors["aayush262"]="#5d689d"
         contributor_colors["Sadwhy"]="#ff7e95"
@@ -278,7 +278,7 @@ jobs:
                       --arg footer_text "Version $VERSION" \
                       --arg timestamp "$(date -u +%Y-%m-%dT%H:%M:%S.000Z)" \
                       --arg thumbnail_url "$thumbnail_url" \
-                      --argjson embed_color "$embed_color" \
+                      --arg embed_color "$embed_color" \
                       '{
                         "content": "<@&1225347048321191996>",
                         "embeds": [
