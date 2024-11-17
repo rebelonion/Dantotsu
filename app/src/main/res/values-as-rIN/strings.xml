@@ -279,6 +279,7 @@
     <string name="fav_anime">প্ৰিয়া অনুষ্ঠান</string>
     <string name="fav_manga">প্ৰিয়া কলা</string>
     <string name="restart_app">এপ পুনঃআৰম্ভ কৰিব?</string>
+    <string name="restart_app_extra">Restart the app to apply changes</string>
     <string name="next">পৰৱৰ্তী</string>
     <string name="previous">পূৰ্বৱৰ্তী</string>
     <string name="current_page">বৰ্তমান পৃষ্ঠা</string>
@@ -663,6 +664,8 @@
     <string name="restore_settings">Import Settings</string>
     <string name="restore_settings_underline"><u>Restore Settings</u></string>
     <string name="try_internal_cast_experimental">আপডেট কৰণ প্ৰযোগ কৰক</string>
+    <string name="comments_button">Enable Comments</string>
+    <string name="comments_button_desc">Dantotsu\'s very own comments server</string>
     <string name="comments">মন্তব্যসমূহ</string>
     <string name="newest">নতুনতম</string>
     <string name="oldest">পুৰণি</string>
