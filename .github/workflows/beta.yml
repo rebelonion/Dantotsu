@@ -362,7 +362,7 @@ jobs:
         version: ${VERSION}" \
             -F "parse_mode=HTML")
         else
-          echo "skipping because skip build set to true Okay"
+          echo "skipping because skip build set to true"
         fi
         
       env:
