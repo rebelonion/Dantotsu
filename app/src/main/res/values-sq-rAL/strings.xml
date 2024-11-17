@@ -279,6 +279,7 @@
     <string name="fav_anime">Anime e Preferuar</string>
     <string name="fav_manga">Manga e Preferuar</string>
     <string name="restart_app">Rihap aplikacionin?</string>
+    <string name="restart_app_extra">Restart the app to apply changes</string>
     <string name="next">Vijues</string>
     <string name="previous">Paraqytje e Mëparshme</string>
     <string name="current_page">Faqja Aktuale</string>
@@ -663,6 +664,8 @@
     <string name="restore_settings">Import Settings</string>
     <string name="restore_settings_underline"><u>Rivendos Cilësimet</u></string>
     <string name="try_internal_cast_experimental">Provoni Transmetimin e Brendshëm (Eksperimental)</string>
+    <string name="comments_button">Enable Comments</string>
+    <string name="comments_button_desc">Dantotsu\'s very own comments server</string>
     <string name="comments">Komente</string>
     <string name="newest">Më e reja</string>
     <string name="oldest">Më e vjetra</string>
