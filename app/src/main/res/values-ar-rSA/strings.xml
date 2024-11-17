@@ -279,6 +279,7 @@
     <string name="fav_anime">الانمي المفضل</string>
     <string name="fav_manga">المانجا المفضلة</string>
     <string name="restart_app">تعيد تشغيل التطبيق؟</string>
+    <string name="restart_app_extra">Restart the app to apply changes</string>
     <string name="next">التالي</string>
     <string name="previous">السابق</string>
     <string name="current_page">الصفحة الحالية</string>
@@ -662,6 +663,8 @@
     <string name="restore_settings">استيراد الإعدادات</string>
     <string name="restore_settings_underline"><u>استعادة الإعدادات الأصلية</u></string>
     <string name="try_internal_cast_experimental">حاول استخدام خاصية \"internal Cast\" (تجريبي)</string>
+    <string name="comments_button">Enable Comments</string>
+    <string name="comments_button_desc">Dantotsu\'s very own comments server</string>
     <string name="comments">التعليقات</string>
     <string name="newest">الأحدث</string>
     <string name="oldest">الأقدم</string>
