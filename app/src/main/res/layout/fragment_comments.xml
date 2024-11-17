@@ -26,6 +26,15 @@
                 android:gravity="end"
                 android:orientation="horizontal"
                 tools:ignore="UseCompoundDrawables">
+                <ImageView
+                    android:id="@+id/openRules"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/open_rules"
+                    app:srcCompat="@drawable/ic_round_info_24"
+                    app:tint="?attr/colorOnBackground" />
 
                 <ImageView
                     android:id="@+id/commentFilter"
