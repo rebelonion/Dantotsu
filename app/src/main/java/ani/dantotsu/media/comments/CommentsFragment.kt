@@ -162,6 +162,26 @@ class CommentsFragment : Fragment() {
             popup.inflate(R.menu.comments_sort_menu)
             popup.show()
         }
+        binding.openRules.setOnClickListener {
+            activity.customAlertDialog().apply {
+                setTitle("Commenting Rules")
+                    .setMessage(
+                        "🚨 BREAK ANY RULE = YOU'RE GONE\n\n" +
+                                "1. NO RACISM, DISCRIMINATION, OR HATE SPEECH\n" +
+                                "2. NO SPAMMING OR SELF-PROMOTION\n" +
+                                "3. ABSOLUTELY NO NSFW CONTENT\n" +
+                                "4. ENGLISH ONLY – NO EXCEPTIONS\n" +
+                                "5. NO IMPERSONATION, HARASSMENT, OR ABUSE\n" +
+                                "6. NO ILLEGAL CONTENT OR EXTREME DISRESPECT TOWARDS ANY FANDOM\n" +
+                                "7. DO NOT REQUEST OR SHARE REPOSITORIES/EXTENSIONS\n" +
+                                "8. SPOILERS ALLOWED ONLY WITH SPOILER TAGS AND A WARNING\n" +
+                                "9. NO SEXUALIZING OR INAPPROPRIATE COMMENTS ABOUT MINOR CHARACTERS\n" +
+                                "10. IF IT'S WRONG, DON'T POST IT!\n\n"
+                    )
+                setNegButton("I Understand") {}
+                show()
+            }
+        }
 
         binding.commentFilter.setOnClickListener {
             activity.customAlertDialog().apply {
@@ -565,20 +585,20 @@ class CommentsFragment : Fragment() {
      * Called when the user tries to comment for the first time
      */
     private fun showCommentRulesDialog() {
-        activity.customAlertDialog().apply{
+        activity.customAlertDialog().apply {
             setTitle("Commenting Rules")
-            setMessage(
-                "I WILL BAN YOU WITHOUT HESITATION\n" +
-                        "1. No racism\n" +
-                        "2. No hate speech\n" +
-                        "3. No spam\n" +
-                        "4. No NSFW content\n" +
-                        "6. ENGLISH ONLY\n" +
-                        "7. No self promotion\n" +
-                        "8. No impersonation\n" +
-                        "9. No harassment\n" +
-                        "10. No illegal content\n" +
-                        "11. Anything you know you shouldn't comment\n"
+            .setMessage(
+                "🚨 BREAK ANY RULE = YOU'RE GONE\n\n" +
+                "1. NO RACISM, DISCRIMINATION, OR HATE SPEECH\n" +
+                "2. NO SPAMMING OR SELF-PROMOTION\n" +
+                "3. ABSOLUTELY NO NSFW CONTENT\n" +
+                "4. ENGLISH ONLY – NO EXCEPTIONS\n" +
+                "5. NO IMPERSONATION, HARASSMENT, OR ABUSE\n" +
+                "6. NO ILLEGAL CONTENT OR EXTREME DISRESPECT TOWARDS ANY FANDOM\n" +
+                "7. DO NOT REQUEST OR SHARE REPOSITORIES/EXTENSIONS\n" +
+                "8. SPOILERS ALLOWED ONLY WITH SPOILER TAGS AND A WARNING\n" +
+                "9. NO SEXUALIZING OR INAPPROPRIATE COMMENTS ABOUT MINOR CHARACTERS\n" +
+                "10. IF IT'S WRONG, DON'T POST IT!\n\n"
             )
             setPosButton("I Understand") {
                 PrefManager.setVal(PrefName.FirstComment, false)

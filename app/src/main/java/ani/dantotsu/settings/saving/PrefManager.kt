@@ -235,6 +235,19 @@ object PrefManager {
             apply()
         }
     }
+    fun getAllCustomValsForMedia(prefix: String): Map<String, Any?> {
+        val allEntries = mutableMapOf<String, Any?>()
+
+        irrelevantPreferences?.all?.forEach { (key, value) ->
+            if (key.startsWith(prefix)) {
+                allEntries[key] = value
+            }
+        }
+
+        return allEntries
+    }
+
+
 
     @Suppress("UNCHECKED_CAST")
     fun <T> getLiveVal(prefName: PrefName, default: T): SharedPreferenceLiveData<T> {
