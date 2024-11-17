@@ -287,7 +287,7 @@ class MainActivity : AppCompatActivity() {
                     .get() > 0 || preferences.mangaExtensionUpdatesCount().get() > 0
             ) {
                 snackString(R.string.extension_updates_available)
-                    ?.setDuration(Snackbar.LENGTH_LONG)
+                    ?.setDuration(Snackbar.LENGTH_SHORT)
                     ?.setAction(R.string.review) {
                         startActivity(Intent(this, ExtensionsActivity::class.java))
                     }

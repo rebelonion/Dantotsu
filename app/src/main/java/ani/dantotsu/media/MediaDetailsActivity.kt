@@ -372,7 +372,9 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             navBar.createTab(R.drawable.ic_round_comment_24, R.string.comments, R.id.comment)
         navBar.addTab(infoTab)
         navBar.addTab(watchTab)
-        navBar.addTab(commentTab)
+        if (PrefManager.getVal<Int>(PrefName.CommentsEnabled) == 1) {
+            navBar.addTab(commentTab)
+        }
         if (model.continueMedia == null && media.cameFromContinue) {
             model.continueMedia = PrefManager.getVal(PrefName.ContinueMedia)
             selected = 1
