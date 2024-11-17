@@ -9,7 +9,6 @@
         <item name="elevationOverlayEnabled">false</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:layoutDirection">ltr</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="android:fontFamily">@font/poppins</item>
         <item name="shapeAppearanceLargeComponent">@style/ShapeAppearanceOverlay.Demo</item>
