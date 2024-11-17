@@ -279,6 +279,7 @@
     <string name="fav_anime">Favori Animeler</string>
     <string name="fav_manga">Favori Mangalar</string>
     <string name="restart_app">Uygulamayı Yeniden Başlatalım mı?</string>
+    <string name="restart_app_extra">Restart the app to apply changes</string>
     <string name="next">Sonraki</string>
     <string name="previous">Önceki</string>
     <string name="current_page">Mevcut Sayfa</string>
@@ -663,6 +664,8 @@
     <string name="restore_settings">Ayarları İçeri Aktar</string>
     <string name="restore_settings_underline"><u>Ayarları Sıfırla</u></string>
     <string name="try_internal_cast_experimental">Dahili Yayını Deneyin (Deneysel)</string>
+    <string name="comments_button">Enable Comments</string>
+    <string name="comments_button_desc">Dantotsu\'s very own comments server</string>
     <string name="comments">Yorumlar</string>
     <string name="newest">En Yeni</string>
     <string name="oldest">En Eski</string>
