@@ -19,7 +19,7 @@ jobs:
       contents: write
     env:
       CI: true
-      SKIP_BUILD: true
+      SKIP_BUILD: false
 
     steps:
     - name: Checkout repo
