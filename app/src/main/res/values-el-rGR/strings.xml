@@ -275,6 +275,7 @@
     <string name="fav_anime">Αγαπημένα Anime</string>
     <string name="fav_manga">Αγαπημένα Manga</string>
     <string name="restart_app">Επανεκκίνηση της εφαρμογής;</string>
+    <string name="restart_app_extra">Restart the app to apply changes</string>
     <string name="next">Επόμενο</string>
     <string name="previous">Προηγούμενο</string>
     <string name="current_page">Τρέχουσα σελίδα</string>
@@ -659,6 +660,8 @@
     <string name="restore_settings">Εισαγωγή Ρυθμίσεων</string>
     <string name="restore_settings_underline"><u>Επαναφορά Ρυθμίσεων</u></string>
     <string name="try_internal_cast_experimental">Δοκιμάστε το Internal Cast (Πειραματικό)</string>
+    <string name="comments_button">Enable Comments</string>
+    <string name="comments_button_desc">Dantotsu\'s very own comments server</string>
     <string name="comments">Σχολεία</string>
     <string name="newest">Νεότερο</string>
     <string name="oldest">Παλιότερο</string>
