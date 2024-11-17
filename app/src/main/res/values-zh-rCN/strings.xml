@@ -275,6 +275,7 @@
     <string name="fav_anime">喜欢的动画</string>
     <string name="fav_manga">喜欢的漫画</string>
     <string name="restart_app">重新启动应用程序？</string>
+    <string name="restart_app_extra">Restart the app to apply changes</string>
     <string name="next">下一个</string>
     <string name="previous">上一个</string>
     <string name="current_page">当前页</string>
@@ -659,6 +660,8 @@
     <string name="restore_settings">导入设置</string>
     <string name="restore_settings_underline"><u>恢复设置</u></string>
     <string name="try_internal_cast_experimental">尝试内部投射（实验性）</string>
+    <string name="comments_button">Enable Comments</string>
+    <string name="comments_button_desc">Dantotsu\'s very own comments server</string>
     <string name="comments">评论</string>
     <string name="newest">最新</string>
     <string name="oldest">最旧</string>
