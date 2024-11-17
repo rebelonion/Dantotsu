@@ -275,6 +275,7 @@
     <string name="fav_anime">पसंदीदा एनिमे</string>
     <string name="fav_manga">पसंदीदा मंगा</string>
     <string name="restart_app">क्या आप एप्लिकेशन को पुनः आरंभ करना चाहते हैं?</string>
+    <string name="restart_app_extra">Restart the app to apply changes</string>
     <string name="next">अगला</string>
     <string name="previous">पिछला</string>
     <string name="current_page">वर्तमान पृष्ठ</string>
@@ -659,6 +660,8 @@
     <string name="restore_settings">सेटिंग्स आयात करें</string>
     <string name="restore_settings_underline"><u>सेटिंग्स पुनर्स्थापित करें</u></string>
     <string name="try_internal_cast_experimental">आंतरिक कास्ट का प्रयास करें (प्रयोगशील)</string>
+    <string name="comments_button">Enable Comments</string>
+    <string name="comments_button_desc">Dantotsu\'s very own comments server</string>
     <string name="comments">टिप्पणियाँ</string>
     <string name="newest">नवीनतम</string>
     <string name="oldest">सबसे पुरानी</string>
