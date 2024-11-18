@@ -154,6 +154,7 @@ import java.io.FileOutputStream
 import java.io.OutputStream
 import java.lang.reflect.Field
 import java.util.Calendar
+import java.util.Locale
 import java.util.TimeZone
 import java.util.Timer
 import java.util.TimerTask
@@ -1538,4 +1539,27 @@ fun getYoutubeId(url: String): String {
     val regex = """(?:youtube\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|(?:youtu\.be|youtube\.com)/)([^"&?/\s]{11})|youtube\.com/""".toRegex()
     val matchResult = regex.find(url)
     return matchResult?.groupValues?.getOrNull(1) ?: ""
+}
+
+fun getLanguageCode(language: String): CharSequence {
+    val locales = Locale.getAvailableLocales()
+    for (locale in locales) {
+        if (locale.displayLanguage.equals(language, ignoreCase = true)) {
+            val lang: CharSequence = locale.language
+            return lang
+
+        }
+    }
+    val out: CharSequence = "null"
+    return out
+}
+
+fun getLanguageName(language: String): String? {
+    val locales = Locale.getAvailableLocales()
+    for (locale in locales) {
+        if (locale.language.equals(language, ignoreCase = true)) {
+            return locale.displayLanguage
+        }
+    }
+    return null
 }
