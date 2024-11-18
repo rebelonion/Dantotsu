@@ -123,6 +123,8 @@ dependencies {
 //  Media3 Casting
     implementation "androidx.media3:media3-cast:$exo_version"
     implementation "androidx.mediarouter:mediarouter:1.7.0"
+// Media3 extension
+    implementation "com.github.anilbeesetti.nextlib:nextlib-media3ext:v0.7.0"
 
 //  UI
     implementation 'com.google.android.material:material:1.12.0'

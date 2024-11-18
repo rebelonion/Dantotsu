@@ -81,6 +81,7 @@ import androidx.media3.datasource.HttpDataSource
 import androidx.media3.datasource.cache.CacheDataSource
 import androidx.media3.datasource.okhttp.OkHttpDataSource
 import androidx.media3.exoplayer.DefaultLoadControl
+import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.hls.HlsMediaSource
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
@@ -165,6 +166,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import io.github.anilbeesetti.nextlib.media3ext.ffdecoder.NextRenderersFactory
 import java.util.Calendar
 import java.util.Locale
 import java.util.Timer
@@ -1700,7 +1702,14 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             .build()
 
         hideSystemBars()
-        exoPlayer = ExoPlayer.Builder(this)
+        
+        val decoder = DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER
+        
+        val renderersFactory = NextRenderersFactory(this)
+             .setEnableDecoderFallback(true)
+             .setExtensionRendererMode(decoder)
+        
+        exoPlayer = ExoPlayer.Builder(this, renderersFactory)
             .setMediaSourceFactory(DefaultMediaSourceFactory(cacheFactory))
             .setTrackSelector(trackSelector)
             .setLoadControl(loadControl)
