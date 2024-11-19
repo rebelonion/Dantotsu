@@ -47,6 +47,8 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     IncludeMangaList(Pref(Location.General, Boolean::class, true)),
     AdultOnly(Pref(Location.General, Boolean::class, false)),
     CommentsEnabled(Pref(Location.General, Int::class, 0)),
+    EnableSocks5Proxy(Pref(Location.General, Boolean::class, false)),
+    ProxyAuthEnabled(Pref(Location.General, Boolean::class, false)),
 
     //User Interface
     UseOLED(Pref(Location.UI, Boolean::class, false)),
@@ -197,6 +199,8 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     RefreshStatus(Pref(Location.Irrelevant, Boolean::class, false)),
     rpcEnabled(Pref(Location.Irrelevant, Boolean::class, true)),
 
+    //testing 
+
     //Protected
     DiscordToken(Pref(Location.Protected, String::class, "")),
     DiscordId(Pref(Location.Protected, String::class, "")),
@@ -210,4 +214,8 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     AppPassword(Pref(Location.Protected, String::class, "")),
     BiometricToken(Pref(Location.Protected, String::class, "")),
     OverridePassword(Pref(Location.Protected, Boolean::class, false)),
+    Socks5ProxyHost(Pref(Location.Protected, String::class, "")),
+    Socks5ProxyPort(Pref(Location.Protected, String::class, "")),
+    Socks5ProxyUsername(Pref(Location.Protected, String::class, "")),
+    Socks5ProxyPassword(Pref(Location.Protected, String::class, "")),
 }

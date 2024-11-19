@@ -157,7 +157,8 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".settings.SettingsExtensionsActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".settings.SettingsAddonActivity"
             android:parentActivityName=".MainActivity" />

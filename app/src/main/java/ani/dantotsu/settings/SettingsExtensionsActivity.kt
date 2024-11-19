@@ -23,9 +23,11 @@ import ani.dantotsu.initActivity
 import ani.dantotsu.media.MediaType
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.parsers.ParserTestActivity
+import ani.dantotsu.restartApp
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
+import ani.dantotsu.others.CustomBottomDialog
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.util.customAlertDialog
 import eu.kanade.domain.base.BasePreferences
@@ -271,6 +273,26 @@ class SettingsExtensionsActivity : AppCompatActivity() {
                         }
                     ),
                     Settings(
+                        type = 2,
+                        name = getString(R.string.proxy),
+                        desc = getString(R.string.proxy_desc),
+                        icon = R.drawable.swap_horizontal_circle_24,
+                        isChecked = PrefManager.getVal(PrefName.EnableSocks5Proxy),
+                        switch = { isChecked, _ ->
+                            PrefManager.setVal(PrefName.EnableSocks5Proxy, isChecked)
+                            restartApp()
+                        }
+                    ),
+                    Settings(
+                        type = 1,
+                        name = getString(R.string.proxy_setup),
+                        desc = getString(R.string.proxy_setup_desc),
+                        icon = R.drawable.lan_24,
+                        onClick = {
+                            ProxyDialogFragment().show(supportFragmentManager, "dialog")
+                        }
+                    ),
+                    Settings( 
                         type = 2,
                         name = getString(R.string.force_legacy_installer),
                         desc = getString(R.string.force_legacy_installer_desc),
