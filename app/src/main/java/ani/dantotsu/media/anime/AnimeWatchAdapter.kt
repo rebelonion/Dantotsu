@@ -38,6 +38,7 @@ import ani.dantotsu.px
 import ani.dantotsu.settings.FAQActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.snackString
 import ani.dantotsu.toast
 import ani.dantotsu.util.customAlertDialog
 import com.google.android.material.chip.Chip
@@ -298,6 +299,27 @@ class AnimeWatchAdapter(
         }
         // Episode Handling
         handleEpisodes()
+
+        //clear progress
+        binding.sourceTitle.setOnLongClickListener {
+            fragment.requireContext().customAlertDialog().apply {
+                setTitle(" Delete Progress for all episodes of ${media.nameRomaji}")
+                setMessage("This will delete all the locally stored progress for all episodes")
+                setPosButton(R.string.ok){
+                    val prefix = "${media.id}_"
+                    val regex = Regex("^${prefix}\\d+$")
+
+                    PrefManager.getAllCustomValsForMedia(prefix)
+                        .keys
+                        .filter { it.matches(regex) }
+                        .onEach { key -> PrefManager.removeCustomVal(key) }
+                    snackString("Deleted the progress of all Episodes for ${media.nameRomaji}")
+                }
+                setNegButton(R.string.no)
+                show()
+            }
+            true
+        }
     }
 
     fun subscribeButton(enabled: Boolean) {
