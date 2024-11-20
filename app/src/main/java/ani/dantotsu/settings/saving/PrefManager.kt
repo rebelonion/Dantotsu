@@ -235,10 +235,18 @@ object PrefManager {
             apply()
         }
     }
+
+    /**
+     * Retrieves all SharedPreferences entries with keys starting with the specified prefix.
+     *
+     * @param prefix The prefix to filter keys.
+     * @return A map containing key-value pairs that match the prefix.
+     */
     fun getAllCustomValsForMedia(prefix: String): Map<String, Any?> {
+        val prefs = irrelevantPreferences ?: return emptyMap()
         val allEntries = mutableMapOf<String, Any?>()
 
-        irrelevantPreferences?.all?.forEach { (key, value) ->
+        prefs.all.forEach { (key, value) ->
             if (key.startsWith(prefix)) {
                 allEntries[key] = value
             }
@@ -246,6 +254,7 @@ object PrefManager {
 
         return allEntries
     }
+
 
 
 

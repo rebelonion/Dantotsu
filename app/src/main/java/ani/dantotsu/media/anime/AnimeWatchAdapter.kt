@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getString
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.FileUrl
 import ani.dantotsu.R
 import ani.dantotsu.currActivity
+import ani.dantotsu.currContext
 import ani.dantotsu.databinding.DialogLayoutBinding
 import ani.dantotsu.databinding.ItemMediaSourceBinding
 import ani.dantotsu.databinding.ItemChipBinding
@@ -38,6 +40,7 @@ import ani.dantotsu.px
 import ani.dantotsu.settings.FAQActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.snackString
 import ani.dantotsu.toast
 import ani.dantotsu.util.customAlertDialog
 import com.google.android.material.chip.Chip
@@ -278,6 +281,26 @@ class AnimeWatchAdapter(
                         }
                     }
                 }
+                resetProgress.setOnClickListener {
+                    fragment.requireContext().customAlertDialog().apply {
+                        setTitle(" Delete Progress for all episodes of ${media.nameRomaji}")
+                        setMessage("This will delete all the locally stored progress for all episodes")
+                        setPosButton(R.string.ok){
+                            val prefix = "${media.id}_"
+                            val regex = Regex("^${prefix}\\d+$")
+
+                            PrefManager.getAllCustomValsForMedia(prefix)
+                                .keys
+                                .filter { it.matches(regex) }
+                                .onEach { key -> PrefManager.removeCustomVal(key) }
+                            snackString("Deleted the progress of all Episodes for ${media.nameRomaji}")
+                        }
+                        setNegButton(R.string.no)
+                        show()
+                    }
+                }
+
+                resetProgressDef.text = getString(currContext()!!,R.string.clear_stored_episode)
 
                 // Hidden
                 mangaScanlatorContainer.visibility = View.GONE
@@ -298,6 +321,27 @@ class AnimeWatchAdapter(
         }
         // Episode Handling
         handleEpisodes()
+
+        //clear progress
+        binding.sourceTitle.setOnLongClickListener {
+            fragment.requireContext().customAlertDialog().apply {
+                setTitle(" Delete Progress for all episodes of ${media.nameRomaji}")
+                setMessage("This will delete all the locally stored progress for all episodes")
+                setPosButton(R.string.ok){
+                    val prefix = "${media.id}_"
+                    val regex = Regex("^${prefix}\\d+$")
+
+                    PrefManager.getAllCustomValsForMedia(prefix)
+                        .keys
+                        .filter { it.matches(regex) }
+                        .onEach { key -> PrefManager.removeCustomVal(key) }
+                    snackString("Deleted the progress of all Episodes for ${media.nameRomaji}")
+                }
+                setNegButton(R.string.no)
+                show()
+            }
+            true
+        }
     }
 
     fun subscribeButton(enabled: Boolean) {

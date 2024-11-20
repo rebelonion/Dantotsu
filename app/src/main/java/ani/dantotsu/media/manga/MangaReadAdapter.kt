@@ -1,6 +1,7 @@
 package ani.dantotsu.media.manga
 
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.NumberPicker
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getString
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -63,6 +65,15 @@ class MangaReadAdapter(
     var scanlatorSelectionListener: ScanlatorSelectionListener? = null
     var options = listOf<String>()
 
+    private fun clearCustomValsForMedia(mediaId: String, suffix: String) {
+        val customVals = PrefManager.getAllCustomValsForMedia("$mediaId$suffix")
+        customVals.forEach { (key) ->
+            PrefManager.removeCustomVal(key)
+            Log.d("PrefManager", "Removed key: $key")
+        }
+    }
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val bind = ItemMediaSourceBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(bind)
@@ -93,14 +104,8 @@ class MangaReadAdapter(
                 setTitle(" Delete Progress for all chapters of ${media.nameRomaji}")
                 setMessage("This will delete all the locally stored progress for chapters")
                 setPosButton(R.string.ok){
-                    val currentChapters = PrefManager.getAllCustomValsForMedia("${media.id}_Chapter")
-                    currentChapters.forEach { (key) ->
-                        PrefManager.removeCustomVal(key)
-                    }
-                    val currentChapterWithVolume = PrefManager.getAllCustomValsForMedia("${media.id}_Vol")
-                    currentChapterWithVolume.forEach { (key) ->
-                        PrefManager.removeCustomVal(key)
-                    }
+                    clearCustomValsForMedia("${media.id}", "_Chapter")
+                    clearCustomValsForMedia("${media.id}", "_Vol")
                     snackString("Deleted the progress of Chapters for ${media.nameRomaji}")
                 }
                 setNegButton(R.string.no)
@@ -277,6 +282,22 @@ class MangaReadAdapter(
                         show()
                     }
                 }
+                resetProgress.setOnClickListener {
+                    fragment.requireContext().customAlertDialog().apply {
+                        setTitle(" Delete Progress for all chapters of ${media.nameRomaji}")
+                        setMessage("This will delete all the locally stored progress for chapters")
+                        setPosButton(R.string.ok){
+// Usage
+                            clearCustomValsForMedia("${media.id}", "_Chapter")
+                            clearCustomValsForMedia("${media.id}", "_Vol")
+
+                            snackString("Deleted the progress of Chapters for ${media.nameRomaji}")
+                        }
+                        setNegButton(R.string.no)
+                        show()
+                    }
+                }
+                resetProgressDef.text = getString(currContext()!!,R.string.clear_stored_chapter)
 
                 // Scanlator
                 mangaScanlatorContainer.isVisible = options.count() > 1
