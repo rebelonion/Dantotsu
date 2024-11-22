@@ -128,6 +128,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     Pip(Pref(Location.Player, Boolean::class, true)),
     RotationPlayer(Pref(Location.Player, Boolean::class, true)),
     TorrentEnabled(Pref(Location.Player, Boolean::class, false)),
+    UseAdditionalCodec(Pref(Location.Player, Boolean::class, true)),
 
     //Reader
     ShowSource(Pref(Location.Reader, Boolean::class, true)),
@@ -198,8 +199,6 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     OC(Pref(Location.Irrelevant, Boolean::class, false)),
     RefreshStatus(Pref(Location.Irrelevant, Boolean::class, false)),
     rpcEnabled(Pref(Location.Irrelevant, Boolean::class, true)),
-
-    //testing 
 
     //Protected
     DiscordToken(Pref(Location.Protected, String::class, "")),

@@ -110,7 +110,7 @@ jobs:
         fi
           
     - name: Upload a Build Artifact
-      if: ${{ env.SKIP_BUILD != 'true' && github.repository == 'rebelonion/Dantotsu' }}
+      if: ${{ env.SKIP_BUILD != 'true' }}
       uses: actions/upload-artifact@v4
       with:
           name: Dantotsu
@@ -118,24 +118,8 @@ jobs:
           compression-level: 9
           path: "app/build/outputs/apk/google/alpha/app-google-alpha.apk"
 
-    - name: Create GitHub Release
-      if: ${{ env.SKIP_BUILD != 'true' && github.repository != 'rebelonion/Dantotsu' }}
-      uses: softprops/action-gh-release@v2.0.6
-      with:
-        files: app/build/outputs/apk/google/alpha/app-google-alpha.apk
-        name: ${{ env.BRANCH }} build ${{ env.VERSION }}
-        tag_name: v${{ env.VERSION }}
-        body: |
-          New Pretester Build ${{ env.VERSION }} released on branch "${{ env.BRANCH }}" :)
-
-          Commits:
-          ${{ env.COMMIT_LOG }}
-        prerelease: false
-        make_latest: true
-        generate_release_notes: true
-        fail_on_unmatched_files: true
-        
     - name: Upload APK to Discord and Telegram
+      if: ${{ github.repository == 'rebelonion/Dantotsu' }}
       shell: bash
       run: |
         # Prepare Discord embed
