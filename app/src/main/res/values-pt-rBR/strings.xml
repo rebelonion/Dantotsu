@@ -970,4 +970,5 @@
     <string name="proxy_setup_desc">Configurar seu Proxy Socks5</string>
     <string name="clear_stored_episode">Limpar Dados de Episódio Armazenados</string>
     <string name="clear_stored_chapter">Limpar Dados de Capítulo Armazenados</string>
+    <string name="use_additional_codec">Additional Codec Support</string>
 </resources>
