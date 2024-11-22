@@ -1703,8 +1703,12 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
         hideSystemBars()
         
-        val decoder = DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER
-        
+        val useExtensionDecoder = PrefManager.getVal<Boolean>(PrefName.UseAdditionalCodec)
+        val decoder = if (useExtensionDecoder) {
+          DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER
+        } else {
+          DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF
+        }
         val renderersFactory = NextRenderersFactory(this)
              .setEnableDecoderFallback(true)
              .setExtensionRendererMode(decoder)
