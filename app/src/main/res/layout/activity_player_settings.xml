@@ -1232,6 +1232,27 @@
 
             </com.google.android.material.materialswitch.MaterialSwitch>
 
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/playerSettingsAdditionalCodec"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:drawableStart="@drawable/ic_round_high_quality_24"
+                android:drawablePadding="16dp"
+                android:elegantTextHeight="true"
+                android:fontFamily="@font/poppins_bold"
+                android:minHeight="64dp"
+                android:paddingHorizontal="32dp"
+                android:text="@string/use_additional_codec"
+                android:textAlignment="viewStart"
+                android:textColor="@color/bg_opp"
+                app:cornerRadius="0dp"
+                app:drawableTint="?attr/colorPrimary"
+                app:showText="false"
+                app:thumbTint="@color/button_switch_track">
+
+            </com.google.android.material.materialswitch.MaterialSwitch>
+            
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
