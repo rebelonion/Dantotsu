@@ -39,6 +39,10 @@ class ProxyDialogFragment : BottomSheetDialogFragment() {
         binding.proxyUsername.setText(proxyUsername)
         binding.proxyPassword.setText(proxyPassword)
         binding.proxyAuthentication.isChecked = authEnabled
+        binding.proxyUsername.isEnabled = authEnabled
+        binding.proxyPassword.isEnabled = authEnabled
+        binding.proxyUsernameLayout.isEnabled = authEnabled
+        binding.proxyPasswordLayout.isEnabled = authEnabled
 
         binding.proxySave.setOnClickListener {
             proxyHost = binding.proxyHost.text.toString() ?: ""
