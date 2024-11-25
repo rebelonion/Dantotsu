@@ -21,7 +21,7 @@ jobs:
 
         
     - name: Download last SHA artifact
-      uses: dawidd6/action-download-artifact@v3
+      uses: dawidd6/action-download-artifact@v6
       with:
         workflow: beta.yml
         name: last-sha
