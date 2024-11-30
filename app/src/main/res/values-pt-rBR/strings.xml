@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="pt-rBR">
-    <string name="slogan">O NOVO Melhor aplicativo de Animes e Mangás para Android.</string>
-    <string name="login">Login</string>
+    <string name="slogan">O NOVO melhor &amp; de Anime e Mangá para Android.</string>
+    <string name="login">Acessar</string>
     <string name="logout">Sair</string>
     <string name="anilist_link">https://anilist.co/user/%1$s/</string>
     <string name="myanilist_link">https://myanimelist.net/profile/%1$s/</string>
@@ -11,8 +11,8 @@
     <string name="browse_anime">Explorar Animes</string>
     <string name="manga">Mangá</string>
     <string name="browse_manga">Explorar Mangás</string>
-    <string name="novels">Novels</string>
-    <string name="info">Info</string>
+    <string name="novels">Livros</string>
+    <string name="info">Informações</string>
     <string name="watch">Assistir</string>
     <string name="read">Ler</string>
     <string name="language">Idioma</string>
@@ -32,7 +32,7 @@
     <string name="trending_anime">Animes em Alta</string>
     <string name="popular_anime">Animes Populares</string>
     <string name="trending_manga">Mangás em Alta</string>
-    <string name="trending_novel">Novels em Alta</string>
+    <string name="trending_novel">Livro tendência</string>
     <string name="popular_manga">Mangás Populares</string>
     <string name="username">Nome de Usuário</string>
     <string name="chapters_read">Capítulos Lidos</string>
@@ -54,7 +54,7 @@
         <item>Assistindo</item>
         <item>Concluído</item>
         <item>Pausado</item>
-        <item>Dropado</item>
+        <item>Largado</item>
         <item>Planejando</item>
         <item>Favoritos</item>
         <item>Reassistindo</item>
