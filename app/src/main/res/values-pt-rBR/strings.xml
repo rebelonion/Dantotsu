@@ -90,7 +90,7 @@
     <string name="delete">Excluir</string>
     <string name="remove">Remover</string>
     <string name="name">Nome</string>
-    <string name="name_romaji">Nome em Romani</string>
+    <string name="name_romaji">Nome em Romaji/Transcrição</string>
     <string name="mean_score">Nota Média</string>
     <string name="format">Formato</string>
     <string name="status_title">Condição</string>
@@ -142,7 +142,7 @@
     <string name="ending">Encerramento</string>
     <string name="prequel">Antecedentes</string>
     <string name="sequel">Continuação</string>
-    <string name="anilist_settings">Configuração do Anilista</string>
+    <string name="anilist_settings">Configuração do Anilist</string>
     <string name="extension_settings">Extensões</string>
     <string name="downloads">Transferências</string>
     <string name="offline_mode">Modo sem rede</string>
@@ -164,7 +164,7 @@
     <string name="theme">Tema</string>
     <string name="ui_settings">Configurações da UI</string>
     <string name="about">Sobre</string>
-    <string name="desc">"    Dantotsu é feito a partir das cinzas do Saikou e tem uma elegância simples, mas super moderna. É um cliente só para Anilista, que também deixa você fazer transmissão para baixar Anime através de extensões &amp; Mangá. \nDantotsu significa literalmente \"o melhor dos melhores\" em japonês. Bem, a gente gostaria de dizer que este é o melhor aplicativo de código aberto para animes e mangás no Android, o que você acha?"</string>
+    <string name="desc">"    Dantotsu é feito a partir das cinzas do Saikou e tem uma elegância simples, mas super moderna. É um cliente só para Anilist, que também deixa você fazer transmissão para baixar Anime através de extensões &amp; Mangá. \nDantotsu significa literalmente \"o melhor dos melhores\" em japonês. Bem, a gente gostaria de dizer que este é o melhor aplicativo de código aberto para animes e mangás no Android, o que você acha?"</string>
     <string name="devs">Desenvolvedores/Ajudantes</string>
     <string name="disclaimer">Aviso</string>
     <string name="full_disclaimer">         - O Dantotsu por si só só oferece um rastreador de animes e mangás e não tem capacidade de streaming ou download de animes ou mangás.
@@ -238,7 +238,7 @@
     <string name="ask_update_progress_info_zero">Ativar fará com que itens recém-iniciados sejam adicionados ao Anilist com o progresso definido para o Capítulo 0.</string>
     <string name="ask_update_progress_hentai">Atualizar Progresso para Hentai</string>
     <string name="ask_update_progress_doujin">Atualizar Progresso para Doujins</string>
-    <string name="very_bold">Bem ousado da sua parte, senhor</string>
+    <string name="very_bold">bem ousado da sua parte, senhor</string>
     <string name="watch_complete_percentage">Porcentagem de Visualização para Atualizar</string>
     <string name="watch_complete_percentage_info">A porcentagem em que o progresso no Anilist deve ser atualizado após assistir a um episódio. \nIsso também define a porcentagem para quando pré-carregar os links para o próximo episódio.</string>
     <string name="behaviour">Comportamento</string>
@@ -336,8 +336,8 @@
     <string name="other">Outro</string>
     <string name="total_repeats">REPETIÇÕES TOTAIS</string>
     <string name="custom_lists">Listas Personalizadas</string>
-    <string name="donate_desc">Quer apoiar o Desenvolvedor do Dantotsu?\nConsidere fazer uma Doação :D</string>
-    <string name="donate_goal">Sem meta de doações no momento</string>
+    <string name="donate_desc">Quer apoiar o mantenedor do Dantotsu?\n Considere fazer uma doação</string>
+    <string name="donate_goal">Sem objetivo de doação no momento</string>
     <string name="filter">Filtro</string>
     <string name="year">Ano</string>
     <string name="apply">Aplicar</string>
@@ -355,7 +355,7 @@
     <string name="image_long_clicking">Abrir imagem ao manter pressionado</string>
     <string name="always_continue_content">Sempre continuar itens anteriores</string>
     <string name="search_source_list">Procurar pela próxima extensão disponível</string>
-    <string name="timestamp_proxy_desc">Útil se você encontrar falhas de Handshake</string>
+    <string name="timestamp_proxy_desc">Útil se você estiver enfrentando falhas de handshake</string>
     <string name="timestamp_proxy">Usar Proxy para Seções Temporais</string>
     <string name="check_app_updates">Procurar por Atualizações</string>
     <string name="author">Autor</string>
@@ -367,32 +367,35 @@
     <string name="login_with_anilist">Faça Login com Anilist!</string>
     <string name="anilist">Anilist</string>
     <string name="account_help">Como isso funciona\?</string>
-    <string name="full_account_help">        Dantotsu é um aplicativo baseado em Anilist, então para sincronizar com sua conta MAL, é necessário fazer login em uma conta Anilist.
-        \nDepois de fazer login com as contas Anilist e MAL, o aplicativo atualizará automaticamente sua conta MAL sempre que:
-        \n- Adicionar uma nova mídia
+    <string name="full_account_help">Dantotsu é um aplicativo baseado no Anilist, portanto, para sincronizar com sua conta MAL, é necessário estar logado em uma conta Anilist.
+        \nUma vez logado com as contas Anilist e MAL, o aplicativo atualizará automaticamente sua conta MAL sempre que:
+        \n- Adicionar um novo mídia
         \n- Editar uma mídia
-        \n- Excluir uma mídia
+        \n- Deletar uma mídia
 
-        \n\nNota: O aplicativo não sincronizará mídias existentes do Anilist para o MAL. É recomendável sincronizá-las.
-        \n- Verifique __FAQs__ para achar o _Método Fácil_
+        \n\nNota: O aplicativo não sincronizará mídias antigas do Anilist para o MAL, é recomendado sincronizá-las.
 
-        \n\nE para os _Intermediários_ :
-        \n- [Como sincronizar lista do Anilist com MAL](https://anilist.co/forum/thread/2654)
-        \n- [Como sincronizar lista MAL com Anilist](https://anilist.co/forum/thread/3393)
+        \n- Verifique as __FAQs__ para o _Método Fácil_
 
-        \n\n_A sincronização de contas MAL e Anilist não é necessária._
+        \n\nPara _Intermediários_ :
+        \n- [Como sincronizar dados do Anilist com o MAL]
+(https://anilist.co/forum/thread/2654)
+        \n- [Como sincronizar dados do MAL com o Anilist]
+(https://anilist.co/forum/thread/3393)
+
+        \n\n_Não é necessário sincronizar as contas MAL e Anilist._
     </string>
-    <string name="notification_for_checking_subscriptions">Notificação para Verificar Inscrições</string>
+    <string name="notification_for_checking_subscriptions">Verificando notificação de assinaturas</string>
     <string name="use_alarm_manager">Usar o Alarm Manager</string>
     <string name="use_alarm_manager_reliable">Usar o Alarm Manager para Notificações Confiáveis</string>
-    <string name="use_alarm_manager_confirm">Usar o Alarm Manager pode ajudar a combater à otimização de bateria, mas pode gastá-la mais. Também requere a permissão do Alarm Manager.</string>
+    <string name="use_alarm_manager_confirm">Usar o Alarm Manager pode ajudar a combater a otimização de bateria, mas pode consumir mais bateria. Também requer a permissão do Alarm Manager.</string>
     <string name="use">Usar</string>
     <string name="remove_all_subscriptions">Remover todas as inscrições</string>
     <string name="remove_all_subscriptions_desc">Tem certeza de que deseja remover todas as inscrições para %1$s?</string>
-    <string name="checking_subscriptions">Notificação ao Verificar Inscrições</string>
+    <string name="checking_subscriptions">Notificação para verificar assinaturas</string>
     <string name="subscriptions_checking_time_s">Frequência de Atualização de Inscrições: %1$s</string>
     <string name="subscriptions_checking_time">Frequência de Atualização de Inscrições</string>
-    <string name="subscriptions_info">Quantidade de tempo para o Dantotsu periodicamente procurar por novos Episódios/Capítulos\n(Menos tempo causará maior consumo de bateria)</string>
+    <string name="subscriptions_info">Tempo para o Dantotsu verificar periodicamente novos episódios/capítulos\n(quanto menor o intervalo, maior o consumo de bateria)</string>
     <string name="do_not_update">Não Atualizar</string>
     <string name="loading_chap_number">Carregando Capítulo %1$s</string>
     <string name="sort_by_release_date">Ordenar por Data de Lançamento</string>
