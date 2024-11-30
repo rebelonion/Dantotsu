@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="pt-rBR">
-    <string name="slogan">O NOVO melhor &amp; de Anime e Mangá para Android.</string>
+    <string name="slogan">O NOVO e melhor &amp; de Animes e Mangás para Android.</string>
     <string name="login">Acessar</string>
     <string name="logout">Sair</string>
     <string name="anilist_link">https://anilist.co/user/%1$s/</string>
@@ -8,16 +8,16 @@
     <string name="discord_link">https://discord.com/users/%1$s/</string>
     <string name="home">Início</string>
     <string name="anime">Anime</string>
-    <string name="browse_anime">Explorar Animes</string>
+    <string name="browse_anime">Buscar Anime</string>
     <string name="manga">Mangá</string>
-    <string name="browse_manga">Explorar Mangás</string>
+    <string name="browse_manga">Buscar Mangás</string>
     <string name="novels">Livros</string>
     <string name="info">Informações</string>
     <string name="watch">Assistir</string>
     <string name="read">Ler</string>
     <string name="language">Idioma</string>
-    <string name="anime_list">Meus Animes</string>
-    <string name="manga_list">Meus Mangás</string>
+    <string name="anime_list">Lista de Animes</string>
+    <string name="manga_list">Lista de Mangás</string>
     <string name="sad">X(</string>
     <string name="oh">:o</string>
     <string name="colon">" : "</string>
@@ -27,12 +27,12 @@
     <string name="search_results">Resultados da Busca</string>
     <string name="sort_by">Ordenar por</string>
     <string name="genre">Gênero</string>
-    <string name="top_score">Melhores</string>
-    <string name="updated">Novos Episódios</string>
+    <string name="top_score">Melhor Pontuação</string>
+    <string name="updated">Atualizado Recentemente</string>
     <string name="trending_anime">Animes em Alta</string>
     <string name="popular_anime">Animes Populares</string>
     <string name="trending_manga">Mangás em Alta</string>
-    <string name="trending_novel">Livro tendência</string>
+    <string name="trending_novel">Livros em Tendência</string>
     <string name="popular_manga">Mangás Populares</string>
     <string name="username">Nome de Usuário</string>
     <string name="chapters_read">Capítulos Lidos</string>
@@ -43,7 +43,7 @@
     <string name="continue_watching">Continuar Assistindo</string>
     <string name="recommended">Recomendações</string>
     <string name="get_recommendations">Assista/Leia alguns Animes ou Mangás para ter Recomendações</string>
-    <string name="empty">Tudo em dia, novidades?</string>
+    <string name="empty">Já vi tudo, e o próximo?</string>
     <string name="action_settings">Configurações</string>
     <string name="add_list">Adicionar à Lista</string>
     <string name="list_editor">Editor de Lista</string>
@@ -57,21 +57,21 @@
         <item>Largado</item>
         <item>Planejando</item>
         <item>Favoritos</item>
-        <item>Reassistindo</item>
+        <item>Assistindo Novamente</item>
         <item>Relendo</item>
         <item>Todos</item>
     </string-array>
-    <string name="nothing_here">Nada por aqui</string>
+    <string name="nothing_here">Não há nada aqui</string>
     <string name="followers">Seguidores</string>
     <string name="write_a_message">Escreva uma mensagem</string>
-    <string name="status">STATUS</string>
+    <string name="status">SITUAÇÃO</string>
     <string-array name="status_anime">
         <item>PLANEJANDO</item>
         <item>ASSISTINDO</item>
         <item>CONCLUÍDO</item>
         <item>RE-ASSISTINDO</item>
         <item>PAUSADO</item>
-        <item>DROPADO</item>
+        <item>LARGADO</item>
     </string-array>
     <string-array name="status_manga">
         <item>PLANEJANDO</item>
@@ -79,7 +79,7 @@
         <item>CONCLUÍDO</item>
         <item>RE-LENDO</item>
         <item>PAUSADO</item>
-        <item>DROPADO</item>
+        <item>LARGADO</item>
     </string-array>
     <string name="progress">PROGRESSO</string>
     <string name="score">NOTA</string>
@@ -90,11 +90,11 @@
     <string name="delete">Excluir</string>
     <string name="remove">Remover</string>
     <string name="name">Nome</string>
-    <string name="name_romaji">Nome em Romaji</string>
+    <string name="name_romaji">Nome em Romani</string>
     <string name="mean_score">Nota Média</string>
     <string name="format">Formato</string>
-    <string name="status_title">Status</string>
-    <string name="total_eps">Número de Episódios</string>
+    <string name="status_title">Condição</string>
+    <string name="total_eps">Lista de Episódios</string>
     <string name="episodes"> Episódio(s)</string>
     <string name="chapters"> Capítulo(s)</string>
     <string name="total_divider"> | %1$s</string>
@@ -110,7 +110,7 @@
     <string name="description">Sinopse</string>
     <string name="characters">Personagens</string>
     <string name="relations">Relacionado</string>
-    <string name="staff">Staff</string>
+    <string name="staff">Pessoal</string>
     <string name="favourites">Favoritos</string>
     <string name="popularity">Popularidade</string>
     <string name="roles">Papéis</string>
@@ -124,54 +124,60 @@
     <string name="source_not_found">        Não apareceu nada nessa extensão.\n
         Vamos procurar em outro lugar.
     </string>
-    <string name="download_not_found">Seus downloads estão se sentindo um pouco solitários…\n Tente baixar algo.</string>
-    <string name="not_supported">%1$s não é suportado!</string>
+    <string name="download_not_found">Suas transferências estão se sentindo um pouco solitárias...\n
+        Tente baixar algo.
+    </string>
+    <string name="not_supported">%1$s Não é suportado!</string>
     <string name="server_selector">Selecionar Servidor</string>
-    <string name="auto_select_server">Selecionando Servidor Padrão</string>
+    <string name="auto_select_server">Seleção automática de servidor</string>
     <string name="make_default">Tornar Padrão</string>
-    <string name="filler">Filler</string>
+    <string name="filler">Preenchimento</string>
     <string name="adult">Adulto</string>
-    <string name="list_only">Na Lista</string>
-    <string name="tag">Tag</string>
-    <string name="tags">Tags</string>
+    <string name="list_only">Somente Lista</string>
+    <string name="tag">Etiqueta</string>
+    <string name="tags">Etiquetas</string>
     <string name="synonyms">Sinônimos</string>
-    <string name="trailer">Trailer</string>
-    <string name="opening">Opening</string>
-    <string name="ending">Ending</string>
-    <string name="prequel">Prequel</string>
-    <string name="sequel">Sequel</string>
-    <string name="anilist_settings">Configurações Anilist</string>
+    <string name="trailer">Prévia</string>
+    <string name="opening">Abertura</string>
+    <string name="ending">Encerramento</string>
+    <string name="prequel">Antecedentes</string>
+    <string name="sequel">Continuação</string>
+    <string name="anilist_settings">Configuração do Anilista</string>
     <string name="extension_settings">Extensões</string>
-    <string name="downloads">Downloads</string>
-    <string name="offline_mode">Modo Offline</string>
+    <string name="downloads">Transferências</string>
+    <string name="offline_mode">Modo sem rede</string>
     <string name="settings">Configurações</string>
     <string name="extensions">Extensões</string>
-    <string name="extension_updates_available">Algumas extensões têm atualizações</string>
-    <string name="player_settings">Configurações do Player</string>
-    <string name="recentlyListOnly">Mostrar apenas minha lista em \"Novos Episódios\"</string>
-    <string name="download_manager_select">Gerenciador de Download</string>
+    <string name="extension_updates_available">Atualizações de extensões disponíveis</string>
+    <string name="player_settings">Configurações do Reprodutor</string>
+    <string name="recentlyListOnly">Mostrar apenas meu conteúdo em \"Recentemente Atualizado\"</string>
+    <string name="download_manager_select">Gerenciador de Transferências</string>
     <string name="downloadInSd">Baixar no cartão SD</string>
     <string name="noSdFound">Não foi encontrado um cartão SD.</string>
     <string name="reader_settings">Configurações do Leitor</string>
-    <string name="default_source">Extensão Padrão</string>
+    <string name="default_source">Fonte Padrão</string>
     <string name="show_yt">Link do YouTube</string>
-    <string name="default_ep_view">Layout de Episódios Padrão</string>
-    <string name="default_chp_view">Layout de Capítulos Padrão</string>
-    <string name="ui">Interface do Usuário</string>
+    <string name="default_ep_view">Arranjo de Episódios Padrão</string>
+    <string name="default_chp_view">Arranjo de Capítulos Padrão</string>
+    <string name="ui">“Interface” do Usuário</string>
     <string name="common">Geral</string>
     <string name="theme">Tema</string>
     <string name="ui_settings">Configurações da UI</string>
     <string name="about">Sobre</string>
-    <string name="desc">"    Dantotsu foi criado a partir das cinzas do Saikou e baseado em elegância simplista mas de última geração. É um cliente Anilist, que te permite transmitir-baixar Animes e Mangás através de extensões.\nDantotsu literalmente significa o \"melhor dos melhores\" em japonês. Bom, gostaríamos de dizer que é o melhor aplicativo open-source para anime e mangá no Android, mas o que você acha?"</string>
+    <string name="desc">"    Dantotsu é feito a partir das cinzas do Saikou e tem uma elegância simples, mas super moderna. É um cliente só para Anilist, que também deixa você fazer streaming e baixar Anime através de extensões &amp; Mangá. \nDantotsu significa literalmente \"o melhor dos melhores\" em japonês. Bem, a gente gostaria de dizer que este é o melhor app de código aberto para animes e mangás no Android, o que você acha?"</string>
     <string name="devs">Desenvolvedores/Ajudantes</string>
     <string name="disclaimer">Aviso</string>
-    <string name="full_disclaimer">         - Dantotsu por si só apenas disponibiliza um meio de catalogar mangás e animes e não provém nenhum recurso de streaming ou download de anime ou mangá.
-        \n\n - Dantotsu ou qualquer um de seus desenvolvedores/equipe não hospeda nenhum conteúdo encontrado dentro do aplicativo. Toda e qualquer imagem e informação de anime/mangá encontradas no aplicativo são obtidas através de várias APIs públicas (AniList, MyAnimeList, Kitsu).
-        \n\n - Além disso, todos os links de anime/mangá encontrados no Dantotsu são retirados de diversos plug-ins de terceiros e não têm afiliação com o Dantotsu ou sua equipe.
-        \n\n - Dantotsu ou seus proprietários não são responsáveis ​​por qualquer uso indevido de qualquer conteúdo encontrado dentro ou fora do aplicativo e não podem ser responsabilizados pela distribuição de qualquer conteúdo encontrado dentro do aplicativo.
-        \n\n - Ao usar o Dantotsu, você concorda que o desenvolvedor do aplicativo não é responsável por nenhum conteúdo encontrado no aplicativo. Você também concorda com o fato de não poder usar o Dantotsu para baixar ou transmitir qualquer conteúdo protegido por direitos autorais.
-        \n\n - Se houver problemas de violação da Internet, entre em contato com o site da origem/fonte. O desenvolvedor não assume nenhuma responsabilidade legal.
-    </string>
+    <string name="full_disclaimer">- O Dantotsu por si só só oferece um rastreador de animes e mangás e não tem capacidade de streaming ou download de animes ou mangás.
+
+- O Dantotsu ou qualquer um de seus desenvolvedores/equipe não hospeda nenhum conteúdo encontrado dentro do Dantotsu. Todas as imagens e informações de animes/mangás encontradas no app são retiradas de várias APIs públicas (AniList, MyAnimeList, Kitsu).
+
+- Além disso, todos os links de animes/mangás encontrados no Dantotsu são provenientes de vários plugins de terceiros e não têm afiliação com o Dantotsu ou sua equipe.
+
+- O Dantotsu ou seus donos não são responsáveis por qualquer uso indevido de qualquer conteúdo encontrado dentro ou fora do app e não podem ser responsabilizados pela distribuição de qualquer conteúdo encontrado no app.
+
+- Ao usar o Dantotsu, você concorda que o desenvolvedor do app não é responsável por nenhum conteúdo encontrado no app. Você também concorda que não pode usar o Dantotsu para baixar ou fazer streaming de qualquer conteúdo protegido por direitos autorais.
+
+- Se houver questões de infração de direitos autorais, entre em contato com o site de origem. O desenvolvedor não assume nenhuma responsabilidade legal.    </string>
     <string name="version_current">Versão %1$s</string>
     <string-array name="tips">
         <item>Você pode manter pressionado em um episódio/capítulo para marcar como assistido/lido.</item>
@@ -970,5 +976,5 @@
     <string name="proxy_setup_desc">Configurar seu Proxy Socks5</string>
     <string name="clear_stored_episode">Limpar Dados de Episódio Armazenados</string>
     <string name="clear_stored_chapter">Limpar Dados de Capítulo Armazenados</string>
-    <string name="use_additional_codec">Additional Codec Support</string>
+    <string name="use_additional_codec">Suporte a Codificadores Adicionais</string>
 </resources>
