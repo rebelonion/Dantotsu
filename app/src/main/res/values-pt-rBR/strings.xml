@@ -164,7 +164,7 @@
     <string name="theme">Tema</string>
     <string name="ui_settings">Configurações da UI</string>
     <string name="about">Sobre</string>
-    <string name="desc">"    Dantotsu é feito a partir das cinzas do Saikou e tem uma elegância simples, mas super moderna. É um cliente só para Anilist, que também deixa você fazer streaming e baixar Anime através de extensões &amp; Mangá. \nDantotsu significa literalmente \"o melhor dos melhores\" em japonês. Bem, a gente gostaria de dizer que este é o melhor app de código aberto para animes e mangás no Android, o que você acha?"</string>
+    <string name="desc">"    Dantotsu é feito a partir das cinzas do Saikou e tem uma elegância simples, mas super moderna. É um cliente só para Anilista, que também deixa você fazer transmissão para baixar Anime através de extensões &amp; Mangá. \nDantotsu significa literalmente \"o melhor dos melhores\" em japonês. Bem, a gente gostaria de dizer que este é o melhor aplicativo de código aberto para animes e mangás no Android, o que você acha?"</string>
     <string name="devs">Desenvolvedores/Ajudantes</string>
     <string name="disclaimer">Aviso</string>
     <string name="full_disclaimer">         - O Dantotsu por si só só oferece um rastreador de animes e mangás e não tem capacidade de streaming ou download de animes ou mangás.
@@ -181,17 +181,17 @@
     <string name="version_current">Versão %1$s</string>
     <string-array name="tips">
         <item>Você pode clicar e segurar em um episódio/capítulo para marcá-lo como lido.</item>
-        <item>Manter pressionado em um show pode diretamente abrir o Editor de Lista.</item>
-        <item>Você pode encontrar alguns outros easter eggs escondidos no app.</item>
-        <item>Um desafio: Chegue ao final da página de Animes ou Mangás Populares</item>
-        <item>Tente manter pressionado o nome de um show.</item>
-        <item>Por que você está perdendo seu tempo com isso?</item>
+        <item>Pressionar longamente em “show” pode abrir diretamente o Editor de Listas.</item>
+        <item>Há mais alguns segredos escondidos no aplicativo.</item>
+        <item>Desafio: Vá até o final da lista de Animes &amp; Mangás Populares</item>
+        <item>Tente pressionar e segurar o título do Show.</item>
+        <item>Caramba! Por que você está perdendo seu tempo?</item>
         <item>Você pode manter pressionado para copiar essa mensagem.</item>
         <item>MEU DEUS, OLHA! VOCÊ ACHOU UM EASTER EGG!?</item>
-        <item>Sabe quem mais gosta dessa animação?</item>
-        <item>Suporte para MAL? Sério?</item>
-        <item>Aqui era para ter uma piada, mas não deu pra traduzir :P (foi mal ae)</item>
-        <item>Mantenha a logo pressionada para procurar por atualizações</item>
+        <item>Sabe quem mais curte essa animação?</item>
+        <item>Suporte ao MAL? Está brincando, né.</item>
+        <item>Novels? Mais tipo \'No-velhas\'.</item>
+        <item>Clique e segure no logo para verificar a atualização do aplicativo</item>
     </string-array>
     <string-array name="themes">
         <item>Padrão</item>
@@ -203,11 +203,11 @@
     <string name="video">Vídeo</string>
     <string name="video_info">Exibir Informações de Vídeo</string>
     <string name="source_info">Exibir Nome da Extensão</string>
-    <string name="video_info_info">Mostra qual é a resolução do vídeo atual, útil para servidores <b>\"Multi Qualidade\"</b>.</string>
-    <string name="default_quality">Seleção de Qualidade Automática</string>
+    <string name="video_info_info">Exibe a resolução do vídeo atual em reprodução, útil para servidores de <b>\'Multi Qualidade\'</b>.</string>
+    <string name="default_quality">Seleção automática de qualidade</string>
     <string name="height">Altura</string>
     <string name="width">Largura</string>
-    <string name="default_quality_info">Automaticamente usa a qualidade mais próxima por padrão, APENAS para Servidores \"Multi Qualidade\". Automaticamente muda ao reproduzir um vídeo.</string>
+    <string name="default_quality_info">Usa automaticamente a qualidade mais próxima fornecida por padrão, APLICADO SOMENTE para servidores \'Multi Qualidade\'. Muda automaticamente ao reproduzir um vídeo.</string>
     <string name="default_playback_speed">Velocidade de Reprodução Padrão: %1$s</string>
     <string name="cursed_speeds">Velocidades Exóticas</string>
     <string name="resize_mode_button">Modo de Redimensionamento Padrão</string>
