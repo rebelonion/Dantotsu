@@ -167,20 +167,20 @@
     <string name="desc">"    Dantotsu é feito a partir das cinzas do Saikou e tem uma elegância simples, mas super moderna. É um cliente só para Anilist, que também deixa você fazer streaming e baixar Anime através de extensões &amp; Mangá. \nDantotsu significa literalmente \"o melhor dos melhores\" em japonês. Bem, a gente gostaria de dizer que este é o melhor app de código aberto para animes e mangás no Android, o que você acha?"</string>
     <string name="devs">Desenvolvedores/Ajudantes</string>
     <string name="disclaimer">Aviso</string>
-    <string name="full_disclaimer">- O Dantotsu por si só só oferece um rastreador de animes e mangás e não tem capacidade de streaming ou download de animes ou mangás.
+    <string name="full_disclaimer">         - O Dantotsu por si só só oferece um rastreador de animes e mangás e não tem capacidade de streaming ou download de animes ou mangás.
 
-- O Dantotsu ou qualquer um de seus desenvolvedores/equipe não hospeda nenhum conteúdo encontrado dentro do Dantotsu. Todas as imagens e informações de animes/mangás encontradas no app são retiradas de várias APIs públicas (AniList, MyAnimeList, Kitsu).
+        \n\n- O Dantotsu ou qualquer um de seus desenvolvedores/equipe não hospeda nenhum conteúdo encontrado dentro do Dantotsu. Todas as imagens e informações de animes/mangás encontradas no app são retiradas de várias APIs públicas (AniList, MyAnimeList, Kitsu).
 
-- Além disso, todos os links de animes/mangás encontrados no Dantotsu são provenientes de vários plugins de terceiros e não têm afiliação com o Dantotsu ou sua equipe.
+        \n\n- Além disso, todos os links de animes/mangás encontrados no Dantotsu são provenientes de vários plugins de terceiros e não têm afiliação com o Dantotsu ou sua equipe.
 
-- O Dantotsu ou seus donos não são responsáveis por qualquer uso indevido de qualquer conteúdo encontrado dentro ou fora do app e não podem ser responsabilizados pela distribuição de qualquer conteúdo encontrado no app.
+        \n\n- O Dantotsu ou seus donos não são responsáveis por qualquer uso indevido de qualquer conteúdo encontrado dentro ou fora do app e não podem ser responsabilizados pela distribuição de qualquer conteúdo encontrado no app.
 
-- Ao usar o Dantotsu, você concorda que o desenvolvedor do app não é responsável por nenhum conteúdo encontrado no app. Você também concorda que não pode usar o Dantotsu para baixar ou fazer streaming de qualquer conteúdo protegido por direitos autorais.
+        \n\n- Ao usar o Dantotsu, você concorda que o desenvolvedor do app não é responsável por nenhum conteúdo encontrado no app. Você também concorda que não pode usar o Dantotsu para baixar ou fazer streaming de qualquer conteúdo protegido por direitos autorais.
 
-- Se houver questões de infração de direitos autorais, entre em contato com o site de origem. O desenvolvedor não assume nenhuma responsabilidade legal.    </string>
+        \n\n- Se houver questões de infração de direitos autorais, entre em contato com o site de origem. O desenvolvedor não assume nenhuma responsabilidade legal.    </string>
     <string name="version_current">Versão %1$s</string>
     <string-array name="tips">
-        <item>Você pode manter pressionado em um episódio/capítulo para marcar como assistido/lido.</item>
+        <item>Você pode clicar e segurar em um episódio/capítulo para marcá-lo como lido.</item>
         <item>Manter pressionado em um show pode diretamente abrir o Editor de Lista.</item>
         <item>Você pode encontrar alguns outros easter eggs escondidos no app.</item>
         <item>Um desafio: Chegue ao final da página de Animes ou Mangás Populares</item>
