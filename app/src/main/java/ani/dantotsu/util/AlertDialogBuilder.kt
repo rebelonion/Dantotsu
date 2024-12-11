@@ -181,7 +181,10 @@ class AlertDialogBuilder(private val context: Context) {
         dialog.setOnShowListener {
             onShow?.invoke()
         }
-        dialog.window?.setDimAmount(0.8f)
+        dialog.window?.apply {
+        setDimAmount(0.8f)
+        attributes.windowAnimations = android.R.style.Animation_Dialog
+        }
         dialog.show()
     }
 }
