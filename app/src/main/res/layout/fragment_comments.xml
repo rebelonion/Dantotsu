@@ -36,6 +36,20 @@
                     app:srcCompat="@drawable/ic_round_info_24"
                     app:tint="?attr/colorOnBackground" />
 
+                <TextView
+                    android:id="@+id/commentCounter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="18dp"
+                    android:fontFamily="@font/poppins_bold"
+                    android:gravity="center_vertical"
+                    android:text="@string/loading" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
                 <ImageView
                     android:id="@+id/commentFilter"
                     android:layout_width="28dp"
