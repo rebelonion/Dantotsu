@@ -513,7 +513,7 @@ internal object ExtensionLoader {
      */
     private fun getSignatureHash(pkgInfo: PackageInfo): String? {
         val signatures = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
-            pkgInfo.signingInfo.signingCertificateHistory
+            pkgInfo.signingInfo?.signingCertificateHistory
         else
             @Suppress("DEPRECATION") pkgInfo.signatures
         return if (signatures != null && signatures.isNotEmpty()) {

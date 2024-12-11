@@ -7,12 +7,12 @@ buildscript {
         maven { url 'https://jitpack.io' }
     }
     ext {
-        kotlin_version = '1.9.23'
-        ksp_version = '1.9.10-1.0.13'
+        kotlin_version = '2.1.0'
+        ksp_version = '2.1.0-1.0.29'
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.4.0'
+        classpath 'com.android.tools.build:gradle:8.7.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
         classpath "com.google.devtools.ksp:symbol-processing-api:$ksp_version"
