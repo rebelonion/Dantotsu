@@ -55,6 +55,14 @@
 
     </androidx.media3.ui.SubtitleView>
 
+    <ani.dantotsu.others.Xubtitle
+        android:id="@+id/customSubtitleView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:adjustViewBounds="true"
+        android:visibility="gone"/>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/exo_full_area"
         android:layout_width="match_parent"

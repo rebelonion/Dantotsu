@@ -12,6 +12,7 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.Animatable
 import android.hardware.SensorManager
@@ -71,9 +72,12 @@ import androidx.media3.common.MimeTypes
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.PlaybackParameters
 import androidx.media3.common.Player
+import androidx.media3.common.text.Cue
+import androidx.media3.common.text.CueGroup
 import androidx.media3.common.TrackGroup
 import androidx.media3.common.TrackSelectionOverride
 import androidx.media3.common.Tracks
+import androidx.media3.common.util.Util
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DefaultDataSource
@@ -137,6 +141,7 @@ import ani.dantotsu.others.getSerialized
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.HAnimeSources
 import ani.dantotsu.parsers.Subtitle
+import ani.dantotsu.others.Xubtitle
 import ani.dantotsu.parsers.SubtitleType
 import ani.dantotsu.parsers.Video
 import ani.dantotsu.parsers.VideoExtractor
@@ -226,6 +231,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
     private lateinit var animeTitle: TextView
     private lateinit var videoInfo: TextView
     private lateinit var episodeTitle: Spinner
+    private lateinit var customSubtitleView: Xubtitle
 
     private var orientationListener: OrientationEventListener? = null
 
@@ -425,6 +431,95 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         }
     }
 
+    private fun applySubtitleStyles(textView: Xubtitle) {
+        val primaryColor = when (PrefManager.getVal<Int>(PrefName.PrimaryColor)) {
+            0 -> Color.BLACK
+            1 -> Color.DKGRAY
+            2 -> Color.GRAY
+            3 -> Color.LTGRAY
+            4 -> Color.WHITE
+            5 -> Color.RED
+            6 -> Color.YELLOW
+            7 -> Color.GREEN
+            8 -> Color.CYAN
+            9 -> Color.BLUE
+            10 -> Color.MAGENTA
+            11 -> Color.TRANSPARENT
+            else -> Color.WHITE
+        }
+
+        val subBackground = when (PrefManager.getVal<Int>(PrefName.SubBackground)) {
+            0 -> Color.TRANSPARENT
+            1 -> Color.BLACK
+            2 -> Color.DKGRAY
+            3 -> Color.GRAY
+            4 -> Color.LTGRAY
+            5 -> Color.WHITE
+            6 -> Color.RED
+            7 -> Color.YELLOW
+            8 -> Color.GREEN
+            9 -> Color.CYAN
+            10 -> Color.BLUE
+            11 -> Color.MAGENTA
+            else -> Color.TRANSPARENT
+        }
+
+        val font = when (PrefManager.getVal<Int>(PrefName.Font)) {
+            0 -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
+            1 -> ResourcesCompat.getFont(this, R.font.poppins_bold)
+            2 -> ResourcesCompat.getFont(this, R.font.poppins)
+            3 -> ResourcesCompat.getFont(this, R.font.poppins_thin)
+            4 -> ResourcesCompat.getFont(this, R.font.century_gothic_regular)
+            5 -> ResourcesCompat.getFont(this, R.font.levenim_mt_bold)
+            6 -> ResourcesCompat.getFont(this, R.font.blocky)
+            else -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
+        }
+
+        val fontSize = PrefManager.getVal<Int>(PrefName.FontSize).toFloat()
+
+        textView.setBackgroundColor(subBackground)
+        textView.setTextColor(primaryColor)
+        textView.typeface = font
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
+
+        val secondaryColor = when (PrefManager.getVal<Int>(PrefName.SecondaryColor)) {
+            0 -> Color.BLACK
+            1 -> Color.DKGRAY
+            2 -> Color.GRAY
+            3 -> Color.LTGRAY
+            4 -> Color.WHITE
+            5 -> Color.RED
+            6 -> Color.YELLOW
+            7 -> Color.GREEN
+            8 -> Color.CYAN
+            9 -> Color.BLUE
+            10 -> Color.MAGENTA
+            11 -> Color.TRANSPARENT
+            else -> Color.BLACK
+        }
+
+        val subStroke = PrefManager.getVal<Float>(PrefName.SubStroke)
+
+        textView.apply {
+              when (PrefManager.getVal<Int>(PrefName.Outline)) {
+                  0 -> applyOutline(secondaryColor, subStroke)
+                  1 -> applyShineEffect(secondaryColor)
+                  2 -> applyDropShadow(secondaryColor, subStroke)
+                  3 -> {}
+                  else -> applyOutline(secondaryColor, subStroke)
+              }
+           }
+
+        textView.alpha =
+            when (PrefManager.getVal<Boolean>(PrefName.Subtitles)) {
+                true -> PrefManager.getVal(PrefName.SubAlpha)
+                false -> 0f
+            }
+
+          val textElevation = PrefManager.getVal<Float>(PrefName.SubBottomMargin) / 30 * resources.displayMetrics.heightPixels
+          textView.translationY = -textElevation
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -470,6 +565,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         skipTimeButton = playerView.findViewById(R.id.exo_skip_timestamp)
         skipTimeText = skipTimeButton.findViewById(R.id.exo_skip_timestamp_text)
         timeStampText = playerView.findViewById(R.id.exo_time_stamp_text)
+        customSubtitleView = playerView.findViewById(R.id.customSubtitleView)
 
         animeTitle = playerView.findViewById(R.id.exo_anime_title)
         episodeTitle = playerView.findViewById(R.id.exo_ep_sel)
@@ -523,7 +619,6 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 it.visibility = View.GONE
             }
         }
-        setupSubFormatting(playerView)
 
         if (savedInstanceState != null) {
             currentWindow = savedInstanceState.getInt(resumeWindow)
@@ -1732,6 +1827,54 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             }
         playerView.player = exoPlayer
 
+        exoPlayer.addListener(object : Player.Listener {
+            var activeSubtitles = ArrayDeque<String>(3)
+            var lastSubtitle: String? = null
+            var lastPosition: Long = 0
+        
+            override fun onCues(cueGroup: CueGroup) {
+                if (PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
+                    exoSubtitleView.visibility = View.GONE
+                    customSubtitleView.visibility = View.VISIBLE
+                    val newCues = cueGroup.cues.map { it.text.toString() ?: "" }
+         
+                    if (newCues.isEmpty()) {
+                        customSubtitleView.text = ""
+                        activeSubtitles.clear()
+                        lastSubtitle = null
+                        lastPosition = 0
+                        return
+                    }
+        
+                    val currentPosition = exoPlayer.currentPosition
+        
+                    if ((lastSubtitle?.length ?: 0) < 20 || (lastPosition != 0L && currentPosition - lastPosition > 1500)) {
+                        activeSubtitles.clear()
+                    }
+        
+                   for (newCue in newCues) {
+                      if (newCue !in activeSubtitles) {
+                          if (activeSubtitles.size >= 2) {
+                              activeSubtitles.removeLast()
+                          }
+                          activeSubtitles.addFirst(newCue)
+                          lastSubtitle = newCue
+                          lastPosition = currentPosition
+                      }
+                  }
+
+                    customSubtitleView.text = activeSubtitles.joinToString("\n")
+                } else {
+                    customSubtitleView.text = ""
+                    customSubtitleView.visibility = View.GONE
+                    exoSubtitleView.visibility = View.VISIBLE
+                }
+            }
+        })
+
+          applySubtitleStyles(customSubtitleView)
+          setupSubFormatting(playerView)
+
         try {
             val rightNow = Calendar.getInstance()
             mediaSession = MediaSession.Builder(this, exoPlayer)
@@ -2021,7 +2164,10 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 TrackSelectionOverride(trackGroup.mediaTrackGroup, index)
             )
             .build()
-        if (type == TRACK_TYPE_TEXT) setupSubFormatting(playerView)
+        if (type == TRACK_TYPE_TEXT) {
+            setupSubFormatting(playerView)
+            applySubtitleStyles(customSubtitleView)
+        }
         playerView.subtitleView?.alpha = when (isDisabled) {
             false -> PrefManager.getVal(PrefName.SubAlpha)
             true -> 0f

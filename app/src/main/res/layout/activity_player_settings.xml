@@ -381,6 +381,88 @@
 
                 </com.google.android.material.slider.Slider>
 
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/subTextSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:checked="true"
+                    android:drawableStart="@drawable/ic_round_subtitles_24"
+                    android:drawablePadding="16dp"
+                    android:elegantTextHeight="false"
+                    android:fontFamily="@font/poppins_bold"
+                    android:minHeight="64dp"
+                    android:paddingHorizontal="32dp"
+                    android:text="@string/textview_sub"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/bg_opp"
+                    app:cornerRadius="0dp"
+                    app:drawableTint="?attr/colorPrimary"
+                    app:showText="false"
+                    app:thumbTint="@color/button_switch_track" />
+
+                <Button
+                    android:id="@+id/videoSubStrokeButton"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:layout_marginBottom="8dp"
+                    android:clickable="false"
+                    android:fontFamily="@font/poppins_bold"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:paddingHorizontal="32dp"
+                    android:text="@string/textview_sub_stroke"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="false"
+                    android:textColor="@color/bg_opp"
+                    app:cornerRadius="0dp"
+                    app:icon="@drawable/ic_round_color_24"
+                    app:iconPadding="16dp"
+                    app:iconSize="24dp" />
+
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/videoSubStroke"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="32dp"
+                    android:valueFrom="1"
+                    android:stepSize="1.0"
+                    android:valueTo="30">
+
+                </com.google.android.material.slider.Slider>
+
+                <Button
+                    android:id="@+id/videoSubBottomMarginButton"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:layout_marginBottom="8dp"
+                    android:clickable="false"
+                    android:fontFamily="@font/poppins_bold"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:paddingHorizontal="32dp"
+                    android:text="@string/textview_sub_bottom_margin"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="false"
+                    android:textColor="@color/bg_opp"
+                    app:cornerRadius="0dp"
+                    app:icon="@drawable/ic_round_color_24"
+                    app:iconPadding="16dp"
+                    app:iconSize="24dp" />
+
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/videoSubBottomMargin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="32dp"
+                    android:valueFrom="1"
+                    android:stepSize="1.0"
+                    android:valueTo="30">
+
+                </com.google.android.material.slider.Slider>
+
                 <Button
                     android:id="@+id/videoSubFont"
                     style="@style/Widget.Material3.Button.TextButton"
@@ -1190,27 +1272,6 @@
             </com.google.android.material.materialswitch.MaterialSwitch>
 
             <com.google.android.material.materialswitch.MaterialSwitch
-                android:id="@+id/playerSettingsInternalCast"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checked="false"
-                android:drawableStart="@drawable/cast_warning"
-                android:drawablePadding="16dp"
-                android:elegantTextHeight="true"
-                android:fontFamily="@font/poppins_bold"
-                android:minHeight="64dp"
-                android:paddingHorizontal="32dp"
-                android:text="@string/try_internal_cast_experimental"
-                android:textAlignment="viewStart"
-                android:textColor="@color/bg_opp"
-                app:cornerRadius="0dp"
-                app:drawableTint="?attr/colorPrimary"
-                app:showText="false"
-                app:thumbTint="@color/button_switch_track">
-
-            </com.google.android.material.materialswitch.MaterialSwitch>
-
-            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/playerSettingsRotate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -1223,6 +1284,27 @@
                 android:minHeight="64dp"
                 android:paddingHorizontal="32dp"
                 android:text="@string/show_rotate_button"
+                android:textAlignment="viewStart"
+                android:textColor="@color/bg_opp"
+                app:cornerRadius="0dp"
+                app:drawableTint="?attr/colorPrimary"
+                app:showText="false"
+                app:thumbTint="@color/button_switch_track">
+
+            </com.google.android.material.materialswitch.MaterialSwitch>
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/playerSettingsInternalCast"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:drawableStart="@drawable/cast_warning"
+                android:drawablePadding="16dp"
+                android:elegantTextHeight="true"
+                android:fontFamily="@font/poppins_bold"
+                android:minHeight="64dp"
+                android:paddingHorizontal="32dp"
+                android:text="@string/try_internal_cast_experimental"
                 android:textAlignment="viewStart"
                 android:textColor="@color/bg_opp"
                 app:cornerRadius="0dp"
@@ -1252,7 +1334,7 @@
                 app:thumbTint="@color/button_switch_track">
 
             </com.google.android.material.materialswitch.MaterialSwitch>
-            
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
