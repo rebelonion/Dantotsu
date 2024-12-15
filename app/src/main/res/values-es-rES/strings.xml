@@ -960,11 +960,14 @@
     <string name="host">Host</string>
     <string name="port">Port</string>
     <string name="authentication">Authentication</string>
-    <string name="proxy">Socks5 Proxy</string>
-    <string name="proxy_desc">Route All Your Network Traffic Through a Socks5 Proxy</string>
+    <string name="proxy">SOCKS5 Proxy</string>
+    <string name="proxy_desc">Route All Your Network Traffic Through a SOCKS5 Proxy</string>
     <string name="proxy_setup">Proxy Setup</string>
     <string name="proxy_setup_desc">Configure your Socks5 Proxy</string>
     <string name="clear_stored_episode">Clear Stored Episode Data</string>
     <string name="clear_stored_chapter">Clear Stored Chapter Data</string>
     <string name="use_additional_codec">Additional Codec Support</string>
+    <string name="textview_sub">Textview Subtitles (Experimental)</string>
+    <string name="textview_sub_stroke">Subtitle Stroke</string>
+    <string name="textview_sub_bottom_margin">Bottom Margin</string>
 </resources>
