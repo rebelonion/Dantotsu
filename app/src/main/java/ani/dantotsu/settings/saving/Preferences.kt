@@ -94,6 +94,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     CursedSpeeds(Pref(Location.Player, Boolean::class, false)),
     Resize(Pref(Location.Player, Int::class, 0)),
     Subtitles(Pref(Location.Player, Boolean::class, true)),
+    TextviewSubtitles(Pref(Location.Player, Boolean::class, false)),
     SubLanguage(Pref(Location.Player, Int::class, 9)),
     PrimaryColor(Pref(Location.Player, Int::class, 4)),
     SecondaryColor(Pref(Location.Player, Int::class, 0)),
@@ -101,6 +102,8 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     SubBackground(Pref(Location.Player, Int::class, 0)),
     SubWindow(Pref(Location.Player, Int::class, 0)),
     SubAlpha(Pref(Location.Player, Float::class, 1f)),
+    SubStroke(Pref(Location.Player, Float::class, 8f)),
+    SubBottomMargin(Pref(Location.Player, Float::class, 4f)),
     Font(Pref(Location.Player, Int::class, 0)),
     FontSize(Pref(Location.Player, Int::class, 20)),
     Locale(Pref(Location.Player, Int::class, 2)),
@@ -128,7 +131,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     Pip(Pref(Location.Player, Boolean::class, true)),
     RotationPlayer(Pref(Location.Player, Boolean::class, true)),
     TorrentEnabled(Pref(Location.Player, Boolean::class, false)),
-    UseAdditionalCodec(Pref(Location.Player, Boolean::class, true)),
+    UseAdditionalCodec(Pref(Location.Player, Boolean::class, false)),
 
     //Reader
     ShowSource(Pref(Location.Reader, Boolean::class, true)),

@@ -267,21 +267,21 @@ class PlayerSettingsActivity : AppCompatActivity() {
             PrefManager.setVal(PrefName.Cast, isChecked)
         }
 
+        binding.playerSettingsRotate.isChecked = PrefManager.getVal(PrefName.RotationPlayer)
+        binding.playerSettingsRotate.setOnCheckedChangeListener { _, isChecked ->
+            PrefManager.setVal(PrefName.RotationPlayer, isChecked)
+        }
+
         binding.playerSettingsInternalCast.isChecked = PrefManager.getVal(PrefName.UseInternalCast)
         binding.playerSettingsInternalCast.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.UseInternalCast, isChecked)
         }
 
-        binding.playerSettingsRotate.isChecked = PrefManager.getVal(PrefName.RotationPlayer)
-        binding.playerSettingsRotate.setOnCheckedChangeListener { _, isChecked ->
-            PrefManager.setVal(PrefName.RotationPlayer, isChecked)
-        }
-        
         binding.playerSettingsAdditionalCodec.isChecked = PrefManager.getVal(PrefName.UseAdditionalCodec)
         binding.playerSettingsAdditionalCodec.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.UseAdditionalCodec, isChecked)
         }
-        
+
         val resizeModes = arrayOf("Original", "Zoom", "Stretch")
         binding.playerResizeMode.setOnClickListener {
             customAlertDialog().apply {
@@ -306,23 +306,50 @@ class PlayerSettingsActivity : AppCompatActivity() {
                 binding.videoSubColorWindow,
                 binding.videoSubFont,
                 binding.videoSubAlpha,
+                binding.videoSubStroke,
                 binding.subtitleFontSizeText,
-                binding.subtitleFontSize
+                binding.subtitleFontSize,
+                binding.videoSubLanguage,
+                binding.subTextSwitch
             ).forEach {
                 it.isEnabled = isChecked
-                it.isClickable = isChecked
                 it.alpha = when (isChecked) {
                     true -> 1f
                     false -> 0.5f
                 }
             }
         }
+
+        fun toggleExpSubOptions(isChecked: Boolean) {
+            arrayOf(
+                binding.videoSubStrokeButton,
+                binding.videoSubStroke,
+                binding.videoSubBottomMarginButton,
+                binding.videoSubBottomMargin
+            ).forEach {
+                it.isEnabled = isChecked
+                it.alpha = when (isChecked) {
+                    true -> 1f
+                    false -> 0.5f
+                }
+            }
+        }
+
         binding.subSwitch.isChecked = PrefManager.getVal(PrefName.Subtitles)
         binding.subSwitch.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.Subtitles, isChecked)
             toggleSubOptions(isChecked)
+            toggleExpSubOptions(binding.subTextSwitch.isChecked && isChecked)
         }
         toggleSubOptions(binding.subSwitch.isChecked)
+
+        binding.subTextSwitch.isChecked = PrefManager.getVal(PrefName.TextviewSubtitles)
+        binding.subTextSwitch.setOnCheckedChangeListener { _, isChecked ->
+            PrefManager.setVal(PrefName.TextviewSubtitles, isChecked)
+            toggleExpSubOptions(isChecked)
+        }
+        toggleExpSubOptions(binding.subTextSwitch.isChecked)
+
         val subLanguages = arrayOf(
             "Albanian",
             "Arabic",
@@ -366,17 +393,17 @@ class PlayerSettingsActivity : AppCompatActivity() {
             "Urdu",
             "Vietnamese",
         )
-        val subLanguageDialog = AlertDialog.Builder(this, R.style.MyPopup)
-            .setTitle(getString(R.string.subtitle_langauge))
         binding.videoSubLanguage.setOnClickListener {
-            val dialog = subLanguageDialog.setSingleChoiceItems(
-                subLanguages,
-                PrefManager.getVal(PrefName.SubLanguage)
-            ) { dialog, count ->
-                PrefManager.setVal(PrefName.SubLanguage, count)
-                dialog.dismiss()
-            }.show()
-            dialog.window?.setDimAmount(0.8f)
+            customAlertDialog().apply {
+                setTitle(getString(R.string.subtitle_langauge))
+                singleChoiceItems(
+                    subLanguages,
+                    PrefManager.getVal(PrefName.SubLanguage)
+                ) { count ->
+                   PrefManager.setVal(PrefName.SubLanguage, count)
+                }
+                show()
+            }
         }
         val colorsPrimary =
             arrayOf(
@@ -506,6 +533,22 @@ class PlayerSettingsActivity : AppCompatActivity() {
         binding.videoSubAlpha.addOnChangeListener(OnChangeListener { _, value, fromUser ->
             if (fromUser) {
                 PrefManager.setVal(PrefName.SubAlpha, value)
+                updateSubPreview()
+            }
+        })
+
+        binding.videoSubStroke.value = PrefManager.getVal(PrefName.SubStroke)
+        binding.videoSubStroke.addOnChangeListener(OnChangeListener { _, value, fromUser ->
+            if (fromUser) {
+                PrefManager.setVal(PrefName.SubStroke, value)
+                updateSubPreview()
+            }
+        })
+
+        binding.videoSubBottomMargin.value = PrefManager.getVal(PrefName.SubBottomMargin)
+        binding.videoSubBottomMargin.addOnChangeListener(OnChangeListener { _, value, fromUser ->
+            if (fromUser) {
+                PrefManager.setVal(PrefName.SubBottomMargin, value)
                 updateSubPreview()
             }
         })
