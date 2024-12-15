@@ -973,11 +973,14 @@
     <string name="host">Host</string>
     <string name="port">Porta</string>
     <string name="authentication">Autenticação</string>
-    <string name="proxy">Proxy Socks5</string>
-    <string name="proxy_desc">Rotear todo o tráfego da sua rede através de um Proxy Socks5</string>
+    <string name="proxy">SOCKS5 Proxy</string>
+    <string name="proxy_desc">Route All Your Network Traffic Through a SOCKS5 Proxy</string>
     <string name="proxy_setup">Ajustes de Proxy</string>
     <string name="proxy_setup_desc">Configurar seu Proxy Socks5</string>
     <string name="clear_stored_episode">Limpar Dados de Episódio Armazenados</string>
     <string name="clear_stored_chapter">Limpar Dados de Capítulo Armazenados</string>
     <string name="use_additional_codec">Suporte a Codificadores Adicionais</string>
+    <string name="textview_sub">Textview Subtitles (Experimental)</string>
+    <string name="textview_sub_stroke">Subtitle Stroke</string>
+    <string name="textview_sub_bottom_margin">Bottom Margin</string>
 </resources>
