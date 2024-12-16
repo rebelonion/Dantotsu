@@ -327,36 +327,10 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
     }
 
     private fun setupSubFormatting(playerView: PlayerView) {
-        val primaryColor = when (PrefManager.getVal<Int>(PrefName.PrimaryColor)) {
-            0 -> Color.BLACK
-            1 -> Color.DKGRAY
-            2 -> Color.GRAY
-            3 -> Color.LTGRAY
-            4 -> Color.WHITE
-            5 -> Color.RED
-            6 -> Color.YELLOW
-            7 -> Color.GREEN
-            8 -> Color.CYAN
-            9 -> Color.BLUE
-            10 -> Color.MAGENTA
-            11 -> Color.TRANSPARENT
-            else -> Color.WHITE
-        }
-        val secondaryColor = when (PrefManager.getVal<Int>(PrefName.SecondaryColor)) {
-            0 -> Color.BLACK
-            1 -> Color.DKGRAY
-            2 -> Color.GRAY
-            3 -> Color.LTGRAY
-            4 -> Color.WHITE
-            5 -> Color.RED
-            6 -> Color.YELLOW
-            7 -> Color.GREEN
-            8 -> Color.CYAN
-            9 -> Color.BLUE
-            10 -> Color.MAGENTA
-            11 -> Color.TRANSPARENT
-            else -> Color.BLACK
-        }
+        val primaryColor = PrefManager.getVal<Int>(PrefName.PrimaryColor)
+
+        val secondaryColor = PrefManager.getVal<Int>(PrefName.SecondaryColor)
+
         val outline = when (PrefManager.getVal<Int>(PrefName.Outline)) {
             0 -> EDGE_TYPE_OUTLINE // Normal
             1 -> EDGE_TYPE_DEPRESSED // Shine
@@ -364,36 +338,11 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             3 -> EDGE_TYPE_NONE // No outline
             else -> EDGE_TYPE_OUTLINE // Normal
         }
-        val subBackground = when (PrefManager.getVal<Int>(PrefName.SubBackground)) {
-            0 -> Color.TRANSPARENT
-            1 -> Color.BLACK
-            2 -> Color.DKGRAY
-            3 -> Color.GRAY
-            4 -> Color.LTGRAY
-            5 -> Color.WHITE
-            6 -> Color.RED
-            7 -> Color.YELLOW
-            8 -> Color.GREEN
-            9 -> Color.CYAN
-            10 -> Color.BLUE
-            11 -> Color.MAGENTA
-            else -> Color.TRANSPARENT
-        }
-        val subWindow = when (PrefManager.getVal<Int>(PrefName.SubWindow)) {
-            0 -> Color.TRANSPARENT
-            1 -> Color.BLACK
-            2 -> Color.DKGRAY
-            3 -> Color.GRAY
-            4 -> Color.LTGRAY
-            5 -> Color.WHITE
-            6 -> Color.RED
-            7 -> Color.YELLOW
-            8 -> Color.GREEN
-            9 -> Color.CYAN
-            10 -> Color.BLUE
-            11 -> Color.MAGENTA
-            else -> Color.TRANSPARENT
-        }
+
+        val subBackground = PrefManager.getVal<Int>(PrefName.SubBackground)
+
+        val subWindow = PrefManager.getVal<Int>(PrefName.SubWindow)
+
         val font = when (PrefManager.getVal<Int>(PrefName.Font)) {
             0 -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
             1 -> ResourcesCompat.getFont(this, R.font.poppins_bold)
@@ -432,37 +381,15 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
     }
 
     private fun applySubtitleStyles(textView: Xubtitle) {
-        val primaryColor = when (PrefManager.getVal<Int>(PrefName.PrimaryColor)) {
-            0 -> Color.BLACK
-            1 -> Color.DKGRAY
-            2 -> Color.GRAY
-            3 -> Color.LTGRAY
-            4 -> Color.WHITE
-            5 -> Color.RED
-            6 -> Color.YELLOW
-            7 -> Color.GREEN
-            8 -> Color.CYAN
-            9 -> Color.BLUE
-            10 -> Color.MAGENTA
-            11 -> Color.TRANSPARENT
-            else -> Color.WHITE
-        }
+        val primaryColor = PrefManager.getVal<Int>(PrefName.PrimaryColor)
 
-        val subBackground = when (PrefManager.getVal<Int>(PrefName.SubBackground)) {
-            0 -> Color.TRANSPARENT
-            1 -> Color.BLACK
-            2 -> Color.DKGRAY
-            3 -> Color.GRAY
-            4 -> Color.LTGRAY
-            5 -> Color.WHITE
-            6 -> Color.RED
-            7 -> Color.YELLOW
-            8 -> Color.GREEN
-            9 -> Color.CYAN
-            10 -> Color.BLUE
-            11 -> Color.MAGENTA
-            else -> Color.TRANSPARENT
-        }
+        val subBackground = PrefManager.getVal<Int>(PrefName.SubBackground)
+
+        val secondaryColor = PrefManager.getVal<Int>(PrefName.SecondaryColor)
+
+        val subStroke = PrefManager.getVal<Float>(PrefName.SubStroke)
+
+        val fontSize = PrefManager.getVal<Int>(PrefName.FontSize).toFloat()
 
         val font = when (PrefManager.getVal<Int>(PrefName.Font)) {
             0 -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
@@ -475,30 +402,10 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             else -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
         }
 
-        val fontSize = PrefManager.getVal<Int>(PrefName.FontSize).toFloat()
-
         textView.setBackgroundColor(subBackground)
         textView.setTextColor(primaryColor)
         textView.typeface = font
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
-
-        val secondaryColor = when (PrefManager.getVal<Int>(PrefName.SecondaryColor)) {
-            0 -> Color.BLACK
-            1 -> Color.DKGRAY
-            2 -> Color.GRAY
-            3 -> Color.LTGRAY
-            4 -> Color.WHITE
-            5 -> Color.RED
-            6 -> Color.YELLOW
-            7 -> Color.GREEN
-            8 -> Color.CYAN
-            9 -> Color.BLUE
-            10 -> Color.MAGENTA
-            11 -> Color.TRANSPARENT
-            else -> Color.BLACK
-        }
-
-        val subStroke = PrefManager.getVal<Float>(PrefName.SubStroke)
 
         textView.apply {
               when (PrefManager.getVal<Int>(PrefName.Outline)) {
@@ -516,7 +423,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 false -> 0f
             }
 
-          val textElevation = PrefManager.getVal<Float>(PrefName.SubBottomMargin) / 30 * resources.displayMetrics.heightPixels
+          val textElevation = PrefManager.getVal<Float>(PrefName.SubBottomMargin) / 50 * resources.displayMetrics.heightPixels
           textView.translationY = -textElevation
     }
 
