@@ -226,25 +226,6 @@
                     app:thumbTint="@color/button_switch_track" />
 
                 <Button
-                    android:id="@+id/videoSubLanguage"
-                    style="@style/Widget.Material3.Button.TextButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="64dp"
-                    android:layout_marginBottom="8dp"
-                    android:fontFamily="@font/poppins_bold"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    android:paddingHorizontal="32dp"
-                    android:text="@string/subtitle_langauge"
-                    android:textAlignment="viewStart"
-                    android:textAllCaps="false"
-                    android:textColor="@color/bg_opp"
-                    app:cornerRadius="0dp"
-                    app:icon="@drawable/ic_round_subtitles_24"
-                    app:iconPadding="16dp"
-                    app:iconSize="24dp" />
-
-                <Button
                     android:id="@+id/videoSubColorPrimary"
                     style="@style/Widget.Material3.Button.TextButton"
                     android:layout_width="match_parent"
@@ -426,7 +407,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="32dp"
-                    android:valueFrom="1"
+                    android:valueFrom="0"
                     android:stepSize="1.0"
                     android:valueTo="30">
 
@@ -457,9 +438,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="32dp"
-                    android:valueFrom="1"
+                    android:valueFrom="0"
                     android:stepSize="1.0"
-                    android:valueTo="30">
+                    android:valueTo="50">
 
                 </com.google.android.material.slider.Slider>
 
@@ -543,6 +524,25 @@
                     </com.google.android.material.card.MaterialCardView>
 
                 </LinearLayout>
+
+               <Button
+                    android:id="@+id/videoSubLanguage"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:layout_marginBottom="8dp"
+                    android:fontFamily="@font/poppins_bold"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:paddingHorizontal="32dp"
+                    android:text="@string/subtitle_langauge"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="false"
+                    android:textColor="@color/bg_opp"
+                    app:cornerRadius="0dp"
+                    app:icon="@drawable/ic_round_subtitles_24"
+                    app:iconPadding="16dp"
+                    app:iconSize="24dp" />
 
                 <TextView
                     android:layout_width="match_parent"
