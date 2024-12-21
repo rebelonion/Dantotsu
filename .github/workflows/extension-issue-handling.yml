@@ -5,6 +5,9 @@ on:
 
 jobs:
   handle-extension-issues:
+    permissions:
+      contents: write
+      issues: write
     runs-on: ubuntu-latest
     steps:
       - name: Fetch Extensions from Repositories
