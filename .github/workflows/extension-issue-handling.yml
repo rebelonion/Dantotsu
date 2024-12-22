@@ -1,7 +1,7 @@
 name: Extension Issue Handling
 on:
   issues:
-    types: [opened, labeled]
+    types: [opened]
 
 jobs:
   handle-extension-issues:
