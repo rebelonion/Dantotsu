@@ -4,107 +4,147 @@ on:
     types: [opened]
 
 jobs:
-  handle-extension-issues:
-    permissions:
-      contents: write
-      issues: write
+  check-extension-issue:
     runs-on: ubuntu-latest
     steps:
-      - name: Fetch Extensions from Repositories
+      - name: Fetch Extension Data
         id: fetch-extensions
-        run: |
-          REPOS=(
-            "https://raw.githubusercontent.com/ni3x/aniyomi-extensions/repo/index.min.json"
-            "https://raw.githubusercontent.com/Kohi-den/extensions/main/index.min.json"
-            "https://raw.githubusercontent.com/keiyoushi/extensions/repo/index.min.json"
-          )
-
-          EXTENSIONS_FILE=extensions.txt
-          > $EXTENSIONS_FILE
-
-          for repo in "${REPOS[@]}"; do
-            echo "Fetching from $repo"
-            curl -sL "$repo" | jq -r '.[].name' | \
-            sed -E 's/^(Aniyomi:|Tachiyomi:)//' | \
-            tr '[:upper:]' '[:lower:]' | \
-            sed -E 's/[^a-z0-9]//g' >> $EXTENSIONS_FILE
-          done
-
-          sort -u $EXTENSIONS_FILE -o $EXTENSIONS_FILE
-
-          EXTENSIONS_LIST=$(paste -sd'|' $EXTENSIONS_FILE)
-          echo "extensions_list=$EXTENSIONS_LIST" >> $GITHUB_OUTPUT
-          echo "Number of Extensions: $(wc -l < $EXTENSIONS_FILE)"
-          cat $EXTENSIONS_FILE
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const repos = [
+              "https://raw.githubusercontent.com/ni3x/aniyomi-extensions/repo/index.min.json"
+              "https://raw.githubusercontent.com/Kohi-den/extensions/main/index.min.json"
+              "https://raw.githubusercontent.com/keiyoushi/extensions/repo/index.min.json"
+            ];
+            
+            const extensionNames = new Set();
+            
+            for (const repo of repos) {
+              try {
+                const response = await fetch(repo);
+                const data = await response.json();
+                data.forEach(extension => {
+                  if (extension.name) {
+                    extensionNames.add(extension.name.toLowerCase());
+                  }
+                });
+                console.log(`✅ Successfully fetched extensions from ${repo}`);
+              } catch (error) {
+                console.error(`❌ Error fetching ${repo}:`, error);
+              }
+            }
+            
+            console.log('📝 Found extensions:', Array.from(extensionNames).join(', '));
+            core.setOutput('extension_names', Array.from(extensionNames).join(','));
 
       - name: Check Issue Content
-        if: github.event.action == 'opened'
         id: check-issue
+        uses: actions/github-script@v6
+        with:
+          script: |
+            function normalizeExtensionName(name) {
+              const original = name;
+              const normalized = name
+                .toLowerCase()
+                .replace(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim()
+                .replace(/\d+/g, '');
+              console.log(`🔍 Normalizing: "${original}" -> "${normalized}"`);
+              return normalized;
+            }
+
+            function findExtensionMatch(content, extensionNames) {
+              console.log('\n📖 Checking content:', content);
+              const normalizedContent = normalizeExtensionName(content);
+              for (const extension of extensionNames) {
+                console.log(`\n⚡ Checking against extension: ${extension}`);
+                const normalizedExtension = normalizeExtensionName(extension);
+                if (normalizedContent.includes(normalizedExtension)) {
+                  console.log(`✅ Direct match found! "${extension}"`);
+                  return extension;
+                }
+                const extensionParts = normalizedExtension.split('');
+                let possibleSplits = '';
+                for (let i = 0; i < extensionParts.length - 1; i++) {
+                  possibleSplits += extensionParts[i] + ' ';
+                }
+                possibleSplits += extensionParts[extensionParts.length - 1];
+                if (normalizedContent.includes(possibleSplits)) {
+                  console.log(`✅ Split match found! "${extension}" (as "${possibleSplits}")`);
+                  return extension;
+                }
+              }
+              console.log('❌ No extension match found');
+              return null;
+            }
+
+            const extensionNames = process.env.EXTENSION_NAMES.split(',');
+            const issueTitle = context.payload.issue.title;
+            const issueBody = context.payload.issue.body || '';
+            console.log('\n🎯 Checking Issue:');
+            console.log('Title:', issueTitle);
+            console.log('Body:', issueBody);
+            
+            const regexPatterns = [
+              ".*(extension|extensions|repo|repositories|source|sources|stream|server).*not working.*",
+              ".*(extension|extensions|repo|repositories|source|sources|stream|server).*doesn't work.*",
+              ".*(extension|extensions|repo|repositories|source|sources|stream|server).*does not work.*",
+              ".*(extension|extensions|repo|repositories|source|sources|stream|server).*cant work.*",
+              ".*(extension|extensions|repo|repositories|source|sources|stream|server).*can't work.*",
+              ".*(no|can't find|cannot find|missing).*extension(s)?.*",
+              ".*(no|can't find|cannot find|missing).*repo(s|sitories)?.*",
+              ".*(no|can't find|cannot find|missing).*source(s)?.*",
+              ".*(no|can't find|cannot find|missing).*stream(s)?.*",
+              ".*(no|can't find|cannot find|missing).*server.*",
+              ".*(server|stream).*not available.*",
+              ".*(server|stream).*unavailable.*",
+              ".*(server|stream).*down.*",
+              ".*{.*}.*(extension|repo|repositories|source|sources).*not working.*",
+              ".*{.*}.*(extension|repo|repositories|source|sources).*issue.*",
+              ".*{.*}.*(extension|repo|repositories|source|sources).*problem.*",
+              ".*(extension|extensions|repo|repositories|source|sources|stream|server).*not available.*",
+              ".*(extension|extensions|repo|repositories|source|sources|stream|server).*missing.*",
+              ".*nothing came up.*source.*look elsewhere.*",
+              ".*no results.*source.*look somewhere else.*",
+              ".*no content.*source.*"
+            ];
+            
+            let isExtensionIssue = false;
+            let detectedExtension = null;
+
+            console.log('\n🔍 Checking for extension matches...');
+            detectedExtension = findExtensionMatch(issueTitle, extensionNames) || 
+                              findExtensionMatch(issueBody, extensionNames);
+            
+            if (detectedExtension) {
+              isExtensionIssue = true;
+              console.log('✅ Extension detected:', detectedExtension);
+            } else {
+              console.log('\n🔍 No specific extension found, checking regex patterns...');
+              for (const pattern of regexPatterns) {
+                const regex = new RegExp(pattern, 'i');
+                if (regex.test(issueTitle.toLowerCase())) {
+                  console.log(`✅ Regex pattern matched in title: "${pattern}"`);
+                  isExtensionIssue = true;
+                  break;
+                }
+                if (regex.test(issueBody.toLowerCase())) {
+                  console.log(`✅ Regex pattern matched in body: "${pattern}"`);
+                  isExtensionIssue = true;
+                  break;
+                }
+              }
+            }
+            
+            console.log('\n📊 Final Results:');
+            console.log('Is Extension Issue:', isExtensionIssue);
+            console.log('Detected Extension:', detectedExtension || 'Unknown Extension');
+            core.setOutput('is_extension_issue', isExtensionIssue.toString());
+            core.setOutput('detected_extension', detectedExtension || 'Unknown Extension');
         env:
-          ISSUE_TITLE: ${{ github.event.issue.title }}
-          ISSUE_BODY: ${{ github.event.issue.body }}
-          EXTENSIONS: ${{ steps.fetch-extensions.outputs.extensions_list }}
-        run: |
-          CLEAN_TITLE=$(echo "$ISSUE_TITLE" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]//g')
-          CLEAN_BODY=$(echo "$ISSUE_BODY" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]//g')
-
-          echo "Cleaned Title: $CLEAN_TITLE"
-          echo "Cleaned Body: $CLEAN_BODY"
-
-          EXTENSIONS_FILE=extensions.txt
-          IS_EXTENSION_ISSUE=false
-          MATCHED_EXTENSION=""
-
-          EXTENSION_REGEX_PATTERNS=(
-            ".*(extension|extensions|repo|repositories|source|sources|stream|server).*not working.*"
-            ".*(extension|extensions|repo|repositories|source|sources|stream|server).*doesn't work.*"
-            ".*(extension|extensions|repo|repositories|source|sources|stream|server).*does not work.*"
-            ".*(extension|extensions|repo|repositories|source|sources|stream|server).*cant work.*"
-            ".*(extension|extensions|repo|repositories|source|sources|stream|server).*can't work.*"
-            ".*(no|can't find|cannot find|missing).*extension(s)?.*"
-            ".*(no|can't find|cannot find|missing).*repo(s|sitories)?.*"
-            ".*(no|can't find|cannot find|missing).*source(s)?.*"
-            ".*(no|can't find|cannot find|missing).*stream(s)?.*"
-            ".*(no|can't find|cannot find|missing).*server.*"
-            ".*(server|stream).*not available.*"
-            ".*(server|stream).*unavailable.*"
-            ".*(server|stream).*down.*"
-            ".*{.*}.*(extension|repo|repositories|source|sources).*not working.*"
-            ".*{.*}.*(extension|repo|repositories|source|sources).*issue.*"
-            ".*{.*}.*(extension|repo|repositories|source|sources).*problem.*"
-            ".*(extension|extensions|repo|repositories|source|sources|stream|server).*not available.*"
-            ".*(extension|extensions|repo|repositories|source|sources|stream|server).*missing.*"
-            ".*nothing came up.*source.*look elsewhere.*"
-            ".*no results.*source.*look somewhere else.*"
-            ".*no content.*source.*"
-          )
-
-          for pattern in "${EXTENSION_REGEX_PATTERNS[@]}"; do
-            if [[ "$CLEAN_TITLE" =~ $pattern ]] || [[ "$CLEAN_BODY" =~ $pattern ]]; then
-              IS_EXTENSION_ISSUE=true
-              break
-            fi
-          done
-
-          if [ "$IS_EXTENSION_ISSUE" = false ] && [ -n "$CLEAN_BODY" ]; then
-            while IFS= read -r ext; do
-              if [[ "$CLEAN_BODY" == *"$ext"* ]]; then
-                IS_EXTENSION_ISSUE=true
-                MATCHED_EXTENSION="$ext"
-                break
-              fi
-            done < "$EXTENSIONS_FILE"
-          fi
-
-          echo "Is Extension Issue: $IS_EXTENSION_ISSUE"
-          echo "Matched Extension: $MATCHED_EXTENSION"
-
-          if [ "$IS_EXTENSION_ISSUE" = true ]; then
-            echo "is_extension_issue=true" >> $GITHUB_OUTPUT
-            echo "detected_extension=$MATCHED_EXTENSION" >> $GITHUB_OUTPUT
-          else
-            echo "is_extension_issue=false" >> $GITHUB_OUTPUT
-          fi
+          EXTENSION_NAMES: ${{ steps.fetch-extensions.outputs.extension_names }}
 
       - name: Comment and Close Extension Issue
         if: steps.check-issue.outputs.is_extension_issue == 'true'
@@ -114,13 +154,14 @@ jobs:
           script: |
             const issueNumber = context.issue.number;
             const reportedExtension = "${{ steps.check-issue.outputs.detected_extension || 'Unknown Extension' }}";
-
+            console.log('🔒 Closing issue:', issueNumber);
+            console.log('Extension reported:', reportedExtension);
             const currentLabels = await github.rest.issues.listLabelsOnIssue({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: issueNumber
             });
-
+            
             for (const label of currentLabels.data) {
               await github.rest.issues.removeLabel({
                 owner: context.repo.owner,
@@ -129,14 +170,14 @@ jobs:
                 name: label.name
               });
             }
-
+            
             await github.rest.issues.addLabels({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: issueNumber,
               labels: ['wontfix']
             });
-
+            
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -146,10 +187,12 @@ jobs:
                     If the extension doesn't work, we cannot help you.
                     Contact the owner of the respective repository for extension-related problems.`
             });
-
+            
             await github.rest.issues.update({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: issueNumber,
               state: 'closed'
             });
+            
+            console.log('✅ Issue processed and closed successfully');
