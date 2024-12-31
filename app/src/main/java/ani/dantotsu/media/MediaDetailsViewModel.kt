@@ -13,6 +13,7 @@ import ani.dantotsu.media.anime.Episode
 import ani.dantotsu.media.anime.SelectorDialogFragment
 import ani.dantotsu.media.manga.MangaChapter
 import ani.dantotsu.others.AniSkip
+import ani.dantotsu.others.Anify
 import ani.dantotsu.others.Jikan
 import ani.dantotsu.others.Kitsu
 import ani.dantotsu.parsers.AnimeSources
@@ -97,6 +98,15 @@ class MediaDetailsViewModel : ViewModel() {
     suspend fun loadKitsuEpisodes(s: Media) {
         tryWithSuspend {
             if (kitsuEpisodes.value == null) kitsuEpisodes.postValue(Kitsu.getKitsuEpisodesDetails(s))
+        }
+    }
+    private val anifyEpisodes: MutableLiveData<Map<String, Episode>> =
+        MutableLiveData<Map<String, Episode>>(null)
+
+    fun getAnifyEpisodes(): LiveData<Map<String, Episode>> = anifyEpisodes
+    suspend fun loadAnifyEpisodes(s: Int) {
+        tryWithSuspend {
+            if (anifyEpisodes.value == null) anifyEpisodes.postValue(Anify.fetchAndParseMetadata(s))
         }
     }
 

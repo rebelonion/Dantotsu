@@ -50,6 +50,7 @@ import ani.dantotsu.statusBarHeight
 import ani.dantotsu.util.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.math.max
@@ -92,6 +93,7 @@ class HomeFragment : Fragment() {
                 )
                 binding.homeUserDataProgressBar.visibility = View.GONE
                 binding.homeNotificationCount.isVisible = Anilist.unreadNotificationCount > 0
+                        && PrefManager.getVal<Boolean>(PrefName.ShowNotificationRedDot) == true
                 binding.homeNotificationCount.text = Anilist.unreadNotificationCount.toString()
 
                 binding.homeAnimeList.setOnClickListener {
@@ -456,51 +458,56 @@ class HomeFragment : Fragment() {
 
         var running = false
         val live = Refresh.activity.getOrPut(1) { MutableLiveData(true) }
-        live.observe(viewLifecycleOwner)
-        {
-            if (!running && it) {
+        live.observe(viewLifecycleOwner) { shouldRefresh ->
+            if (!running && shouldRefresh) {
                 running = true
                 scope.launch {
                     withContext(Dispatchers.IO) {
-                        //Get userData First
-                        Anilist.userid =
-                            PrefManager.getNullableVal<String>(PrefName.AnilistUserId, null)
-                                ?.toIntOrNull()
+                        // Get user data first
+                        Anilist.userid = PrefManager.getNullableVal<String>(PrefName.AnilistUserId, null)?.toIntOrNull()
                         if (Anilist.userid == null) {
-                            getUserId(requireContext()) {
-                                load()
-                            }
-                        } else {
-                            CoroutineScope(Dispatchers.IO).launch {
+                            withContext(Dispatchers.Main) {
                                 getUserId(requireContext()) {
                                     load()
                                 }
                             }
+                        } else {
+                            getUserId(requireContext()) {
+                                load()
+                            }
                         }
                         model.loaded = true
-                        CoroutineScope(Dispatchers.IO).launch {
-                            model.setListImages()
-                        }
-                        var empty = true
-                        val homeLayoutShow: List<Boolean> =
-                            PrefManager.getVal(PrefName.HomeLayout)
-                        model.initHomePage()
-                        (array.indices).forEach { i ->
+                        model.setListImages()
+                    }
+
+                    var empty = true
+                    val homeLayoutShow: List<Boolean> = PrefManager.getVal(PrefName.HomeLayout)
+
+                    withContext(Dispatchers.Main) {
+                        homeLayoutShow.indices.forEach { i ->
                             if (homeLayoutShow.elementAt(i)) {
                                 empty = false
-                            } else withContext(Dispatchers.Main) {
+                            } else {
                                 containers[i].visibility = View.GONE
                             }
                         }
-                        model.empty.postValue(empty)
                     }
+
+                    val initHomePage = async(Dispatchers.IO) { model.initHomePage() }
+                    val initUserStatus = async(Dispatchers.IO) { model.initUserStatus() }
+                    initHomePage.await()
+                    initUserStatus.await()
+
+                    withContext(Dispatchers.Main) {
+                        model.empty.postValue(empty)
+                        binding.homeHiddenItemsContainer.visibility = View.GONE
+                    }
+
                     live.postValue(false)
                     _binding?.homeRefresh?.isRefreshing = false
                     running = false
                 }
-                binding.homeHiddenItemsContainer.visibility = View.GONE
             }
-
         }
     }
 
@@ -508,6 +515,7 @@ class HomeFragment : Fragment() {
         if (!model.loaded) Refresh.activity[1]!!.postValue(true)
         if (_binding != null) {
             binding.homeNotificationCount.isVisible = Anilist.unreadNotificationCount > 0
+                    && PrefManager.getVal<Boolean>(PrefName.ShowNotificationRedDot) == true
             binding.homeNotificationCount.text = Anilist.unreadNotificationCount.toString()
         }
         super.onResume()

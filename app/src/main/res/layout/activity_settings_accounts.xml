@@ -186,6 +186,15 @@
 
             </LinearLayout>
 
+            <ImageView
+                android:id="@+id/settingsAccountHelp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/account_help"
+                android:padding="16dp"
+                android:src="@drawable/ic_round_help_24"
+                app:tint="?attr/colorPrimary"/>
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/settingsMALAvatarContainer"
                 android:layout_width="51dp"
@@ -256,9 +265,10 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/settingsImageSwitcher"
+                android:id="@+id/settingsPresenceSwitcher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/discord_rich_presence"
                 android:padding="16dp"
                 android:src="@drawable/discord_status_idle" />
 
@@ -281,27 +291,13 @@
             </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/settingsAccountHelp"
+        <ani.dantotsu.FadingEdgeRecyclerView
+            android:id="@+id/settingsRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:layout_marginStart="-31dp"
-            android:layout_marginEnd="-31dp"
-            android:background="?android:colorBackground"
-            android:drawablePadding="16dp"
-            android:fontFamily="@font/poppins_bold"
-            android:gravity="center_vertical"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:paddingStart="31dp"
-            android:paddingEnd="31dp"
-            android:text="@string/account_help"
-            android:textAllCaps="false"
-            android:textColor="?attr/colorOnBackground"
-            app:cornerRadius="0dp"
-            app:drawableStartCompat="@drawable/ic_round_help_24"
-            app:drawableTint="?attr/colorPrimary" />
-
+            android:layout_height="match_parent"
+            android:nestedScrollingEnabled="false"
+            android:requiresFadingEdge="vertical"
+            tools:itemCount="1"
+            tools:listitem="@layout/item_settings" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

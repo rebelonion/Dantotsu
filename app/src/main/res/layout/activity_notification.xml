@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/notificationToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/notificationBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginStart="12dp"
+            android:src="@drawable/ic_round_arrow_back_ios_new_24"
+            app:tint="?attr/colorOnBackground"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/notificationTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="44dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/poppins_bold"
+            android:gravity="center|start"
+            android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="18sp"
+            tools:text="Notifications" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginBottom="67dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/notificationViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:nestedScrollingEnabled="true"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+    </LinearLayout>
+
+    <nl.joery.animatedbottombar.AnimatedBottomBar
+        android:id="@+id/notificationNavBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginTop="-67dp"
+        android:background="?attr/colorSurface"
+        android:padding="0dp"
+        app:abb_animationInterpolator="@anim/over_shoot"
+        app:abb_indicatorAppearance="round"
+        app:abb_indicatorLocation="top"
+        app:abb_indicatorMargin="28dp"
+        app:abb_selectedTabType="text"
+        app:abb_textAppearance="@style/NavBarText"
+        app:itemActiveIndicatorStyle="@style/BottomNavBar"
+        app:itemIconTint="@color/tab_layout_icon"
+        app:itemRippleColor="#00000000"
+        app:itemTextAppearanceActive="@style/NavBarText"
+        app:itemTextAppearanceInactive="@style/NavBarText"
+        app:itemTextColor="@color/tab_layout_icon" />
+
+</LinearLayout>

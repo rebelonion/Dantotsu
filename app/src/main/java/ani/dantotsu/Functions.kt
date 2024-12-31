@@ -68,7 +68,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.AttrRes
-import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -92,12 +91,12 @@ import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.BuildConfig.APPLICATION_ID
 import ani.dantotsu.connections.anilist.Genre
 import ani.dantotsu.connections.anilist.api.FuzzyDate
-import ani.dantotsu.connections.bakaupdates.MangaUpdates
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.databinding.ItemCountDownBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.notifications.IncognitoNotificationClickReceiver
+import ani.dantotsu.others.AlignTagHandler
 import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.others.SpoilerPlugin
 import ani.dantotsu.parsers.ShowResponse
@@ -106,7 +105,6 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.internal.PreferenceKeystore
 import ani.dantotsu.settings.saving.internal.PreferenceKeystore.Companion.generateSalt
-import ani.dantotsu.util.CountUpTimer
 import ani.dantotsu.util.Logger
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
@@ -119,8 +117,8 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withC
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.Target
-import com.bumptech.glide.request.target.ViewTarget
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -154,6 +152,7 @@ import java.io.FileOutputStream
 import java.io.OutputStream
 import java.lang.reflect.Field
 import java.util.Calendar
+import java.util.Locale
 import java.util.TimeZone
 import java.util.Timer
 import java.util.TimerTask
@@ -314,6 +313,7 @@ fun Activity.reloadActivity() {
     Refresh.all()
     finish()
     startActivity(Intent(this, this::class.java))
+    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     initActivity(this)
 }
 
@@ -854,7 +854,7 @@ fun savePrefsToDownloads(
         }
     )
 }
-
+@SuppressLint("StringFormatMatches")
 fun savePrefs(serialized: String, path: String, title: String, context: Context): File? {
     var file = File(path, "$title.ani")
     var counter = 1
@@ -874,6 +874,7 @@ fun savePrefs(serialized: String, path: String, title: String, context: Context)
     }
 }
 
+@SuppressLint("StringFormatMatches")
 fun savePrefs(
     serialized: String,
     path: String,
@@ -920,7 +921,7 @@ fun shareImage(title: String, bitmap: Bitmap, context: Context) {
     intent.putExtra(Intent.EXTRA_STREAM, contentUri)
     context.startActivity(Intent.createChooser(intent, "Share $title"))
 }
-
+@SuppressLint("StringFormatMatches")
 fun saveImage(image: Bitmap, path: String, imageFileName: String): File? {
     val imageFile = File(path, "$imageFileName.png")
     return try {
@@ -1010,47 +1011,10 @@ fun countDown(media: Media, view: ViewGroup) {
     }
 }
 
-fun sinceWhen(media: Media, view: ViewGroup) {
-    if (media.status != "RELEASING" && media.status != "HIATUS") return
-    CoroutineScope(Dispatchers.IO).launch {
-        MangaUpdates().search(media.mangaName(), media.startDate)?.let {
-            val latestChapter = MangaUpdates.getLatestChapter(view.context, it)
-            val timeSince = (System.currentTimeMillis() -
-                    (it.metadata.series.lastUpdated!!.timestamp * 1000)) / 1000
-
-            withContext(Dispatchers.Main) {
-                val v =
-                    ItemCountDownBinding.inflate(LayoutInflater.from(view.context), view, false)
-                view.addView(v.root, 0)
-                v.mediaCountdownText.text =
-                    currActivity()?.getString(R.string.chapter_release_timeout, latestChapter)
-
-                object : CountUpTimer(86400000) {
-                    override fun onTick(second: Int) {
-                        val a = second + timeSince
-                        v.mediaCountdown.text = currActivity()?.getString(
-                            R.string.time_format,
-                            a / 86400,
-                            a % 86400 / 3600,
-                            a % 86400 % 3600 / 60,
-                            a % 86400 % 3600 % 60
-                        )
-                    }
-
-                    override fun onFinish() {
-                        // The legend will never die.
-                    }
-                }.start()
-            }
-        }
-    }
-}
-
 fun displayTimer(media: Media, view: ViewGroup) {
     when {
         media.anime != null -> countDown(media, view)
-        media.format == "MANGA" || media.format == "ONE_SHOT" -> sinceWhen(media, view)
-        else -> {} // No timer yet
+        else -> {}
     }
 }
 
@@ -1447,6 +1411,8 @@ fun openOrCopyAnilistLink(link: String) {
         } else {
             copyToClipboard(link, true)
         }
+    } else if (getYoutubeId(link).isNotEmpty()) {
+        openLinkInYouTube(link)
     } else {
         copyToClipboard(link, true)
     }
@@ -1483,6 +1449,7 @@ fun buildMarkwon(
                     TagHandlerNoOp.create("h1", "h2", "h3", "h4", "h5", "h6", "hr", "pre", "a")
                 )
             }
+            plugin.addHandler(AlignTagHandler())
         })
         .usePlugin(GlideImagesPlugin.create(object : GlideImagesPlugin.GlideStore {
 
@@ -1500,7 +1467,6 @@ fun buildMarkwon(
                         }
                         return false
                     }
-
                     override fun onLoadFailed(
                         e: GlideException?,
                         model: Any?,
@@ -1526,4 +1492,35 @@ fun buildMarkwon(
         }))
         .build()
     return markwon
+}
+
+
+
+fun getYoutubeId(url: String): String {
+    val regex = """(?:youtube\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|(?:youtu\.be|youtube\.com)/)([^"&?/\s]{11})|youtube\.com/""".toRegex()
+    val matchResult = regex.find(url)
+    return matchResult?.groupValues?.getOrNull(1) ?: ""
+}
+
+fun getLanguageCode(language: String): CharSequence {
+    val locales = Locale.getAvailableLocales()
+    for (locale in locales) {
+        if (locale.displayLanguage.equals(language, ignoreCase = true)) {
+            val lang: CharSequence = locale.language
+            return lang
+
+        }
+    }
+    val out: CharSequence = "null"
+    return out
+}
+
+fun getLanguageName(language: String): String? {
+    val locales = Locale.getAvailableLocales()
+    for (locale in locales) {
+        if (locale.language.equals(language, ignoreCase = true)) {
+            return locale.displayLanguage
+        }
+    }
+    return null
 }

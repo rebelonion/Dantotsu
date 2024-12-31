@@ -111,8 +111,8 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
             trendingBinding.searchBar.performClick()
         }
 
-        trendingBinding.notificationCount.visibility =
-            if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
+        trendingBinding.notificationCount.isVisible = Anilist.unreadNotificationCount > 0
+                && PrefManager.getVal<Boolean>(PrefName.ShowNotificationRedDot) == true
         trendingBinding.notificationCount.text = Anilist.unreadNotificationCount.toString()
 
         listOf(
@@ -268,8 +268,9 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
                 LinearLayoutManager.HORIZONTAL,
                 false
             )
-        MediaListViewActivity.passedMedia = media.toCollection(ArrayList())
+
         more.setOnClickListener {
+            MediaListViewActivity.passedMedia = media.toCollection(ArrayList())
             ContextCompat.startActivity(
                 it.context, Intent(it.context, MediaListViewActivity::class.java)
                     .putExtra("title", string),
@@ -294,8 +295,8 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
 
     fun updateNotificationCount() {
         if (this::binding.isInitialized) {
-            trendingBinding.notificationCount.visibility =
-                if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
+            trendingBinding.notificationCount.isVisible = Anilist.unreadNotificationCount > 0
+                    && PrefManager.getVal<Boolean>(PrefName.ShowNotificationRedDot) == true
             trendingBinding.notificationCount.text = Anilist.unreadNotificationCount.toString()
         }
     }

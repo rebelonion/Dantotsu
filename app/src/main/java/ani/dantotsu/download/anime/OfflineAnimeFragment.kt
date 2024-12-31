@@ -30,6 +30,7 @@ import ani.dantotsu.bottomBar
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.currActivity
 import ani.dantotsu.currContext
+import ani.dantotsu.download.DownloadCompat
 import ani.dantotsu.download.DownloadCompat.Companion.loadMediaCompat
 import ani.dantotsu.download.DownloadCompat.Companion.loadOfflineAnimeModelCompat
 import ani.dantotsu.download.DownloadedType
@@ -48,6 +49,7 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.util.Logger
+import ani.dantotsu.util.customAlertDialog
 import com.anggrayudi.storage.file.openInputStream
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.imageview.ShapeableImageView
@@ -202,25 +204,22 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
             val type: MediaType = MediaType.ANIME
 
             // Alert dialog to confirm deletion
-            val builder =
-                androidx.appcompat.app.AlertDialog.Builder(requireContext(), R.style.MyPopup)
-            builder.setTitle("Delete ${item.title}?")
-            builder.setMessage("Are you sure you want to delete ${item.title}?")
-            builder.setPositiveButton("Yes") { _, _ ->
-                downloadManager.removeMedia(item.title, type)
-                val mediaIds =
-                    PrefManager.getAnimeDownloadPreferences().all?.filter { it.key.contains(item.title) }?.values
-                        ?: emptySet()
-                if (mediaIds.isEmpty()) {
-                    snackString("No media found")  // if this happens, terrible things have happened
+            requireContext().customAlertDialog().apply {
+                setTitle("Delete ${item.title}?")
+                setMessage("Are you sure you want to delete ${item.title}?")
+                setPosButton(R.string.yes) {
+                    downloadManager.removeMedia(item.title, type)
+                    val mediaIds = PrefManager.getAnimeDownloadPreferences().all?.filter { it.key.contains(item.title) }?.values ?: emptySet()
+                    if (mediaIds.isEmpty()) {
+                        snackString("No media found")  // if this happens, terrible things have happened
+                    }
+                    getDownloads()
                 }
-                getDownloads()
+                setNegButton(R.string.no) {
+                    // Do nothing
+                }
+                show()
             }
-            builder.setNegativeButton("No") { _, _ ->
-                // Do nothing
-            }
-            val dialog = builder.show()
-            dialog.window?.setDimAmount(0.8f)
             true
         }
     }
@@ -319,17 +318,20 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
             )
             val gson = GsonBuilder()
                 .registerTypeAdapter(SChapter::class.java, InstanceCreator<SChapter> {
-                    SChapterImpl() // Provide an instance of SChapterImpl
+                    SChapterImpl()
                 })
                 .registerTypeAdapter(SAnime::class.java, InstanceCreator<SAnime> {
-                    SAnimeImpl() // Provide an instance of SAnimeImpl
+                    SAnimeImpl()
                 })
                 .registerTypeAdapter(SEpisode::class.java, InstanceCreator<SEpisode> {
-                    SEpisodeImpl() // Provide an instance of SEpisodeImpl
+                    SEpisodeImpl()
                 })
                 .create()
             val media = directory?.findFile("media.json")
-                ?: return loadMediaCompat(downloadedType)
+            if (media == null) {
+                Logger.log("No media.json found at ${directory?.uri?.path}")
+                return loadMediaCompat(downloadedType)
+            }
             val mediaJson =
                 media.openInputStream(context ?: currContext()!!)?.bufferedReader().use {
                     it?.readText()
@@ -394,6 +396,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                 bannerUri
             )
         } catch (e: Exception) {
+            Logger.log(e)
             return try {
                 loadOfflineAnimeModelCompat(downloadedType)
             } catch (e: Exception) {
@@ -401,7 +404,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                 Logger.log(e)
                 Injekt.get<CrashlyticsInterface>().logException(e)
                 OfflineAnimeModel(
-                    "unknown",
+                    downloadedType.titleName,
                     "0",
                     "??",
                     "??",

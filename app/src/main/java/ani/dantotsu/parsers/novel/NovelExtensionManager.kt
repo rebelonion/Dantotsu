@@ -159,7 +159,7 @@ class NovelExtensionManager(private val context: Context) {
      *
      * @param pkgName The package name of the application to uninstall.
      */
-    fun uninstallExtension(pkgName: String, context: Context) {
+    fun uninstallExtension(pkgName: String) {
         installer.uninstallApk(pkgName)
     }
 

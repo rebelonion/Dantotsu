@@ -30,6 +30,7 @@ import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.profile.User
 import ani.dantotsu.profile.UsersDialogFragment
 import ani.dantotsu.profile.activity.ActivityItemBuilder
+import ani.dantotsu.profile.activity.RepliesBottomDialog
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
@@ -48,7 +49,6 @@ import kotlin.math.abs
 class Stories @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr), View.OnTouchListener {
-    private lateinit var activity: FragmentActivity
     private lateinit var binding: FragmentStatusBinding
     private lateinit var activityList: List<Activity>
     private lateinit var storiesListener: StoriesCallback
@@ -74,16 +74,14 @@ class Stories @JvmOverloads constructor(
 
         if (context is StoriesCallback) storiesListener = context as StoriesCallback
 
-        binding.leftTouchPanel.setOnTouchListener(this)
-        binding.rightTouchPanel.setOnTouchListener(this)
+        binding.touchPanel.setOnTouchListener(this)
     }
 
 
     fun setStoriesList(
-        activityList: List<Activity>, activity: FragmentActivity, startIndex: Int = 1
+        activityList: List<Activity>, startIndex: Int = 1
     ) {
         this.activityList = activityList
-        this.activity = activity
         this.storyIndex = startIndex
         addLoadingViews(activityList)
     }
@@ -264,49 +262,7 @@ class Stories @JvmOverloads constructor(
     }
 
 
-    private var startClickTime = 0L
-    private var startX = 0f
-    private var startY = 0f
-    private var isLongPress = false
-    private val swipeThreshold = 100
-    override fun onTouch(view: View?, event: MotionEvent?): Boolean {
-        val maxClickDuration = 200
-        when (event?.action) {
-            MotionEvent.ACTION_DOWN -> {
-                startX = event.x
-                startY = event.y
-                startClickTime = Calendar.getInstance().timeInMillis
-                pause()
-                isLongPress = false
-            }
 
-            MotionEvent.ACTION_MOVE -> {
-                val deltaX = event.x - startX
-                val deltaY = event.y - startY
-                if (!isLongPress && (abs(deltaX) > swipeThreshold || abs(deltaY) > swipeThreshold)) {
-                    isLongPress = true
-                }
-            }
-
-            MotionEvent.ACTION_UP -> {
-                val clickDuration = Calendar.getInstance().timeInMillis - startClickTime
-                if (clickDuration < maxClickDuration && !isLongPress) {
-                    when (view?.id) {
-                        R.id.leftTouchPanel -> leftPanelTouch()
-                        R.id.rightTouchPanel -> rightPanelTouch()
-                    }
-                } else {
-                    resume()
-                }
-                val deltaX = event.x - startX
-                if (abs(deltaX) > swipeThreshold) {
-                    if (deltaX > 0) onStoriesPrevious()
-                    else onStoriesCompleted()
-                }
-            }
-        }
-        return true
-    }
 
     private fun rightPanelTouch() {
         Logger.log("rightPanelTouch: $storyIndex")
@@ -359,6 +315,7 @@ class Stories @JvmOverloads constructor(
         timer.resume()
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun loadStory(story: Activity) {
         val key = "activities"
         val set = PrefManager.getCustomVal<Set<Int>>(key, setOf()).plus((story.id))
@@ -373,6 +330,15 @@ class Stories @JvmOverloads constructor(
                 Intent(context, ProfileActivity::class.java).putExtra("userId", story.userId),
                 null
             )
+        }
+
+        binding.textActivity.setOnTouchListener { v, event ->
+            onTouchView(v, event, true)
+            v.onTouchEvent(event)
+        }
+        binding.textActivityContainer.setOnTouchListener { v, event ->
+            onTouchView(v, event, true)
+            v.onTouchEvent(event)
         }
         fun visible(isList: Boolean) {
             binding.textActivity.isVisible = !isList
@@ -397,15 +363,17 @@ class Stories @JvmOverloads constructor(
                         }
                     }
                 } ${story.progress ?: story.media?.title?.userPreferred} " +
-                    if (
-                        story.status?.contains("completed") == false &&
-                        !story.status.contains("plans") &&
-                        !story.status.contains("repeating")
-                    ) {
-                        "of ${story.media?.title?.userPreferred}"
-                    } else {
-                        ""
-                    }
+                        if (
+                            story.status?.contains("completed") == false &&
+                            !story.status.contains("plans") &&
+                            !story.status.contains("repeating")&&
+                            !story.status.contains("paused")&&
+                            !story.status.contains("dropped")
+                        ) {
+                            "of ${story.media?.title?.userPreferred}"
+                        } else {
+                            ""
+                        }
                 binding.infoText.text = text
                 val bannerAnimations: Boolean = PrefManager.getVal(PrefName.BannerAnimations)
                 blurImage(
@@ -421,7 +389,7 @@ class Stories @JvmOverloads constructor(
                             story.media?.id
                         ),
                         ActivityOptionsCompat.makeSceneTransitionAnimation(
-                            activity,
+                            (it.context as FragmentActivity),
                             binding.coverImage,
                             ViewCompat.getTransitionName(binding.coverImage)!!
                         ).toBundle()
@@ -455,22 +423,21 @@ class Stories @JvmOverloads constructor(
         }
         val likeColor = ContextCompat.getColor(context, R.color.yt_red)
         val notLikeColor = ContextCompat.getColor(context, R.color.bg_opp)
+        binding.replyCount.text = story.replyCount.toString()
+        binding.activityReplies.setColorFilter(ContextCompat.getColor(context, R.color.bg_opp))
         binding.activityRepliesContainer.setOnClickListener {
             RepliesBottomDialog.newInstance(story.id)
-                .show(activity.supportFragmentManager, "replies")
+                .show((it.context as FragmentActivity).supportFragmentManager, "replies")
         }
         binding.activityLike.setColorFilter(if (story.isLiked == true) likeColor else notLikeColor)
-        binding.replyCount.text = story.replyCount.toString()
         binding.activityLikeCount.text = story.likeCount.toString()
-        binding.activityReplies.setColorFilter(ContextCompat.getColor(context, R.color.bg_opp))
         binding.activityLikeContainer.setOnClickListener {
             like()
         }
         binding.activityLikeContainer.setOnLongClickListener {
-            val context = activity
             UsersDialogFragment().apply {
                 userList(userList)
-                show(context.supportFragmentManager, "dialog")
+                show((it.context as FragmentActivity).supportFragmentManager, "dialog")
             }
             true
         }
@@ -484,7 +451,7 @@ class Stories @JvmOverloads constructor(
         val notLikeColor = ContextCompat.getColor(context, R.color.bg_opp)
         val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
         scope.launch {
-            val res = Anilist.query.toggleLike(story.id, "ACTIVITY")
+            val res = Anilist.mutation.toggleLike(story.id, "ACTIVITY")
             withContext(Dispatchers.Main) {
                 if (res != null) {
                     if (story.isLiked == true) {
@@ -499,6 +466,71 @@ class Stories @JvmOverloads constructor(
                 } else {
                     snackString("Failed to like activity")
                 }
+            }
+        }
+    }
+    private var startClickTime = 0L
+    private var startX = 0f
+    private var startY = 0f
+    private var isLongPress = false
+    private val swipeThreshold = 100
+    override fun onTouch(view: View, event: MotionEvent): Boolean {
+        onTouchView(view, event)
+        return true
+    }
+    private fun onTouchView(view: View, event: MotionEvent, isText: Boolean = false){
+        val maxClickDuration = 200
+        val screenWidth = view.width
+        val leftHalf = screenWidth / 2
+        val leftQuarter = screenWidth * 0.15
+        val rightQuarter = screenWidth * 0.85
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                startX = event.x
+                startY = event.y
+                startClickTime = Calendar.getInstance().timeInMillis
+                pause()
+                isLongPress = false
+            }
+            MotionEvent.ACTION_MOVE -> {
+                val deltaX = event.x - startX
+                val deltaY = event.y - startY
+                if (!isLongPress && (abs(deltaX) > swipeThreshold || abs(deltaY) > swipeThreshold)) {
+                    isLongPress = true
+                }
+            }
+            MotionEvent.ACTION_UP -> {
+                val clickDuration = Calendar.getInstance().timeInMillis - startClickTime
+                if (isText) {
+                    if (clickDuration < maxClickDuration && !isLongPress) {
+                        if (event.x < leftQuarter) {
+                            leftPanelTouch()
+                        } else if (event.x > rightQuarter) {
+                            rightPanelTouch()
+                        } else {
+                            resume()
+                        }
+                    } else {
+                        resume()
+                    }
+                } else {
+                    if (clickDuration < maxClickDuration && !isLongPress) {
+                        if (event.x < leftHalf) {
+                            leftPanelTouch()
+                        } else {
+                            rightPanelTouch()
+                        }
+                    } else {
+                        resume()
+                    }
+                }
+                val deltaX = event.x - startX
+                val deltaY = event.y - startY
+                if (abs(deltaX) > swipeThreshold && !(abs(deltaY) > 10)) {
+                    if (deltaX > 0) onStoriesPrevious()
+                    else onStoriesCompleted()
+                }
+
             }
         }
     }

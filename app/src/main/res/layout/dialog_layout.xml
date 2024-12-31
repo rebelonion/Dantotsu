@@ -54,7 +54,7 @@
                 app:cardElevation="0dp">
 
                 <ImageButton
-                    android:id="@+id/animeSourceList"
+                    android:id="@+id/mediaSourceList"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:alpha="0.33"
@@ -73,7 +73,7 @@
                 app:cardElevation="0dp">
 
                 <ImageButton
-                    android:id="@+id/animeSourceGrid"
+                    android:id="@+id/mediaSourceGrid"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:alpha="0.33"
@@ -91,7 +91,7 @@
                 app:cardElevation="0dp">
 
                 <ImageButton
-                    android:id="@+id/animeSourceCompact"
+                    android:id="@+id/mediaSourceCompact"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:alpha="0.33"
@@ -140,7 +140,7 @@
                 app:cardElevation="0dp">
 
                 <ImageButton
-                    android:id="@+id/animeSourceTop"
+                    android:id="@+id/mediaSourceTop"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:background="?android:attr/selectableItemBackground"
@@ -189,7 +189,7 @@
                 app:cardElevation="0dp">
 
                 <ImageButton
-                    android:id="@+id/animeDownloadTop"
+                    android:id="@+id/mediaDownloadTop"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:background="?android:attr/selectableItemBackground"
@@ -200,7 +200,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/animeScanlatorContainer"
+            android:id="@+id/mangaScanlatorContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical">
@@ -235,7 +235,7 @@
                 app:cardElevation="0dp">
 
                 <ImageButton
-                    android:id="@+id/animeScanlatorTop"
+                    android:id="@+id/mangaScanlatorTop"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:background="?android:attr/selectableItemBackground"
@@ -246,7 +246,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/animeWebviewContainer"
+            android:id="@+id/mediaWebviewContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -280,13 +280,61 @@
                 android:layout_height="48dp">
 
                 <ImageView
-                    android:id="@+id/animeWebViewTop"
+                    android:id="@+id/mediaWebViewTop"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_gravity="center|center_horizontal"
                     android:layout_marginStart="12dp"
                     android:background="?android:attr/selectableItemBackground"
                     app:srcCompat="@drawable/ic_internet"
+                    app:tint="?attr/colorOnBackground"
+                    tools:ignore="ContentDescription,ImageContrastCheck" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mediaProgressResetContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="265dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.58"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text="@string/reset" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/reset_progress_def"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text=""
+                    android:textColor="?attr/colorSecondary"
+                    tools:ignore="TextContrastCheck" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="48dp"
+                android:layout_height="48dp">
+
+                <ImageView
+                    android:id="@+id/resetProgress"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center|center_horizontal"
+                    android:layout_marginStart="12dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    app:srcCompat="@drawable/ic_delete"
                     app:tint="?attr/colorOnBackground"
                     tools:ignore="ContentDescription,ImageContrastCheck" />
             </LinearLayout>

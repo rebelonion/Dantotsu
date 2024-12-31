@@ -10,6 +10,8 @@ import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.BuildConfig
 import ani.dantotsu.R
+import ani.dantotsu.buildMarkwon
+import ani.dantotsu.client
 import ani.dantotsu.databinding.ActivitySettingsAboutBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.navBarHeight
@@ -20,6 +22,9 @@ import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.util.Logger
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class SettingsAboutActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsAboutBinding
@@ -130,6 +135,48 @@ class SettingsAboutActivity : AppCompatActivity() {
                             }
                         }
                     ),
+                    Settings(
+                        type = 1,
+                        name = getString(R.string.privacy_policy),
+                        desc = getString(R.string.privacy_policy_desc),
+                        icon = R.drawable.ic_incognito_24,
+                        onClick = {
+                            val text = TextView(context)
+                            val pPLink = "https://raw.githubusercontent.com/rebelonion/Dantotsu/main/privacy_policy.md"
+                            val backup = "https://gcore.jsdelivr.net/gh/rebelonion/dantotsu/privacy_policy.md"
+                            text.text = getString(R.string.loading)
+                            val markWon = try {
+                                buildMarkwon(this@SettingsAboutActivity, false)
+                            } catch (e: IllegalArgumentException) {
+                                return@Settings
+                            }
+                            CoroutineScope(Dispatchers.IO).launch {
+                                val res = try {
+                                    val out = client.get(pPLink)
+                                    if (out.code != 200) {
+                                        client.get(backup)
+                                    } else {
+                                        out
+                                    }.text
+                                } catch (e: Exception) {
+                                    getString(R.string.failed_to_load)
+                                }
+                                runOnUiThread {
+                                    markWon.setMarkdown(text, res)
+                                }
+                            }
+
+                            CustomBottomDialog.newInstance().apply {
+                                setTitleText(context.getString(R.string.privacy_policy))
+                                addView(text)
+                                setNegativeButton(context.getString(R.string.close)) {
+                                    dismiss()
+                                }
+                                show(supportFragmentManager, "dialog")
+                            }
+                        }
+                    ),
+
                 )
             )
             binding.settingsRecyclerView.layoutManager =

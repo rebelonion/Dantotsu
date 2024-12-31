@@ -58,6 +58,8 @@ import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsViewModel
 import ani.dantotsu.media.MediaNameAdapter
 import ani.dantotsu.media.MediaSingleton
+import ani.dantotsu.media.anime.ExoplayerView
+import ani.dantotsu.media.anime.ExoplayerView.Companion
 import ani.dantotsu.media.manga.MangaCache
 import ani.dantotsu.media.manga.MangaChapter
 import ani.dantotsu.others.ImageViewDialog
@@ -83,6 +85,7 @@ import ani.dantotsu.showSystemBarsRetractView
 import ani.dantotsu.snackString
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.tryWith
+import ani.dantotsu.util.customAlertDialog
 import com.alexvasilkov.gestures.views.GestureFrameLayout
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
@@ -184,6 +187,8 @@ class MangaReaderActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
+
+
         defaultSettings = loadReaderSettings("reader_settings") ?: defaultSettings
 
         onBackPressedDispatcher.addCallback(this) {
@@ -258,7 +263,16 @@ class MangaReaderActivity : AppCompatActivity() {
             }
         else model.getMedia().value ?: return
         model.setMedia(media)
+        @Suppress("UNCHECKED_CAST")
+        val list = (PrefManager.getNullableCustomVal(
+            "continueMangaList",
+            listOf<Int>(),
+            List::class.java
+        ) as List<Int>).toMutableList()
+        if (list.contains(media.id)) list.remove(media.id)
+        list.add(media.id)
 
+        PrefManager.setCustomVal("continueMangaList", list)
         if (PrefManager.getVal(PrefName.AutoDetectWebtoon) && media.countryOfOrigin != "JP") applyWebtoon(
             defaultSettings
         )
@@ -400,7 +414,8 @@ class MangaReaderActivity : AppCompatActivity() {
                 val context = this
                 val offline: Boolean = PrefManager.getVal(PrefName.OfflineMode)
                 val incognito: Boolean = PrefManager.getVal(PrefName.Incognito)
-                if ((isOnline(context) && !offline) && Discord.token != null && !incognito) {
+                val rpcenabled: Boolean = PrefManager.getVal(PrefName.rpcEnabled)
+                if ((isOnline(context) && !offline) && Discord.token != null && !incognito && rpcenabled) {
                     lifecycleScope.launch {
                         val discordMode = PrefManager.getCustomVal("discord_mode", "dantotsu")
                         val buttons = when (discordMode) {
@@ -1013,28 +1028,27 @@ class MangaReaderActivity : AppCompatActivity() {
                     PrefManager.setCustomVal("${media.id}_progressDialog", !isChecked)
                     showProgressDialog = !isChecked
                 }
-                AlertDialog.Builder(this, R.style.MyPopup)
-                    .setTitle(getString(R.string.title_update_progress))
-                    .setView(dialogView)
-                    .setCancelable(false)
-                    .setPositiveButton(getString(R.string.yes)) { dialog, _ ->
+                customAlertDialog().apply {
+                    setTitle(R.string.title_update_progress)
+                    setCustomView(dialogView)
+                    setCancelable(false)
+                    setPosButton(R.string.yes) {
                         PrefManager.setCustomVal("${media.id}_save_progress", true)
                         updateProgress(
                             media,
                             MediaNameAdapter.findChapterNumber(media.manga!!.selectedChapter!!)
                                 .toString()
                         )
-                        dialog.dismiss()
                         runnable.run()
                     }
-                    .setNegativeButton(getString(R.string.no)) { dialog, _ ->
+                    setNegButton(R.string.no) {
                         PrefManager.setCustomVal("${media.id}_save_progress", false)
-                        dialog.dismiss()
                         runnable.run()
                     }
-                    .setOnCancelListener { hideSystemBars() }
-                    .create()
-                    .show()
+                    setOnCancelListener { hideSystemBars() }
+                    show()
+
+                }
             } else {
                 if (!incognito && PrefManager.getCustomVal(
                         "${media.id}_save_progress",

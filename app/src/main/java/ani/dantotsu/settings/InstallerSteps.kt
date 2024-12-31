@@ -6,6 +6,7 @@ import androidx.core.app.NotificationCompat
 import ani.dantotsu.R
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.snackString
+import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.extension.InstallStep
 import uy.kohesive.injekt.Injekt
@@ -30,6 +31,7 @@ class InstallerSteps(
 
     fun onError(error: Throwable, extra: () -> Unit) {
         Injekt.get<CrashlyticsInterface>().logException(error)
+        Logger.log(error)
         val builder = NotificationCompat.Builder(
             context,
             Notifications.CHANNEL_DOWNLOADER_ERROR

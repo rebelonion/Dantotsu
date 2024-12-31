@@ -12,6 +12,7 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.Animatable
 import android.hardware.SensorManager
@@ -71,9 +72,12 @@ import androidx.media3.common.MimeTypes
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.PlaybackParameters
 import androidx.media3.common.Player
+import androidx.media3.common.text.Cue
+import androidx.media3.common.text.CueGroup
 import androidx.media3.common.TrackGroup
 import androidx.media3.common.TrackSelectionOverride
 import androidx.media3.common.Tracks
+import androidx.media3.common.util.Util
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DefaultDataSource
@@ -81,6 +85,7 @@ import androidx.media3.datasource.HttpDataSource
 import androidx.media3.datasource.cache.CacheDataSource
 import androidx.media3.datasource.okhttp.OkHttpDataSource
 import androidx.media3.exoplayer.DefaultLoadControl
+import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.hls.HlsMediaSource
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
@@ -117,6 +122,7 @@ import ani.dantotsu.download.DownloadsManager.Companion.getSubDirectory
 import ani.dantotsu.download.video.Helper
 import ani.dantotsu.dp
 import ani.dantotsu.getCurrentBrightnessValue
+import ani.dantotsu.getLanguageCode
 import ani.dantotsu.hideSystemBars
 import ani.dantotsu.hideSystemBarsExtendView
 import ani.dantotsu.isOnline
@@ -135,6 +141,7 @@ import ani.dantotsu.others.getSerialized
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.HAnimeSources
 import ani.dantotsu.parsers.Subtitle
+import ani.dantotsu.others.Xubtitle
 import ani.dantotsu.parsers.SubtitleType
 import ani.dantotsu.parsers.Video
 import ani.dantotsu.parsers.VideoExtractor
@@ -164,6 +171,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import io.github.anilbeesetti.nextlib.media3ext.ffdecoder.NextRenderersFactory
 import java.util.Calendar
 import java.util.Locale
 import java.util.Timer
@@ -223,6 +231,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
     private lateinit var animeTitle: TextView
     private lateinit var videoInfo: TextView
     private lateinit var episodeTitle: Spinner
+    private lateinit var customSubtitleView: Xubtitle
 
     private var orientationListener: OrientationEventListener? = null
 
@@ -318,36 +327,10 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
     }
 
     private fun setupSubFormatting(playerView: PlayerView) {
-        val primaryColor = when (PrefManager.getVal<Int>(PrefName.PrimaryColor)) {
-            0 -> Color.BLACK
-            1 -> Color.DKGRAY
-            2 -> Color.GRAY
-            3 -> Color.LTGRAY
-            4 -> Color.WHITE
-            5 -> Color.RED
-            6 -> Color.YELLOW
-            7 -> Color.GREEN
-            8 -> Color.CYAN
-            9 -> Color.BLUE
-            10 -> Color.MAGENTA
-            11 -> Color.TRANSPARENT
-            else -> Color.WHITE
-        }
-        val secondaryColor = when (PrefManager.getVal<Int>(PrefName.SecondaryColor)) {
-            0 -> Color.BLACK
-            1 -> Color.DKGRAY
-            2 -> Color.GRAY
-            3 -> Color.LTGRAY
-            4 -> Color.WHITE
-            5 -> Color.RED
-            6 -> Color.YELLOW
-            7 -> Color.GREEN
-            8 -> Color.CYAN
-            9 -> Color.BLUE
-            10 -> Color.MAGENTA
-            11 -> Color.TRANSPARENT
-            else -> Color.BLACK
-        }
+        val primaryColor = PrefManager.getVal<Int>(PrefName.PrimaryColor)
+
+        val secondaryColor = PrefManager.getVal<Int>(PrefName.SecondaryColor)
+
         val outline = when (PrefManager.getVal<Int>(PrefName.Outline)) {
             0 -> EDGE_TYPE_OUTLINE // Normal
             1 -> EDGE_TYPE_DEPRESSED // Shine
@@ -355,36 +338,11 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             3 -> EDGE_TYPE_NONE // No outline
             else -> EDGE_TYPE_OUTLINE // Normal
         }
-        val subBackground = when (PrefManager.getVal<Int>(PrefName.SubBackground)) {
-            0 -> Color.TRANSPARENT
-            1 -> Color.BLACK
-            2 -> Color.DKGRAY
-            3 -> Color.GRAY
-            4 -> Color.LTGRAY
-            5 -> Color.WHITE
-            6 -> Color.RED
-            7 -> Color.YELLOW
-            8 -> Color.GREEN
-            9 -> Color.CYAN
-            10 -> Color.BLUE
-            11 -> Color.MAGENTA
-            else -> Color.TRANSPARENT
-        }
-        val subWindow = when (PrefManager.getVal<Int>(PrefName.SubWindow)) {
-            0 -> Color.TRANSPARENT
-            1 -> Color.BLACK
-            2 -> Color.DKGRAY
-            3 -> Color.GRAY
-            4 -> Color.LTGRAY
-            5 -> Color.WHITE
-            6 -> Color.RED
-            7 -> Color.YELLOW
-            8 -> Color.GREEN
-            9 -> Color.CYAN
-            10 -> Color.BLUE
-            11 -> Color.MAGENTA
-            else -> Color.TRANSPARENT
-        }
+
+        val subBackground = PrefManager.getVal<Int>(PrefName.SubBackground)
+
+        val subWindow = PrefManager.getVal<Int>(PrefName.SubWindow)
+
         val font = when (PrefManager.getVal<Int>(PrefName.Font)) {
             0 -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
             1 -> ResourcesCompat.getFont(this, R.font.poppins_bold)
@@ -420,6 +378,53 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
             subtitles.setFixedTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
         }
+    }
+
+    private fun applySubtitleStyles(textView: Xubtitle) {
+        val primaryColor = PrefManager.getVal<Int>(PrefName.PrimaryColor)
+
+        val subBackground = PrefManager.getVal<Int>(PrefName.SubBackground)
+
+        val secondaryColor = PrefManager.getVal<Int>(PrefName.SecondaryColor)
+
+        val subStroke = PrefManager.getVal<Float>(PrefName.SubStroke)
+
+        val fontSize = PrefManager.getVal<Int>(PrefName.FontSize).toFloat()
+
+        val font = when (PrefManager.getVal<Int>(PrefName.Font)) {
+            0 -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
+            1 -> ResourcesCompat.getFont(this, R.font.poppins_bold)
+            2 -> ResourcesCompat.getFont(this, R.font.poppins)
+            3 -> ResourcesCompat.getFont(this, R.font.poppins_thin)
+            4 -> ResourcesCompat.getFont(this, R.font.century_gothic_regular)
+            5 -> ResourcesCompat.getFont(this, R.font.levenim_mt_bold)
+            6 -> ResourcesCompat.getFont(this, R.font.blocky)
+            else -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
+        }
+
+        textView.setBackgroundColor(subBackground)
+        textView.setTextColor(primaryColor)
+        textView.typeface = font
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
+
+        textView.apply {
+              when (PrefManager.getVal<Int>(PrefName.Outline)) {
+                  0 -> applyOutline(secondaryColor, subStroke)
+                  1 -> applyShineEffect(secondaryColor)
+                  2 -> applyDropShadow(secondaryColor, subStroke)
+                  3 -> {}
+                  else -> applyOutline(secondaryColor, subStroke)
+              }
+           }
+
+        textView.alpha =
+            when (PrefManager.getVal<Boolean>(PrefName.Subtitles)) {
+                true -> PrefManager.getVal(PrefName.SubAlpha)
+                false -> 0f
+            }
+
+          val textElevation = PrefManager.getVal<Float>(PrefName.SubBottomMargin) / 50 * resources.displayMetrics.heightPixels
+          textView.translationY = -textElevation
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -467,6 +472,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         skipTimeButton = playerView.findViewById(R.id.exo_skip_timestamp)
         skipTimeText = skipTimeButton.findViewById(R.id.exo_skip_timestamp_text)
         timeStampText = playerView.findViewById(R.id.exo_time_stamp_text)
+        customSubtitleView = playerView.findViewById(R.id.customSubtitleView)
 
         animeTitle = playerView.findViewById(R.id.exo_anime_title)
         episodeTitle = playerView.findViewById(R.id.exo_ep_sel)
@@ -520,7 +526,6 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 it.visibility = View.GONE
             }
         }
-        setupSubFormatting(playerView)
 
         if (savedInstanceState != null) {
             currentWindow = savedInstanceState.getInt(resumeWindow)
@@ -1114,60 +1119,6 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 )
                 initPlayer()
                 preloading = false
-                val context = this
-                val offline: Boolean = PrefManager.getVal(PrefName.OfflineMode)
-                val incognito: Boolean = PrefManager.getVal(PrefName.Incognito)
-                if ((isOnline(context) && !offline) && Discord.token != null && !incognito) {
-                    lifecycleScope.launch {
-                        val discordMode = PrefManager.getCustomVal("discord_mode", "dantotsu")
-                        val buttons = when (discordMode) {
-                            "nothing" -> mutableListOf(
-                                RPC.Link(getString(R.string.view_anime), media.shareLink ?: ""),
-                            )
-
-                            "dantotsu" -> mutableListOf(
-                                RPC.Link(getString(R.string.view_anime), media.shareLink ?: ""),
-                                RPC.Link("Watch on Dantotsu", getString(R.string.dantotsu))
-                            )
-
-                            "anilist" -> {
-                                val userId = PrefManager.getVal<String>(PrefName.AnilistUserId)
-                                val anilistLink = "https://anilist.co/user/$userId/"
-                                mutableListOf(
-                                    RPC.Link(getString(R.string.view_anime), media.shareLink ?: ""),
-                                    RPC.Link("View My AniList", anilistLink)
-                                )
-                            }
-
-                            else -> mutableListOf()
-                        }
-                        val presence = RPC.createPresence(
-                            RPC.Companion.RPCData(
-                                applicationId = Discord.application_Id,
-                                type = RPC.Type.WATCHING,
-                                activityName = media.userPreferredName,
-                                details = ep.title?.takeIf { it.isNotEmpty() } ?: getString(
-                                    R.string.episode_num,
-                                    ep.number
-                                ),
-                                state = "Episode : ${ep.number}/${media.anime?.totalEpisodes ?: "??"}",
-                                largeImage = media.cover?.let {
-                                    RPC.Link(
-                                        media.userPreferredName,
-                                        it
-                                    )
-                                },
-                                smallImage = RPC.Link("Dantotsu", Discord.small_Image),
-                                buttons = buttons
-                            )
-                        )
-                        val intent = Intent(context, DiscordService::class.java).apply {
-                            putExtra("presence", presence)
-                        }
-                        DiscordServiceRunningSingleton.running = true
-                        startService(intent)
-                    }
-                }
                 updateProgress()
             }
         }
@@ -1358,6 +1309,73 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
     }
 
+    private fun discordRPC(){
+        val context = this
+        val ep = episode
+        val offline: Boolean = PrefManager.getVal(PrefName.OfflineMode)
+        val incognito: Boolean = PrefManager.getVal(PrefName.Incognito)
+        val rpcenabled: Boolean = PrefManager.getVal(PrefName.rpcEnabled)
+         if ((isOnline(context) && !offline) && Discord.token != null && !incognito && rpcenabled) {
+            lifecycleScope.launch {
+                val discordMode = PrefManager.getCustomVal("discord_mode", "dantotsu")
+                val buttons = when (discordMode) {
+                    "nothing" -> mutableListOf(
+                        RPC.Link(getString(R.string.view_anime), media.shareLink ?: ""),
+                    )
+
+                    "dantotsu" -> mutableListOf(
+                        RPC.Link(getString(R.string.view_anime), media.shareLink ?: ""),
+                        RPC.Link("Watch on Dantotsu", getString(R.string.dantotsu))
+                    )
+
+                    "anilist" -> {
+                        val userId = PrefManager.getVal<String>(PrefName.AnilistUserId)
+                        val anilistLink = "https://anilist.co/user/$userId/"
+                        mutableListOf(
+                            RPC.Link(getString(R.string.view_anime), media.shareLink ?: ""),
+                            RPC.Link("View My AniList", anilistLink)
+                        )
+                    }
+
+                    else -> mutableListOf()
+                }
+                val startTimestamp = Calendar.getInstance()
+                val durationInSeconds = if (exoPlayer.duration != C.TIME_UNSET) (exoPlayer.duration / 1000).toInt() else 1440
+
+                val endTimestamp = Calendar.getInstance().apply {
+                    timeInMillis = startTimestamp.timeInMillis
+                    add(Calendar.SECOND, durationInSeconds)
+                }
+                val presence = RPC.createPresence(
+                    RPC.Companion.RPCData(
+                        applicationId = Discord.application_Id,
+                        type = RPC.Type.WATCHING,
+                        activityName = media.userPreferredName,
+                        details = ep.title?.takeIf { it.isNotEmpty() } ?: getString(
+                            R.string.episode_num,
+                            ep.number
+                        ),
+                        startTimestamp = startTimestamp.timeInMillis,
+                        stopTimestamp = endTimestamp.timeInMillis,
+                        state = "Episode : ${ep.number}/${media.anime?.totalEpisodes ?: "??"}",
+                        largeImage = media.cover?.let {
+                            RPC.Link(
+                                media.userPreferredName,
+                                it
+                            )
+                        },
+                        smallImage = RPC.Link("Dantotsu", Discord.small_Image),
+                        buttons = buttons
+                    )
+                )
+                val intent = Intent(context, DiscordService::class.java).apply {
+                    putExtra("presence", presence)
+                }
+                DiscordServiceRunningSingleton.running = true
+                startService(intent)
+            }
+        }
+    }
     private fun initPlayer() {
         checkNotch()
 
@@ -1383,13 +1401,57 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         val ext = episode.extractors?.find { it.server.name == episode.selectedExtractor } ?: return
         extractor = ext
         video = ext.videos.getOrNull(episode.selectedVideo) ?: return
+        val subLanguages = arrayOf(
+            "Albanian",
+            "Arabic",
+            "Bosnian",
+            "Bulgarian",
+            "Chinese",
+            "Croatian",
+            "Czech",
+            "Danish",
+            "Dutch",
+            "English",
+            "Estonian",
+            "Finnish",
+            "French",
+            "Georgian",
+            "German",
+            "Greek",
+            "Hebrew",
+            "Hindi",
+            "Indonesian",
+            "Irish",
+            "Italian",
+            "Japanese",
+            "Korean",
+            "Lithuanian",
+            "Luxembourgish",
+            "Macedonian",
+            "Mongolian",
+            "Norwegian",
+            "Polish",
+            "Portuguese",
+            "Punjabi",
+            "Romanian",
+            "Russian",
+            "Serbian",
+            "Slovak",
+            "Slovenian",
+            "Spanish",
+            "Turkish",
+            "Ukrainian",
+            "Urdu",
+            "Vietnamese",
+        )
+        val lang = subLanguages[PrefManager.getVal(PrefName.SubLanguage)]
         subtitle = intent.getSerialized("subtitle")
             ?: when (val subLang: String? =
                 PrefManager.getNullableCustomVal("subLang_${media.id}", null, String::class.java)) {
                 null -> {
                     when (episode.selectedSubtitle) {
                         null -> null
-                        -1 -> ext.subtitles.find { it.language.trim() == "English" || it.language == "en-US" }
+                        -1 -> ext.subtitles.find { it.language.contains( lang, ignoreCase = true ) || it.language.contains( getLanguageCode(lang), ignoreCase = true ) }
                         else -> ext.subtitles.getOrNull(episode.selectedSubtitle!!)
                     }
                 }
@@ -1642,7 +1704,18 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             .build()
 
         hideSystemBars()
-        exoPlayer = ExoPlayer.Builder(this)
+        
+        val useExtensionDecoder = PrefManager.getVal<Boolean>(PrefName.UseAdditionalCodec)
+        val decoder = if (useExtensionDecoder) {
+          DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER
+        } else {
+          DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF
+        }
+        val renderersFactory = NextRenderersFactory(this)
+             .setEnableDecoderFallback(true)
+             .setExtensionRendererMode(decoder)
+        
+        exoPlayer = ExoPlayer.Builder(this, renderersFactory)
             .setMediaSourceFactory(DefaultMediaSourceFactory(cacheFactory))
             .setTrackSelector(trackSelector)
             .setLoadControl(loadControl)
@@ -1660,6 +1733,54 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 seekTo(playbackPosition)
             }
         playerView.player = exoPlayer
+
+        exoPlayer.addListener(object : Player.Listener {
+            var activeSubtitles = ArrayDeque<String>(3)
+            var lastSubtitle: String? = null
+            var lastPosition: Long = 0
+        
+            override fun onCues(cueGroup: CueGroup) {
+                if (PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
+                    exoSubtitleView.visibility = View.GONE
+                    customSubtitleView.visibility = View.VISIBLE
+                    val newCues = cueGroup.cues.map { it.text.toString() ?: "" }
+         
+                    if (newCues.isEmpty()) {
+                        customSubtitleView.text = ""
+                        activeSubtitles.clear()
+                        lastSubtitle = null
+                        lastPosition = 0
+                        return
+                    }
+        
+                    val currentPosition = exoPlayer.currentPosition
+        
+                    if ((lastSubtitle?.length ?: 0) < 20 || (lastPosition != 0L && currentPosition - lastPosition > 1500)) {
+                        activeSubtitles.clear()
+                    }
+        
+                   for (newCue in newCues) {
+                      if (newCue !in activeSubtitles) {
+                          if (activeSubtitles.size >= 2) {
+                              activeSubtitles.removeLast()
+                          }
+                          activeSubtitles.addFirst(newCue)
+                          lastSubtitle = newCue
+                          lastPosition = currentPosition
+                      }
+                  }
+
+                    customSubtitleView.text = activeSubtitles.joinToString("\n")
+                } else {
+                    customSubtitleView.text = ""
+                    customSubtitleView.visibility = View.GONE
+                    exoSubtitleView.visibility = View.VISIBLE
+                }
+            }
+        })
+
+          applySubtitleStyles(customSubtitleView)
+          setupSubFormatting(playerView)
 
         try {
             val rightNow = Calendar.getInstance()
@@ -1950,7 +2071,10 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 TrackSelectionOverride(trackGroup.mediaTrackGroup, index)
             )
             .build()
-        if (type == TRACK_TYPE_TEXT) setupSubFormatting(playerView)
+        if (type == TRACK_TYPE_TEXT) {
+            setupSubFormatting(playerView)
+            applySubtitleStyles(customSubtitleView)
+        }
         playerView.subtitleView?.alpha = when (isDisabled) {
             false -> PrefManager.getVal(PrefName.SubAlpha)
             true -> 0f
@@ -2042,6 +2166,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             exoPlayer.play()
             if (episodeLength == 0f) {
                 episodeLength = exoPlayer.duration.toFloat()
+                discordRPC()
             }
         }
         isBuffering = playbackState == Player.STATE_BUFFERING

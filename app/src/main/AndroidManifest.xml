@@ -19,6 +19,7 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="29" />
@@ -115,7 +116,8 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="application/epub+zip" />
+                <data android:host="*"/>
+                <data android:mimeType="application/epub+zip"/>
                 <data android:mimeType="application/x-mobipocket-ebook" />
                 <data android:mimeType="application/vnd.amazon.ebook" />
                 <data android:mimeType="application/fb2+zip" />
@@ -131,10 +133,11 @@
         </activity>
         <activity android:name=".others.calc.CalcActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".settings.FAQActivity" />
-        <activity android:name=".settings.ReaderSettingsActivity" />
+        <activity android:name=".settings.AnilistSettingsActivity"/>
         <activity android:name=".settings.UserInterfaceSettingsActivity" />
         <activity android:name=".settings.PlayerSettingsActivity" />
+        <activity android:name=".settings.ReaderSettingsActivity" />
+        <activity android:name=".settings.FAQActivity" />
         <activity
             android:name=".settings.SettingsActivity"
             android:parentActivityName=".MainActivity" />
@@ -155,7 +158,8 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".settings.SettingsExtensionsActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".settings.SettingsAddonActivity"
             android:parentActivityName=".MainActivity" />
@@ -194,14 +198,15 @@
             android:label="Inbox Activity"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".profile.activity.NotificationActivity"
+            android:name=".profile.notification.NotificationActivity"
             android:label="Inbox Activity"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".others.imagesearch.ImageSearchActivity"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".util.MarkdownCreatorActivity"/>
+            android:name=".util.ActivityMarkdownCreator"
+            android:windowSoftInputMode="adjustResize|stateVisible" />
         <activity android:name=".parsers.ParserTestActivity" />
         <activity
             android:name=".media.ReviewActivity"
@@ -370,24 +375,30 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.Main" />
-
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <data android:scheme="content" />
                 <data android:mimeType="*/*" />
                 <data android:pathPattern=".*\\.ani" />
                 <data android:pathPattern=".*\\.sani" />
                 <data android:host="*" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Support both schemes -->
+                <data android:scheme="tachiyomi"/>
+                <data android:host="add-repo"/>
+                <data android:scheme="aniyomi"/>
+                <data android:host="add-repo"/>
             </intent-filter>
         </activity>
         <activity

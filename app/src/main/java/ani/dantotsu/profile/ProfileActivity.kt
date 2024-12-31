@@ -22,6 +22,7 @@ import ani.dantotsu.R
 import ani.dantotsu.blurImage
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.Query
+import ani.dantotsu.copyToClipboard
 import ani.dantotsu.databinding.ActivityProfileBinding
 import ani.dantotsu.databinding.ItemProfileAppBarBinding
 import ani.dantotsu.initActivity
@@ -30,15 +31,14 @@ import ani.dantotsu.media.user.ListActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.openImage
 import ani.dantotsu.openLinkInBrowser
-import ani.dantotsu.others.ImageViewDialog
-import ani.dantotsu.profile.activity.FeedFragment
+import ani.dantotsu.profile.activity.ActivityFragment
+import ani.dantotsu.profile.activity.ActivityFragment.Companion.ActivityType
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.toast
-import ani.dantotsu.util.MarkdownCreatorActivity
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -136,7 +136,7 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
 
                     followButton.setOnClickListener {
                         lifecycleScope.launch(Dispatchers.IO) {
-                            val res = Anilist.query.toggleFollow(user.id)
+                            val res = Anilist.mutation.toggleFollow(user.id)
                             if (res?.data?.toggleFollow != null) {
                                 withContext(Dispatchers.Main) {
                                     snackString(R.string.success)
@@ -153,16 +153,18 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                         popup.setOnMenuItemClickListener { item ->
                             when (item.itemId) {
                                 R.id.action_view_on_anilist -> {
-                                    openLinkInBrowser("https://anilist.co/user/${user.name}")
+                                    openLinkInBrowser(getString(R.string.anilist_link, user.name))
                                     true
                                 }
-                                R.id.action_create_new_activity -> {
-                                    ContextCompat.startActivity(
-                                        context,
-                                        Intent(context, MarkdownCreatorActivity::class.java)
-                                            .putExtra("type", "activity"),
-                                        null
-                                    )
+                                R.id.action_share_profile -> {
+                                    val shareIntent = Intent(Intent.ACTION_SEND)
+                                    shareIntent.type = "text/plain"
+                                    shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.anilist_link, user.name))
+                                    startActivity(Intent.createChooser(shareIntent, "Share Profile"))
+                                    true
+                                }
+                                R.id.action_copy_user_id -> {
+                                    copyToClipboard(user.id.toString(), true)
                                     true
                                 }
                                 else -> false
@@ -177,7 +179,11 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                         user.avatar?.medium ?: ""
                     )
                     profileUserName.text = user.name
-                    val bannerAnimations: ImageView= if (PrefManager.getVal(PrefName.BannerAnimations)) profileBannerImage else profileBannerImageNoKen
+                    profileUserName.setOnClickListener {
+                        copyToClipboard(profileUserName.text.toString(), true)
+                    }
+                    val bannerAnimations: ImageView =
+                        if (PrefManager.getVal(PrefName.BannerAnimations)) profileBannerImage else profileBannerImageNoKen
 
                     blurImage(
                         bannerAnimations,
@@ -199,7 +205,8 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                     profileAppBar.addOnOffsetChangedListener(context)
 
 
-                    profileFollowerCount.text = (respond.data.followerPage?.pageInfo?.total ?: 0).toString()
+                    profileFollowerCount.text =
+                        (respond.data.followerPage?.pageInfo?.total ?: 0).toString()
                     profileFollowerCountContainer.setOnClickListener {
                         ContextCompat.startActivity(
                             context,
@@ -209,7 +216,8 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                             null
                         )
                     }
-                    profileFollowingCount.text = (respond.data.followingPage?.pageInfo?.total ?: 0).toString()
+                    profileFollowingCount.text =
+                        (respond.data.followingPage?.pageInfo?.total ?: 0).toString()
                     profileFollowingCountContainer.setOnClickListener {
                         ContextCompat.startActivity(
                             context,
@@ -320,7 +328,7 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
         override fun getItemCount(): Int = 3
         override fun createFragment(position: Int): Fragment = when (position) {
             0 -> ProfileFragment.newInstance(user)
-            1 -> FeedFragment.newInstance(user.id, false, -1)
+            1 -> ActivityFragment.newInstance(ActivityType.OTHER_USER, user.id)
             2 -> StatsFragment.newInstance(user)
             else -> ProfileFragment.newInstance(user)
         }

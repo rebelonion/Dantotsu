@@ -31,7 +31,8 @@ import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.FileUrl
 import ani.dantotsu.R
 import ani.dantotsu.addons.download.DownloadAddonManager
-import ani.dantotsu.databinding.FragmentAnimeWatchBinding
+import ani.dantotsu.connections.anilist.api.MediaStreamingEpisode
+import ani.dantotsu.databinding.FragmentMediaSourceBinding
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.DownloadsManager.Companion.compareName
@@ -48,6 +49,7 @@ import ani.dantotsu.media.MediaType
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.notifications.subscription.SubscriptionHelper
 import ani.dantotsu.notifications.subscription.SubscriptionHelper.Companion.saveSubscription
+import ani.dantotsu.others.Anify
 import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.parsers.AnimeParser
 import ani.dantotsu.parsers.AnimeSources
@@ -61,6 +63,7 @@ import ani.dantotsu.toast
 import ani.dantotsu.util.Logger
 import ani.dantotsu.util.StoragePermissions.Companion.accessAlertDialog
 import ani.dantotsu.util.StoragePermissions.Companion.hasDirAccess
+import ani.dantotsu.util.customAlertDialog
 import com.anggrayudi.storage.file.extension
 import com.google.android.material.appbar.AppBarLayout
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
@@ -78,7 +81,7 @@ import kotlin.math.max
 import kotlin.math.roundToInt
 
 class AnimeWatchFragment : Fragment() {
-    private var _binding: FragmentAnimeWatchBinding? = null
+    private var _binding: FragmentMediaSourceBinding? = null
     private val binding get() = _binding!!
     private val model: MediaDetailsViewModel by activityViewModels()
 
@@ -105,7 +108,7 @@ class AnimeWatchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentAnimeWatchBinding.inflate(inflater, container, false)
+        _binding = FragmentMediaSourceBinding.inflate(inflater, container, false)
         return _binding?.root
     }
 
@@ -126,7 +129,7 @@ class AnimeWatchFragment : Fragment() {
         )
 
 
-        binding.animeSourceRecycler.updatePadding(bottom = binding.animeSourceRecycler.paddingBottom + navBarHeight)
+        binding.mediaSourceRecycler.updatePadding(bottom = binding.mediaSourceRecycler.paddingBottom + navBarHeight)
         screenWidth = resources.displayMetrics.widthPixels.dp
 
         var maxGridSize = (screenWidth / 100f).roundToInt()
@@ -150,13 +153,13 @@ class AnimeWatchFragment : Fragment() {
             }
         }
 
-        binding.animeSourceRecycler.layoutManager = gridLayoutManager
+        binding.mediaSourceRecycler.layoutManager = gridLayoutManager
 
         binding.ScrollTop.setOnClickListener {
-            binding.animeSourceRecycler.scrollToPosition(10)
-            binding.animeSourceRecycler.smoothScrollToPosition(0)
+            binding.mediaSourceRecycler.scrollToPosition(10)
+            binding.mediaSourceRecycler.smoothScrollToPosition(0)
         }
-        binding.animeSourceRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.mediaSourceRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
@@ -170,7 +173,7 @@ class AnimeWatchFragment : Fragment() {
             }
         })
         model.scrolledToTop.observe(viewLifecycleOwner) {
-            if (it) binding.animeSourceRecycler.scrollToPosition(0)
+            if (it) binding.mediaSourceRecycler.scrollToPosition(0)
         }
 
         continueEp = model.continueMedia ?: false
@@ -203,7 +206,7 @@ class AnimeWatchFragment : Fragment() {
                             offlineMode = offlineMode
                         )
 
-                    binding.animeSourceRecycler.adapter =
+                    binding.mediaSourceRecycler.adapter =
                         ConcatAdapter(headerAdapter, episodeAdapter)
 
                     lifecycleScope.launch(Dispatchers.IO) {
@@ -212,10 +215,11 @@ class AnimeWatchFragment : Fragment() {
                         if (offline) {
                             media.selected!!.sourceIndex = model.watchSources!!.list.lastIndex
                         } else {
-                            awaitAll(
-                                async { model.loadKitsuEpisodes(media) },
-                                async { model.loadFillerEpisodes(media) }
-                            )
+                            val kitsuEpisodes = async { model.loadKitsuEpisodes(media) }
+                            val anifyEpisodes = async { model.loadAnifyEpisodes(media.id) }
+                            val fillerEpisodes = async { model.loadFillerEpisodes(media) }
+
+                            awaitAll(kitsuEpisodes, anifyEpisodes, fillerEpisodes)
                         }
                         model.loadEpisodes(media, media.selected!!.sourceIndex)
                     }
@@ -230,6 +234,18 @@ class AnimeWatchFragment : Fragment() {
                 val episodes = loadedEpisodes[media.selected!!.sourceIndex]
                 if (episodes != null) {
                     episodes.forEach { (i, episode) ->
+                        if (media.anime?.anifyEpisodes != null) {
+                            if (media.anime!!.anifyEpisodes!!.containsKey(i)) {
+                                episode.desc = media.anime!!.anifyEpisodes!![i]?.desc ?: episode.desc
+                                episode.title = if (MediaNameAdapter.removeEpisodeNumberCompletely(
+                                        episode.title ?: ""
+                                    ).isBlank()
+                                ) media.anime!!.anifyEpisodes!![i]?.title ?: episode.title else episode.title
+                                    ?: media.anime!!.anifyEpisodes!![i]?.title ?: episode.title
+                                episode.thumb = media.anime!!.anifyEpisodes!![i]?.thumb ?: episode.thumb
+
+                            }
+                        }
                         if (media.anime?.fillerEpisodes != null) {
                             if (media.anime!!.fillerEpisodes!!.containsKey(i)) {
                                 episode.title =
@@ -239,22 +255,19 @@ class AnimeWatchFragment : Fragment() {
                         }
                         if (media.anime?.kitsuEpisodes != null) {
                             if (media.anime!!.kitsuEpisodes!!.containsKey(i)) {
-                                episode.desc =
-                                    media.anime!!.kitsuEpisodes!![i]?.desc ?: episode.desc
+                                episode.desc = media.anime!!.kitsuEpisodes!![i]?.desc ?: episode.desc
                                 episode.title = if (MediaNameAdapter.removeEpisodeNumberCompletely(
                                         episode.title ?: ""
                                     ).isBlank()
-                                ) media.anime!!.kitsuEpisodes!![i]?.title
-                                    ?: episode.title else episode.title
-                                    ?: media.anime!!.kitsuEpisodes!![i]?.title ?: episode.title
-                                episode.thumb = media.anime!!.kitsuEpisodes!![i]?.thumb
-                                    ?: FileUrl[media.cover]
+                                ) media.anime!!.kitsuEpisodes!![i]?.title ?: episode.title else episode.title
+                                ?: media.anime!!.kitsuEpisodes!![i]?.title ?: episode.title
+                                episode.thumb = media.anime!!.kitsuEpisodes!![i]?.thumb ?: episode.thumb
                             }
                         }
                     }
                     media.anime?.episodes = episodes
 
-                    //CHIP GROUP
+                    // CHIP GROUP
                     val total = episodes.size
                     val divisions = total.toDouble() / 10
                     start = 0
@@ -294,6 +307,10 @@ class AnimeWatchFragment : Fragment() {
         model.getFillerEpisodes().observe(viewLifecycleOwner) { i ->
             if (i != null)
                 media.anime?.fillerEpisodes = i
+        }
+        model.getAnifyEpisodes().observe(viewLifecycleOwner) { i ->
+            if (i != null)
+                media.anime?.anifyEpisodes = i
         }
     }
 
@@ -380,20 +397,18 @@ class AnimeWatchFragment : Fragment() {
             if (allSettings.size > 1) {
                 val names =
                     allSettings.map { LanguageMapper.getLanguageName(it.lang) }.toTypedArray()
-                val dialog = AlertDialog.Builder(requireContext(), R.style.MyPopup)
-                    .setTitle("Select a Source")
-                    .setSingleChoiceItems(names, -1) { dialog, which ->
+                requireContext()
+                    .customAlertDialog()
+                    .apply {
+                    setTitle("Select a Source")
+                    singleChoiceItems(names) { which ->
                         selectedSetting = allSettings[which]
                         itemSelected = true
-                        dialog.dismiss()
-
-                        // Move the fragment transaction here
                         requireActivity().runOnUiThread {
-                            val fragment =
-                                AnimeSourcePreferencesFragment().getInstance(selectedSetting.id) {
-                                    changeUIVisibility(true)
-                                    loadEpisodes(media.selected!!.sourceIndex, true)
-                                }
+                            val fragment = AnimeSourcePreferencesFragment().getInstance(selectedSetting.id) {
+                                changeUIVisibility(true)
+                                loadEpisodes(media.selected!!.sourceIndex, true)
+                            }
                             parentFragmentManager.beginTransaction()
                                 .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
                                 .replace(R.id.fragmentExtensionsContainer, fragment)
@@ -401,13 +416,13 @@ class AnimeWatchFragment : Fragment() {
                                 .commit()
                         }
                     }
-                    .setOnDismissListener {
+                    onDismiss {
                         if (!itemSelected) {
                             changeUIVisibility(true)
                         }
                     }
-                    .show()
-                dialog.window?.setDimAmount(0.8f)
+                    show()
+                }
             } else {
                 // If there's only one setting, proceed with the fragment transaction
                 requireActivity().runOnUiThread {
@@ -416,11 +431,12 @@ class AnimeWatchFragment : Fragment() {
                             changeUIVisibility(true)
                             loadEpisodes(media.selected!!.sourceIndex, true)
                         }
-                    parentFragmentManager.beginTransaction()
-                        .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
-                        .replace(R.id.fragmentExtensionsContainer, fragment)
-                        .addToBackStack(null)
-                        .commit()
+                    parentFragmentManager.beginTransaction().apply {
+                        setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
+                        replace(R.id.fragmentExtensionsContainer, fragment)
+                        addToBackStack(null)
+                        commit()
+                    }
                 }
             }
 
@@ -619,7 +635,7 @@ class AnimeWatchFragment : Fragment() {
     private fun reload() {
         val selected = model.loadSelected(media)
 
-        //Find latest episode for subscription
+        // Find latest episode for subscription
         selected.latest =
             media.anime?.episodes?.values?.maxOfOrNull { it.number.toFloatOrNull() ?: 0f } ?: 0f
         selected.latest =
@@ -663,14 +679,14 @@ class AnimeWatchFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         binding.mediaInfoProgressBar.visibility = progress
-        binding.animeSourceRecycler.layoutManager?.onRestoreInstanceState(state)
+        binding.mediaSourceRecycler.layoutManager?.onRestoreInstanceState(state)
 
         requireActivity().setNavigationTheme()
     }
 
     override fun onPause() {
         super.onPause()
-        state = binding.animeSourceRecycler.layoutManager?.onSaveInstanceState()
+        state = binding.mediaSourceRecycler.layoutManager?.onSaveInstanceState()
     }
 
     companion object {

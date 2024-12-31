@@ -22,6 +22,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     CheckUpdate(Pref(Location.General, Boolean::class, true)),
     VerboseLogging(Pref(Location.General, Boolean::class, false)),
     DohProvider(Pref(Location.General, Int::class, 0)),
+    HidePrivate(Pref(Location.General, Boolean::class, false)),
     DefaultUserAgent(
         Pref(
             Location.General,
@@ -45,6 +46,9 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     IncludeAnimeList(Pref(Location.General, Boolean::class, true)),
     IncludeMangaList(Pref(Location.General, Boolean::class, true)),
     AdultOnly(Pref(Location.General, Boolean::class, false)),
+    CommentsEnabled(Pref(Location.General, Int::class, 0)),
+    EnableSocks5Proxy(Pref(Location.General, Boolean::class, false)),
+    ProxyAuthEnabled(Pref(Location.General, Boolean::class, false)),
 
     //User Interface
     UseOLED(Pref(Location.UI, Boolean::class, false)),
@@ -82,6 +86,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     MangaListSortOrder(Pref(Location.UI, String::class, "score")),
     CommentSortOrder(Pref(Location.UI, String::class, "newest")),
     FollowerLayout(Pref(Location.UI, Int::class, 0)),
+    ShowNotificationRedDot(Pref(Location.UI, Boolean::class, true)),
 
 
     //Player
@@ -89,12 +94,16 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     CursedSpeeds(Pref(Location.Player, Boolean::class, false)),
     Resize(Pref(Location.Player, Int::class, 0)),
     Subtitles(Pref(Location.Player, Boolean::class, true)),
-    PrimaryColor(Pref(Location.Player, Int::class, 4)),
-    SecondaryColor(Pref(Location.Player, Int::class, 0)),
+    TextviewSubtitles(Pref(Location.Player, Boolean::class, false)),
+    SubLanguage(Pref(Location.Player, Int::class, 9)),
+    PrimaryColor(Pref(Location.Player, Int::class, Color.WHITE)),
+    SecondaryColor(Pref(Location.Player, Int::class, Color.BLACK)),
     Outline(Pref(Location.Player, Int::class, 0)),
-    SubBackground(Pref(Location.Player, Int::class, 0)),
-    SubWindow(Pref(Location.Player, Int::class, 0)),
+    SubBackground(Pref(Location.Player, Int::class, Color.TRANSPARENT)),
+    SubWindow(Pref(Location.Player, Int::class, Color.TRANSPARENT)),
     SubAlpha(Pref(Location.Player, Float::class, 1f)),
+    SubStroke(Pref(Location.Player, Float::class, 8f)),
+    SubBottomMargin(Pref(Location.Player, Float::class, 1f)),
     Font(Pref(Location.Player, Int::class, 0)),
     FontSize(Pref(Location.Player, Int::class, 20)),
     Locale(Pref(Location.Player, Int::class, 2)),
@@ -122,6 +131,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     Pip(Pref(Location.Player, Boolean::class, true)),
     RotationPlayer(Pref(Location.Player, Boolean::class, true)),
     TorrentEnabled(Pref(Location.Player, Boolean::class, false)),
+    UseAdditionalCodec(Pref(Location.Player, Boolean::class, false)),
 
     //Reader
     ShowSource(Pref(Location.Reader, Boolean::class, true)),
@@ -189,7 +199,9 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     SubscriptionNotificationStore(Pref(Location.Irrelevant, List::class, listOf<SubscriptionStore>())),
     UnreadCommentNotifications(Pref(Location.Irrelevant, Int::class, 0)),
     DownloadsDir(Pref(Location.Irrelevant, String::class, "")),
+    OC(Pref(Location.Irrelevant, Boolean::class, false)),
     RefreshStatus(Pref(Location.Irrelevant, Boolean::class, false)),
+    rpcEnabled(Pref(Location.Irrelevant, Boolean::class, true)),
 
     //Protected
     DiscordToken(Pref(Location.Protected, String::class, "")),
@@ -202,4 +214,10 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     MALCodeChallenge(Pref(Location.Protected, String::class, "")),
     MALToken(Pref(Location.Protected, MAL.ResponseToken::class, "")),
     AppPassword(Pref(Location.Protected, String::class, "")),
+    BiometricToken(Pref(Location.Protected, String::class, "")),
+    OverridePassword(Pref(Location.Protected, Boolean::class, false)),
+    Socks5ProxyHost(Pref(Location.Protected, String::class, "")),
+    Socks5ProxyPort(Pref(Location.Protected, String::class, "")),
+    Socks5ProxyUsername(Pref(Location.Protected, String::class, "")),
+    Socks5ProxyPassword(Pref(Location.Protected, String::class, "")),
 }

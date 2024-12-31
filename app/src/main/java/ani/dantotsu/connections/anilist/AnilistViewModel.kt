@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 suspend fun getUserId(context: Context, block: () -> Unit) {
-    if (!Anilist.initialized) {
+    if (!Anilist.initialized && PrefManager.getVal<String>(PrefName.AnilistToken) != "") {
         if (Anilist.query.getUserData()) {
             tryWithSuspend {
                 if (MAL.token != null && !MAL.query.getUserData())
@@ -81,24 +81,26 @@ class AnilistHomeViewModel : ViewModel() {
         MutableLiveData<ArrayList<User>>(null)
 
     fun getUserStatus(): LiveData<ArrayList<User>> = userStatus
+    suspend fun initUserStatus() {
+        val res = Anilist.query.getUserStatus()
+        res?.let { userStatus.postValue(it) }
+    }
 
     private val hidden: MutableLiveData<ArrayList<Media>> =
         MutableLiveData<ArrayList<Media>>(null)
 
     fun getHidden(): LiveData<ArrayList<Media>> = hidden
 
-    @Suppress("UNCHECKED_CAST")
     suspend fun initHomePage() {
         val res = Anilist.query.initHomePage()
-        res["currentAnime"]?.let { animeContinue.postValue(it as ArrayList<Media>?) }
-        res["favoriteAnime"]?.let { animeFav.postValue(it as ArrayList<Media>?) }
-        res["plannedAnime"]?.let { animePlanned.postValue(it as ArrayList<Media>?) }
-        res["currentManga"]?.let { mangaContinue.postValue(it as ArrayList<Media>?) }
-        res["favoriteManga"]?.let { mangaFav.postValue(it as ArrayList<Media>?) }
-        res["plannedManga"]?.let { mangaPlanned.postValue(it as ArrayList<Media>?) }
-        res["recommendations"]?.let { recommendation.postValue(it as ArrayList<Media>?) }
-        res["hidden"]?.let { hidden.postValue(it as ArrayList<Media>?) }
-        res["status"]?.let { userStatus.postValue(it as ArrayList<User>?) }
+        res["currentAnime"]?.let { animeContinue.postValue(it) }
+        res["favoriteAnime"]?.let { animeFav.postValue(it) }
+        res["currentAnimePlanned"]?.let { animePlanned.postValue(it) }
+        res["currentManga"]?.let { mangaContinue.postValue(it) }
+        res["favoriteManga"]?.let { mangaFav.postValue(it) }
+        res["currentMangaPlanned"]?.let { mangaPlanned.postValue(it) }
+        res["recommendations"]?.let { recommendation.postValue(it) }
+        res["hidden"]?.let { hidden.postValue(it) }
     }
 
     suspend fun loadMain(context: FragmentActivity) {

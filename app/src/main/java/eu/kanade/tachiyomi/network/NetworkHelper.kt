@@ -5,8 +5,10 @@ import android.os.Build
 import ani.dantotsu.Mapper
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.util.Logger
 import com.lagradost.nicehttp.Requests
 import eu.kanade.tachiyomi.network.interceptor.CloudflareInterceptor
+import eu.kanade.tachiyomi.network.interceptor.IgnoreGzipInterceptor
 import eu.kanade.tachiyomi.network.interceptor.UncaughtExceptionInterceptor
 import eu.kanade.tachiyomi.network.interceptor.UserAgentInterceptor
 import okhttp3.Cache
@@ -15,10 +17,49 @@ import okhttp3.brotli.BrotliInterceptor
 import okhttp3.logging.HttpLoggingInterceptor
 import java.io.File
 import java.util.concurrent.TimeUnit
+import java.net.InetSocketAddress
+import java.net.Proxy
+import java.net.Authenticator
+import java.net.PasswordAuthentication
+import java.util.prefs.Preferences
+import okhttp3.Credentials
+import okhttp3.Response
+import okhttp3.Route
 
 class NetworkHelper(
     context: Context
 ) {
+
+   init {
+     setupSocks5Proxy()
+   }
+
+private fun setupSocks5Proxy() {
+        val proxyEnabled = PrefManager.getVal<Boolean>(PrefName.EnableSocks5Proxy)
+        if (proxyEnabled) {
+            val proxyHost = PrefManager.getVal<String>(PrefName.Socks5ProxyHost)
+            val proxyPort = PrefManager.getVal<String>(PrefName.Socks5ProxyPort)
+
+            System.setProperty("socksProxyHost", proxyHost)
+            System.setProperty("socksProxyPort", proxyPort)
+
+            if (PrefManager.getVal<Boolean>(PrefName.ProxyAuthEnabled)) {
+                val proxyUsername = PrefManager.getVal<String>(PrefName.Socks5ProxyUsername)
+                val proxyPassword = PrefManager.getVal<String>(PrefName.Socks5ProxyPassword)
+
+                Authenticator.setDefault(object : Authenticator() {
+                    override fun getPasswordAuthentication(): PasswordAuthentication {
+                        return PasswordAuthentication(proxyUsername, proxyPassword.toCharArray())
+                    }
+                 }
+              )
+            }
+        } else {
+            System.clearProperty("socksProxyHost")
+            System.clearProperty("socksProxyPort")
+            Authenticator.setDefault(null)
+        }
+    }
 
     val cookieJar = AndroidCookieJar()
 
@@ -35,12 +76,19 @@ class NetworkHelper(
                 ),
             )
             .addInterceptor(UncaughtExceptionInterceptor())
-            .addInterceptor(BrotliInterceptor)
             .addInterceptor(UserAgentInterceptor(::defaultUserAgentProvider))
+            .addNetworkInterceptor(IgnoreGzipInterceptor())
+            .addNetworkInterceptor(BrotliInterceptor)
 
-        if (PrefManager.getVal(PrefName.VerboseLogging)) {
-            val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.HEADERS
+        class ConsoleLogger : HttpLoggingInterceptor.Logger {
+            override fun log(message: String) {
+                Logger.log("OkHttp: $message")
+            }
+        }
+
+        if (PrefManager.getVal<Boolean>(PrefName.VerboseLogging)) {
+            val httpLoggingInterceptor = HttpLoggingInterceptor(ConsoleLogger()).apply {
+                level = HttpLoggingInterceptor.Level.BASIC
             }
             builder.addNetworkInterceptor(httpLoggingInterceptor)
         }
@@ -64,9 +112,8 @@ class NetworkHelper(
             PREF_DOH_SHECAN -> builder.dohShecan()
             PREF_DOH_LIBREDNS -> builder.dohLibreDNS()
         }
-
-        builder.build()
-    }
+      builder.build()
+     }
 
     val downloadClient = client.newBuilder().callTimeout(20, TimeUnit.MINUTES).build()
 

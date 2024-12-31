@@ -293,7 +293,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                 binding.mediaTotal.visibility = View.VISIBLE
                 binding.mediaAddToList.text = userStatus
             } else {
-                binding.mediaAddToList.setText(R.string.add)
+                binding.mediaAddToList.setText(R.string.add_list)
             }
             total()
             binding.mediaAddToList.setOnClickListener {
@@ -372,7 +372,9 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             navBar.createTab(R.drawable.ic_round_comment_24, R.string.comments, R.id.comment)
         navBar.addTab(infoTab)
         navBar.addTab(watchTab)
-        navBar.addTab(commentTab)
+        if (PrefManager.getVal<Int>(PrefName.CommentsEnabled) == 1) {
+            navBar.addTab(commentTab)
+        }
         if (model.continueMedia == null && media.cameFromContinue) {
             model.continueMedia = PrefManager.getVal(PrefName.ContinueMedia)
             selected = 1
@@ -424,7 +426,8 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
     }
 
     override fun onResume() {
-        navBar.selectTabAt(selected)
+        if (::navBar.isInitialized)
+            navBar.selectTabAt(selected)
         super.onResume()
     }
 

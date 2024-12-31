@@ -3,7 +3,6 @@ package ani.dantotsu.media
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.text.SpannableString
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +20,7 @@ import ani.dantotsu.initActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
-import ani.dantotsu.util.MarkdownCreatorActivity
+import ani.dantotsu.util.ActivityMarkdownCreator
 import com.xwray.groupie.GroupieAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -59,7 +58,7 @@ class ReviewActivity : AppCompatActivity() {
         binding.followFilterButton.setOnClickListener {
             ContextCompat.startActivity(
                 this,
-                Intent(this, MarkdownCreatorActivity::class.java)
+                Intent(this, ActivityMarkdownCreator::class.java)
                     .putExtra("type", "review"),
                 null
             )

@@ -66,7 +66,7 @@
     <string name="empty">All caught up, when New?</string>
     <string name="action_settings">Settings</string>
 
-    <string name="add">Add to List</string>
+    <string name="add_list">Add to List</string>
     <string name="list_editor">List Editor</string>
     <string name="add_fav">Add to Favourites</string>
     <string name="notifications">Notifications</string>
@@ -83,9 +83,9 @@
         <item>All</item>
     </string-array>
 
-    <string name="no_notifications">No more notifications</string>
+    <string name="nothing_here">Nothing here</string>
     <string name="followers">Followers</string>
-
+    <string name="write_a_message">Write a Message</string>
     <string name="status">STATUS</string>
     <string-array name="status" translatable="false">
         <item>PLANNING</item>
@@ -155,8 +155,12 @@
     <string name="chap">Chapter</string>
     <string name="wrong"><u>Wrong Title?</u></string>
     <string name="source_not_found">
-        Couldn\'t find anything X( \n
-        Try another source.
+        Nothing came up from this source.\n
+        Let\'s look elsewhere.
+    </string>
+    <string name="download_not_found">
+        Your downloads are feeling a bit lonely…\n
+        Try downloading something.
     </string>
     <string name="not_supported">%1$s is not supported!</string>
     <string name="server_selector">Select Server</string>
@@ -319,6 +323,7 @@
     <string name="fav_anime">Favourite Anime</string>
     <string name="fav_manga">Favourite Manga</string>
     <string name="restart_app">Restart the app?</string>
+    <string name="restart_app_extra">Restart the app to apply changes</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="current_page">Current Page</string>
@@ -327,7 +332,20 @@
     <string name="prefer_dub">Prefer Dubbed Anime</string>
     <string name="none">None</string>
     <string name="selected_dns">Selected DNS</string>
+    <string name="anime_manga">Anime and Manga</string>
+    <string name="list_settings">List Settings</string>
     <string name="dns_info">Change if your ISP blocks any source</string>
+    <string name="selected_title_language">Selected Title Language</string>
+    <string name="selected_staff_language">Selected Staff Language</string>
+    <string name="selected_merge_time">Activity Merge Time</string>
+    <string name="selected_score_format">Scoring System</string>
+    <string name="selected_time_zone">Timezone</string>
+    <string name="selected_no_time_zone">No Timezone selected</string>
+    <string name="selected_row_order">Default List Order</string>
+    <string name="custom_anime_list">Custom Anime Lists</string>
+    <string name="custom_manga_list">Custom Manga Lists</string>
+    <string name="delete_custom_list">Delete Custom List</string>
+    <string name="delete_custom_list_confirm">Are you sure you want to delete %1$s ?</string>
     <string name="keep_screen_on">Keep Screen On</string>
     <string name="layout">Layout</string>
     <string name="spaced_pages">Spaced Pages</string>
@@ -366,6 +384,8 @@
     <string name="apply">Apply</string>
     <string name="cancel">Cancel</string>
     <string name="edit">Edit</string>
+    <string name="publish">Publish</string>
+    <string name="reply_hint">Write a response…</string>
     <string name="this_season">This Season</string>
     <string name="next_season">Next Season</string>
     <string name="previous_season">Previous Season</string>
@@ -384,7 +404,6 @@
     <string name="faq">FAQ</string>
     <string name="accounts">Accounts</string>
     <string name="addons">Add-ons</string>
-    <string name="addons_desc">Get more features out of your app</string>
     <string name="myanimelist">MyAnimeList</string>
     <string name="login_with_anilist">Login with Anilist!</string>
     <string name="anilist">Anilist</string>
@@ -410,6 +429,8 @@
     <string name="use_alarm_manager_reliable">Use Alarm Manager for reliable Notifications</string>
     <string name="use_alarm_manager_confirm">Using Alarm Manger can help fight against battery optimization, but may consume more battery. It also requires the Alarm Manager permission.</string>
     <string name="use">Use</string>
+    <string name="remove_all_subscriptions">Remove All Subscriptions</string>
+    <string name="remove_all_subscriptions_desc">Are you sure you want to remove all subscriptions for %1$s?</string>
     <string name="checking_subscriptions">Notification for Checking Subscriptions</string>
     <string name="subscriptions_checking_time_s">Subscriptions Update Frequency : %1$s</string>
     <string name="subscriptions_checking_time">Subscriptions Update Frequency</string>
@@ -626,13 +647,7 @@
     <string name="answer_6">This is because it updates every 48 hours automatically (by Anilist). If you really need to update your stats, you can force update your stats after going to this [link](https://anilist.co/settings/lists).</string>
 
     <string name="question_7">How to download Anime?</string>
-    <string name="answer_7">There are two methods of downloading currently. One is internal and the other is external. If you download internally, then it can be viewed within the app but only the app can open that episode, you cannot move it or share it. The other option is to use external downloading. It requires a download manager to download and a separate video player to watch. External downloads can be shared but you cannot view it within the Dantotsu app.\n\n•To download internally:\n\n1. Tap the download button.\n2. Pick the server and the video quality.\n3. Profit.\n\n•To download externally:\n\n 1. Download 1DM or ADM from Google Play Store.
-        \n2. Enter the app, give storage access and set your preferences (downloading speed, downloading path etc(optional))
-        \n3. Now go to \`Dantotsu > Settings > Common > Download Managers\` and choose the download manager you just set up.
-        \n4. Go to your desired episode and press on the download icon of any server. There may be a popup to set your preferences again, just press on "Download" and it will be saved in the directed path.
-
-        \n\nNote: Direct downloads are also possible without a manager but it\'s not recommended.
-\n\nNerd Note: Internally downloaded episodes are stored in \`Android/data/ani.dantotsu.*/files/Anime_Downloads\`\nYou cannot play those files as they are in \`.exo\` format, split into hundreds of pieces and are encrypted.</string>
+    <string name="answer_7">There are two methods of downloading. Internal and external. If you download internally, then it can be viewed within the app and tracking will work normally for it. The other option is to use external downloader. It requires a download manager to download and a separate video player to watch. External downloads cannot be viewed within the Dantotsu app.\n\n•To download internally:\n\n1. Tap the download button.\n2. For the first time, it will ask you to set a download location. All your downloads will be stored there.\n3. Pick the server and the video quality.\n4. Profit.\n\n•To download externally:\n\n 1. Download 1DM or ADM from Google Play Store.\n2. Enter the app, give storage access and set your preferences (downloading speed, downloading path etc(optional))\n3. Now go to \`Dantotsu > Settings > Common > Download Managers\` and choose the download manager you just set up.\n4. Go to your desired episode and press on the download icon of any server. There may be a popup to set your preferences again, just press on "Download" and it will be saved in the directed path.\n\nNote: External downloads are also possible without a manager but it\'s not recommended.\n\nNerd Note: Internally downloaded episodes are stored in \`{your set location}/Dantotsu/Anime/*`\nYou can change your download location in settings but your previous downloaded episodes will not show up in the app anymore.</string>
 
     <string name="question_9">How to enable NSFW content?</string>
     <string name="answer_9">You can enable NSFW content by enabling 18+ contents from this [link](https://anilist.co/settings/media). You also have to enable NSFW extensions in \`Settings > Extensions > NSFW extensions\` </string>
@@ -661,6 +676,11 @@
     <string name="question_17">Some useful tips and tricks</string>
     <string name="answer_17">The following presents some tips and tricks you may or may not know about - \n \n \n - By hold pressing the Dantotsu logo in settings, you can check if there are any new updates manually. \n \n - Hold pressing an error message/tag/synonym or title will copy it. \n \n - You can open an episode with other apps by hold pressing any server for that episode. This helps in streaming the episode using other video players or download the episode using download managers. \n \n - You can set up custom lists using this [link](https://anilist.co/settings/lists). (you need to be signed in) \n \n - If your episode/chapter is not being progressed automatically after you finish watching/reading it, then hold press the status bar(planning/repeating/watching button) of that anime/manga. The next time you start a chapter/finish an episode, you will stumble upon a popup. Press yes there. </string>
 
+    <string name="question_18">I can\'t login to Anilist.</string>
+    <string name="answer_18">The reason this happens is probably because you\'re not using the default browser.\n\n>You have to set Chrome as your default browser to login to Anilist.\n\n>It takes a few seconds for the login button to display changes.\n\nIf it doesn\'t work then you could possibly be IP banned from Anilist or your ISP banned Anilist themselves. We believe that this is highly unlikely so open [Anilist](https://anilist.co) in your browser to see if that\`s the case.</string>
+
+    <string name="question_19">What is torrent? How do I use it?</string>
+    <string name="answer_19">Torrent or formally known as BitTorrent is an internet communication protocol for peer\-to\-peer file sharing. A torrent network doesn\'t use a centralised server to host files. It shares files in a decentralised manner. A torrent network has two types of peers. Seeders &amp; Leachers.\n\n• Seeders : These are peers who completed downloading and has the full file. And now they are sharing this file to other peers which is called seeding. A torrent cannot work without at least one seeder. The more seeder a torrent has, the better.\n\n• Leachers : These are peers who are currently downloading the file. If they currently have 40&#37; downloaded then they will share the 40&#37; to any other peers who requests it.\n\nUnlike a centralised server, torrents have no bandwidth limit. You can get your files from hundreds of seeders at the highest possible speed your internet can offer. But many ISP throttle torrent to slow them down because it\'s demanding on their infrastructure. Use a VPN to circumvent this.\n\n• How to use torrents :\n\n1. Install the Torrent Add-on from \`Dantotsu &gt; Settings &gt; Add-ons &gt; Torrent Add-on.\` \n2. Get a source that provides torrents.\n3. USE A VPN. Using VPN while torrenting only has upsides. Without a VPN your IP address will be exposed, your ISP will throttle your network and you could possibly be fined if you live in a country first world country. DO NOT USE IT WITHOUT A VPN IF YOU DON\'T KNOW WHAT YOU\'RE DOING.\n4. Now use that source to start torrenting.</string>
 
     <string name="subscribed_notification">Subscribed! Receiving notifications, when new episodes are released on %1$s.</string>
 
@@ -708,6 +728,7 @@
     <string name="installed_manga">Installed Manga</string>
     <string name="color_picker">Color Picker</string>
     <string name="random_selection">Random Selection</string>
+    <string name="listed_in_library">Listed in Library</string>
     <string name="incognito_mode">Incognito Mode</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="configure">Configure</string>
@@ -726,6 +747,8 @@
     <string name="restore_settings">Import Settings</string>
     <string name="restore_settings_underline"><u>Restore Settings</u></string>
     <string name="try_internal_cast_experimental">Try Internal Cast (Experimental)</string>
+    <string name="comments_button">Enable Comments</string>    
+    <string name="comments_button_desc">Dantotsu\'s very own comments server</string>
 
     <string name="comments">Comments</string>
     <string name="newest">Newest</string>
@@ -794,10 +817,14 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="blur">Blur</string>
     <string name="hide_scroll_bar">Hide Scroll Bar</string>
     <string name="view_on_anilist" translatable="false">View on AniList</string>
+    <string name="share_profile">Share Profile</string>
+    <string name="copy_user_id" >Copy user ID</string>
     <string name="anilist_notification_filters">Filter Notifications</string>
     <string name="anilist_notifications_checking_time">Anilist notifications update frequency : %1$s</string>
     <string name="comment_notification_checking_time">Comment notifications update frequency : %1$s</string>
     <string name="activities">Activities</string>
+    <string name="enable_rpc">Enable Discord RPC</string>
+    <string name="enable_rpc_desc">Display your taste to plebs on Discord!</string>
 
     <string name="incorrect_password">Incorrect password</string>
     <string name="password_cannot_be_empty">Password cannot be empty</string>
@@ -899,11 +926,20 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="unknown_track">\[%1$s\] Unknown</string>
     <string name="accounts_desc">Anilist, MAL and Discord.\nWhat more could you need?</string>
     <string name="theme_desc">Change the vibe of your app</string>
-    <string name="extensions_desc">Manage your reliable repositories</string>
     <string name="common_desc">UI and other mischievous stuff</string>
-    <string name="notifications_desc">Customise your news and updates</string>
     <string name="anime_desc">Choose how you watch</string>
     <string name="manga_desc">Choose how you read</string>
+    <string name="extensions_desc">Manage your reliable repositories</string>
+    <string name="addons_desc">Get more features out of your app</string>
+    <string name="alsettings_desc">Change your AniList settings</string>
+    <string name="airing_notifications">Airing Anime notifications</string>
+    <string name="airing_notifications_desc">Get notified whenever a new episode drops</string>
+    <string name="display_adult_content">18+ Content</string>
+    <string name="display_adult_content_desc">Enable NSFW content</string>
+    <string name="restrict_messages">Restrict messages to following</string>
+    <string name="restrict_messages_desc">Allow only users I follow to message me</string>
+
+    <string name="notifications_desc">Customise your news and updates</string>
     <string name="about_desc">Learn more about Dantotsu</string>
     <string name="faq_desc">General questions about Dantotsu</string>
     <string name="check_app_updates_desc">Check Github for app updates</string>
@@ -930,7 +966,7 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="user_agent_desc">Change your default user agent</string>
     <string name="force_legacy_installer_desc">Use the legacy installer to install extensions (For older android phones)</string>
     <string name="skip_loading_extension_icons_desc">Don\'t load icons of extensions on the extension page</string>
-    <string name="NSFWExtention_desc">Remove 18+ extensions from search (May remove some useful extensions)</string>
+    <string name="NSFWExtention_desc">Enable 18+ extensions from search (May remove some useful extensions)</string>
     <string name="reader_settings_desc">All the Reader related settings</string>
     <string name="purge_manga_downloads_desc">Delete all downloaded Manga</string>
     <string name="purge_novel_downloads_desc">Delete all downloaded Novels</string>
@@ -945,6 +981,8 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="use_unique_theme_for_each_item_desc">Use color from media\'s banner</string>
     <string name="use_custom_theme_desc">Use your own color for the theme</string>
     <string name="color_picker_desc">Choose a color</string>
+    <string name="hide_private">Hide private Media from home screen</string>
+    <string name="hide_private_desc">Long click "Continue Watching" to access</string>
     <string name="torrent_addon">Torrent Add-on</string>
     <string name="enable_torrent">Enable Torrent</string>
     <string name="anime_downloader_addon">Anime Downloader Add-on</string>
@@ -955,7 +993,9 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="update_addon">Add-on update available</string>
     <string name="install_addon">Install Add-on</string>
     <string name="download_addon_not_found">Add-on not found</string>
+
     <string name="image">Image</string>
+    <string name="clear_history">Clear History</string>
     <string name="failed_ext_install_conflict">Failed to install extension due to conflict</string>
     <string name="reading">READING</string>
     <string name="watching">WATCHING</string>
@@ -984,6 +1024,7 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="create_new_activity">Create New Activity</string>
     <string name="create_new_review">Create New Review</string>
     <string name="create_new_reply">Create New Reply</string>
+    <string name="create_new_message">Create New Message</string>
     <string name="create">Create</string>
     <string name="preview">Preview</string>
     <string name="cannot_be_empty">Text cannot be empty</string>
@@ -1024,4 +1065,35 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="app_lock_desc">Lock the app with a password\n( ͡° ͜ʖ ͡°)</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="password_mismatch">Passwords do not match or are empty!</string>
+    <string name="enable_biometric">Enable Biometric</string>
+    <string name="bio_prompt_info_title">Biometric Authentication</string>
+    <string name="bio_prompt_info_desc">Use your fingerprint or face to unlock the app</string>
+    <string name="enable_forgot_password">Enable Forgot Password (hold clear button for 10 seconds)</string>
+    <string name="hide_notification_dot">Hide Notification Dot</string>
+    <string name="private_mode">Private</string>
+    <string name="omega_cursed">you have been Ǫ̴̺̙͎̤̫͓̮̰̿͝M̴͇̤͗́̾̈́̑̍̿̈͌͝Ȅ̴̡̨̛͉̣̙̩̲̣̤̟̪̣̎͗̎̆̒̉͆̆̕ͅͅǴ̸̯̬̗̠̙͛͐̀̈͋̀̈̽́̎̿͘͘͝ͅĀ̶̧̲̀ͅ ̴̢̟͕̜̓̾̓C̶̬̜̰̘̝̱̫͓͙̭̈́͐͋̓̏̈̍̓̀̌̾̚Ư̸̛̤̱̈́͆̽͊͛̐̓́̑͘̕̕͝R̸̨̨͈̬̱̺͕̪̪̘͕͎̂͛́̅̆̓̀͝ͅS̴̨̨̛̩̭̗̹̰̭̥͉̮̝̠̓̔͆̂͊͆̀̈́̅̕͘̚͝È̴̢̛̝͈̳͉͈͒͒̒̄̏̈̈́D̸̢̡̨̜̞̩̼̫̹̗̮͛̀̈̋̾̇̕̕͜ͅ</string>
+    <string name="omega_freed">you have been freed</string>
+    <string name="subtitle_langauge">Preferred Langauge</string>
+    <string name="socks5">SOCKS5</string>
+    <string name="host">Host</string>
+    <string name="port">Port</string>
+    <string name="authentication">Authentication</string>
+    <string name="proxy">SOCKS5 Proxy</string>
+    <string name="proxy_desc">Route All Your Network Traffic Through a SOCKS5 Proxy</string>
+    <string name="proxy_setup">Proxy Setup</string>
+    <string name="proxy_setup_desc">Configure your Socks5 Proxy</string>
+    <string name="clear_stored_episode">Clear Stored Episode Data</string>
+    <string name="clear_stored_chapter">Clear Stored Chapter Data</string>
+    <string name="use_additional_codec">Additional Codec Support</string>
+    <string name="textview_sub">Textview Subtitles (Experimental)</string>
+    <string name="textview_sub_stroke">Subtitle Stroke</string>
+    <string name="textview_sub_bottom_margin">Bottom Margin</string>
+    <string name="add_repository">Add Repository</string>
+    <string name="add_repository_desc">A repository link should look like this: https://raw.githubusercontent.com/username/repo/branch/index.min.json</string>
+    <string name="current_repositories">Current Repositories</string>
+    <string name="add_repository_warning">Warning: Extensions from the repository can run arbitrary code on your device. Only use repositories you trust. \n\nBy adding a repository, you agree to: \n\n1. Not use the app for viewing or distributing copyrighted content. \n2. Not use the app for any illegal activities. \n3. Not use the app for any activities that violate the terms of service of the content providers. \n\nThe app or it\'s maintainer are not affiliated in any way with extension providers. The developers are not responsible for any damages caused by the app. \n\nBy adding a repository, you agree to these terms.</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="privacy_policy_desc">Read our privacy policy</string>
+    <string name="failed_to_load">Failed to load</string>
+
 </resources>

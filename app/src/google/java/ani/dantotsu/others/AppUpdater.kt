@@ -29,6 +29,7 @@ import ani.dantotsu.util.Logger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.time.delay
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonArray
@@ -69,7 +70,11 @@ object AppUpdater {
                     )
                     addView(
                         TextView(activity).apply {
-                            val markWon = buildMarkwon(activity, false)
+                            val markWon = try {  //slower phones can destroy the activity before this is done
+                                buildMarkwon(activity, false)
+                            } catch (e: IllegalArgumentException) {
+                                return@runOnUiThread
+                            }
                             markWon.setMarkdown(this, md)
                         }
                     )

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="16dp"
+    android:layout_marginTop="24dp"
     android:background="?attr/colorSurface"
     android:orientation="vertical">
 
@@ -40,7 +40,6 @@
             android:layout_weight="1"
             android:orientation="horizontal">
 
-
             <TextView
                 android:id="@+id/activityUserName"
                 android:layout_width="wrap_content"
@@ -67,8 +66,46 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_semi_bold"
                 android:text="@string/time"
+                android:layout_marginEnd="4dp"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
+
+            <ImageView
+                android:id="@+id/activityPrivate"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:padding="4dp"
+                android:alpha="0.6"
+                android:src="@drawable/ic_round_lock_24"
+                tools:tint="@color/bg_opp"
+                tools:ignore="ContentDescription" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/activityRepliesContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:orientation="vertical"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/activityReplies"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_round_comment_24"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/replyCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:textAlignment="center"
+                android:textSize="12sp"
+                tools:text="12" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -81,8 +118,8 @@
 
             <ImageView
                 android:id="@+id/activityLike"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
                 android:src="@drawable/ic_round_favorite_24"
                 tools:ignore="ContentDescription" />
 
@@ -92,7 +129,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:fontFamily="@font/poppins_semi_bold"
-                android:textSize="15sp"
+                android:textAlignment="center"
+                android:textSize="12sp"
                 tools:text="12" />
         </LinearLayout>
 
@@ -108,12 +146,49 @@
         android:text="@string/lorem_ipsum"
         android:textSize="12sp" />
 
+    <LinearLayout
+        android:id="@+id/linearLayout6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="-12dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/activityDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginStart="12dp"
+            android:alpha="0.6"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:gravity="center"
+            android:text="@string/delete"
+            android:textSize="12sp"
+            android:visibility="gone"
+            tools:ignore="HardcodedText"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/activityEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginStart="12dp"
+            android:alpha="0.6"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:gravity="center"
+            android:text="@string/edit"
+            android:textSize="12sp"
+            android:visibility="gone"
+            tools:ignore="HardcodedText"
+            tools:visibility="visible" />
+    </LinearLayout>
+
     <FrameLayout
         android:id="@+id/activityBannerContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:visibility="gone">
+        android:layout_marginTop="12dp"
+        android:visibility="visible">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -201,63 +276,4 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </FrameLayout>
-
-    <LinearLayout
-        android:id="@+id/commentRepliesContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="6dp"
-        android:orientation="horizontal">
-
-        <View
-            android:id="@+id/commentRepliesDivider"
-            android:layout_width="32dp"
-            android:layout_height="3dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="8dp"
-            android:background="@color/nav_tab" />
-
-        <TextView
-            android:id="@+id/commentTotalReplies"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:alpha="0.8"
-            android:fontFamily="@font/poppins_semi_bold"
-            android:text="View replies"
-            android:textSize="12sp"
-            tools:ignore="HardcodedText" />
-
-        <TextView
-            android:id="@+id/dot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:alpha="0.8"
-            android:fontFamily="@font/poppins_semi_bold"
-            android:text="•"
-            android:textSize="12sp"
-            tools:ignore="HardcodedText" />
-
-        <TextView
-            android:id="@+id/commentReply"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:alpha="0.8"
-            android:fontFamily="@font/poppins_semi_bold"
-            android:text="@string/reply"
-            android:textSize="12sp"
-            tools:ignore="HardcodedText" />
-    </LinearLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/activityReplies"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="16dp"
-        android:nestedScrollingEnabled="false"
-        android:visibility="gone" />
-
 </LinearLayout>

@@ -1,10 +1,14 @@
 package ani.dantotsu.others.calc
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -16,6 +20,8 @@ import ani.dantotsu.databinding.ActivityCalcBinding
 import ani.dantotsu.getThemeColor
 import ani.dantotsu.initActivity
 import ani.dantotsu.navBarHeight
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.util.NumberConverter.Companion.toBinary
@@ -24,7 +30,13 @@ import ani.dantotsu.util.NumberConverter.Companion.toHex
 class CalcActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCalcBinding
     private lateinit var code: String
+    private val handler = Handler(Looper.getMainLooper())
+    private val runnable = Runnable {
+        success()
+    }
     private val stack = CalcStack()
+
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ThemeManager(this).applyTheme()
@@ -73,11 +85,48 @@ class CalcActivity : AppCompatActivity() {
                 binding.displayHex.text = ""
                 binding.display.text = "0"
             }
+            if (PrefManager.getVal(PrefName.OverridePassword, false)) {
+                buttonClear.setOnTouchListener { v, event ->
+                    when (event.action) {
+                        MotionEvent.ACTION_DOWN -> {
+                            handler.postDelayed(runnable, 10000)
+                            true
+                        }
+
+                        MotionEvent.ACTION_UP -> {
+                            v.performClick()
+                            handler.removeCallbacks(runnable)
+                            true
+                        }
+
+                        MotionEvent.ACTION_CANCEL -> {
+                            handler.removeCallbacks(runnable)
+                            true
+                        }
+
+                        else -> false
+                    }
+                }
+            }
             buttonBackspace.setOnClickListener {
                 stack.remove()
                 updateDisplay()
             }
             display.text = "0"
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (hasPermission) {
+            success()
+        }
+        if (PrefManager.getVal(PrefName.BiometricToken, "").isNotEmpty()) {
+            val bioMetricPrompt = BiometricPromptUtils.createBiometricPrompt(this) {
+                success()
+            }
+            val promptInfo = BiometricPromptUtils.createPromptInfo(this)
+            bioMetricPrompt.authenticate(promptInfo)
         }
     }
 

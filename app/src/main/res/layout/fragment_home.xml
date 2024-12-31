@@ -314,9 +314,9 @@
                 android:id="@+id/homeUserStatusContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="100dp"
+                android:minHeight="120dp"
+                android:layout_marginVertical="8dp"
                 android:visibility="gone">
-
                 <ProgressBar
                     android:id="@+id/homeUserStatusProgressBar"
                     style="?android:attr/progressBarStyle"

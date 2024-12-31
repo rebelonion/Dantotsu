@@ -50,16 +50,16 @@ class NovelReadAdapter(
         val source =
             media.selected!!.sourceIndex.let { if (it >= novelReadSources.names.size) 0 else it }
         if (novelReadSources.names.isNotEmpty() && source in 0 until novelReadSources.names.size) {
-            binding.animeSource.setText(novelReadSources.names[source], false)
+            binding.mediaSource.setText(novelReadSources.names[source], false)
         }
-        binding.animeSource.setAdapter(
+        binding.mediaSource.setAdapter(
             ArrayAdapter(
                 fragment.requireContext(),
                 R.layout.item_dropdown,
                 novelReadSources.names
             )
         )
-        binding.animeSource.setOnItemClickListener { _, _, i, _ ->
+        binding.mediaSource.setOnItemClickListener { _, _, i, _ ->
             fragment.onSourceChange(i)
             search()
         }

@@ -1,6 +1,5 @@
 package ani.dantotsu.settings
 
-import android.app.AlertDialog
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Bundle
@@ -25,13 +24,15 @@ import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.R
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.databinding.FragmentExtensionsBinding
-import ani.dantotsu.others.LanguageMapper
+import ani.dantotsu.others.LanguageMapper.Companion.getLanguageName
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.settings.extensionprefs.AnimeSourcePreferencesFragment
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.util.Logger
+import ani.dantotsu.util.customAlertDialog
+
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputLayout
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
@@ -42,13 +43,10 @@ import kotlinx.coroutines.launch
 import rx.android.schedulers.AndroidSchedulers
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.util.Collections
 import java.util.Locale
 
 
 class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
-
-
     private var _binding: FragmentExtensionsBinding? = null
     private val binding get() = _binding!!
     private lateinit var extensionsRecyclerView: RecyclerView
@@ -72,16 +70,15 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
             if (allSettings.isNotEmpty()) {
                 var selectedSetting = allSettings[0]
                 if (allSettings.size > 1) {
-                    val names = allSettings.map { LanguageMapper.getLanguageName(it.lang) }
+                    val names = allSettings.map { getLanguageName(it.lang) }
                         .toTypedArray()
                     var selectedIndex = 0
-                    val dialog = AlertDialog.Builder(requireContext(), R.style.MyPopup)
-                        .setTitle("Select a Source")
-                        .setSingleChoiceItems(names, selectedIndex) { dialog, which ->
+                    requireContext().customAlertDialog().apply {
+                        setTitle("Select a Source")
+                        singleChoiceItems(names, selectedIndex) { which ->
                             itemSelected = true
                             selectedIndex = which
                             selectedSetting = allSettings[selectedIndex]
-                            dialog.dismiss()
 
                             val fragment =
                                 AnimeSourcePreferencesFragment().getInstance(selectedSetting.id) {
@@ -93,13 +90,13 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
                                 .addToBackStack(null)
                                 .commit()
                         }
-                        .setOnDismissListener {
+                        onDismiss {
                             if (!itemSelected) {
                                 changeUIVisibility(true)
                             }
                         }
-                        .show()
-                    dialog.window?.setDimAmount(0.8f)
+                        show()
+                    }
                 } else {
                     // If there's only one setting, proceed with the fragment transaction
                     val fragment =
@@ -121,15 +118,20 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
                     .show()
             }
         },
-        { pkg, forceDelete ->
-            if (isAdded) {  // Check if the fragment is currently added to its activity
-                val context = requireContext()  // Store context in a variable
+        { pkg ->
+            if (isAdded) {
+                animeExtensionManager.uninstallExtension(pkg.pkgName)
+                snackString("Extension uninstalled")
+            }
+        }, { pkg ->
+            if (isAdded) {
+                val context = requireContext()
                 val notificationManager =
-                    context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager  // Initialize NotificationManager once
+                    context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-                if (pkg.hasUpdate && !forceDelete) {
+                if (pkg.hasUpdate) {
                     animeExtensionManager.updateExtension(pkg)
-                        .observeOn(AndroidSchedulers.mainThread())  // Observe on main thread
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                             { installStep ->
                                 val builder = NotificationCompat.Builder(
@@ -144,7 +146,7 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
                             },
                             { error ->
                                 Injekt.get<CrashlyticsInterface>().logException(error)
-                                Logger.log(error)  // Log the error
+                                Logger.log(error)
                                 val builder = NotificationCompat.Builder(
                                     context,
                                     Notifications.CHANNEL_DOWNLOADER_ERROR
@@ -170,13 +172,12 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
                             }
                         )
                 } else {
-                    animeExtensionManager.uninstallExtension(pkg.pkgName)
-                    snackString("Extension uninstalled")
+                    snackString("No update available")
                 }
+
             }
         }, skipIcons
     )
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -197,17 +198,10 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
-                val newList = extensionsAdapter.currentList.toMutableList()
                 val fromPosition = viewHolder.absoluteAdapterPosition
                 val toPosition = target.absoluteAdapterPosition
-                if (fromPosition < toPosition) { //probably need to switch to a recyclerview adapter
-                    for (i in fromPosition until toPosition) {
-                        Collections.swap(newList, i, i + 1)
-                    }
-                } else {
-                    for (i in fromPosition downTo toPosition + 1) {
-                        Collections.swap(newList, i, i - 1)
-                    }
+                val newList = extensionsAdapter.currentList.toMutableList().apply {
+                    add(toPosition, removeAt(fromPosition))
                 }
                 extensionsAdapter.submitList(newList)
                 return true
@@ -269,7 +263,8 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
 
     private class AnimeExtensionsAdapter(
         private val onSettingsClicked: (AnimeExtension.Installed) -> Unit,
-        private val onUninstallClicked: (AnimeExtension.Installed, Boolean) -> Unit,
+        private val onUninstallClicked: (AnimeExtension.Installed) -> Unit,
+        private val onUpdateClicked: (AnimeExtension.Installed) -> Unit,
         val skipIcons: Boolean
     ) : ListAdapter<AnimeExtension.Installed, AnimeExtensionsAdapter.ViewHolder>(
         DIFF_CALLBACK_INSTALLED
@@ -295,7 +290,7 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val extension = getItem(position)
             val nsfw = if (extension.isNsfw) "(18+)" else ""
-            val lang = LanguageMapper.getLanguageName(extension.lang)
+            val lang = getLanguageName(extension.lang)
             holder.extensionNameTextView.text = extension.name
             val versionText = "$lang ${extension.versionName} $nsfw"
             holder.extensionVersionTextView.text = versionText
@@ -303,19 +298,18 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
                 holder.extensionIconImageView.setImageDrawable(extension.icon)
             }
             if (extension.hasUpdate) {
-                holder.closeTextView.setImageResource(R.drawable.ic_round_sync_24)
+                holder.updateView.isVisible = true
             } else {
-                holder.closeTextView.setImageResource(R.drawable.ic_round_delete_24)
+                holder.updateView.isVisible = false
             }
-            holder.closeTextView.setOnClickListener {
-                onUninstallClicked(extension, false)
+            holder.deleteView.setOnClickListener {
+                onUninstallClicked(extension)
+            }
+            holder.updateView.setOnClickListener {
+                onUpdateClicked(extension)
             }
             holder.settingsImageView.setOnClickListener {
                 onSettingsClicked(extension)
-            }
-            holder.closeTextView.setOnLongClickListener {
-                onUninstallClicked(extension, true)
-                true
             }
         }
 
@@ -336,7 +330,8 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
                 view.findViewById(R.id.extensionVersionTextView)
             val settingsImageView: ImageView = view.findViewById(R.id.settingsImageView)
             val extensionIconImageView: ImageView = view.findViewById(R.id.extensionIconImageView)
-            val closeTextView: ImageView = view.findViewById(R.id.closeTextView)
+            val deleteView: ImageView = view.findViewById(R.id.deleteTextView)
+            val updateView: ImageView = view.findViewById(R.id.updateTextView)
         }
 
         companion object {

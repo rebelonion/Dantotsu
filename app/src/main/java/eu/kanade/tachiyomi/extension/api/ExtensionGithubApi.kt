@@ -52,7 +52,7 @@ internal class ExtensionGithubApi {
                     sources = it.sources?.toAnimeExtensionSources().orEmpty(),
                     apkName = it.apk,
                     repository = repository,
-                    iconUrl = "${repository}/icon/${it.pkg}.png",
+                    iconUrl = "${repository.removeSuffix("/index.min.json")}/icon/${it.pkg}.png",
                 )
             }
     }
@@ -64,10 +64,6 @@ internal class ExtensionGithubApi {
 
             val repos =
                 PrefManager.getVal<Set<String>>(PrefName.AnimeExtensionRepos).toMutableList()
-            if (repos.isEmpty()) {
-                repos.add("https://raw.githubusercontent.com/aniyomiorg/aniyomi-extensions/repo")
-                PrefManager.setVal(PrefName.AnimeExtensionRepos, repos.toSet())
-            }
 
             repos.forEach {
                 try {
@@ -91,12 +87,6 @@ internal class ExtensionGithubApi {
                         response
                             .parseAs<List<ExtensionJsonObject>>()
                             .toAnimeExtensions(it)
-                    }
-
-                    // Sanity check - a small number of extensions probably means something broke
-                    // with the repo generator
-                    if (repoExtensions.size < 10) {
-                        throw Exception()
                     }
 
                     extensions.addAll(repoExtensions)
@@ -145,7 +135,7 @@ internal class ExtensionGithubApi {
                     sources = it.sources?.toMangaExtensionSources().orEmpty(),
                     apkName = it.apk,
                     repository = repository,
-                    iconUrl = "${repository}/icon/${it.pkg}.png",
+                    iconUrl = "${repository.removeSuffix("/index.min.json")}/icon/${it.pkg}.png",
                 )
             }
     }
@@ -157,19 +147,20 @@ internal class ExtensionGithubApi {
 
             val repos =
                 PrefManager.getVal<Set<String>>(PrefName.MangaExtensionRepos).toMutableList()
-            if (repos.isEmpty()) {
-                repos.add("https://raw.githubusercontent.com/keiyoushi/extensions/main")
-                PrefManager.setVal(PrefName.MangaExtensionRepos, repos.toSet())
-            }
 
             repos.forEach {
+                val repoUrl = if (it.contains("index.min.json")) {
+                    it
+                } else {
+                    "$it${if (it.endsWith('/')) "" else "/"}index.min.json"
+                }
                 try {
                     val githubResponse = try {
                         networkService.client
-                            .newCall(GET("${it}/index.min.json"))
+                            .newCall(GET(repoUrl))
                             .awaitSuccess()
                     } catch (e: Throwable) {
-                        Logger.log("Failed to get repo: $it")
+                        Logger.log("Failed to get repo: $repoUrl")
                         Logger.log(e)
                         null
                     }
@@ -184,12 +175,6 @@ internal class ExtensionGithubApi {
                         response
                             .parseAs<List<ExtensionJsonObject>>()
                             .toMangaExtensions(it)
-                    }
-
-                    // Sanity check - a small number of extensions probably means something broke
-                    // with the repo generator
-                    if (repoExtensions.size < 10) {
-                        throw Exception()
                     }
 
                     extensions.addAll(repoExtensions)
@@ -209,8 +194,11 @@ internal class ExtensionGithubApi {
 
     private fun fallbackRepoUrl(repoUrl: String): String? {
         var fallbackRepoUrl = "https://gcore.jsdelivr.net/gh/"
-        val strippedRepoUrl =
-            repoUrl.removePrefix("https://").removePrefix("http://").removeSuffix("/")
+        val strippedRepoUrl = repoUrl
+            .removePrefix("https://")
+            .removePrefix("http://")
+            .removeSuffix("/")
+            .removeSuffix("/index.min.json")
         val repoUrlParts = strippedRepoUrl.split("/")
         if (repoUrlParts.size < 3) {
             return null

@@ -105,8 +105,8 @@ class MediaInfoFragment : Fragment() {
                 }
                 if (media.name != null) binding.mediaInfoNameRomajiContainer.visibility =
                     View.VISIBLE
-                val infoNameRomanji = tripleTab + media.nameRomaji
-                binding.mediaInfoNameRomaji.text = infoNameRomanji
+                val infoNameRomaji = tripleTab + media.nameRomaji
+                binding.mediaInfoNameRomaji.text = infoNameRomaji
                 binding.mediaInfoNameRomaji.setOnLongClickListener {
                     copyToClipboard(media.nameRomaji)
                     true

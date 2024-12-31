@@ -20,21 +20,18 @@ class AlarmManagerScheduler(private val context: Context) : TaskScheduler {
             return
         }
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = when (taskType) {
-            TaskType.COMMENT_NOTIFICATION -> Intent(
-                context,
-                CommentNotificationReceiver::class.java
-            )
 
-            TaskType.ANILIST_NOTIFICATION -> Intent(
-                context,
-                AnilistNotificationReceiver::class.java
-            )
+        val intent = when {
+            taskType == TaskType.COMMENT_NOTIFICATION && PrefManager.getVal<Int>(PrefName.CommentsEnabled) == 1 -> 
+                Intent(context, CommentNotificationReceiver::class.java)
 
-            TaskType.SUBSCRIPTION_NOTIFICATION -> Intent(
-                context,
-                SubscriptionNotificationReceiver::class.java
-            )
+            taskType == TaskType.ANILIST_NOTIFICATION -> 
+                Intent(context, AnilistNotificationReceiver::class.java)
+
+            taskType == TaskType.SUBSCRIPTION_NOTIFICATION -> 
+                Intent(context, SubscriptionNotificationReceiver::class.java)
+
+            else -> return
         }
 
         val pendingIntent = PendingIntent.getBroadcast(
@@ -64,21 +61,18 @@ class AlarmManagerScheduler(private val context: Context) : TaskScheduler {
 
     override fun cancelTask(taskType: TaskType) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = when (taskType) {
-            TaskType.COMMENT_NOTIFICATION -> Intent(
-                context,
-                CommentNotificationReceiver::class.java
-            )
 
-            TaskType.ANILIST_NOTIFICATION -> Intent(
-                context,
-                AnilistNotificationReceiver::class.java
-            )
+        val intent = when {
+            taskType == TaskType.COMMENT_NOTIFICATION && PrefManager.getVal<Int>(PrefName.CommentsEnabled) == 1 -> 
+                Intent(context, CommentNotificationReceiver::class.java)
 
-            TaskType.SUBSCRIPTION_NOTIFICATION -> Intent(
-                context,
-                SubscriptionNotificationReceiver::class.java
-            )
+            taskType == TaskType.ANILIST_NOTIFICATION -> 
+                Intent(context, AnilistNotificationReceiver::class.java)
+
+            taskType == TaskType.SUBSCRIPTION_NOTIFICATION -> 
+                Intent(context, SubscriptionNotificationReceiver::class.java)
+
+            else -> return
         }
 
         val pendingIntent = PendingIntent.getBroadcast(

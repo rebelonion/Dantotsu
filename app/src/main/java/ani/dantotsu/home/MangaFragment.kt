@@ -35,6 +35,7 @@ import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -274,15 +275,22 @@ class MangaFragment : Fragment() {
                                 }
                             }
                         }
-                        model.loaded = true
-                        model.loadTrending()
-                        model.loadAll()
+                    }
+                    model.loaded = true
+                    val loadTrending = async(Dispatchers.IO) { model.loadTrending() }
+                    val loadAll = async(Dispatchers.IO) { model.loadAll() }
+                    val loadPopular = async(Dispatchers.IO) {
                         model.loadPopular(
-                            "MANGA", sort = Anilist.sortBy[1], onList = PrefManager.getVal(
-                                PrefName.PopularMangaList
-                            )
+                            "MANGA",
+                            sort = Anilist.sortBy[1],
+                            onList = PrefManager.getVal(PrefName.PopularAnimeList)
                         )
                     }
+
+                    loadTrending.await()
+                    loadAll.await()
+                    loadPopular.await()
+
                     live.postValue(false)
                     _binding?.mangaRefresh?.isRefreshing = false
                     running = false

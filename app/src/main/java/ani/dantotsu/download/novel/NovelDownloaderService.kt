@@ -239,6 +239,13 @@ class NovelDownloaderService : Service() {
                     return@withContext
                 }
 
+                val baseDirectory = getSubDirectory(
+                    this@NovelDownloaderService,
+                    MediaType.NOVEL,
+                    false,
+                    task.title
+                ) ?: throw Exception("Directory not found")
+
                 // Start the download
                 withContext(Dispatchers.IO) {
                     try {
@@ -334,7 +341,7 @@ class NovelDownloaderService : Service() {
                     notificationManager.notify(NOTIFICATION_ID, builder.build())
                 }
 
-                saveMediaInfo(task)
+                saveMediaInfo(task, baseDirectory)
                 downloadsManager.addDownload(
                     DownloadedType(
                         task.title,
@@ -354,15 +361,8 @@ class NovelDownloaderService : Service() {
     }
 
     @OptIn(DelicateCoroutinesApi::class)
-    private fun saveMediaInfo(task: DownloadTask) {
+    private fun saveMediaInfo(task: DownloadTask, directory: DocumentFile) {
         launchIO {
-            val directory =
-                getSubDirectory(
-                    this@NovelDownloaderService,
-                    MediaType.NOVEL,
-                    false,
-                    task.title
-                ) ?: throw Exception("Directory not found")
             directory.findFile("media.json")?.forceDelete(this@NovelDownloaderService)
             val file = directory.createFile("application/json", "media.json")
                 ?: throw Exception("File not created")

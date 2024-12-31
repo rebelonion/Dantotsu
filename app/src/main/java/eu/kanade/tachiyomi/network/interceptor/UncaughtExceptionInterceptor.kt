@@ -23,6 +23,7 @@ class UncaughtExceptionInterceptor : Interceptor {
             Logger.log(e)
             throw IOException("Request timed out")  // there's some odd behavior throwing a SocketTimeoutException
         } catch (e: Exception) {
+            Logger.log(e)
             if (e is IOException) {
                 throw e
             } else {

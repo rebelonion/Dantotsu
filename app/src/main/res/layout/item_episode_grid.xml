@@ -13,7 +13,7 @@
     app:cardElevation="4dp">
 
     <ImageView
-        android:id="@+id/itemEpisodeImage"
+        android:id="@+id/itemMediaImage"
         android:layout_width="match_parent"
         android:layout_height="96dp"
         android:scaleType="centerCrop"
@@ -85,21 +85,21 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/itemEpisodeProgressCont"
+        android:id="@+id/itemMediaProgressCont"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:orientation="horizontal">
 
         <View
-            android:id="@+id/itemEpisodeProgress"
+            android:id="@+id/itemMediaProgress"
             android:layout_width="0dp"
             android:layout_height="2dp"
             android:layout_weight="0"
             android:background="?attr/colorPrimary" />
 
         <View
-            android:id="@+id/itemEpisodeProgressEmpty"
+            android:id="@+id/itemMediaProgressEmpty"
             android:layout_width="0dp"
             android:layout_height="2dp"
             android:layout_weight="1" />

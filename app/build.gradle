@@ -11,12 +11,12 @@ def gitCommitHash = providers.exec {
 }.standardOutput.asText.get().trim()
 
 android {
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId "ani.dantotsu"
         minSdk 21
-        targetSdk 34
+        targetSdk 35
         versionCode((System.currentTimeMillis() / 60000).toInteger())
         versionName "3.1.0"
         versionCode 300100000
@@ -101,6 +101,8 @@ dependencies {
     implementation 'androidx.preference:preference-ktx:1.2.1'
     implementation 'androidx.webkit:webkit:1.11.0'
     implementation "com.anggrayudi:storage:1.5.5"
+    implementation "androidx.biometric:biometric:1.1.0"
+
 
 //  Glide
     ext.glide_version = '4.16.0'
@@ -111,7 +113,7 @@ dependencies {
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
 
 //  Exoplayer
-    ext.exo_version = '1.3.1'
+    ext.exo_version = '1.5.0'
     implementation "androidx.media3:media3-exoplayer:$exo_version"
     implementation "androidx.media3:media3-ui:$exo_version"
     implementation "androidx.media3:media3-exoplayer-hls:$exo_version"
@@ -121,6 +123,8 @@ dependencies {
 //  Media3 Casting
     implementation "androidx.media3:media3-cast:$exo_version"
     implementation "androidx.mediarouter:mediarouter:1.7.0"
+// Media3 extension
+    implementation "com.github.anilbeesetti.nextlib:nextlib-media3ext:0.8.3"
 
 //  UI
     implementation 'com.google.android.material:material:1.12.0'
@@ -131,7 +135,7 @@ dependencies {
     implementation 'com.github.VipulOG:ebook-reader:0.1.6'
     implementation 'androidx.paging:paging-runtime-ktx:3.2.1'
     implementation 'com.github.eltos:simpledialogfragments:v3.7'
-    implementation 'com.github.AAChartModel:AAChartCore-Kotlin:7.2.1'
+    implementation 'com.github.AAChartModel:AAChartCore-Kotlin:7.2.3'
 
 //  Markwon
     ext.markwon_version = '4.6.2'
@@ -157,7 +161,7 @@ dependencies {
     implementation 'ru.beryukhov:flowreactivenetwork:1.0.4'
     implementation 'ca.gosyer:voyager-navigator:1.0.0-rc07'
     implementation 'com.squareup.logcat:logcat:0.1'
-    implementation 'com.github.inorichi.injekt:injekt-core:65b0440'
+    implementation 'uy.kohesive.injekt:injekt-core:1.16.+'
     implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.12'
     implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.12'
     implementation 'com.squareup.okhttp3:okhttp-dnsoverhttps'

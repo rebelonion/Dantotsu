@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
+import ani.dantotsu.copyToClipboard
 import ani.dantotsu.databinding.ItemCharacterBinding
 import ani.dantotsu.loadImage
 import ani.dantotsu.setAnimation
@@ -55,6 +56,7 @@ class CharacterAdapter(
                     ).toBundle()
                 )
             }
+            itemView.setOnLongClickListener { copyToClipboard(characterList[bindingAdapterPosition].name ?: ""); true }
         }
     }
 }

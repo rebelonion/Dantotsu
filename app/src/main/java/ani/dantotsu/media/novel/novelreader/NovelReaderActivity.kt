@@ -2,6 +2,7 @@ package ani.dantotsu.media.novel.novelreader
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -45,12 +46,17 @@ import ani.dantotsu.tryWith
 import com.google.android.material.slider.Slider
 import com.vipulog.ebookreader.Book
 import com.vipulog.ebookreader.EbookReaderEventListener
+import com.vipulog.ebookreader.EbookReaderView
 import com.vipulog.ebookreader.ReaderError
 import com.vipulog.ebookreader.ReaderFlow
 import com.vipulog.ebookreader.ReaderTheme
 import com.vipulog.ebookreader.RelocationInfo
 import com.vipulog.ebookreader.TocItem
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -190,6 +196,8 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setupViews() {
+        binding.bookReader.useSafeScope(this)
+
         scope.launch { binding.bookReader.openBook(intent.data!!) }
         binding.bookReader.setEbookReaderListener(this)
 
@@ -540,4 +548,42 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
             hideSystemBars()
         }
     }
+}
+
+
+/**
+ * ⚠️ TEMPORARY HOTFIX ⚠️
+ *
+ * This is a hacky workaround to handle crashes in the deprecated ebookreader library.
+ *
+ * Current implementation:
+ * - Uses reflection to access the private `scope` field in `EbookReaderView`.
+ * - Replaces the existing `CoroutineScope` with a new one that includes a
+ *   `CoroutineExceptionHandler`.
+ * - Ensures that uncaught exceptions in coroutines are handled gracefully by showing a snackbar
+ *   with error details.
+ *
+ * TODO:
+ * - This is NOT a long-term solution
+ * - The underlying library is archived and unmaintained
+ * - Schedule migration to an actively maintained library
+ * - Consider alternatives like https://github.com/readium/kotlin-toolkit
+ */
+fun EbookReaderView.useSafeScope(activity: Activity) {
+    runCatching {
+        val scopeField = javaClass.getDeclaredField("scope").apply { isAccessible = true }
+        val currentScope = scopeField.get(this) as CoroutineScope
+        val safeScope = CoroutineScope(
+            SupervisorJob() +
+                    currentScope.coroutineContext.minusKey(Job) +
+                    scopeExceptionHandler(activity)
+        )
+        scopeField.set(this, safeScope)
+    }.onFailure { e ->
+        snackString(e.localizedMessage, activity, e.stackTraceToString())
+    }
+}
+
+private fun scopeExceptionHandler(activity: Activity) = CoroutineExceptionHandler { _, e ->
+    snackString(e.localizedMessage, activity, e.stackTraceToString())
 }

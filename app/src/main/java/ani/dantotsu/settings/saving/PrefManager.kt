@@ -236,6 +236,28 @@ object PrefManager {
         }
     }
 
+    /**
+     * Retrieves all SharedPreferences entries with keys starting with the specified prefix.
+     *
+     * @param prefix The prefix to filter keys.
+     * @return A map containing key-value pairs that match the prefix.
+     */
+    fun getAllCustomValsForMedia(prefix: String): Map<String, Any?> {
+        val prefs = irrelevantPreferences ?: return emptyMap()
+        val allEntries = mutableMapOf<String, Any?>()
+
+        prefs.all.forEach { (key, value) ->
+            if (key.startsWith(prefix)) {
+                allEntries[key] = value
+            }
+        }
+
+        return allEntries
+    }
+
+
+
+
     @Suppress("UNCHECKED_CAST")
     fun <T> getLiveVal(prefName: PrefName, default: T): SharedPreferenceLiveData<T> {
         val pref = getPrefLocation(prefName.data.prefLocation)

@@ -56,6 +56,7 @@
         app:abb_animationInterpolator="@anim/over_shoot"
         app:abb_indicatorAppearance="round"
         app:abb_indicatorLocation="top"
+        app:abb_indicatorMargin="28dp"
         app:abb_selectedTabType="text"
         app:abb_textAppearance="@style/NavBarText"
         app:itemActiveIndicatorStyle="@style/BottomNavBar"

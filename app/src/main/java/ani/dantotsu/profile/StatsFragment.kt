@@ -252,14 +252,14 @@ class StatsFragment :
                 stat?.statistics?.anime?.scores?.map {
                     convertScore(
                         it.score,
-                        stat.mediaListOptions.scoreFormat
+                        stat.mediaListOptions.scoreFormat.toString()
                     )
                 } ?: emptyList()
             } else {
                 stat?.statistics?.manga?.scores?.map {
                     convertScore(
                         it.score,
-                        stat.mediaListOptions.scoreFormat
+                        stat.mediaListOptions.scoreFormat.toString()
                     )
                 } ?: emptyList()
             }

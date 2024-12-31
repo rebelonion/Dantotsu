@@ -8,8 +8,13 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_create_new_activity"
-        android:title="@string/create_new_activity"
+        android:id="@+id/action_share_profile"
+        android:title="@string/share_profile"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_copy_user_id"
+        android:title="@string/copy_user_id"
         app:showAsAction="never" />
 
 </menu>
