@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
@@ -19,7 +20,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.R
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
-import ani.dantotsu.currContext
 import ani.dantotsu.databinding.FragmentNovelExtensionsBinding
 import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.parsers.NovelSources
@@ -34,7 +34,6 @@ import kotlinx.coroutines.launch
 import rx.android.schedulers.AndroidSchedulers
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.util.Collections
 import java.util.Locale
 
 class InstalledNovelExtensionsFragment : Fragment(), SearchQueryHandler {
@@ -48,15 +47,21 @@ class InstalledNovelExtensionsFragment : Fragment(), SearchQueryHandler {
             Toast.makeText(requireContext(), "Source is not configurable", Toast.LENGTH_SHORT)
                 .show()
         },
-        { pkg, forceDelete ->
-            if (isAdded) {  // Check if the fragment is currently added to its activity
-                val context = requireContext()  // Store context in a variable
-                val notificationManager =
-                    context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager  // Initialize NotificationManager once
+        { pkg ->
+            if (isAdded) {
+                novelExtensionManager.uninstallExtension(pkg.pkgName)
+                snackString("Extension uninstalled")
 
-                if (pkg.hasUpdate && !forceDelete) {
+            }
+        },
+        { pkg ->
+            if (isAdded) {
+                val context = requireContext()
+                val notificationManager =
+                    context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                if (pkg.hasUpdate) {
                     novelExtensionManager.updateExtension(pkg)
-                        .observeOn(AndroidSchedulers.mainThread())  // Observe on main thread
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                             { installStep ->
                                 val builder = NotificationCompat.Builder(
@@ -71,7 +76,7 @@ class InstalledNovelExtensionsFragment : Fragment(), SearchQueryHandler {
                             },
                             { error ->
                                 Injekt.get<CrashlyticsInterface>().logException(error)
-                                Logger.log(error)  // Log the error
+                                Logger.log(error)
                                 val builder = NotificationCompat.Builder(
                                     context,
                                     Notifications.CHANNEL_DOWNLOADER_ERROR
@@ -97,8 +102,7 @@ class InstalledNovelExtensionsFragment : Fragment(), SearchQueryHandler {
                             }
                         )
                 } else {
-                    novelExtensionManager.uninstallExtension(pkg.pkgName, currContext() ?: context)
-                    snackString("Extension uninstalled")
+                    snackString("No update available")
                 }
             }
         }, skipIcons
@@ -123,17 +127,10 @@ class InstalledNovelExtensionsFragment : Fragment(), SearchQueryHandler {
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
-                val newList = extensionsAdapter.currentList.toMutableList()
                 val fromPosition = viewHolder.absoluteAdapterPosition
                 val toPosition = target.absoluteAdapterPosition
-                if (fromPosition < toPosition) { //probably need to switch to a recyclerview adapter
-                    for (i in fromPosition until toPosition) {
-                        Collections.swap(newList, i, i + 1)
-                    }
-                } else {
-                    for (i in fromPosition downTo toPosition + 1) {
-                        Collections.swap(newList, i, i - 1)
-                    }
+                val newList = extensionsAdapter.currentList.toMutableList().apply {
+                    add(toPosition, removeAt(fromPosition))
                 }
                 extensionsAdapter.submitList(newList)
                 return true
@@ -195,7 +192,8 @@ class InstalledNovelExtensionsFragment : Fragment(), SearchQueryHandler {
 
     private class NovelExtensionsAdapter(
         private val onSettingsClicked: (NovelExtension.Installed) -> Unit,
-        private val onUninstallClicked: (NovelExtension.Installed, Boolean) -> Unit,
+        private val onUninstallClicked: (NovelExtension.Installed) -> Unit,
+        private val onUpdateClicked: (NovelExtension.Installed) -> Unit,
         val skipIcons: Boolean
     ) : ListAdapter<NovelExtension.Installed, NovelExtensionsAdapter.ViewHolder>(
         DIFF_CALLBACK_INSTALLED
@@ -230,19 +228,18 @@ class InstalledNovelExtensionsFragment : Fragment(), SearchQueryHandler {
                 holder.extensionIconImageView.setImageDrawable(extension.icon)
             }
             if (extension.hasUpdate) {
-                holder.closeTextView.setImageResource(R.drawable.ic_round_sync_24)
+                holder.updateView.isVisible = true
             } else {
-                holder.closeTextView.setImageResource(R.drawable.ic_round_delete_24)
+                holder.updateView.isVisible = false
             }
-            holder.closeTextView.setOnClickListener {
-                onUninstallClicked(extension, false)
+            holder.deleteView.setOnClickListener {
+                onUninstallClicked(extension)
+            }
+            holder.updateView.setOnClickListener {
+                onUpdateClicked(extension)
             }
             holder.settingsImageView.setOnClickListener {
                 onSettingsClicked(extension)
-            }
-            holder.closeTextView.setOnLongClickListener {
-                onUninstallClicked(extension, true)
-                true
             }
         }
 
@@ -263,7 +260,8 @@ class InstalledNovelExtensionsFragment : Fragment(), SearchQueryHandler {
                 view.findViewById(R.id.extensionVersionTextView)
             val settingsImageView: ImageView = view.findViewById(R.id.settingsImageView)
             val extensionIconImageView: ImageView = view.findViewById(R.id.extensionIconImageView)
-            val closeTextView: ImageView = view.findViewById(R.id.closeTextView)
+            val deleteView: ImageView = view.findViewById(R.id.deleteTextView)
+            val updateView: ImageView = view.findViewById(R.id.updateTextView)
         }
 
         companion object {

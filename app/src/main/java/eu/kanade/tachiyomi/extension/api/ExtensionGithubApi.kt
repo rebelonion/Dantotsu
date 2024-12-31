@@ -52,7 +52,7 @@ internal class ExtensionGithubApi {
                     sources = it.sources?.toAnimeExtensionSources().orEmpty(),
                     apkName = it.apk,
                     repository = repository,
-                    iconUrl = "${repository}/icon/${it.pkg}.png",
+                    iconUrl = "${repository.removeSuffix("/index.min.json")}/icon/${it.pkg}.png",
                 )
             }
     }
@@ -135,7 +135,7 @@ internal class ExtensionGithubApi {
                     sources = it.sources?.toMangaExtensionSources().orEmpty(),
                     apkName = it.apk,
                     repository = repository,
-                    iconUrl = "${repository}/icon/${it.pkg}.png",
+                    iconUrl = "${repository.removeSuffix("/index.min.json")}/icon/${it.pkg}.png",
                 )
             }
     }

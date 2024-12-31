@@ -73,11 +73,23 @@
         tools:ignore="ContentDescription"/>
 
     <ImageView
-        android:id="@+id/closeTextView"
+        android:id="@+id/updateTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="0"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/ic_round_sync_24"
+        app:tint="?attr/colorOnBackground"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/deleteTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="0"
+        android:layout_marginEnd="10dp"
         android:src="@drawable/ic_round_delete_24"
         app:tint="?attr/colorOnBackground"
         tools:ignore="ContentDescription" />

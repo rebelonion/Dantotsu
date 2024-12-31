@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 suspend fun getUserId(context: Context, block: () -> Unit) {
-    if (!Anilist.initialized) {
+    if (!Anilist.initialized && PrefManager.getVal<String>(PrefName.AnilistToken) != "") {
         if (Anilist.query.getUserData()) {
             tryWithSuspend {
                 if (MAL.token != null && !MAL.query.getUserData())

@@ -1,5 +1,6 @@
 package ani.dantotsu.settings
 
+import android.content.Context
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import ani.dantotsu.R
 import ani.dantotsu.databinding.BottomSheetAddRepositoryBinding
 import ani.dantotsu.databinding.ItemRepoBinding
 import ani.dantotsu.media.MediaType
+import ani.dantotsu.util.customAlertDialog
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.viewbinding.BindableItem
 
@@ -72,8 +74,12 @@ class AddRepositoryBottomSheet : BottomSheetDialogFragment() {
             val input = binding.repositoryInput.text.toString()
             val error = isValidUrl(input)
             if (error == null) {
-                onRepositoryAdded?.invoke(input, mediaType)
-                dismiss()
+                context?.let { context ->
+                    addRepoWarning(context) {
+                        onRepositoryAdded?.invoke(input, mediaType)
+                        dismiss()
+                    }
+                }
             } else {
                 binding.repositoryInput.error = error
             }
@@ -86,11 +92,16 @@ class AddRepositoryBottomSheet : BottomSheetDialogFragment() {
         binding.repositoryInput.setOnEditorActionListener { textView, action, keyEvent ->
             if (action == EditorInfo.IME_ACTION_DONE ||
                 (keyEvent?.action == KeyEvent.ACTION_UP && keyEvent.keyCode == KeyEvent.KEYCODE_ENTER)) {
-                if (!textView.text.isNullOrBlank()) {
-                    val error = isValidUrl(textView.text.toString())
+                val url = textView.text.toString()
+                if (url.isNotBlank()) {
+                    val error = isValidUrl(url)
                     if (error == null) {
-                        onRepositoryAdded?.invoke(textView.text.toString(), mediaType)
-                        dismiss()
+                        context?.let { context ->
+                            addRepoWarning(context) {
+                                onRepositoryAdded?.invoke(url, mediaType)
+                                dismiss()
+                            }
+                        }
                         return@setOnEditorActionListener true
                     } else {
                         binding.repositoryInput.error = error
@@ -121,6 +132,16 @@ class AddRepositoryBottomSheet : BottomSheetDialogFragment() {
     }
 
     companion object {
+        fun addRepoWarning(context: Context, onRepositoryAdded: () -> Unit) {
+            context.customAlertDialog()
+                .setTitle(R.string.warning)
+                .setMessage(R.string.add_repository_warning)
+                .setPosButton(R.string.ok) {
+                    onRepositoryAdded.invoke()
+                }
+                .setNegButton(R.string.cancel) { }
+                .show()
+        }
         fun newInstance(
             mediaType: MediaType,
             repositories: List<String>,

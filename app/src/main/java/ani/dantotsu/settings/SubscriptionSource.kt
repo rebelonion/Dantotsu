@@ -48,7 +48,8 @@ class SubscriptionSource(
 
         binding.extensionPinImageView.visibility = View.GONE
         binding.extensionVersionTextView.visibility = View.GONE
-        binding.closeTextView.visibility = View.GONE
+        binding.deleteTextView.visibility = View.GONE
+        binding.updateTextView.visibility = View.GONE
         binding.settingsImageView.visibility = View.GONE
     }
 
