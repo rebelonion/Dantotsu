@@ -971,15 +971,16 @@
     <string name="proxy_setup_desc">قم بتكوين وكيل Socks5 الخاص بك</string>
     <string name="clear_stored_episode">مسح بيانات الحلقة المخزنة</string>
     <string name="clear_stored_chapter">مسح بيانات الفصل المخزنة</string>
-    <string name="use_additional_codec">Additional Codec Support</string>
-    <string name="textview_sub">Textview Subtitles (Experimental)</string>
+    <string name="use_additional_codec">دعم إضافي لترميز الفيديوهات (codec)</string>
+    <string name="textview_sub">عرض نص الترجمة (تجريبي)</string>
     <string name="textview_sub_stroke">Subtitle Stroke</string>
-    <string name="textview_sub_bottom_margin">Bottom Margin</string>
-    <string name="add_repository">Add Repository</string>
-    <string name="add_repository_desc">A repository link should look like this: https://raw.githubusercontent.com/username/repo/branch/index.min.json</string>
-    <string name="current_repositories">Current Repositories</string>
-    <string name="add_repository_warning">Warning: Extensions from the repository can run arbitrary code on your device. Only use repositories you trust. \n\nBy adding a repository, you agree to: \n\n1. Not use the app for viewing or distributing copyrighted content. \n2. Not use the app for any illegal activities. \n3. Not use the app for any activities that violate the terms of service of the content providers. \n\nThe app or it\'s maintainer are not affiliated in any way with extension providers. The developers are not responsible for any damages caused by the app. \n\nBy adding a repository, you agree to these terms.</string>
-    <string name="privacy_policy">Privacy Policy</string>
-    <string name="privacy_policy_desc">Read our privacy policy</string>
-    <string name="failed_to_load">Failed to load</string>
+    <string name="textview_sub_bottom_margin">المسافة السفلية</string>
+    <string name="add_repository">إضافة مستودع</string>
+    <string name="add_repository_desc">يجب أن يبدو رابط المستودع بهذا الشكل:
+https://raw.githubusercontent.com/username/repo/branch/index.min.json</string>
+    <string name="current_repositories">المستودعات الحالية</string>
+    <string name="add_repository_warning">تحذير: يمكن للامتدادات من المستودع تشغيل تعليمات برمجية عشوائية على جهازك. استخدم المستودعات التي تثق بها فقط. \n\nمن خلال إضافة مستودع، فإنك توافق على:\n\n1. لا تستخدم التطبيق لعرض أو توزيع المحتوى المحمي بحقوق الطبع والنشر. \n 2. لا تستخدم التطبيق لأي أنشطة غير قانونية. \n3. لا تستخدم التطبيق لأي أنشطة تنتهك شروط خدمة مقدمي المحتوى.\n\nلا يرتبط التطبيق أو القائمون على صيانته بأي شكل من الأشكال بموفري الامتدادات. ولا يتحمل المطورون مسؤولية أي أضرار ناجمة عن التطبيق.\n\nعند إضافة مستودع، فإنك توافق على هذه الشروط.</string>
+    <string name="privacy_policy">سياسة الخصوصية</string>
+    <string name="privacy_policy_desc">اقرأ سياسة الخصوصية الخاصة بنا</string>
+    <string name="failed_to_load">فشل التحميل</string>
 </resources>
