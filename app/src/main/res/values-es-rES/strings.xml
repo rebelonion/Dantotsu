@@ -970,4 +970,7 @@
     <string name="textview_sub">Textview Subtitles (Experimental)</string>
     <string name="textview_sub_stroke">Subtitle Stroke</string>
     <string name="textview_sub_bottom_margin">Bottom Margin</string>
+    <string name="add_repository">Add Repository</string>
+    <string name="add_repository_desc">A repository link should look like this: https://raw.githubusercontent.com/username/repo/branch/index.min.json</string>
+    <string name="current_repositories">Current Repositories</string>
 </resources>
