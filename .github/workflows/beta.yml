@@ -146,7 +146,6 @@ jobs:
         contributor_colors["ibo"]="#ff9b46"
         contributor_colors["aayush262"]="#5d689d"
         contributor_colors["Sadwhy"]="#ff7e95"
-        contributor_colors["rebelonion"]="#d4e5ed"
 
         hex_to_decimal() { printf '%d' "0x${1#"#"}"; }
         
