@@ -89,13 +89,6 @@ internal class ExtensionGithubApi {
                             .toAnimeExtensions(it)
                     }
 
-                    // Sanity check - a small number of extensions probably means something broke
-                    // with the repo generator
-                    //if (repoExtensions.size < 10) {
-                    //    throw Exception()
-                    //}
-                    // No official repo now so this won't be needed anymore. User-made repo can have less than 10 extensions
-
                     extensions.addAll(repoExtensions)
                 } catch (e: Throwable) {
                     Logger.log("Failed to get extensions from GitHub")
@@ -156,13 +149,18 @@ internal class ExtensionGithubApi {
                 PrefManager.getVal<Set<String>>(PrefName.MangaExtensionRepos).toMutableList()
 
             repos.forEach {
+                val repoUrl = if (it.contains("index.min.json")) {
+                    it
+                } else {
+                    "$it${if (it.endsWith('/')) "" else "/"}index.min.json"
+                }
                 try {
                     val githubResponse = try {
                         networkService.client
-                            .newCall(GET("${it}/index.min.json"))
+                            .newCall(GET(repoUrl))
                             .awaitSuccess()
                     } catch (e: Throwable) {
-                        Logger.log("Failed to get repo: $it")
+                        Logger.log("Failed to get repo: $repoUrl")
                         Logger.log(e)
                         null
                     }
@@ -178,13 +176,6 @@ internal class ExtensionGithubApi {
                             .parseAs<List<ExtensionJsonObject>>()
                             .toMangaExtensions(it)
                     }
-
-                    // Sanity check - a small number of extensions probably means something broke
-                    // with the repo generator
-                    //if (repoExtensions.size < 10) {
-                    //    throw Exception()
-                    //}
-                    // No official repo now so this won't be needed anymore. User made repo can have less than 10 extensions.
 
                     extensions.addAll(repoExtensions)
                 } catch (e: Throwable) {
@@ -203,8 +194,11 @@ internal class ExtensionGithubApi {
 
     private fun fallbackRepoUrl(repoUrl: String): String? {
         var fallbackRepoUrl = "https://gcore.jsdelivr.net/gh/"
-        val strippedRepoUrl =
-            repoUrl.removePrefix("https://").removePrefix("http://").removeSuffix("/")
+        val strippedRepoUrl = repoUrl
+            .removePrefix("https://")
+            .removePrefix("http://")
+            .removeSuffix("/")
+            .removeSuffix("/index.min.json")
         val repoUrlParts = strippedRepoUrl.split("/")
         if (repoUrlParts.size < 3) {
             return null

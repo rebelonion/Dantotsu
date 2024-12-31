@@ -27,7 +27,6 @@ import ani.dantotsu.restartApp
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
-import ani.dantotsu.others.CustomBottomDialog
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.util.customAlertDialog
 import eu.kanade.domain.base.BasePreferences
@@ -117,14 +116,13 @@ class SettingsExtensionsActivity : AppCompatActivity() {
             }
 
             fun processUserInput(input: String, mediaType: MediaType, view: ViewGroup) {
-                val entry =
-                    if (input.endsWith("/") || input.endsWith("index.min.json")) input.substring(
-                        0,
-                        input.lastIndexOf("/")
-                    ) else input
+                val validLink = if (input.contains("github.com") && input.contains("blob")) {
+                    input.replace("github.com", "raw.githubusercontent.com")
+                        .replace("/blob/", "/")
+                } else input
                 if (mediaType == MediaType.ANIME) {
                     val anime =
-                        PrefManager.getVal<Set<String>>(PrefName.AnimeExtensionRepos).plus(entry)
+                        PrefManager.getVal<Set<String>>(PrefName.AnimeExtensionRepos).plus(validLink)
                     PrefManager.setVal(PrefName.AnimeExtensionRepos, anime)
                     CoroutineScope(Dispatchers.IO).launch {
                         animeExtensionManager.findAvailableExtensions()
@@ -133,7 +131,7 @@ class SettingsExtensionsActivity : AppCompatActivity() {
                 }
                 if (mediaType == MediaType.MANGA) {
                     val manga =
-                        PrefManager.getVal<Set<String>>(PrefName.MangaExtensionRepos).plus(entry)
+                        PrefManager.getVal<Set<String>>(PrefName.MangaExtensionRepos).plus(validLink)
                     PrefManager.setVal(PrefName.MangaExtensionRepos, manga)
                     CoroutineScope(Dispatchers.IO).launch {
                         mangaExtensionManager.findAvailableExtensions()
@@ -142,25 +140,6 @@ class SettingsExtensionsActivity : AppCompatActivity() {
                 }
             }
 
-            fun processEditorAction(
-                dialog: AlertDialog,
-                editText: EditText,
-                mediaType: MediaType,
-                view: ViewGroup
-            ) {
-                editText.setOnEditorActionListener { textView, action, keyEvent ->
-                    if (action == EditorInfo.IME_ACTION_SEARCH || action == EditorInfo.IME_ACTION_DONE || (keyEvent?.action == KeyEvent.ACTION_UP && keyEvent.keyCode == KeyEvent.KEYCODE_ENTER)) {
-                        return@setOnEditorActionListener if (textView.text.isNullOrBlank()) {
-                            false
-                        } else {
-                            processUserInput(textView.text.toString(), mediaType, view)
-                            dialog.dismiss()
-                            true
-                        }
-                    }
-                    false
-                }
-            }
             settingsRecyclerView.adapter = SettingsAdapter(
                 arrayListOf(
                     Settings(
@@ -169,31 +148,19 @@ class SettingsExtensionsActivity : AppCompatActivity() {
                         desc = getString(R.string.anime_add_repository_desc),
                         icon = R.drawable.ic_github,
                         onClick = {
-                            val dialogView = DialogUserAgentBinding.inflate(layoutInflater)
-                            val editText = dialogView.userAgentTextBox.apply {
-                                hint = getString(R.string.anime_add_repository)
-                            }
-                            context.customAlertDialog().apply {
-                                setTitle(R.string.anime_add_repository)
-                                setCustomView(dialogView.root)
-                                setPosButton(getString(R.string.ok)) {
-                                    if (!editText.text.isNullOrBlank()) processUserInput(
-                                        editText.text.toString(),
-                                        MediaType.ANIME,
-                                        it.attachView
-                                    )
+                            val animeRepos = PrefManager.getVal<Set<String>>(PrefName.AnimeExtensionRepos)
+                            AddRepositoryBottomSheet.newInstance(
+                                MediaType.ANIME,
+                                animeRepos.toList(),
+                                onRepositoryAdded = { input, mediaType ->
+                                    processUserInput(input, mediaType, it.attachView)
+                                },
+                                onRepositoryRemoved = { item ->
+                                    val repos = PrefManager.getVal<Set<String>>(PrefName.AnimeExtensionRepos).minus(item)
+                                    PrefManager.setVal(PrefName.AnimeExtensionRepos, repos)
+                                    setExtensionOutput(it.attachView, MediaType.ANIME)
                                 }
-                                setNegButton(getString(R.string.cancel))
-                                attach { dialog ->
-                                    processEditorAction(
-                                        dialog,
-                                        editText,
-                                        MediaType.ANIME,
-                                        it.attachView
-                                    )
-                                }
-                                show()
-                            }
+                            ).show(supportFragmentManager, "add_repo")
                         },
                         attach = {
                             setExtensionOutput(it.attachView, MediaType.ANIME)
@@ -205,31 +172,19 @@ class SettingsExtensionsActivity : AppCompatActivity() {
                         desc = getString(R.string.manga_add_repository_desc),
                         icon = R.drawable.ic_github,
                         onClick = {
-                            val dialogView = DialogUserAgentBinding.inflate(layoutInflater)
-                            val editText = dialogView.userAgentTextBox.apply {
-                                hint = getString(R.string.manga_add_repository)
-                            }
-                            context.customAlertDialog().apply {
-                                setTitle(R.string.manga_add_repository)
-                                setCustomView(dialogView.root)
-                                setPosButton(R.string.ok) {
-                                    if (!editText.text.isNullOrBlank()) processUserInput(
-                                        editText.text.toString(),
-                                        MediaType.MANGA,
-                                        it.attachView
-                                    )
+                            val mangaRepos = PrefManager.getVal<Set<String>>(PrefName.MangaExtensionRepos)
+                            AddRepositoryBottomSheet.newInstance(
+                                MediaType.MANGA,
+                                mangaRepos.toList(),
+                                onRepositoryAdded = { input, mediaType ->
+                                    processUserInput(input, mediaType, it.attachView)
+                                },
+                                onRepositoryRemoved = { item ->
+                                    val repos = PrefManager.getVal<Set<String>>(PrefName.MangaExtensionRepos).minus(item)
+                                    PrefManager.setVal(PrefName.MangaExtensionRepos, repos)
+                                    setExtensionOutput(it.attachView, MediaType.MANGA)
                                 }
-                                setNegButton(R.string.cancel)
-                                attach { dialog ->
-                                    processEditorAction(
-                                        dialog,
-                                        editText,
-                                        MediaType.MANGA,
-                                        it.attachView
-                                    )
-                                }
-                            }.show()
-
+                            ).show(supportFragmentManager, "add_repo")
                         },
                         attach = {
                             setExtensionOutput(it.attachView, MediaType.MANGA)

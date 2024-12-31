@@ -116,7 +116,8 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="application/epub+zip" />
+                <data android:host="*"/>
+                <data android:mimeType="application/epub+zip"/>
                 <data android:mimeType="application/x-mobipocket-ebook" />
                 <data android:mimeType="application/vnd.amazon.ebook" />
                 <data android:mimeType="application/fb2+zip" />
@@ -374,24 +375,30 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.Main" />
-
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <data android:scheme="content" />
                 <data android:mimeType="*/*" />
                 <data android:pathPattern=".*\\.ani" />
                 <data android:pathPattern=".*\\.sani" />
                 <data android:host="*" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Support both schemes -->
+                <data android:scheme="tachiyomi"/>
+                <data android:host="add-repo"/>
+                <data android:scheme="aniyomi"/>
+                <data android:host="add-repo"/>
             </intent-filter>
         </activity>
         <activity

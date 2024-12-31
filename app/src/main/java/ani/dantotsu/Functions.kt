@@ -91,7 +91,6 @@ import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.BuildConfig.APPLICATION_ID
 import ani.dantotsu.connections.anilist.Genre
 import ani.dantotsu.connections.anilist.api.FuzzyDate
-import ani.dantotsu.connections.bakaupdates.MangaUpdates
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.databinding.ItemCountDownBinding
 import ani.dantotsu.media.Media
@@ -106,7 +105,6 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.internal.PreferenceKeystore
 import ani.dantotsu.settings.saving.internal.PreferenceKeystore.Companion.generateSalt
-import ani.dantotsu.util.CountUpTimer
 import ani.dantotsu.util.Logger
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
@@ -1013,47 +1011,10 @@ fun countDown(media: Media, view: ViewGroup) {
     }
 }
 
-fun sinceWhen(media: Media, view: ViewGroup) {
-    if (media.status != "RELEASING" && media.status != "HIATUS") return
-    CoroutineScope(Dispatchers.IO).launch {
-        MangaUpdates().search(media.mangaName(), media.startDate)?.let {
-            val latestChapter = MangaUpdates.getLatestChapter(view.context, it)
-            val timeSince = (System.currentTimeMillis() -
-                    (it.metadata.series.lastUpdated!!.timestamp * 1000)) / 1000
-
-            withContext(Dispatchers.Main) {
-                val v =
-                    ItemCountDownBinding.inflate(LayoutInflater.from(view.context), view, false)
-                view.addView(v.root, 0)
-                v.mediaCountdownText.text =
-                    currActivity()?.getString(R.string.chapter_release_timeout, latestChapter)
-
-                object : CountUpTimer(86400000) {
-                    override fun onTick(second: Int) {
-                        val a = second + timeSince
-                        v.mediaCountdown.text = currActivity()?.getString(
-                            R.string.time_format,
-                            a / 86400,
-                            a % 86400 / 3600,
-                            a % 86400 % 3600 / 60,
-                            a % 86400 % 3600 % 60
-                        )
-                    }
-
-                    override fun onFinish() {
-                        // The legend will never die.
-                    }
-                }.start()
-            }
-        }
-    }
-}
-
 fun displayTimer(media: Media, view: ViewGroup) {
     when {
         media.anime != null -> countDown(media, view)
-        media.format == "MANGA" || media.format == "ONE_SHOT" -> sinceWhen(media, view)
-        else -> {} // No timer yet
+        else -> {}
     }
 }
 
