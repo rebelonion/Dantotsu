@@ -6,6 +6,7 @@ import ani.dantotsu.media.MediaType
 import ani.dantotsu.snackString
 import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.extension.InstallStep
+import eu.kanade.tachiyomi.extension.api.ExtensionGithubApi
 import eu.kanade.tachiyomi.extension.util.ExtensionInstallReceiver
 import eu.kanade.tachiyomi.extension.util.ExtensionInstaller
 import eu.kanade.tachiyomi.extension.util.ExtensionLoader
@@ -22,7 +23,7 @@ class NovelExtensionManager(private val context: Context) {
     /**
      * API where all the available Novel extensions can be found.
      */
-    private val api = NovelExtensionGithubApi()
+    private val api = ExtensionGithubApi()
 
     /**
      * The installer which installs, updates and uninstalls the Novel extensions.
@@ -70,7 +71,7 @@ class NovelExtensionManager(private val context: Context) {
      */
     suspend fun findAvailableExtensions() {
         val extensions: List<NovelExtension.Available> = try {
-            api.findExtensions()
+            api.findNovelExtensions()
         } catch (e: Exception) {
             Logger.log("Error finding extensions: ${e.message}")
             withUIContext { snackString("Failed to get Novel extensions list") }
@@ -119,7 +120,7 @@ class NovelExtensionManager(private val context: Context) {
      * @param extension The anime extension to be installed.
      */
     fun installExtension(extension: NovelExtension.Available): Observable<InstallStep> {
-        return installer.downloadAndInstall(api.getApkUrl(extension), extension.pkgName,
+        return installer.downloadAndInstall(api.getNovelApkUrl(extension), extension.pkgName,
             extension.name, MediaType.NOVEL)
     }
 

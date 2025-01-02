@@ -394,11 +394,10 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <!-- Support both schemes -->
+                <data android:host="add-repo"/>
                 <data android:scheme="tachiyomi"/>
-                <data android:host="add-repo"/>
                 <data android:scheme="aniyomi"/>
-                <data android:host="add-repo"/>
+                <data android:scheme="novelyomi"/>
             </intent-filter>
         </activity>
         <activity

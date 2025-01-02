@@ -1,18 +1,12 @@
 package ani.dantotsu.settings
 
-import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.HapticFeedbackConstants
-import android.view.KeyEvent
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
 import android.widget.AutoCompleteTextView
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
@@ -20,10 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.R
-import ani.dantotsu.copyToClipboard
 import ani.dantotsu.databinding.ActivityExtensionsBinding
-import ani.dantotsu.databinding.DialogRepositoriesBinding
-import ani.dantotsu.databinding.ItemRepositoryBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.media.MediaType
 import ani.dantotsu.navBarHeight
@@ -37,19 +28,10 @@ import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.util.customAlertDialog
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
-import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import uy.kohesive.injekt.injectLazy
 import java.util.Locale
 
 class ExtensionsActivity : AppCompatActivity() {
     lateinit var binding: ActivityExtensionsBinding
-
-    private val animeExtensionManager: AnimeExtensionManager by injectLazy()
-    private val mangaExtensionManager: MangaExtensionManager by injectLazy()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -123,6 +105,9 @@ class ExtensionsActivity : AppCompatActivity() {
                     }
                     if (tab.text?.contains("Manga") == true) {
                         generateRepositoryButton(MediaType.MANGA)
+                    }
+                    if (tab.text?.contains("Novels") == true) {
+                        generateRepositoryButton(MediaType.NOVEL)
                     }
                 }
 
@@ -199,136 +184,28 @@ class ExtensionsActivity : AppCompatActivity() {
         }
     }
 
-    private fun processUserInput(input: String, mediaType: MediaType) {
-        val entry = if (input.endsWith("/") || input.endsWith("index.min.json"))
-            input.substring(0, input.lastIndexOf("/")) else input
-        if (mediaType == MediaType.ANIME) {
-            val anime =
-                PrefManager.getVal<Set<String>>(PrefName.AnimeExtensionRepos).plus(entry)
-            PrefManager.setVal(PrefName.AnimeExtensionRepos, anime)
-            CoroutineScope(Dispatchers.IO).launch {
-                animeExtensionManager.findAvailableExtensions()
-            }
-        }
-        if (mediaType == MediaType.MANGA) {
-            val manga =
-                PrefManager.getVal<Set<String>>(PrefName.MangaExtensionRepos).plus(entry)
-            PrefManager.setVal(PrefName.MangaExtensionRepos, manga)
-            CoroutineScope(Dispatchers.IO).launch {
-                mangaExtensionManager.findAvailableExtensions()
-            }
-        }
-    }
-
-    private fun getSavedRepositories(repoInventory: ViewGroup, type: MediaType) {
-        repoInventory.removeAllViews()
-        val prefName: PrefName? = when (type) {
-            MediaType.ANIME -> {
-                PrefName.AnimeExtensionRepos
-            }
-
-            MediaType.MANGA -> {
-                PrefName.MangaExtensionRepos
-            }
-
-            else -> {
-                null
-            }
-        }
-        prefName?.let { repoList ->
-            PrefManager.getVal<Set<String>>(repoList).forEach { item ->
-                val view = ItemRepositoryBinding.inflate(
-                    LayoutInflater.from(repoInventory.context), repoInventory, true
-                )
-                view.repositoryItem.text = item.removePrefix("https://raw.githubusercontent.com")
-                view.repositoryItem.setOnClickListener {
-                    customAlertDialog().apply {
-                        setTitle(R.string.rem_repository)
-                        setMessage(item)
-                        setPosButton(R.string.ok) {
-                            val repos = PrefManager.getVal<Set<String>>(prefName).minus(item)
-                            PrefManager.setVal(prefName, repos)
-                            repoInventory.removeView(view.root)
-                            CoroutineScope(Dispatchers.IO).launch {
-                                when (type) {
-                                    MediaType.ANIME -> {
-                                        animeExtensionManager.findAvailableExtensions()
-                                    }
-
-                                    MediaType.MANGA -> {
-                                        mangaExtensionManager.findAvailableExtensions()
-                                    }
-
-                                    else -> {}
-                                }
-                            }
-                        }
-                        setNegButton(R.string.cancel)
-                        show()
-                    }
-                }
-                view.repositoryItem.setOnLongClickListener {
-                    it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-                    copyToClipboard(item, true)
-                    true
-                }
-            }
-        }
-    }
-
-    private fun processEditorAction(editText: EditText, mediaType: MediaType) {
-        editText.setOnEditorActionListener { textView, action, keyEvent ->
-            if (action == EditorInfo.IME_ACTION_SEARCH || action == EditorInfo.IME_ACTION_DONE ||
-                (keyEvent?.action == KeyEvent.ACTION_UP
-                        && keyEvent.keyCode == KeyEvent.KEYCODE_ENTER)
-            ) {
-                return@setOnEditorActionListener if (textView.text.isNullOrBlank()) {
-                    false
-                } else {
-                    processUserInput(textView.text.toString(), mediaType)
-                    true
-                }
-            }
-            false
-        }
-    }
-
     private fun generateRepositoryButton(type: MediaType) {
-        val hintResource: Int? = when (type) {
-            MediaType.ANIME -> {
-                R.string.anime_add_repository
-            }
-
-            MediaType.MANGA -> {
-                R.string.manga_add_repository
-            }
-
-            else -> {
-                null
-            }
-        }
-        hintResource?.let { res ->
-            binding.openSettingsButton.setOnClickListener {
-                val dialogView = DialogRepositoriesBinding.inflate(
-                    LayoutInflater.from(binding.openSettingsButton.context), null, false
-                )
-                dialogView.repositoryTextBox.hint = getString(res)
-                dialogView.repoInventory.apply {
-                    getSavedRepositories(this, type)
+        binding.openSettingsButton.setOnClickListener {
+            val repos: Set<String> = when (type) {
+                MediaType.ANIME -> {
+                    PrefManager.getVal(PrefName.AnimeExtensionRepos)
                 }
-                processEditorAction(dialogView.repositoryTextBox, type)
-                customAlertDialog().apply {
-                    setTitle(R.string.edit_repositories)
-                    setCustomView(dialogView.root)
-                    setPosButton(R.string.add_list) {
-                        if (!dialogView.repositoryTextBox.text.isNullOrBlank()) {
-                            processUserInput(dialogView.repositoryTextBox.text.toString(), type)
-                        }
-                    }
-                    setNegButton(R.string.close)
-                    show()
+
+                MediaType.MANGA -> {
+                    PrefManager.getVal(PrefName.MangaExtensionRepos)
+                }
+
+                MediaType.NOVEL -> {
+                    PrefManager.getVal(PrefName.NovelExtensionRepos)
                 }
             }
+            AddRepositoryBottomSheet.newInstance(
+                type,
+                repos.toList(),
+                AddRepositoryBottomSheet::addRepo,
+                AddRepositoryBottomSheet::removeRepo
+
+            ).show(supportFragmentManager, "add_repo")
         }
     }
 }
