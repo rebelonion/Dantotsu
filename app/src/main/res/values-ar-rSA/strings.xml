@@ -786,6 +786,7 @@
     <string name="placeholder">مثبت</string>
     <string name="anime_add_repository">إضافة مستودع انمي</string>
     <string name="manga_add_repository">إضافة مستودع مانجا</string>
+    <string name="novel_add_repository">Add Novel Repo</string>
     <string name="edit_repositories">تعديل المستودعات</string>
     <string name="rem_repository">حذف مستودع؟</string>
     <string name="trending_movies">أفلام شائعة</string>
@@ -851,6 +852,7 @@
     <string name="adult_only_content_desc">عرض محتوى البالغين فقط في صفحة الاستكشاف</string>
     <string name="anime_add_repository_desc">أضف الامتدادات الخاصة بالانمي من مصادر مختلفة</string>
     <string name="manga_add_repository_desc">أضف الامتدادات الخاصة بالمانجا من مصادر مختلفة</string>
+    <string name="novel_add_repository_desc">Add Novel Extensions from various sources</string>
     <string name="user_agent_desc">قم بتغيير وكيل المستخدم الافتراضي الخاص بك</string>
     <string name="force_legacy_installer_desc">استخدم المثبت القديم لتثبيت الامتدادت (لهواتف الاندرويد القديمة)</string>
     <string name="skip_loading_extension_icons_desc">لا تقم بتحميل أيقونات الامتدادات على صفحة الامتدادات</string>
@@ -976,8 +978,7 @@
     <string name="textview_sub_stroke">Subtitle Stroke</string>
     <string name="textview_sub_bottom_margin">المسافة السفلية</string>
     <string name="add_repository">إضافة مستودع</string>
-    <string name="add_repository_desc">يجب أن يبدو رابط المستودع بهذا الشكل:
-https://raw.githubusercontent.com/username/repo/branch/index.min.json</string>
+    <string name="add_repository_desc">A repository link should look like this: https://raw.githubusercontent.com/username/repo/branch/index.min.json\nOr: username/repo/branch</string>
     <string name="current_repositories">المستودعات الحالية</string>
     <string name="add_repository_warning">تحذير: يمكن للامتدادات من المستودع تشغيل تعليمات برمجية عشوائية على جهازك. استخدم المستودعات التي تثق بها فقط. \n\nمن خلال إضافة مستودع، فإنك توافق على:\n\n1. لا تستخدم التطبيق لعرض أو توزيع المحتوى المحمي بحقوق الطبع والنشر. \n 2. لا تستخدم التطبيق لأي أنشطة غير قانونية. \n3. لا تستخدم التطبيق لأي أنشطة تنتهك شروط خدمة مقدمي المحتوى.\n\nلا يرتبط التطبيق أو القائمون على صيانته بأي شكل من الأشكال بموفري الامتدادات. ولا يتحمل المطورون مسؤولية أي أضرار ناجمة عن التطبيق.\n\nعند إضافة مستودع، فإنك توافق على هذه الشروط.</string>
     <string name="privacy_policy">سياسة الخصوصية</string>
