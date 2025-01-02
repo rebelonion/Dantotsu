@@ -783,6 +783,7 @@
     <string name="placeholder">प्लेसहोल्डर</string>
     <string name="anime_add_repository">एनिमे रेपो जोड़ें</string>
     <string name="manga_add_repository">मंगा रेपो जोड़ें</string>
+    <string name="novel_add_repository">Add Novel Repo</string>
     <string name="edit_repositories">रेपोजिटरी संपादित करें</string>
     <string name="rem_repository">रेपोजिटरी हटाएं?</string>
     <string name="trending_movies">ट्रेंडिंग मूवीज़</string>
@@ -848,6 +849,7 @@
     <string name="adult_only_content_desc">अन्वेषण पृष्ठ में केवल वयस्क सामग्री दिखाएं</string>
     <string name="anime_add_repository_desc">विभिन्न स्रोतों से एनिमे एक्सटेंशन जोड़ें</string>
     <string name="manga_add_repository_desc">विभिन्न स्रोतों से मंगा एक्सटेंशन जोड़ें</string>
+    <string name="novel_add_repository_desc">Add Novel Extensions from various sources</string>
     <string name="user_agent_desc">अपने डिफ़ॉल्ट उपयोगकर्ता एजेंट को बदलें</string>
     <string name="force_legacy_installer_desc">पुराने एंड्रॉयड फोनों के लिए पुराने इंस्टॉलर का उपयोग करें (पुराने एक्सटेंशन्स को इंस्टॉल करने के लिए)</string>
     <string name="skip_loading_extension_icons_desc">एक्सटेंशन पेज पर एक्सटेंशन के आइकन लोड न करें</string>
@@ -973,7 +975,7 @@
     <string name="textview_sub_stroke">Subtitle Stroke</string>
     <string name="textview_sub_bottom_margin">Bottom Margin</string>
     <string name="add_repository">Add Repository</string>
-    <string name="add_repository_desc">A repository link should look like this: https://raw.githubusercontent.com/username/repo/branch/index.min.json</string>
+    <string name="add_repository_desc">A repository link should look like this: https://raw.githubusercontent.com/username/repo/branch/index.min.json\nOr: username/repo/branch</string>
     <string name="current_repositories">Current Repositories</string>
     <string name="add_repository_warning">Warning: Extensions from the repository can run arbitrary code on your device. Only use repositories you trust. \n\nBy adding a repository, you agree to: \n\n1. Not use the app for viewing or distributing copyrighted content. \n2. Not use the app for any illegal activities. \n3. Not use the app for any activities that violate the terms of service of the content providers. \n\nThe app or it\'s maintainer are not affiliated in any way with extension providers. The developers are not responsible for any damages caused by the app. \n\nBy adding a repository, you agree to these terms.</string>
     <string name="privacy_policy">Privacy Policy</string>
