@@ -136,7 +136,7 @@ jobs:
         declare -A additional_info
         additional_info["ibo"]="\n Discord: <@951737931159187457>\n AniList: [takarealist112](<https://anilist.co/user/5790266/>)"
         additional_info["aayush262"]="\n Discord: <@918825160654598224>\n AniList: [aayush262](<https://anilist.co/user/5144645/>)"
-        additional_info["rebelonion"]="\n Discord: <@714249925248024617>\n AniList: [rebelonion](<https://anilist.co/user/6077251/>)\n PornHub: [rebelonion](<https://www.cornhub.com/model/rebelonion>)"
+        additional_info["rebel onion"]="\n Discord: <@714249925248024617>\n AniList: [rebelonion](<https://anilist.co/user/6077251/>)\n PornHub: [rebelonion](<https://www.cornhub.com/model/rebelonion>)"
         additional_info["Ankit Grai"]="\n Discord: <@1125628254330560623>\n AniList: [bheshnarayan](<https://anilist.co/user/6417303/>)"
         
         # Decimal color codes for contributors
@@ -146,7 +146,6 @@ jobs:
         contributor_colors["ibo"]="#ff9b46"
         contributor_colors["aayush262"]="#5d689d"
         contributor_colors["Sadwhy"]="#ff7e95"
-        contributor_colors["rebelonion"]="#d4e5ed"
 
         hex_to_decimal() { printf '%d' "0x${1#"#"}"; }
         
