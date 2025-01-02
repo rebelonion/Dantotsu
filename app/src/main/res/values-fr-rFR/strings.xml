@@ -784,6 +784,7 @@
     <string name="placeholder">Espace réservé</string>
     <string name="anime_add_repository">Ajouter un dépot d\'anime</string>
     <string name="manga_add_repository">Ajouter un dépôt de manga</string>
+    <string name="novel_add_repository">Add Novel Repo</string>
     <string name="edit_repositories">Modifier les dépôts</string>
     <string name="rem_repository">Supprimer le dépôt?</string>
     <string name="trending_movies">Films en tendance</string>
@@ -849,6 +850,7 @@
     <string name="adult_only_content_desc">Afficher uniquement le contenu pour adultes dans la page de découverte</string>
     <string name="anime_add_repository_desc">Ajoutez des extensions pour les Anime à partir de diverses sources</string>
     <string name="manga_add_repository_desc">Ajoutez des extensions pour les manga à partir de diverses sources</string>
+    <string name="novel_add_repository_desc">Add Novel Extensions from various sources</string>
     <string name="user_agent_desc">Changez votre agent utilisateur par défaut</string>
     <string name="force_legacy_installer_desc">Utilisez l\'ancien programme d\'installation pour installer des extensions (pour les anciens appareils Android)</string>
     <string name="skip_loading_extension_icons_desc">Ne pas charger les icônes d\'extensions sur la page d\'extension</string>
@@ -974,7 +976,7 @@
     <string name="textview_sub_stroke">Subtitle Stroke</string>
     <string name="textview_sub_bottom_margin">Bottom Margin</string>
     <string name="add_repository">Add Repository</string>
-    <string name="add_repository_desc">A repository link should look like this: https://raw.githubusercontent.com/username/repo/branch/index.min.json</string>
+    <string name="add_repository_desc">A repository link should look like this: https://raw.githubusercontent.com/username/repo/branch/index.min.json\nOr: username/repo/branch</string>
     <string name="current_repositories">Current Repositories</string>
     <string name="add_repository_warning">Warning: Extensions from the repository can run arbitrary code on your device. Only use repositories you trust. \n\nBy adding a repository, you agree to: \n\n1. Not use the app for viewing or distributing copyrighted content. \n2. Not use the app for any illegal activities. \n3. Not use the app for any activities that violate the terms of service of the content providers. \n\nThe app or it\'s maintainer are not affiliated in any way with extension providers. The developers are not responsible for any damages caused by the app. \n\nBy adding a repository, you agree to these terms.</string>
     <string name="privacy_policy">Privacy Policy</string>
