@@ -791,6 +791,7 @@
     <string name="placeholder">প্লেসহোল্ডার</string>
     <string name="anime_add_repository">অ্যানিমে রিপো যোগ করুন</string>
     <string name="manga_add_repository">ম্যাঙ্গা রিপো যোগ করুন</string>
+    <string name="novel_add_repository">Add Novel Repo</string>
     <string name="edit_repositories">রিপোসিটরি সম্পাদনা করুন</string>
     <string name="rem_repository">রিপোসিটরি মুছে ফেলতে চান?</string>
     <string name="trending_movies">ট্রেন্ডিং চলচ্চিত্র</string>
@@ -856,6 +857,7 @@
     <string name="adult_only_content_desc">এক্সপ্লোর পেজে শুধুমাত্র প্রাপ্তবয়স্ক বিষয় দেখান</string>
     <string name="anime_add_repository_desc">বিভিন্ন উৎস থেকে অ্যানিমে এক্সটেনশন যোগ করুন</string>
     <string name="manga_add_repository_desc">বিভিন্ন উৎস থেকে ম্যাঙ্গা এক্সটেনশন যোগ করুন</string>
+    <string name="novel_add_repository_desc">Add Novel Extensions from various sources</string>
     <string name="user_agent_desc">আপনার ডিফল্ট ব্যবহারকারী এজেন্ট পরিবর্তন করুন</string>
     <string name="force_legacy_installer_desc">এক্সটেনশন ইনস্টল করতে পুরোনো অ্যান্ড্রয়েড ফোনের জন্য লেগেসি ইনস্টলার ব্যবহার করুন</string>
     <string name="skip_loading_extension_icons_desc">এক্সটেনশন পেজে এক্সটেনশনগুলির আইকন লোড করা না করুন</string>
@@ -981,7 +983,7 @@
     <string name="textview_sub_stroke">Subtitle Stroke</string>
     <string name="textview_sub_bottom_margin">Bottom Margin</string>
     <string name="add_repository">Add Repository</string>
-    <string name="add_repository_desc">A repository link should look like this: https://raw.githubusercontent.com/username/repo/branch/index.min.json</string>
+    <string name="add_repository_desc">A repository link should look like this: https://raw.githubusercontent.com/username/repo/branch/index.min.json\nOr: username/repo/branch</string>
     <string name="current_repositories">Current Repositories</string>
     <string name="add_repository_warning">Warning: Extensions from the repository can run arbitrary code on your device. Only use repositories you trust. \n\nBy adding a repository, you agree to: \n\n1. Not use the app for viewing or distributing copyrighted content. \n2. Not use the app for any illegal activities. \n3. Not use the app for any activities that violate the terms of service of the content providers. \n\nThe app or it\'s maintainer are not affiliated in any way with extension providers. The developers are not responsible for any damages caused by the app. \n\nBy adding a repository, you agree to these terms.</string>
     <string name="privacy_policy">Privacy Policy</string>
