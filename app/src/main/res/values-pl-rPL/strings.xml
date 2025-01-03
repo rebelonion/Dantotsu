@@ -565,6 +565,9 @@
     <string name="age">"__Wiek:__ "</string>
     <string name="birthday">\n\"__Urodziny:__ \"</string>
     <string name="gender">\n\"__Płeć:__ \"</string>
+    <string name="hometown">\n\"__Home Town:__ \"</string>
+    <string name="years_active">\n\"__Years Active:__ \"</string>
+    <string name="date_of_death">\n\"__Date of Death:__ \"</string>
     <string name="male">Mężczyzna</string>
     <string name="female">Kobieta</string>
     <string name="question_1">Czym jest Dantotsu?</string>
@@ -985,4 +988,5 @@
     <string name="privacy_policy">Privacy Policy</string>
     <string name="privacy_policy_desc">Read our privacy policy</string>
     <string name="failed_to_load">Failed to load</string>
+    <string name="studios">Studios</string>
 </resources>
