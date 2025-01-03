@@ -141,11 +141,12 @@ jobs:
         
         # Decimal color codes for contributors
         declare -A contributor_colors
-        default_color="16721401"
-        contributor_colors["grayankit"]="#350297"
+        default_color="#bf2cc8"
         contributor_colors["ibo"]="#ff9b46"
         contributor_colors["aayush262"]="#5d689d"
         contributor_colors["Sadwhy"]="#ff7e95"
+        contributor_colors["grayankit"]="#c51aa1"
+        contributor_colors["rebelonion"]="#d4e5ed"
 
         hex_to_decimal() { printf '%d' "0x${1#"#"}"; }
         
@@ -179,7 +180,7 @@ jobs:
         top_contributor=""
         top_contributor_count=0
         top_contributor_avatar=""
-        embed_color=$default_color
+        embed_color=$(hex_to_decimal "$default_color")
         
         # Process contributors in the new order
         while read -r login; do
@@ -201,7 +202,7 @@ jobs:
             elif [ $commit_count -eq $max_commits ]; then
               top_contributors+=("$login")
               top_contributor_count=$((top_contributor_count + 1))
-              embed_color=$default_color
+              embed_color=$(hex_to_decimal "$default_color")
             fi
             echo "Debug top contributors:"
             echo "$top_contributors"
@@ -241,7 +242,7 @@ jobs:
           thumbnail_url="$top_contributor_avatar"
         else
           thumbnail_url="https://i.imgur.com/5o3Y9Jb.gif"
-          embed_color=$default_color
+          embed_color=$(hex_to_decimal "$default_color")
         fi
         
         # Truncate field values
