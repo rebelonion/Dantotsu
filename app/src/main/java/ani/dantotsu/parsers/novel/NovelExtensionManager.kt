@@ -234,7 +234,7 @@ class NovelExtensionManager(private val context: Context) {
     private fun NovelExtension.Installed.updateExists(availableNovelExtension: NovelExtension.Available? = null): Boolean {
         val availableExt = availableNovelExtension
             ?: _availableNovelExtensionsFlow.value.find { it.pkgName == pkgName }
-        if (isUnofficial || availableExt == null) return false
+        if (availableExt == null) return false
 
         return (availableExt.versionCode > versionCode)
     }

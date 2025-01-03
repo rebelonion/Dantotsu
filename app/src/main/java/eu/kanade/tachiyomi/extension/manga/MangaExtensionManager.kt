@@ -250,44 +250,6 @@ class MangaExtensionManager(
     }
 
     /**
-     * Adds the given signature to the list of trusted signatures. It also loads in background the
-     * extensions that match this signature.
-     *
-     * @param signature The signature to whitelist.
-     */
-    @OptIn(DelicateCoroutinesApi::class)
-    fun trustSignature(signature: String) {
-        val untrustedSignatures = _untrustedExtensionsFlow.value.map { it.signatureHash }.toSet()
-        if (signature !in untrustedSignatures) return
-
-        ExtensionLoader.trustedSignaturesManga += signature
-        preferences.trustedSignatures() += signature
-
-        val nowTrustedExtensions =
-            _untrustedExtensionsFlow.value.filter { it.signatureHash == signature }
-        _untrustedExtensionsFlow.value -= nowTrustedExtensions
-
-        val ctx = context
-        launchNow {
-            nowTrustedExtensions
-                .map { extension ->
-                    async {
-                        ExtensionLoader.loadMangaExtensionFromPkgName(
-                            ctx,
-                            extension.pkgName
-                        )
-                    }
-                }
-                .map { it.await() }
-                .forEach { result ->
-                    if (result is MangaLoadResult.Success) {
-                        registerNewExtension(result.extension)
-                    }
-                }
-        }
-    }
-
-    /**
      * Registers the given extension in this and the source managers.
      *
      * @param extension The extension to be registered.
@@ -368,7 +330,7 @@ class MangaExtensionManager(
     private fun MangaExtension.Installed.updateExists(availableExtension: MangaExtension.Available? = null): Boolean {
         val availableExt =
             availableExtension ?: _availableExtensionsFlow.value.find { it.pkgName == pkgName }
-        if (isUnofficial || availableExt == null) return false
+        if (availableExt == null) return false
 
         return (availableExt.versionCode > versionCode || availableExt.libVersion > libVersion)
     }

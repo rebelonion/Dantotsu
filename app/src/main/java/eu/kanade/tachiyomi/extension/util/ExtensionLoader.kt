@@ -73,27 +73,6 @@ internal object ExtensionLoader {
             (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
                 PackageManager.GET_SIGNING_CERTIFICATES else 0)
 
-    // jmir1's key
-    private const val officialSignatureAnime =
-        "50ab1d1e3a20d204d0ad6d334c7691c632e41b98dfa132bf385695fdfa63839c"
-
-    var trustedSignaturesAnime =
-        mutableSetOf<String>() + preferences.trustedSignatures().get() + officialSignatureAnime
-
-    // inorichi's key
-    private const val officialSignatureManga =
-        "7ce04da7773d41b489f4693a366c36bcd0a11fc39b547168553c285bd7348e23"
-
-    //dan's key
-    private const val officialSignature =
-        "a3061edb369278749b8e8de810d440d38e96417bbd67bbdfc5d9d9ed475ce4a5"
-
-    /**
-     * List of the trusted signatures.
-     */
-    var trustedSignaturesManga =
-        mutableSetOf<String>() + preferences.trustedSignatures().get() + officialSignatureManga
-
     /**
      * Return a list of all the installed extensions initialized concurrently.
      *
@@ -256,8 +235,6 @@ internal object ExtensionLoader {
             return AnimeLoadResult.Error
         }
 
-        val signatureHash = getSignatureHash(pkgInfo)
-
         val isNsfw = appInfo.metaData.getInt("$ANIME_PACKAGE$XX_METADATA_NSFW") == 1
         if (!loadNsfwSource && isNsfw) {
             Logger.log("NSFW extension $pkgName not allowed")
@@ -321,7 +298,7 @@ internal object ExtensionLoader {
             hasChangelog = hasChangelog,
             sources = sources,
             pkgFactory = appInfo.metaData.getString("$ANIME_PACKAGE$XX_METADATA_SOURCE_FACTORY"),
-            isUnofficial = signatureHash != officialSignatureAnime,
+            isUnofficial = true,
             icon = context.getApplicationIcon(pkgName),
         )
         return AnimeLoadResult.Success(extension)
@@ -361,8 +338,6 @@ internal object ExtensionLoader {
             )
             return MangaLoadResult.Error
         }
-
-        val signatureHash = getSignatureHash(pkgInfo)
 
         val isNsfw = appInfo.metaData.getInt("$MANGA_PACKAGE$XX_METADATA_NSFW") == 1
         if (!loadNsfwSource && isNsfw) {
@@ -427,7 +402,7 @@ internal object ExtensionLoader {
             hasChangelog = hasChangelog,
             sources = sources,
             pkgFactory = appInfo.metaData.getString("$MANGA_PACKAGE$XX_METADATA_SOURCE_FACTORY"),
-            isUnofficial = signatureHash != officialSignatureManga,
+            isUnofficial = true,
             icon = context.getApplicationIcon(pkgName),
         )
         return MangaLoadResult.Success(extension)
@@ -458,8 +433,6 @@ internal object ExtensionLoader {
             return NovelLoadResult.Error(Exception("Missing versionName for extension $extName"))
         }
 
-        val signatureHash = getSignatureHash(pkgInfo)
-
         val classLoader = PathClassLoader(appInfo.sourceDir, null, context.classLoader)
         val novelInterfaceInstance = try {
             val className = appInfo.loadLabel(context.packageManager).toString()
@@ -479,7 +452,7 @@ internal object ExtensionLoader {
             versionName = versionName,
             versionCode = versionCode,
             sources = listOfNotNull(novelInterfaceInstance),
-            isUnofficial = signatureHash != officialSignatureManga,
+            isUnofficial = true,
             icon = context.getApplicationIcon(pkgName),
         )
         return NovelLoadResult.Success(extension)
@@ -503,23 +476,6 @@ internal object ExtensionLoader {
                     else -> ""
                 }
             }
-        }
-    }
-
-    /**
-     * Returns the signature hash of the package or null if it's not signed.
-     *
-     * @param pkgInfo The package info of the application.
-     */
-    private fun getSignatureHash(pkgInfo: PackageInfo): String? {
-        val signatures = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
-            pkgInfo.signingInfo?.signingCertificateHistory
-        else
-            @Suppress("DEPRECATION") pkgInfo.signatures
-        return if (signatures != null && signatures.isNotEmpty()) {
-            Hash.sha256(signatures.first().toByteArray())
-        } else {
-            null
         }
     }
 }
