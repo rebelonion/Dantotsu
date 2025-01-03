@@ -108,7 +108,7 @@ internal class ExtensionGithubApi {
     }
 
     fun getAnimeApkUrl(extension: AnimeExtension.Available): String {
-        return "${extension.repository}/apk/${extension.apkName}"
+        return "${extension.repository.removeSuffix("index.min.json")}/apk/${extension.apkName}"
     }
 
     private fun List<ExtensionSourceJsonObject>.toMangaExtensionSources(): List<AvailableMangaSources> {
@@ -196,7 +196,7 @@ internal class ExtensionGithubApi {
     }
 
     fun getMangaApkUrl(extension: MangaExtension.Available): String {
-        return "${extension.repository}/apk/${extension.apkName}"
+        return "${extension.repository.removeSuffix("index.min.json")}/apk/${extension.apkName}"
     }
 
     suspend fun findNovelExtensions(): List<NovelExtension.Available> {
@@ -282,7 +282,7 @@ internal class ExtensionGithubApi {
     }
 
     fun getNovelApkUrl(extension: NovelExtension.Available): String {
-        return "${extension.repository}/apk/${extension.pkgName}.apk"
+        return "${extension.repository.removeSuffix("index.min.json")}/apk/${extension.pkgName}.apk"
     }
 
     private fun fallbackRepoUrl(repoUrl: String): String? {
