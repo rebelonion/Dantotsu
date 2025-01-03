@@ -1,7 +1,11 @@
 package ani.dantotsu.settings.saving
 
 import android.content.SharedPreferences
+import android.util.Base64
 import androidx.lifecycle.LiveData
+import ani.dantotsu.util.Logger
+import java.io.ByteArrayInputStream
+import java.io.ObjectInputStream
 
 abstract class SharedPreferenceLiveData<T>(
     val sharedPrefs: SharedPreferences,
@@ -76,6 +80,41 @@ class SharedPreferenceStringSetLiveData(
     SharedPreferenceLiveData<Set<String>>(sharedPrefs, key, defValue) {
     override fun getValueFromPreferences(key: String, defValue: Set<String>): Set<String> =
         sharedPrefs.getStringSet(key, defValue)?.toSet() ?: defValue
+}
+
+@Suppress("UNCHECKED_CAST")
+class SharedPreferenceClassLiveData<T>(
+    sharedPrefs: SharedPreferences,
+    key: String,
+    defValue: T
+) : SharedPreferenceLiveData<T>(sharedPrefs, key, defValue) {
+    override fun getValueFromPreferences(key: String, defValue: T): T {
+        return try {
+            val serialized = sharedPrefs.getString(key, null)
+            if (serialized != null) {
+                val data = Base64.decode(serialized, Base64.DEFAULT)
+                val bis = ByteArrayInputStream(data)
+                val ois = ObjectInputStream(bis)
+                val obj = ois.readObject() as T
+                obj
+            } else {
+                Logger.log("Serialized data is null (key: $key)")
+                defValue
+            }
+        } catch (e: java.io.InvalidClassException) {
+            Logger.log(e)
+            try {
+                sharedPrefs.edit().remove(key).apply()
+                defValue
+            } catch (e: Exception) {
+                Logger.log(e)
+                defValue
+            }
+        } catch (e: Exception) {
+            Logger.log(e)
+            defValue
+        }
+    }
 }
 
 @Suppress("unused")
