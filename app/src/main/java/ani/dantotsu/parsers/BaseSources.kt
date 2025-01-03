@@ -38,7 +38,7 @@ abstract class WatchSources : BaseSources() {
         tryWithSuspend(true) {
             if (sAnime != null) {
                 parser.loadEpisodes(showLink, extra, sAnime).forEach {
-                    map[it.number] = Episode(
+                    map["${it.number}-${it.hashCode()}"] = Episode(
                         it.number,
                         it.link,
                         it.title,
@@ -51,7 +51,7 @@ abstract class WatchSources : BaseSources() {
                 }
             } else if (parser is OfflineAnimeParser) {
                 parser.loadEpisodes(showLink, extra, SAnime.create()).forEach {
-                    map[it.number] = Episode(
+                    map["${it.number}-${it.hashCode()}"] = Episode(
                         it.number,
                         it.link,
                         it.title,
@@ -90,7 +90,7 @@ abstract class MangaReadSources : BaseSources() {
         show.sManga?.let { sManga ->
             tryWithSuspend(true) {
                 parser.loadChapters(show.link, show.extra, sManga).forEach {
-                    map[it.number] = MangaChapter(it)
+                    map["${it.number}-${it.hashCode()}"] = MangaChapter(it)
                 }
             }
         }
@@ -102,7 +102,7 @@ abstract class MangaReadSources : BaseSources() {
             tryWithSuspend(true) {
                 // Since we've checked, we can safely cast parser to OfflineMangaParser and call its methods
                 parser.loadChapters(show.link, show.extra, SManga.create()).forEach {
-                    map[it.number] = MangaChapter(it)
+                    map["${it.number}-${it.hashCode()}"] = MangaChapter(it)
                 }
             }
         } else {
