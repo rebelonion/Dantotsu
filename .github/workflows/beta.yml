@@ -141,7 +141,7 @@ jobs:
         
         # Decimal color codes for contributors
         declare -A contributor_colors
-        default_color="16721401"
+        default_color=16748606
         contributor_colors["grayankit"]="#350297"
         contributor_colors["ibo"]="#ff9b46"
         contributor_colors["aayush262"]="#5d689d"
