@@ -38,7 +38,7 @@ abstract class WatchSources : BaseSources() {
         tryWithSuspend(true) {
             if (sAnime != null) {
                 parser.loadEpisodes(showLink, extra, sAnime).forEach {
-                    map["${it.number}-${it.hashCode()}"] = Episode(
+                    map[it.number] = Episode(
                         it.number,
                         it.link,
                         it.title,
@@ -51,7 +51,7 @@ abstract class WatchSources : BaseSources() {
                 }
             } else if (parser is OfflineAnimeParser) {
                 parser.loadEpisodes(showLink, extra, SAnime.create()).forEach {
-                    map["${it.number}-${it.hashCode()}"] = Episode(
+                    map[it.number] = Episode(
                         it.number,
                         it.link,
                         it.title,
