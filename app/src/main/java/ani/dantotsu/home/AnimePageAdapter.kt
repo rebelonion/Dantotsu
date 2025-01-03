@@ -13,7 +13,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,7 +20,6 @@ import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.MediaPageTransformer
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
-import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ItemAnimePageBinding
 import ani.dantotsu.databinding.LayoutTrendingBinding
 import ani.dantotsu.getAppString
@@ -32,7 +30,6 @@ import ani.dantotsu.media.GenreActivity
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaAdaptor
 import ani.dantotsu.media.MediaListViewActivity
-import ani.dantotsu.media.SearchActivity
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.px
 import ani.dantotsu.setSafeOnClickListener
@@ -83,12 +80,11 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
 
         updateAvatar()
 
-        trendingBinding.searchBar.hint = "ANIME"
+        trendingBinding.searchBar.hint = binding.root.context.getString(R.string.search)
         trendingBinding.searchBarText.setOnClickListener {
-            ContextCompat.startActivity(
-                it.context,
-                Intent(it.context, SearchActivity::class.java).putExtra("type", "ANIME"),
-                null
+            SearchBottomSheet.newInstance().show(
+                (binding.root.context as AppCompatActivity).supportFragmentManager,
+                "search"
             )
         }
 

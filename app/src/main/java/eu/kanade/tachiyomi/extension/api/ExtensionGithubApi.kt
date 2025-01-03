@@ -68,13 +68,18 @@ internal class ExtensionGithubApi {
                 PrefManager.getVal<Set<String>>(PrefName.AnimeExtensionRepos).toMutableList()
 
             repos.forEach {
+                val repoUrl = if (it.contains("index.min.json")) {
+                    it
+                } else {
+                    "$it${if (it.endsWith('/')) "" else "/"}index.min.json"
+                }
                 try {
                     val githubResponse = try {
                         networkService.client
-                            .newCall(GET("${it}/index.min.json"))
+                            .newCall(GET(repoUrl))
                             .awaitSuccess()
                     } catch (e: Throwable) {
-                        Logger.log("Failed to get repo: $it")
+                        Logger.log("Failed to get repo: $repoUrl")
                         Logger.log(e)
                         null
                     }

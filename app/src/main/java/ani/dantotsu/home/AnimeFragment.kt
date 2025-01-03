@@ -24,7 +24,7 @@ import ani.dantotsu.Refresh
 import ani.dantotsu.bottomBar
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.AnilistAnimeViewModel
-import ani.dantotsu.connections.anilist.SearchResults
+import ani.dantotsu.connections.anilist.AniMangaSearchResults
 import ani.dantotsu.connections.anilist.getUserId
 import ani.dantotsu.databinding.FragmentAnimeBinding
 import ani.dantotsu.media.MediaAdaptor
@@ -100,7 +100,7 @@ class AnimeFragment : Fragment() {
         var loading = true
         if (model.notSet) {
             model.notSet = false
-            model.searchResults = SearchResults(
+            model.aniMangaSearchResults = AniMangaSearchResults(
                 "ANIME",
                 isAdult = false,
                 onList = false,
@@ -109,7 +109,7 @@ class AnimeFragment : Fragment() {
                 sort = Anilist.sortBy[1]
             )
         }
-        val popularAdaptor = MediaAdaptor(1, model.searchResults.results, requireActivity())
+        val popularAdaptor = MediaAdaptor(1, model.aniMangaSearchResults.results, requireActivity())
         val progressAdaptor = ProgressAdapter(searched = model.searched)
         val adapter = ConcatAdapter(animePageAdapter, popularAdaptor, progressAdaptor)
         binding.animePageRecyclerView.adapter = adapter
@@ -142,7 +142,7 @@ class AnimeFragment : Fragment() {
         animePageAdapter.onIncludeListClick = { checked ->
             oldIncludeList = !checked
             loading = true
-            model.searchResults.results.clear()
+            model.aniMangaSearchResults.results.clear()
             popularAdaptor.notifyDataSetChanged()
             scope.launch(Dispatchers.IO) {
                 model.loadPopular("ANIME", sort = Anilist.sortBy[1], onList = checked)
@@ -152,17 +152,17 @@ class AnimeFragment : Fragment() {
         model.getPopular().observe(viewLifecycleOwner) {
             if (it != null) {
                 if (oldIncludeList == (it.onList != false)) {
-                    val prev = model.searchResults.results.size
-                    model.searchResults.results.addAll(it.results)
+                    val prev = model.aniMangaSearchResults.results.size
+                    model.aniMangaSearchResults.results.addAll(it.results)
                     popularAdaptor.notifyItemRangeInserted(prev, it.results.size)
                 } else {
-                    model.searchResults.results.addAll(it.results)
+                    model.aniMangaSearchResults.results.addAll(it.results)
                     popularAdaptor.notifyDataSetChanged()
                     oldIncludeList = it.onList ?: true
                 }
-                model.searchResults.onList = it.onList
-                model.searchResults.hasNextPage = it.hasNextPage
-                model.searchResults.page = it.page
+                model.aniMangaSearchResults.onList = it.onList
+                model.aniMangaSearchResults.hasNextPage = it.hasNextPage
+                model.aniMangaSearchResults.page = it.page
                 if (it.hasNextPage)
                     progressAdaptor.bar?.visibility = View.VISIBLE
                 else {
@@ -177,10 +177,10 @@ class AnimeFragment : Fragment() {
             RecyclerView.OnScrollListener() {
             override fun onScrolled(v: RecyclerView, dx: Int, dy: Int) {
                 if (!v.canScrollVertically(1)) {
-                    if (model.searchResults.hasNextPage && model.searchResults.results.isNotEmpty() && !loading) {
+                    if (model.aniMangaSearchResults.hasNextPage && model.aniMangaSearchResults.results.isNotEmpty() && !loading) {
                         scope.launch(Dispatchers.IO) {
                             loading = true
-                            model.loadNextPage(model.searchResults)
+                            model.loadNextPage(model.aniMangaSearchResults)
                         }
                     }
                 }

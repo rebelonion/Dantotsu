@@ -7,23 +7,26 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.R
+import ani.dantotsu.connections.anilist.AnilistSearch.SearchType
 import ani.dantotsu.databinding.ItemSearchHistoryBinding
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefManager.asLiveStringSet
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.SharedPreferenceStringSetLiveData
-import java.util.Locale
 
-class SearchHistoryAdapter(private val type: String, private val searchClicked: (String) -> Unit) :
+class SearchHistoryAdapter(type: SearchType, private val searchClicked: (String) -> Unit) :
     ListAdapter<String, SearchHistoryAdapter.SearchHistoryViewHolder>(
         DIFF_CALLBACK_INSTALLED
     ) {
     private var searchHistoryLiveData: SharedPreferenceStringSetLiveData? = null
     private var searchHistory: MutableSet<String>? = null
-    private var historyType: PrefName = when (type.lowercase(Locale.ROOT)) {
-        "anime" -> PrefName.AnimeSearchHistory
-        "manga" -> PrefName.MangaSearchHistory
-        else -> throw IllegalArgumentException("Invalid type")
+    private var historyType: PrefName = when (type) {
+        SearchType.ANIME -> PrefName.AnimeSearchHistory
+        SearchType.MANGA -> PrefName.MangaSearchHistory
+        SearchType.CHARACTER -> PrefName.CharacterSearchHistory
+        SearchType.STAFF -> PrefName.StaffSearchHistory
+        SearchType.STUDIO -> PrefName.StudioSearchHistory
+        SearchType.USER -> PrefName.UserSearchHistory
     }
 
     init {

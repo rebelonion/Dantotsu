@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.math.MathUtils.clamp
 import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.lifecycle.MutableLiveData
@@ -45,6 +46,11 @@ class CharacterDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChang
     private lateinit var character: Character
     private var loaded = false
 
+    private var isCollapsed = false
+    private val percent = 30
+    private var mMaxScrollSize = 0
+    private var screenWidth: Float = 0f
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -71,6 +77,11 @@ class CharacterDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChang
         binding.characterClose.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
+
+        binding.authorCharactersRecycler.isVisible = false
+        binding.AuthorCharactersText.isVisible = false
+        binding.authorCharacterDesc.isVisible = false
+
         character = intent.getSerialized("character") ?: return
         binding.characterTitle.text = character.name
         banner.loadImage(character.banner)
@@ -157,11 +168,6 @@ class CharacterDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChang
         binding.characterProgress.isGone = loaded
         super.onResume()
     }
-
-    private var isCollapsed = false
-    private val percent = 30
-    private var mMaxScrollSize = 0
-    private var screenWidth: Float = 0f
 
     override fun onOffsetChanged(appBar: AppBarLayout, i: Int) {
         if (mMaxScrollSize == 0) mMaxScrollSize = appBar.totalScrollRange

@@ -15,7 +15,7 @@ import ani.dantotsu.setAnimation
 import java.io.Serializable
 
 class AuthorAdapter(
-    private val authorList: ArrayList<Author>,
+    private val authorList: MutableList<Author>,
 ) : RecyclerView.Adapter<AuthorAdapter.AuthorViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AuthorViewHolder {
         val binding =
@@ -26,7 +26,7 @@ class AuthorAdapter(
     override fun onBindViewHolder(holder: AuthorViewHolder, position: Int) {
         val binding = holder.binding
         setAnimation(binding.root.context, holder.binding.root)
-        val author = authorList[position]
+        val author = authorList.getOrNull(position) ?: return
         binding.itemCompactRelation.text = author.role
         binding.itemCompactImage.loadImage(author.image)
         binding.itemCompactTitle.text = author.name
