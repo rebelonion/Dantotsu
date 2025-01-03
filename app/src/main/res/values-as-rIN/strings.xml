@@ -565,6 +565,9 @@
     <string name="age">"__বয়স:__ "</string>
     <string name="birthday">\n\"__জন্মদিন:__ \"</string>
     <string name="gender">\n\"__লিংগ:__ \"</string>
+    <string name="hometown">\n\"__Home Town:__ \"</string>
+    <string name="years_active">\n\"__Years Active:__ \"</string>
+    <string name="date_of_death">\n\"__Date of Death:__ \"</string>
     <string name="male">পুৰুষ</string>
     <string name="female">মহিলা</string>
     <string name="question_1">Dantotsu কি?</string>
@@ -985,4 +988,5 @@
     <string name="privacy_policy">গোপনীয়তা নীতি</string>
     <string name="privacy_policy_desc">আমাৰ গোপনীয়তা নীতি পঢ়ক</string>
     <string name="failed_to_load">লোড কৰাত ব্যৰ্থ</string>
+    <string name="studios">Studios</string>
 </resources>
