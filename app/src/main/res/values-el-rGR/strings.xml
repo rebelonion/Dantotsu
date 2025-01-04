@@ -346,6 +346,8 @@
     <string name="planned_manga">Σχεδιασμένα Manga</string>
     <string name="image_long_clicking">Ανοίξτε την εικόνα με παρατεταμένο κλικ</string>
     <string name="always_continue_content">Συνεχίζετε πάντα τα προηγούμενα στοιχεία</string>
+    <string name="open_animanga_directly">Open Anime/Manga search directly</string>
+    <string name="open_animanga_directly_info">Open Anime/Manga search on their respective pages directly</string>
     <string name="search_source_list">Αναζήτηση επόμενης διαθέσιμης πηγής</string>
     <string name="timestamp_proxy_desc">Χρήσιμο εάν λαμβάνετε Αποτυχία χειραψίας</string>
     <string name="timestamp_proxy">Χρησιμοποιήστε διακομιστή μεσολάβησης για χρονικές σημάνσεις</string>
