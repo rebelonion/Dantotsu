@@ -28,7 +28,7 @@ fun characterInformation(includeMediaInfo: Boolean) = """
     }
     age
     gender
-    description(asHtml: true)
+    description
     dateOfBirth {
       year
       month
