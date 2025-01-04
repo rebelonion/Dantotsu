@@ -346,6 +346,8 @@
     <string name="planned_manga">予定のマンガ</string>
     <string name="image_long_clicking">画像を長押しして開く</string>
     <string name="always_continue_content">Always continue previous items</string>
+    <string name="open_animanga_directly">Open Anime/Manga search directly</string>
+    <string name="open_animanga_directly_info">Open Anime/Manga search on their respective pages directly</string>
     <string name="search_source_list">Search next available source</string>
     <string name="timestamp_proxy_desc">Handshake Failsを受け取っている場合に便利です</string>
     <string name="timestamp_proxy">タイムスタンプのためにプロキシを使用</string>
