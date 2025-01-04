@@ -346,6 +346,8 @@
     <string name="planned_manga">পরিকল্পিত ম্যাঙ্গা</string>
     <string name="image_long_clicking">দীর্ঘ ক্লিক করে ইমেজ খোলা</string>
     <string name="always_continue_content">সবসময় পুর্ববরতি জিনিস দিয়ে চলবে</string>
+    <string name="open_animanga_directly">Open Anime/Manga search directly</string>
+    <string name="open_animanga_directly_info">Open Anime/Manga search on their respective pages directly</string>
     <string name="search_source_list">পরবর্তী সোর্স সন্ধান করুন</string>
     <string name="timestamp_proxy_desc">যদি আপনি হ্যান্ডশেক ফেলে পাচ্ছেন তাহলে উপকারী</string>
     <string name="timestamp_proxy">সময়সূচীর জন্য প্রক্সি ব্যবহার করুন</string>
