@@ -350,6 +350,8 @@
     <string name="planned_manga">Planlanan Manga</string>
     <string name="image_long_clicking">Basılı Tutarak Görselleri Aç</string>
     <string name="always_continue_content">Önceki ögeleri her zaman devam ettir</string>
+    <string name="open_animanga_directly">Open Anime/Manga search directly</string>
+    <string name="open_animanga_directly_info">Open Anime/Manga search on their respective pages directly</string>
     <string name="search_source_list">Sonraki mevcut kaynağı ara</string>
     <string name="timestamp_proxy_desc">Handshake Hatası alıyorsanız Yararlıdır</string>
     <string name="timestamp_proxy">Zaman Bilgisi için Proxy kullan</string>
