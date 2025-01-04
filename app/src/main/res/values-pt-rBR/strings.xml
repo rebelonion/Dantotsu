@@ -354,6 +354,8 @@
     <string name="planned_manga">Mangás Planejados</string>
     <string name="image_long_clicking">Abrir imagem ao manter pressionado</string>
     <string name="always_continue_content">Sempre continuar itens anteriores</string>
+    <string name="open_animanga_directly">Open Anime/Manga search directly</string>
+    <string name="open_animanga_directly_info">Open Anime/Manga search on their respective pages directly</string>
     <string name="search_source_list">Procurar pela próxima extensão disponível</string>
     <string name="timestamp_proxy_desc">Útil se você estiver enfrentando falhas de handshake</string>
     <string name="timestamp_proxy">Usar Proxy para Seções Temporais</string>
