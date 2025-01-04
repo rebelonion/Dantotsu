@@ -346,6 +346,8 @@
     <string name="planned_manga">Geplande Manga</string>
     <string name="image_long_clicking">Open afbeelding door lang te klikken</string>
     <string name="always_continue_content">Altijd doorgaan met vorige items</string>
+    <string name="open_animanga_directly">Open Anime/Manga search directly</string>
+    <string name="open_animanga_directly_info">Open Anime/Manga search on their respective pages directly</string>
     <string name="search_source_list">Zoek volgende beschikbare bron</string>
     <string name="timestamp_proxy_desc">Handig als u Handshake Fails krijgt</string>
     <string name="timestamp_proxy">Proxy gebruiken voor tijdstempels</string>
