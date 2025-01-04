@@ -243,7 +243,7 @@ class MangaDownloaderService : Service() {
                         builder.setProgress(task.imageData.size, farthest, false)
 
                         broadcastDownloadProgress(
-                            task.chapter,
+                            task.uniqueName,
                             farthest * 100 / task.imageData.size
                         )
                         if (notifi) {
@@ -270,17 +270,18 @@ class MangaDownloaderService : Service() {
                     DownloadedType(
                         task.title,
                         task.chapter,
-                        MediaType.MANGA
+                        MediaType.MANGA,
+                        scanlator = task.scanlator,
                     )
                 )
-                broadcastDownloadFinished(task.chapter)
+                broadcastDownloadFinished(task.uniqueName)
                 snackString("${task.title} - ${task.chapter} Download finished")
             }
         } catch (e: Exception) {
             Logger.log("Exception while downloading file: ${e.message}")
             snackString("Exception while downloading file: ${e.message}")
             Injekt.get<CrashlyticsInterface>().logException(e)
-            broadcastDownloadFailed(task.chapter)
+            broadcastDownloadFailed(task.uniqueName)
         }
     }
 
@@ -423,11 +424,15 @@ class MangaDownloaderService : Service() {
     data class DownloadTask(
         val title: String,
         val chapter: String,
+        val scanlator: String,
         val imageData: List<ImageData>,
         val sourceMedia: Media? = null,
         val retries: Int = 2,
         val simultaneousDownloads: Int = 2,
-    )
+    ) {
+        val uniqueName: String
+            get() = "$chapter-$scanlator"
+    }
 
     companion object {
         private const val NOTIFICATION_ID = 1103

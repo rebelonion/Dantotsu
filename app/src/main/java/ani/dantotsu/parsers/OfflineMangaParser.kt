@@ -31,13 +31,17 @@ class OfflineMangaParser : MangaParser() {
         val chapters = mutableListOf<MangaChapter>()
         if (directory?.exists() == true) {
             directory.listFiles().forEach {
+                val scanlator = downloadManager.mangaDownloadedTypes.find { items ->
+                    items.titleName == mangaLink &&
+                    items.chapterName == it.name
+                }?.scanlator ?: "Unknown"
                 if (it.isDirectory) {
                     val chapter = MangaChapter(
                         it.name!!,
                         "$mangaLink/${it.name}",
                         it.name,
                         null,
-                        null,
+                        scanlator,
                         SChapter.create()
                     )
                     chapters.add(chapter)
@@ -45,8 +49,7 @@ class OfflineMangaParser : MangaParser() {
             }
         }
         chapters.addAll(loadChaptersCompat(mangaLink, extra, sManga))
-        return chapters.distinctBy { it.number }
-            .sortedBy { MediaNameAdapter.findChapterNumber(it.number) }
+        return chapters.sortedBy { MediaNameAdapter.findChapterNumber(it.number) }
     }
 
     override suspend fun loadImages(chapterLink: String, sChapter: SChapter): List<MangaImage> {

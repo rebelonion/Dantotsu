@@ -60,7 +60,7 @@ class DownloadsManager(private val context: Context) {
         onFinished: () -> Unit
     ) {
         removeDownloadCompat(context, downloadedType, toast)
-        downloadsList.remove(downloadedType)
+        downloadsList.removeAll { it.titleName == downloadedType.titleName && it.chapterName == downloadedType.chapterName }
         CoroutineScope(Dispatchers.IO).launch {
             removeDirectory(downloadedType, toast)
             withContext(Dispatchers.Main) {
@@ -234,7 +234,7 @@ class DownloadsManager(private val context: Context) {
         val directory =
             baseDirectory?.findFolder(downloadedType.titleName)
                 ?.findFolder(downloadedType.chapterName)
-        downloadsList.remove(downloadedType)
+        downloadsList.removeAll { it.titleName == downloadedType.titleName && it.chapterName == downloadedType.chapterName }
         // Check if the directory exists and delete it recursively
         if (directory?.exists() == true) {
             val deleted = directory.deleteRecursively(context, false)
@@ -401,10 +401,13 @@ data class DownloadedType(
     @Deprecated("use pTitle instead")
     private val title: String? = null,
     @Deprecated("use pChapter instead")
-    private val chapter: String? = null
+    private val chapter: String? = null,
+    val scanlator: String = "Unknown"
 ) : Serializable {
     val titleName: String
         get() = title ?: pTitle.findValidName()
     val chapterName: String
         get() = chapter ?: pChapter.findValidName()
+    val uniqueName: String
+        get() = "$chapterName-${scanlator}"
 }
