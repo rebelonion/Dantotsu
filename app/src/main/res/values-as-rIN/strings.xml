@@ -350,6 +350,8 @@
     <string name="planned_manga">পূৰ্বধাৰিত কলা</string>
     <string name="image_long_clicking">দীৰ্ঘ টিপি কৰিবলৈ ছবি খোলক</string>
     <string name="always_continue_content">পূৰ্ববৰ্তী আইটেমসমূহ সদায়ে অব্যাহত ৰাখিব</string>
+    <string name="open_animanga_directly">Open Anime/Manga search directly</string>
+    <string name="open_animanga_directly_info">Open Anime/Manga search on their respective pages directly</string>
     <string name="search_source_list">পৰৱৰ্তী উপলব্ধ উৎস সন্ধান কৰক</string>
     <string name="timestamp_proxy_desc">যদি আপুনি হেণ্ডশেক ফেইল পায়</string>
     <string name="timestamp_proxy">সময় চিহ্নসমূহ সুৱিদ্ধত ব্যৱহাৰ কৰা</string>
