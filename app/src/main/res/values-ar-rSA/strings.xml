@@ -350,6 +350,8 @@
     <string name="planned_manga">المانجا المخطط قراءتها</string>
     <string name="image_long_clicking">افتح الصورة عند ضغطة مطولة</string>
     <string name="always_continue_content">تابع الحلقة\الفصل السابق دائما</string>
+    <string name="open_animanga_directly">Open Anime/Manga search directly</string>
+    <string name="open_animanga_directly_info">Open Anime/Manga search on their respective pages directly</string>
     <string name="search_source_list">البحث عن المصدر المتاح التالي</string>
     <string name="timestamp_proxy_desc">مفيد إذا كنت تواجه فشل المصافحة</string>
     <string name="timestamp_proxy">استخدم \"الوكيل \ Proxy\" للطوابع الزمنية</string>
