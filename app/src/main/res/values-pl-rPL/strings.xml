@@ -350,6 +350,8 @@
     <string name="planned_manga">Planowane Mangi</string>
     <string name="image_long_clicking">Otwórz obraz przytrzymując go</string>
     <string name="always_continue_content">Zawsze kontynuuj wcześniejsze elementy</string>
+    <string name="open_animanga_directly">Open Anime/Manga search directly</string>
+    <string name="open_animanga_directly_info">Open Anime/Manga search on their respective pages directly</string>
     <string name="search_source_list">Wyszukaj następne dostępne źródło</string>
     <string name="timestamp_proxy_desc">Przydatne, jeśli otrzymujesz błędy połączenia</string>
     <string name="timestamp_proxy">Użyj proxy dla znaczników czasowych</string>
