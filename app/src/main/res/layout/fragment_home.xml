@@ -157,6 +157,8 @@
                                 android:layout_height="52dp"
                                 android:layout_marginTop="4dp"
                                 android:backgroundTint="@color/nav_bg_inv"
+                                android:scaleX="0.96"
+                                android:scaleY="0.96"
                                 app:cardCornerRadius="26dp">
 
                                 <com.google.android.material.imageview.ShapeableImageView
@@ -166,7 +168,7 @@
                                     android:scaleType="center"
                                     android:scaleX="1.2"
                                     android:scaleY="1.2"
-                                    android:tint="@color/bg_black"
+                                    android:tint="@color/bg_white"
                                     app:srcCompat="@drawable/ic_round_search_24"
                                     tools:ignore="ContentDescription,ImageContrastCheck" />
 
