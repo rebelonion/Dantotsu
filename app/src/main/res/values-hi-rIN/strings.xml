@@ -346,6 +346,8 @@
     <string name="planned_manga">योजित मंगा</string>
     <string name="image_long_clicking">लॉन्ग क्लिक करके छवि खोलें</string>
     <string name="always_continue_content">हमेशा पिछली वस्तु जारी रखें</string>
+    <string name="open_animanga_directly">Open Anime/Manga search directly</string>
+    <string name="open_animanga_directly_info">Open Anime/Manga search on their respective pages directly</string>
     <string name="search_source_list">अगले उपस्थित स्त्रोत मे ढूँढे</string>
     <string name="timestamp_proxy_desc">यदि आप हैंडशेक फेल प्राप्त कर रहे हैं तो उपयोगी</string>
     <string name="timestamp_proxy">टाइमस्टैंप के लिए प्रॉक्सी का उपयोग करें</string>
