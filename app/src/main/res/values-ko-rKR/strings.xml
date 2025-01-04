@@ -346,6 +346,8 @@
     <string name="planned_manga">계획된 만화</string>
     <string name="image_long_clicking">이미지를 길게 클릭하여 열기</string>
     <string name="always_continue_content">Always continue previous items</string>
+    <string name="open_animanga_directly">Open Anime/Manga search directly</string>
+    <string name="open_animanga_directly_info">Open Anime/Manga search on their respective pages directly</string>
     <string name="search_source_list">Search next available source</string>
     <string name="timestamp_proxy_desc">핸드셰이크 실패가 발생하는 경우 유용합니다</string>
     <string name="timestamp_proxy">타임 스탬프에 프록시 사용</string>
