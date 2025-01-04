@@ -346,6 +346,8 @@
     <string name="planned_manga">Запланированные манга</string>
     <string name="image_long_clicking">Открыть изображение удержанием</string>
     <string name="always_continue_content">Always continue previous items</string>
+    <string name="open_animanga_directly">Open Anime/Manga search directly</string>
+    <string name="open_animanga_directly_info">Open Anime/Manga search on their respective pages directly</string>
     <string name="search_source_list">Search next available source</string>
     <string name="timestamp_proxy_desc">Полезно, если у вас возникают проблемы с подключением</string>
     <string name="timestamp_proxy">Использовать прокси для временных меток</string>
