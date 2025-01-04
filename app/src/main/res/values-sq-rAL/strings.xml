@@ -350,6 +350,8 @@
     <string name="planned_manga">Manga e Planifikuar</string>
     <string name="image_long_clicking">Hap Imazhin duke Bërë Klik të Gjatë</string>
     <string name="always_continue_content">Vazhdo gjithmonë me artikujt e mëparshëm</string>
+    <string name="open_animanga_directly">Open Anime/Manga search directly</string>
+    <string name="open_animanga_directly_info">Open Anime/Manga search on their respective pages directly</string>
     <string name="search_source_list">Kërko burimin e ardhshëm të disponueshëm</string>
     <string name="timestamp_proxy_desc">E dobishme nëse po merrni Handshake Fails</string>
     <string name="timestamp_proxy">Përdor Proxy për Timestamps</string>
