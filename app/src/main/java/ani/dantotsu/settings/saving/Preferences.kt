@@ -55,6 +55,7 @@ enum class PrefName(val data: Pref) {
     CommentsEnabled(Pref(Location.General, Int::class, 0)),
     EnableSocks5Proxy(Pref(Location.General, Boolean::class, false)),
     ProxyAuthEnabled(Pref(Location.General, Boolean::class, false)),
+    AniMangaSearchDirect(Pref(Location.General, Boolean::class, true)),
 
     //User Interface
     UseOLED(Pref(Location.UI, Boolean::class, false)),

@@ -20,6 +20,7 @@ import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.MediaPageTransformer
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
+import ani.dantotsu.connections.anilist.AnilistSearch.SearchType.Companion.toAnilistString
 import ani.dantotsu.databinding.ItemAnimePageBinding
 import ani.dantotsu.databinding.LayoutTrendingBinding
 import ani.dantotsu.getAppString
@@ -30,6 +31,7 @@ import ani.dantotsu.media.GenreActivity
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaAdaptor
 import ani.dantotsu.media.MediaListViewActivity
+import ani.dantotsu.media.SearchActivity
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.px
 import ani.dantotsu.setSafeOnClickListener
@@ -82,10 +84,19 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
 
         trendingBinding.searchBar.hint = binding.root.context.getString(R.string.search)
         trendingBinding.searchBarText.setOnClickListener {
-            SearchBottomSheet.newInstance().show(
-                (binding.root.context as AppCompatActivity).supportFragmentManager,
-                "search"
-            )
+            val context = binding.root.context
+            if (PrefManager.getVal(PrefName.AniMangaSearchDirect) && Anilist.token != null) {
+                ContextCompat.startActivity(
+                    context,
+                    Intent(context, SearchActivity::class.java).putExtra("type", "ANIME"),
+                    null
+                )
+            } else {
+                SearchBottomSheet.newInstance().show(
+                    (context as AppCompatActivity).supportFragmentManager,
+                    "search"
+                )
+            }
         }
 
         trendingBinding.userAvatar.setSafeOnClickListener {

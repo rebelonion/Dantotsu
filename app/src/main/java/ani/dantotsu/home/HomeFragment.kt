@@ -133,6 +133,12 @@ class HomeFragment : Fragment() {
                 "dialog"
             )
         }
+        binding.searchImageContainer.setSafeOnClickListener {
+            SearchBottomSheet.newInstance().show(
+                (it.context as androidx.appcompat.app.AppCompatActivity).supportFragmentManager,
+                "search"
+            )
+        }
         binding.homeUserAvatarContainer.setOnLongClickListener {
             it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
             ContextCompat.startActivity(

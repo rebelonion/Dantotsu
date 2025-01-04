@@ -84,10 +84,19 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
         trendingBinding.notificationCount.text = Anilist.unreadNotificationCount.toString()
         trendingBinding.searchBar.hint = binding.root.context.getString(R.string.search)
         trendingBinding.searchBarText.setOnClickListener {
-            SearchBottomSheet.newInstance().show(
-                (binding.root.context as AppCompatActivity).supportFragmentManager,
-                "search"
-            )
+            val context = binding.root.context
+            if (PrefManager.getVal(PrefName.AniMangaSearchDirect) && Anilist.token != null) {
+                ContextCompat.startActivity(
+                    context,
+                    Intent(context, SearchActivity::class.java).putExtra("type", "MANGA"),
+                    null
+                )
+            } else {
+                SearchBottomSheet.newInstance().show(
+                    (context as AppCompatActivity).supportFragmentManager,
+                    "search"
+                )
+            }
         }
 
         trendingBinding.userAvatar.setSafeOnClickListener {
