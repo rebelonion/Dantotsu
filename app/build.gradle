@@ -18,8 +18,8 @@ android {
         minSdk 21
         targetSdk 35
         versionCode((System.currentTimeMillis() / 60000).toInteger())
-        versionName "3.1.0"
-        versionCode 300100000
+        versionName "3.2.0"
+        versionCode 300200000
         signingConfig signingConfigs.debug
 
     }

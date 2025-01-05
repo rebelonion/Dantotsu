@@ -40,4 +40,6 @@ data class MangaChapter(
     private val dualPages = mutableListOf<Pair<MangaImage, MangaImage?>>()
     fun dualPages(): List<Pair<MangaImage, MangaImage?>> = dualPages
 
+    fun uniqueNumber(): String = "${number}-${scanlator ?: "Unknown"}"
+
 }

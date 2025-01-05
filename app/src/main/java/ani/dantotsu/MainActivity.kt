@@ -449,19 +449,20 @@ class MainActivity : AppCompatActivity() {
             if (uri == null) {
                 throw Exception("Uri is null")
             }
-            if ((uri.scheme == "tachiyomi" || uri.scheme == "aniyomi") && uri.host == "add-repo") {
+            if ((uri.scheme == "tachiyomi" || uri.scheme == "aniyomi" || uri.scheme == "novelyomi") && uri.host == "add-repo") {
                 val url = uri.getQueryParameter("url") ?: throw Exception("No url for repo import")
-                val prefName = if (uri.scheme == "tachiyomi") {
-                    PrefName.MangaExtensionRepos
-                } else {
-                    PrefName.AnimeExtensionRepos
+                val (prefName, name) = when (uri.scheme) {
+                    "tachiyomi" -> PrefName.MangaExtensionRepos to "Manga"
+                    "aniyomi" -> PrefName.AnimeExtensionRepos to "Anime"
+                    "novelyomi" -> PrefName.NovelExtensionRepos to "Novel"
+                    else -> throw Exception("Invalid scheme")
                 }
                 val savedRepos: Set<String> = PrefManager.getVal(prefName)
                 val newRepos = savedRepos.toMutableSet()
                 AddRepositoryBottomSheet.addRepoWarning(this) {
                     newRepos.add(url)
                     PrefManager.setVal(prefName, newRepos)
-                    toast("${if (uri.scheme == "tachiyomi") "Manga" else "Anime"} Extension Repo added")
+                    toast("$name Extension Repo added")
                 }
                 return
             }
@@ -488,9 +489,9 @@ class MainActivity : AppCompatActivity() {
                             return@passwordAlertDialog
                         }
                         if (PreferencePackager.unpack(decryptedJson)) {
-                            val intent = Intent(this, this.javaClass)
+                            val newIntent = Intent(this, this.javaClass)
                             this.finish()
-                            startActivity(intent)
+                            startActivity(newIntent)
                         }
                     } else {
                         toast("Password cannot be empty")
@@ -499,9 +500,9 @@ class MainActivity : AppCompatActivity() {
             } else if (name.endsWith(".ani")) {
                 val decryptedJson = jsonString.toString(Charsets.UTF_8)
                 if (PreferencePackager.unpack(decryptedJson)) {
-                    val intent = Intent(this, this.javaClass)
+                    val newIntent = Intent(this, this.javaClass)
                     this.finish()
-                    startActivity(intent)
+                    startActivity(newIntent)
                 }
             } else {
                 toast("Invalid file type")

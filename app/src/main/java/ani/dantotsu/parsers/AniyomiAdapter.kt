@@ -499,7 +499,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
             sChapter.url,
             sChapter.name,
             null,
-            sChapter.scanlator,
+            sChapter.scanlator ?: "Unknown",
             sChapter,
             sChapter.date_upload
         )

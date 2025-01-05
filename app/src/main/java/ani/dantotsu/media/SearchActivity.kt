@@ -15,10 +15,16 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.AnilistSearch
-import ani.dantotsu.connections.anilist.SearchResults
+import ani.dantotsu.connections.anilist.AnilistSearch.SearchType
+import ani.dantotsu.connections.anilist.AniMangaSearchResults
+import ani.dantotsu.connections.anilist.CharacterSearchResults
+import ani.dantotsu.connections.anilist.StaffSearchResults
+import ani.dantotsu.connections.anilist.StudioSearchResults
+import ani.dantotsu.connections.anilist.UserSearchResults
 import ani.dantotsu.databinding.ActivitySearchBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.navBarHeight
+import ani.dantotsu.profile.UsersAdapter
 import ani.dantotsu.px
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
@@ -35,14 +41,25 @@ class SearchActivity : AppCompatActivity() {
     val model: AnilistSearch by viewModels()
 
     var style: Int = 0
+    lateinit var searchType: SearchType
     private var screenWidth: Float = 0f
 
     private lateinit var mediaAdaptor: MediaAdaptor
+    private lateinit var characterAdaptor: CharacterAdapter
+    private lateinit var studioAdaptor: StudioAdapter
+    private lateinit var staffAdaptor: AuthorAdapter
+    private lateinit var usersAdapter: UsersAdapter
+
     private lateinit var progressAdapter: ProgressAdapter
     private lateinit var concatAdapter: ConcatAdapter
-    private lateinit var headerAdaptor: SearchAdapter
+    private lateinit var headerAdaptor: HeaderInterface
 
-    lateinit var result: SearchResults
+    lateinit var aniMangaResult: AniMangaSearchResults
+    lateinit var characterResult: CharacterSearchResults
+    lateinit var studioResult: StudioSearchResults
+    lateinit var staffResult: StaffSearchResults
+    lateinit var userResult: UserSearchResults
+
     lateinit var updateChips: (() -> Unit)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,39 +76,117 @@ class SearchActivity : AppCompatActivity() {
             bottom = navBarHeight + 80f.px
         )
 
-        style = PrefManager.getVal(PrefName.SearchStyle)
-        var listOnly: Boolean? = intent.getBooleanExtra("listOnly", false)
-        if (!listOnly!!) listOnly = null
-
         val notSet = model.notSet
-        if (model.notSet) {
-            model.notSet = false
-            model.searchResults = SearchResults(
-                intent.getStringExtra("type") ?: "ANIME",
-                isAdult = if (Anilist.adult) intent.getBooleanExtra("hentai", false) else false,
-                onList = listOnly,
-                search = intent.getStringExtra("query"),
-                genres = intent.getStringExtra("genre")?.let { mutableListOf(it) },
-                tags = intent.getStringExtra("tag")?.let { mutableListOf(it) },
-                sort = intent.getStringExtra("sortBy"),
-                status = intent.getStringExtra("status"),
-                source = intent.getStringExtra("source"),
-                countryOfOrigin = intent.getStringExtra("country"),
-                season = intent.getStringExtra("season"),
-                seasonYear = if (intent.getStringExtra("type") == "ANIME") intent.getStringExtra("seasonYear")
-                    ?.toIntOrNull() else null,
-                startYear = if (intent.getStringExtra("type") == "MANGA") intent.getStringExtra("seasonYear")
-                    ?.toIntOrNull() else null,
-                results = mutableListOf(),
-                hasNextPage = false
-            )
+        searchType = SearchType.fromString(intent.getStringExtra("type") ?: "ANIME")
+        when (searchType) {
+            SearchType.ANIME, SearchType.MANGA -> {
+                style = PrefManager.getVal(PrefName.SearchStyle)
+                var listOnly: Boolean? = intent.getBooleanExtra("listOnly", false)
+                if (!listOnly!!) listOnly = null
+
+                if (model.notSet) {
+                    model.notSet = false
+                    model.aniMangaSearchResults = AniMangaSearchResults(
+                        intent.getStringExtra("type") ?: "ANIME",
+                        isAdult = if (Anilist.adult) intent.getBooleanExtra(
+                            "hentai",
+                            false
+                        ) else false,
+                        onList = listOnly,
+                        search = intent.getStringExtra("query"),
+                        genres = intent.getStringExtra("genre")?.let { mutableListOf(it) },
+                        tags = intent.getStringExtra("tag")?.let { mutableListOf(it) },
+                        sort = intent.getStringExtra("sortBy"),
+                        status = intent.getStringExtra("status"),
+                        source = intent.getStringExtra("source"),
+                        countryOfOrigin = intent.getStringExtra("country"),
+                        season = intent.getStringExtra("season"),
+                        seasonYear = if (intent.getStringExtra("type") == "ANIME") intent.getStringExtra(
+                            "seasonYear"
+                        )
+                            ?.toIntOrNull() else null,
+                        startYear = if (intent.getStringExtra("type") == "MANGA") intent.getStringExtra(
+                            "seasonYear"
+                        )
+                            ?.toIntOrNull() else null,
+                        results = mutableListOf(),
+                        hasNextPage = false
+                    )
+                }
+
+                aniMangaResult = model.aniMangaSearchResults
+                mediaAdaptor =
+                    MediaAdaptor(
+                        style,
+                        model.aniMangaSearchResults.results,
+                        this,
+                        matchParent = true
+                    )
+            }
+
+            SearchType.CHARACTER -> {
+                if (model.notSet) {
+                    model.notSet = false
+                    model.characterSearchResults = CharacterSearchResults(
+                        search = intent.getStringExtra("query"),
+                        results = mutableListOf(),
+                        hasNextPage = false
+                    )
+
+                    characterResult = model.characterSearchResults
+                    characterAdaptor = CharacterAdapter(model.characterSearchResults.results)
+                }
+            }
+
+            SearchType.STUDIO -> {
+                if (model.notSet) {
+                    model.notSet = false
+                    model.studioSearchResults = StudioSearchResults(
+                        search = intent.getStringExtra("query"),
+                        results = mutableListOf(),
+                        hasNextPage = false
+                    )
+
+                    studioResult = model.studioSearchResults
+                    studioAdaptor = StudioAdapter(model.studioSearchResults.results)
+                }
+            }
+
+            SearchType.STAFF -> {
+                if (model.notSet) {
+                    model.notSet = false
+                    model.staffSearchResults = StaffSearchResults(
+                        search = intent.getStringExtra("query"),
+                        results = mutableListOf(),
+                        hasNextPage = false
+                    )
+
+                    staffResult = model.staffSearchResults
+                    staffAdaptor = AuthorAdapter(model.staffSearchResults.results)
+                }
+            }
+
+            SearchType.USER -> {
+                if (model.notSet) {
+                    model.notSet = false
+                    model.userSearchResults = UserSearchResults(
+                        search = intent.getStringExtra("query"),
+                        results = mutableListOf(),
+                        hasNextPage = false
+                    )
+
+                    userResult = model.userSearchResults
+                    usersAdapter = UsersAdapter(model.userSearchResults.results, grid = true)
+                }
+            }
         }
 
-        result = model.searchResults
-
         progressAdapter = ProgressAdapter(searched = model.searched)
-        mediaAdaptor = MediaAdaptor(style, model.searchResults.results, this, matchParent = true)
-        headerAdaptor = SearchAdapter(this, model.searchResults.type)
+        headerAdaptor = if (searchType == SearchType.ANIME || searchType == SearchType.MANGA) {
+            SearchAdapter(this, searchType)
+        } else {
+            SupportingSearchAdapter(this, searchType)
+        }
 
         val gridSize = (screenWidth / 120f).toInt()
         val gridLayoutManager = GridLayoutManager(this, gridSize)
@@ -108,7 +203,27 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
-        concatAdapter = ConcatAdapter(headerAdaptor, mediaAdaptor, progressAdapter)
+        concatAdapter = when (searchType) {
+            SearchType.ANIME, SearchType.MANGA -> {
+                ConcatAdapter(headerAdaptor, mediaAdaptor, progressAdapter)
+            }
+
+            SearchType.CHARACTER -> {
+                ConcatAdapter(headerAdaptor, characterAdaptor, progressAdapter)
+            }
+
+            SearchType.STUDIO -> {
+                ConcatAdapter(headerAdaptor, studioAdaptor, progressAdapter)
+            }
+
+            SearchType.STAFF -> {
+                ConcatAdapter(headerAdaptor, staffAdaptor, progressAdapter)
+            }
+
+            SearchType.USER -> {
+                ConcatAdapter(headerAdaptor, usersAdapter, progressAdapter)
+            }
+        }
 
         binding.searchRecyclerView.layoutManager = gridLayoutManager
         binding.searchRecyclerView.adapter = concatAdapter
@@ -117,9 +232,9 @@ class SearchActivity : AppCompatActivity() {
             RecyclerView.OnScrollListener() {
             override fun onScrolled(v: RecyclerView, dx: Int, dy: Int) {
                 if (!v.canScrollVertically(1)) {
-                    if (model.searchResults.hasNextPage && model.searchResults.results.isNotEmpty() && !loading) {
+                    if (model.hasNextPage(searchType) && model.resultsIsNotEmpty(searchType) && !loading) {
                         scope.launch(Dispatchers.IO) {
-                            model.loadNextPage(model.searchResults)
+                            model.loadNextPage(searchType)
                         }
                     }
                 }
@@ -127,34 +242,110 @@ class SearchActivity : AppCompatActivity() {
             }
         })
 
-        model.getSearch().observe(this) {
-            if (it != null) {
-                model.searchResults.apply {
-                    onList = it.onList
-                    isAdult = it.isAdult
-                    perPage = it.perPage
-                    search = it.search
-                    sort = it.sort
-                    genres = it.genres
-                    excludedGenres = it.excludedGenres
-                    excludedTags = it.excludedTags
-                    tags = it.tags
-                    season = it.season
-                    startYear = it.startYear
-                    seasonYear = it.seasonYear
-                    status = it.status
-                    source = it.source
-                    format = it.format
-                    countryOfOrigin = it.countryOfOrigin
-                    page = it.page
-                    hasNextPage = it.hasNextPage
+        when (searchType) {
+            SearchType.ANIME, SearchType.MANGA -> {
+                model.getSearch<AniMangaSearchResults>(searchType).observe(this) {
+                    if (it != null) {
+                        model.aniMangaSearchResults.apply {
+                            onList = it.onList
+                            isAdult = it.isAdult
+                            perPage = it.perPage
+                            search = it.search
+                            sort = it.sort
+                            genres = it.genres
+                            excludedGenres = it.excludedGenres
+                            excludedTags = it.excludedTags
+                            tags = it.tags
+                            season = it.season
+                            startYear = it.startYear
+                            seasonYear = it.seasonYear
+                            status = it.status
+                            source = it.source
+                            format = it.format
+                            countryOfOrigin = it.countryOfOrigin
+                            page = it.page
+                            hasNextPage = it.hasNextPage
+                        }
+
+                        val prev = model.aniMangaSearchResults.results.size
+                        model.aniMangaSearchResults.results.addAll(it.results)
+                        mediaAdaptor.notifyItemRangeInserted(prev, it.results.size)
+
+                        progressAdapter.bar?.isVisible = it.hasNextPage
+                    }
                 }
+            }
 
-                val prev = model.searchResults.results.size
-                model.searchResults.results.addAll(it.results)
-                mediaAdaptor.notifyItemRangeInserted(prev, it.results.size)
+            SearchType.CHARACTER -> {
+                model.getSearch<CharacterSearchResults>(searchType).observe(this) {
+                    if (it != null) {
+                        model.characterSearchResults.apply {
+                            search = it.search
+                            page = it.page
+                            hasNextPage = it.hasNextPage
+                        }
 
-                progressAdapter.bar?.isVisible = it.hasNextPage
+                        val prev = model.characterSearchResults.results.size
+                        model.characterSearchResults.results.addAll(it.results)
+                        characterAdaptor.notifyItemRangeInserted(prev, it.results.size)
+
+                        progressAdapter.bar?.isVisible = it.hasNextPage
+                    }
+                }
+            }
+
+            SearchType.STUDIO -> {
+                model.getSearch<StudioSearchResults>(searchType).observe(this) {
+                    if (it != null) {
+                        model.studioSearchResults.apply {
+                            search = it.search
+                            page = it.page
+                            hasNextPage = it.hasNextPage
+                        }
+
+                        val prev = model.studioSearchResults.results.size
+                        model.studioSearchResults.results.addAll(it.results)
+                        studioAdaptor.notifyItemRangeInserted(prev, it.results.size)
+
+                        progressAdapter.bar?.isVisible = it.hasNextPage
+                    }
+                }
+            }
+
+            SearchType.STAFF -> {
+                model.getSearch<StaffSearchResults>(searchType).observe(this) {
+                    if (it != null) {
+                        model.staffSearchResults.apply {
+                            search = it.search
+                            page = it.page
+                            hasNextPage = it.hasNextPage
+                        }
+
+                        val prev = model.staffSearchResults.results.size
+                        model.staffSearchResults.results.addAll(it.results)
+                        staffAdaptor.notifyItemRangeInserted(prev, it.results.size)
+
+                        progressAdapter.bar?.isVisible = it.hasNextPage
+                    }
+                }
+            }
+
+            SearchType.USER -> {
+                model.getSearch<UserSearchResults>(searchType).observe(this) {
+                    if (it != null) {
+                        model.userSearchResults.apply {
+                            search = it.search
+                            page = it.page
+                            hasNextPage = it.hasNextPage
+                        }
+
+                        val prev = model.userSearchResults.results.size
+                        model.userSearchResults.results.addAll(it.results)
+                        usersAdapter.notifyItemRangeInserted(prev, it.results.size)
+
+                        progressAdapter.bar?.isVisible = it.hasNextPage
+                    }
+                }
             }
         }
 
@@ -179,8 +370,32 @@ class SearchActivity : AppCompatActivity() {
     fun emptyMediaAdapter() {
         searchTimer.cancel()
         searchTimer.purge()
-        mediaAdaptor.notifyItemRangeRemoved(0, model.searchResults.results.size)
-        model.searchResults.results.clear()
+        when (searchType) {
+            SearchType.ANIME, SearchType.MANGA -> {
+                mediaAdaptor.notifyItemRangeRemoved(0, model.aniMangaSearchResults.results.size)
+                model.aniMangaSearchResults.results.clear()
+            }
+
+            SearchType.CHARACTER -> {
+                characterAdaptor.notifyItemRangeRemoved(0, model.characterSearchResults.results.size)
+                model.characterSearchResults.results.clear()
+            }
+
+            SearchType.STUDIO -> {
+                studioAdaptor.notifyItemRangeRemoved(0, model.studioSearchResults.results.size)
+                model.studioSearchResults.results.clear()
+            }
+
+            SearchType.STAFF -> {
+                staffAdaptor.notifyItemRangeRemoved(0, model.staffSearchResults.results.size)
+                model.staffSearchResults.results.clear()
+            }
+
+            SearchType.USER -> {
+                usersAdapter.notifyItemRangeRemoved(0, model.userSearchResults.results.size)
+                model.userSearchResults.results.clear()
+            }
+        }
         progressAdapter.bar?.visibility = View.GONE
     }
 
@@ -188,10 +403,30 @@ class SearchActivity : AppCompatActivity() {
     private var loading = false
     fun search() {
         headerAdaptor.setHistoryVisibility(false)
-        val size = model.searchResults.results.size
-        model.searchResults.results.clear()
+        val size = model.size(searchType)
+        model.clearResults(searchType)
         binding.searchRecyclerView.post {
-            mediaAdaptor.notifyItemRangeRemoved(0, size)
+            when (searchType) {
+                SearchType.ANIME, SearchType.MANGA -> {
+                    mediaAdaptor.notifyItemRangeRemoved(0, size)
+                }
+
+                SearchType.CHARACTER -> {
+                    characterAdaptor.notifyItemRangeRemoved(0, size)
+                }
+
+                SearchType.STUDIO -> {
+                    studioAdaptor.notifyItemRangeRemoved(0, size)
+                }
+
+                SearchType.STAFF -> {
+                    staffAdaptor.notifyItemRangeRemoved(0, size)
+                }
+
+                SearchType.USER -> {
+                    usersAdapter.notifyItemRangeRemoved(0, size)
+                }
+            }
         }
 
         progressAdapter.bar?.visibility = View.VISIBLE
@@ -202,7 +437,7 @@ class SearchActivity : AppCompatActivity() {
             override fun run() {
                 scope.launch(Dispatchers.IO) {
                     loading = true
-                    model.loadSearch(result)
+                    model.loadSearch(searchType)
                     loading = false
                 }
             }
@@ -213,8 +448,10 @@ class SearchActivity : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     fun recycler() {
-        mediaAdaptor.type = style
-        mediaAdaptor.notifyDataSetChanged()
+        if (searchType == SearchType.ANIME || searchType == SearchType.MANGA) {
+            mediaAdaptor.type = style
+            mediaAdaptor.notifyDataSetChanged()
+        }
     }
 
     var state: Parcelable? = null

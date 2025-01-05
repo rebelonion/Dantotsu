@@ -29,8 +29,6 @@ class SourcePreferences(
     fun migrationSortingDirection() =
         preferenceStore.getEnum("pref_migration_direction", SetMigrateSorting.Direction.ASCENDING)
 
-    fun trustedSignatures() = preferenceStore.getStringSet("trusted_signatures", emptySet())
-
     // Mixture Sources
 
     fun disabledAnimeSources() = preferenceStore.getStringSet("hidden_anime_catalogues", emptySet())

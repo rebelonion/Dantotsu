@@ -1,12 +1,10 @@
 package ani.dantotsu.home
 
-import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.Fragment
@@ -20,7 +18,6 @@ import ani.dantotsu.settings.saving.internal.PreferencePackager
 import ani.dantotsu.toast
 import ani.dantotsu.util.Logger
 import ani.dantotsu.util.customAlertDialog
-import com.google.android.material.textfield.TextInputEditText
 
 class LoginFragment : Fragment() {
 

@@ -156,6 +156,16 @@ class SettingsCommonActivity : AppCompatActivity() {
                         isActivity = true
                     ),
                     Settings(
+                        type = 2,
+                        name = getString(R.string.open_animanga_directly),
+                        desc = getString(R.string.open_animanga_directly_info),
+                        icon = R.drawable.ic_round_search_24,
+                        isChecked = PrefManager.getVal(PrefName.AniMangaSearchDirect),
+                        switch = { isChecked, _ ->
+                            PrefManager.setVal(PrefName.AniMangaSearchDirect, isChecked)
+                        }
+                    ),
+                    Settings(
                         type = 1,
                         name = getString(R.string.download_manager_select),
                         desc = getString(R.string.download_manager_select_desc),

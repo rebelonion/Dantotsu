@@ -2,15 +2,25 @@ package ani.dantotsu.connections.anilist
 
 import ani.dantotsu.R
 import ani.dantotsu.currContext
+import ani.dantotsu.media.Author
+import ani.dantotsu.media.Character
 import ani.dantotsu.media.Media
+import ani.dantotsu.media.Studio
+import ani.dantotsu.profile.User
 import java.io.Serializable
 
-data class SearchResults(
+interface SearchResults<T> {
+    var search: String?
+    var page: Int
+    var results: MutableList<T>
+    var hasNextPage: Boolean
+}
+
+data class AniMangaSearchResults(
     val type: String,
     var isAdult: Boolean,
     var onList: Boolean? = null,
     var perPage: Int? = null,
-    var search: String? = null,
     var countryOfOrigin: String? = null,
     var sort: String? = null,
     var genres: MutableList<String>? = null,
@@ -23,10 +33,11 @@ data class SearchResults(
     var seasonYear: Int? = null,
     var startYear: Int? = null,
     var season: String? = null,
-    var page: Int = 1,
-    var results: MutableList<Media>,
-    var hasNextPage: Boolean,
-) : Serializable {
+    override var search: String? = null,
+    override var page: Int = 1,
+    override var results: MutableList<Media>,
+    override var hasNextPage: Boolean,
+) : SearchResults<Media>, Serializable {
     fun toChipList(): List<SearchChip> {
         val list = mutableListOf<SearchChip>()
         sort?.let {
@@ -109,3 +120,32 @@ data class SearchResults(
         val text: String
     )
 }
+
+data class CharacterSearchResults(
+    override var search: String?,
+    override var page: Int = 1,
+    override var results: MutableList<Character>,
+    override var hasNextPage: Boolean,
+) : SearchResults<Character>, Serializable
+
+data class StudioSearchResults(
+    override var search: String?,
+    override var page: Int = 1,
+    override var results: MutableList<Studio>,
+    override var hasNextPage: Boolean,
+) : SearchResults<Studio>, Serializable
+
+
+data class StaffSearchResults(
+    override var search: String?,
+    override var page: Int = 1,
+    override var results: MutableList<Author>,
+    override var hasNextPage: Boolean,
+) : SearchResults<Author>, Serializable
+
+data class UserSearchResults(
+    override var search: String?,
+    override var page: Int = 1,
+    override var results: MutableList<User>,
+    override var hasNextPage: Boolean,
+) : SearchResults<User>, Serializable

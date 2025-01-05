@@ -57,7 +57,7 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
     }
 
     private fun setSortByFilterImage() {
-        val filterDrawable = when (activity.result.sort) {
+        val filterDrawable = when (activity.aniMangaResult.sort) {
             Anilist.sortBy[0] -> R.drawable.ic_round_area_chart_24
             Anilist.sortBy[1] -> R.drawable.ic_round_filter_peak_24
             Anilist.sortBy[2] -> R.drawable.ic_round_star_graph_24
@@ -71,10 +71,10 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
     }
 
     private fun resetSearchFilter() {
-        activity.result.sort = null
+        activity.aniMangaResult.sort = null
         binding.sortByFilter.setImageResource(R.drawable.ic_round_filter_alt_24)
         startBounceZoomAnimation(binding.sortByFilter)
-        activity.result.countryOfOrigin = null
+        activity.aniMangaResult.countryOfOrigin = null
         binding.countryFilter.setImageResource(R.drawable.ic_round_globe_search_googlefonts)
         startBounceZoomAnimation(binding.countryFilter)
 
@@ -98,10 +98,10 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
 
         activity = requireActivity() as SearchActivity
 
-        selectedGenres = activity.result.genres ?: mutableListOf()
-        exGenres = activity.result.excludedGenres ?: mutableListOf()
-        selectedTags = activity.result.tags ?: mutableListOf()
-        exTags = activity.result.excludedTags ?: mutableListOf()
+        selectedGenres = activity.aniMangaResult.genres ?: mutableListOf()
+        exGenres = activity.aniMangaResult.excludedGenres ?: mutableListOf()
+        selectedTags = activity.aniMangaResult.tags ?: mutableListOf()
+        exTags = activity.aniMangaResult.excludedTags ?: mutableListOf()
         setSortByFilterImage()
 
         binding.resetSearchFilter.setOnClickListener {
@@ -126,7 +126,7 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
                 resetSearchFilter()
 
                 CoroutineScope(Dispatchers.Main).launch {
-                    activity.result.apply {
+                    activity.aniMangaResult.apply {
                         status =
                             binding.searchStatus.text.toString().replace(" ", "_").ifBlank { null }
                         source =
@@ -135,7 +135,7 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
                         season = binding.searchSeason.text.toString().ifBlank { null }
                         startYear = binding.searchYear.text.toString().toIntOrNull()
                         seasonYear = binding.searchYear.text.toString().toIntOrNull()
-                        sort = activity.result.sort
+                        sort = activity.aniMangaResult.sort
                         genres = selectedGenres
                         tags = selectedTags
                         excludedGenres = exGenres
@@ -155,43 +155,43 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
             popupMenu.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.sort_by_score -> {
-                        activity.result.sort = Anilist.sortBy[0]
+                        activity.aniMangaResult.sort = Anilist.sortBy[0]
                         binding.sortByFilter.setImageResource(R.drawable.ic_round_area_chart_24)
                         startBounceZoomAnimation()
                     }
 
                     R.id.sort_by_popular -> {
-                        activity.result.sort = Anilist.sortBy[1]
+                        activity.aniMangaResult.sort = Anilist.sortBy[1]
                         binding.sortByFilter.setImageResource(R.drawable.ic_round_filter_peak_24)
                         startBounceZoomAnimation()
                     }
 
                     R.id.sort_by_trending -> {
-                        activity.result.sort = Anilist.sortBy[2]
+                        activity.aniMangaResult.sort = Anilist.sortBy[2]
                         binding.sortByFilter.setImageResource(R.drawable.ic_round_star_graph_24)
                         startBounceZoomAnimation()
                     }
 
                     R.id.sort_by_recent -> {
-                        activity.result.sort = Anilist.sortBy[3]
+                        activity.aniMangaResult.sort = Anilist.sortBy[3]
                         binding.sortByFilter.setImageResource(R.drawable.ic_round_new_releases_24)
                         startBounceZoomAnimation()
                     }
 
                     R.id.sort_by_a_z -> {
-                        activity.result.sort = Anilist.sortBy[4]
+                        activity.aniMangaResult.sort = Anilist.sortBy[4]
                         binding.sortByFilter.setImageResource(R.drawable.ic_round_filter_list_24)
                         startBounceZoomAnimation()
                     }
 
                     R.id.sort_by_z_a -> {
-                        activity.result.sort = Anilist.sortBy[5]
+                        activity.aniMangaResult.sort = Anilist.sortBy[5]
                         binding.sortByFilter.setImageResource(R.drawable.ic_round_filter_list_24_reverse)
                         startBounceZoomAnimation()
                     }
 
                     R.id.sort_by_pure_pain -> {
-                        activity.result.sort = Anilist.sortBy[6]
+                        activity.aniMangaResult.sort = Anilist.sortBy[6]
                         binding.sortByFilter.setImageResource(R.drawable.ic_round_assist_walker_24)
                         startBounceZoomAnimation()
                     }
@@ -212,25 +212,25 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
                     }
 
                     R.id.country_china -> {
-                        activity.result.countryOfOrigin = "CN"
+                        activity.aniMangaResult.countryOfOrigin = "CN"
                         binding.countryFilter.setImageResource(R.drawable.ic_round_globe_china_googlefonts)
                         startBounceZoomAnimation(binding.countryFilter)
                     }
 
                     R.id.country_south_korea -> {
-                        activity.result.countryOfOrigin = "KR"
+                        activity.aniMangaResult.countryOfOrigin = "KR"
                         binding.countryFilter.setImageResource(R.drawable.ic_round_globe_south_korea_googlefonts)
                         startBounceZoomAnimation(binding.countryFilter)
                     }
 
                     R.id.country_japan -> {
-                        activity.result.countryOfOrigin = "JP"
+                        activity.aniMangaResult.countryOfOrigin = "JP"
                         binding.countryFilter.setImageResource(R.drawable.ic_round_globe_japan_googlefonts)
                         startBounceZoomAnimation(binding.countryFilter)
                     }
 
                     R.id.country_taiwan -> {
-                        activity.result.countryOfOrigin = "TW"
+                        activity.aniMangaResult.countryOfOrigin = "TW"
                         binding.countryFilter.setImageResource(R.drawable.ic_round_globe_taiwan_googlefonts)
                         startBounceZoomAnimation(binding.countryFilter)
                     }
@@ -241,18 +241,18 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
         }
 
         binding.searchFilterApply.setOnClickListener {
-            activity.result.apply {
+            activity.aniMangaResult.apply {
                 status = binding.searchStatus.text.toString().replace(" ", "_").ifBlank { null }
                 source = binding.searchSource.text.toString().replace(" ", "_").ifBlank { null }
                 format = binding.searchFormat.text.toString().ifBlank { null }
                 season = binding.searchSeason.text.toString().ifBlank { null }
-                if (activity.result.type == "ANIME") {
+                if (activity.aniMangaResult.type == "ANIME") {
                     seasonYear = binding.searchYear.text.toString().toIntOrNull()
                 } else {
                     startYear = binding.searchYear.text.toString().toIntOrNull()
                 }
-                sort = activity.result.sort
-                countryOfOrigin = activity.result.countryOfOrigin
+                sort = activity.aniMangaResult.sort
+                countryOfOrigin = activity.aniMangaResult.countryOfOrigin
                 genres = selectedGenres
                 tags = selectedTags
                 excludedGenres = exGenres
@@ -266,8 +266,8 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
             dismiss()
         }
         val format =
-            if (activity.result.type == "ANIME") Anilist.animeStatus else Anilist.mangaStatus
-        binding.searchStatus.setText(activity.result.status?.replace("_", " "))
+            if (activity.aniMangaResult.type == "ANIME") Anilist.animeStatus else Anilist.mangaStatus
+        binding.searchStatus.setText(activity.aniMangaResult.status?.replace("_", " "))
         binding.searchStatus.setAdapter(
             ArrayAdapter(
                 binding.root.context,
@@ -276,7 +276,7 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
             )
         )
 
-        binding.searchSource.setText(activity.result.source?.replace("_", " "))
+        binding.searchSource.setText(activity.aniMangaResult.source?.replace("_", " "))
         binding.searchSource.setAdapter(
             ArrayAdapter(
                 binding.root.context,
@@ -285,19 +285,19 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
             )
         )
 
-        binding.searchFormat.setText(activity.result.format)
+        binding.searchFormat.setText(activity.aniMangaResult.format)
         binding.searchFormat.setAdapter(
             ArrayAdapter(
                 binding.root.context,
                 R.layout.item_dropdown,
-                (if (activity.result.type == "ANIME") Anilist.animeFormats else Anilist.mangaFormats).toTypedArray()
+                (if (activity.aniMangaResult.type == "ANIME") Anilist.animeFormats else Anilist.mangaFormats).toTypedArray()
             )
         )
 
-        if (activity.result.type == "ANIME") {
-            binding.searchYear.setText(activity.result.seasonYear?.toString())
+        if (activity.aniMangaResult.type == "ANIME") {
+            binding.searchYear.setText(activity.aniMangaResult.seasonYear?.toString())
         } else {
-            binding.searchYear.setText(activity.result.startYear?.toString())
+            binding.searchYear.setText(activity.aniMangaResult.startYear?.toString())
         }
         binding.searchYear.setAdapter(
             ArrayAdapter(
@@ -308,9 +308,9 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
             )
         )
 
-        if (activity.result.type == "MANGA") binding.searchSeasonCont.visibility = GONE
+        if (activity.aniMangaResult.type == "MANGA") binding.searchSeasonCont.visibility = GONE
         else {
-            binding.searchSeason.setText(activity.result.season)
+            binding.searchSeason.setText(activity.aniMangaResult.season)
             binding.searchSeason.setAdapter(
                 ArrayAdapter(
                     binding.root.context,
@@ -346,7 +346,7 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
         binding.searchGenresGrid.isChecked = false
 
         binding.searchFilterTags.adapter =
-            FilterChipAdapter(Anilist.tags?.get(activity.result.isAdult) ?: listOf()) { chip ->
+            FilterChipAdapter(Anilist.tags?.get(activity.aniMangaResult.isAdult) ?: listOf()) { chip ->
                 val tag = chip.text.toString()
                 chip.isChecked = selectedTags.contains(tag)
                 chip.isCloseIconVisible = exTags.contains(tag)

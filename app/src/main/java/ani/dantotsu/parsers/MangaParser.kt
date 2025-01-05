@@ -79,7 +79,7 @@ data class MangaChapter(
     //Self-Descriptive
     val title: String? = null,
     val description: String? = null,
-    val scanlator: String? = null,
+    val scanlator: String,
     val sChapter: SChapter,
     val date: Long? = null,
 )

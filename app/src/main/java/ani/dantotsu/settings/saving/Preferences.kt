@@ -3,12 +3,13 @@ package ani.dantotsu.settings.saving
 import android.graphics.Color
 import ani.dantotsu.connections.comments.AuthResponse
 import ani.dantotsu.connections.mal.MAL
+import ani.dantotsu.media.SearchHistory
 import ani.dantotsu.notifications.comment.CommentStore
 import ani.dantotsu.notifications.subscription.SubscriptionStore
 import ani.dantotsu.settings.saving.internal.Location
 import ani.dantotsu.settings.saving.internal.Pref
 
-enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
+enum class PrefName(val data: Pref) {
     //General
     SharedUserID(Pref(Location.General, Boolean::class, true)),
     OfflineView(Pref(Location.General, Int::class, 0)),
@@ -32,10 +33,15 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     ),
     AnimeExtensionRepos(Pref(Location.General, Set::class, setOf<String>())),
     MangaExtensionRepos(Pref(Location.General, Set::class, setOf<String>())),
+    NovelExtensionRepos(Pref(Location.General, Set::class, setOf<String>())),
     AnimeSourcesOrder(Pref(Location.General, List::class, listOf<String>())),
-    AnimeSearchHistory(Pref(Location.General, Set::class, setOf<String>())),
     MangaSourcesOrder(Pref(Location.General, List::class, listOf<String>())),
-    MangaSearchHistory(Pref(Location.General, Set::class, setOf<String>())),
+    SortedAnimeSH(Pref(Location.General, List::class, listOf<SearchHistory>())),
+    SortedMangaSH(Pref(Location.General, List::class, listOf<SearchHistory>())),
+    SortedCharacterSH(Pref(Location.General, List::class, listOf<SearchHistory>())),
+    SortedStaffSH(Pref(Location.General, List::class, listOf<SearchHistory>())),
+    SortedStudioSH(Pref(Location.General, List::class, listOf<SearchHistory>())),
+    SortedUserSH(Pref(Location.General, List::class, listOf<SearchHistory>())),
     NovelSourcesOrder(Pref(Location.General, List::class, listOf<String>())),
     CommentNotificationInterval(Pref(Location.General, Int::class, 0)),
     AnilistNotificationInterval(Pref(Location.General, Int::class, 3)),
@@ -49,6 +55,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     CommentsEnabled(Pref(Location.General, Int::class, 0)),
     EnableSocks5Proxy(Pref(Location.General, Boolean::class, false)),
     ProxyAuthEnabled(Pref(Location.General, Boolean::class, false)),
+    AniMangaSearchDirect(Pref(Location.General, Boolean::class, true)),
 
     //User Interface
     UseOLED(Pref(Location.UI, Boolean::class, false)),

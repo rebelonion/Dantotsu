@@ -254,45 +254,6 @@ class AnimeExtensionManager(
     }
 
     /**
-     * Adds the given signature to the list of trusted signatures. It also loads in background the
-     * anime extensions that match this signature.
-     *
-     * @param signature The signature to whitelist.
-     */
-    @OptIn(DelicateCoroutinesApi::class)
-    fun trustSignature(signature: String) {
-        val untrustedSignatures =
-            _untrustedAnimeExtensionsFlow.value.map { it.signatureHash }.toSet()
-        if (signature !in untrustedSignatures) return
-
-        ExtensionLoader.trustedSignaturesAnime += signature
-        preferences.trustedSignatures() += signature
-
-        val nowTrustedAnimeExtensions =
-            _untrustedAnimeExtensionsFlow.value.filter { it.signatureHash == signature }
-        _untrustedAnimeExtensionsFlow.value -= nowTrustedAnimeExtensions
-
-        val ctx = context
-        launchNow {
-            nowTrustedAnimeExtensions
-                .map { animeextension ->
-                    async {
-                        ExtensionLoader.loadAnimeExtensionFromPkgName(
-                            ctx,
-                            animeextension.pkgName
-                        )
-                    }
-                }
-                .map { it.await() }
-                .forEach { result ->
-                    if (result is AnimeLoadResult.Success) {
-                        registerNewExtension(result.extension)
-                    }
-                }
-        }
-    }
-
-    /**
      * Registers the given anime extension in this and the source managers.
      *
      * @param extension The anime extension to be registered.
@@ -375,7 +336,7 @@ class AnimeExtensionManager(
     private fun AnimeExtension.Installed.updateExists(availableAnimeExtension: AnimeExtension.Available? = null): Boolean {
         val availableExt = availableAnimeExtension
             ?: _availableAnimeExtensionsFlow.value.find { it.pkgName == pkgName }
-        if (isUnofficial || availableExt == null) return false
+        if (availableExt == null) return false
 
         return (availableExt.versionCode > versionCode || availableExt.libVersion > libVersion)
     }

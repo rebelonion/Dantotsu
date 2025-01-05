@@ -63,7 +63,7 @@ class MangaChapterAdapter(
         init {
             itemView.setOnClickListener {
                 if (0 <= bindingAdapterPosition && bindingAdapterPosition < arr.size)
-                    fragment.onMangaChapterClick(arr[bindingAdapterPosition].number)
+                    fragment.onMangaChapterClick(arr[bindingAdapterPosition])
             }
         }
     }
@@ -74,7 +74,7 @@ class MangaChapterAdapter(
     fun startDownload(chapterNumber: String) {
         activeDownloads.add(chapterNumber)
         // Find the position of the chapter and notify only that item
-        val position = arr.indexOfFirst { it.number == chapterNumber }
+        val position = arr.indexOfFirst { it.uniqueNumber() == chapterNumber }
         if (position != -1) {
             notifyItemChanged(position)
         }
@@ -84,17 +84,17 @@ class MangaChapterAdapter(
         activeDownloads.remove(chapterNumber)
         downloadedChapters.add(chapterNumber)
         // Find the position of the chapter and notify only that item
-        val position = arr.indexOfFirst { it.number == chapterNumber }
+        val position = arr.indexOfFirst { it.uniqueNumber() == chapterNumber }
         if (position != -1) {
             arr[position].progress = "Downloaded"
             notifyItemChanged(position)
         }
     }
 
-    fun deleteDownload(chapterNumber: String) {
-        downloadedChapters.remove(chapterNumber)
+    fun deleteDownload(chapterNumber: MangaChapter) {
+        downloadedChapters.remove(chapterNumber.uniqueNumber())
         // Find the position of the chapter and notify only that item
-        val position = arr.indexOfFirst { it.number == chapterNumber }
+        val position = arr.indexOfFirst { it.uniqueNumber() == chapterNumber.uniqueNumber() }
         if (position != -1) {
             arr[position].progress = ""
             notifyItemChanged(position)
@@ -105,7 +105,7 @@ class MangaChapterAdapter(
         activeDownloads.remove(chapterNumber)
         downloadedChapters.remove(chapterNumber)
         // Find the position of the chapter and notify only that item
-        val position = arr.indexOfFirst { it.number == chapterNumber }
+        val position = arr.indexOfFirst { it.uniqueNumber() == chapterNumber }
         if (position != -1) {
             arr[position].progress = ""
             notifyItemChanged(position)
@@ -114,7 +114,7 @@ class MangaChapterAdapter(
 
     fun updateDownloadProgress(chapterNumber: String, progress: Int) {
         // Find the position of the chapter and notify only that item
-        val position = arr.indexOfFirst { it.number == chapterNumber }
+        val position = arr.indexOfFirst { it.uniqueNumber() == chapterNumber }
         if (position != -1) {
             arr[position].progress = "Downloading: ${progress}%"
 
@@ -127,7 +127,8 @@ class MangaChapterAdapter(
         if (position < 0 || position >= arr.size) return
         for (i in 0..<n) {
             if (position + i < arr.size) {
-                val chapterNumber = arr[position + i].number
+                val chapter = arr[position + i]
+                val chapterNumber = chapter.uniqueNumber()
                 if (activeDownloads.contains(chapterNumber)) {
                     //do nothing
                     continue
@@ -135,8 +136,8 @@ class MangaChapterAdapter(
                     //do nothing
                     continue
                 } else {
-                    fragment.onMangaChapterDownloadClick(chapterNumber)
-                    startDownload(chapterNumber)
+                    fragment.onMangaChapterDownloadClick(chapter)
+                    startDownload(chapter.uniqueNumber())
                 }
             }
         }
@@ -201,28 +202,29 @@ class MangaChapterAdapter(
         init {
             itemView.setOnClickListener {
                 if (0 <= bindingAdapterPosition && bindingAdapterPosition < arr.size)
-                    fragment.onMangaChapterClick(arr[bindingAdapterPosition].number)
+                    fragment.onMangaChapterClick(arr[bindingAdapterPosition])
             }
             binding.itemDownload.setOnClickListener {
                 if (0 <= bindingAdapterPosition && bindingAdapterPosition < arr.size) {
-                    val chapterNumber = arr[bindingAdapterPosition].number
+                    val chapter = arr[bindingAdapterPosition]
+                    val chapterNumber = chapter.uniqueNumber()
                     if (activeDownloads.contains(chapterNumber)) {
-                        fragment.onMangaChapterStopDownloadClick(chapterNumber)
+                        fragment.onMangaChapterStopDownloadClick(chapter)
                         return@setOnClickListener
                     } else if (downloadedChapters.contains(chapterNumber)) {
                         it.context.customAlertDialog().apply {
                             setTitle("Delete Chapter")
                             setMessage("Are you sure you want to delete ${chapterNumber}?")
                             setPosButton(R.string.delete) {
-                                fragment.onMangaChapterRemoveDownloadClick(chapterNumber)
+                                fragment.onMangaChapterRemoveDownloadClick(chapter)
                             }
                             setNegButton(R.string.cancel)
                             show()
                         }
                         return@setOnClickListener
                     } else {
-                        fragment.onMangaChapterDownloadClick(chapterNumber)
-                        startDownload(chapterNumber)
+                        fragment.onMangaChapterDownloadClick(chapter)
+                        startDownload(chapter.uniqueNumber())
                     }
                 }
             }
@@ -277,7 +279,7 @@ class MangaChapterAdapter(
             is ChapterListViewHolder -> {
                 val binding = holder.binding
                 val ep = arr[position]
-                holder.bind(ep.number, ep.progress)
+                holder.bind(ep.uniqueNumber(), ep.progress)
                 setAnimation(fragment.requireContext(), holder.binding.root)
                 binding.itemChapterNumber.text = ep.number
 

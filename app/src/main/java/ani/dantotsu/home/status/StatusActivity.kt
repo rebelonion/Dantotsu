@@ -9,14 +9,13 @@ import androidx.core.view.updateLayoutParams
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.api.Activity
 import ani.dantotsu.databinding.ActivityStatusBinding
-import ani.dantotsu.initActivity
-import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.home.status.listener.StoriesCallback
+import ani.dantotsu.initActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.profile.User
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.statusBarHeight
-import ani.dantotsu.toast
+import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.util.Logger
 
 class StatusActivity : AppCompatActivity(), StoriesCallback {

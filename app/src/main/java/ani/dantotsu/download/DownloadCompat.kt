@@ -260,7 +260,7 @@ class DownloadCompat {
                             "$mangaLink/${it.name}",
                             it.name,
                             null,
-                            null,
+                            "Unknown",
                             SChapter.create()
                         )
                         chapters.add(chapter)
