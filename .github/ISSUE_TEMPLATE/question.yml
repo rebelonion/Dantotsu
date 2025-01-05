@@ -1,0 +1,35 @@
+name: ❓ Question
+description: Submit a question or query related to Dantotsu
+labels: [question]
+body:
+  - type: textarea
+    id: question-details
+    attributes:
+      label: Question Details
+      description: Provide a detailed explanation of your question or query.
+      placeholder: |
+        Example:
+          "How do I customize the settings in Dartotsu to optimize performance?"
+    validations:
+      required: true
+
+  - type: input
+    id: related-features
+    attributes:
+      label: Related Features (if applicable)
+      description: Mention any specific feature or section of Dantotsu related to your question.
+      placeholder: |
+        Example: "Settings > Performance"
+
+  - type: checkboxes
+    id: submission-checklist
+    attributes:
+      label: Submission Checklist
+      description: Review the following items before submitting your question.
+      options:
+        - label: I have searched existing issues to see if this question has already been answered.
+          required: true
+        - label: I have provided a clear and concise question title.
+          required: true
+        - label: I have provided all relevant details to understand my question fully.
+          required: true

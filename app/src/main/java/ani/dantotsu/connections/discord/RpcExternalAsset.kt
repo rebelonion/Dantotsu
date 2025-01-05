@@ -1,3 +1,5 @@
+// this code was kanged from the greatest mind of this era, aka shivam brahmkshatriya
+// please subscribe to my only fans here: https://github.com/brahmkshatriya
 package ani.dantotsu.connections.discord
 
 

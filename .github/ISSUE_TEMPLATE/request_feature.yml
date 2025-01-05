@@ -1,0 +1,54 @@
+name: 🚀 Feature Request
+description: Propose a new feature to enhance Dantotsu
+labels: [enhancement]
+body:
+  - type: textarea
+    id: feature-summary
+    attributes:
+      label: Feature Summary
+      description: Provide a concise summary of the feature you'd like to see.
+      placeholder: |
+        Example:
+          "Add support for dark mode..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: detailed-description
+    attributes:
+      label: Detailed Description
+      description: Elaborate on how this feature should function and its potential impact.
+      placeholder: |
+        Example:
+          "The dark mode should automatically activate based on system settings..."
+      value: |
+        ### Current Behavior
+        - Describe the current functionality or lack thereof.
+        
+        ### Proposed Solution
+        - Detail how the feature should work and any potential benefits.
+        
+        ### Considerations
+        - Mention any potential challenges or alternatives.
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Provide any other information, relevant screenshots, or references.
+      placeholder: "Include links to relevant resources, external tools, or related issues."
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Submission Checklist
+      description: Ensure you've completed these before submitting.
+      options:
+        - label: I have searched the existing issues and confirm that this feature has not been requested before.
+          required: true
+        - label: I have provided a clear and descriptive title.
+          required: true
+        - label: I am using the **[latest](https://github.com/rebelonion/Dantotsu/releases/latest)** version of Dantotsu. If not, I have provided a reason for using an older version.
+          required: true
+        - label: I understand that not all feature requests will be accepted, and if declined, I won't resubmit the same request.
+          required: true

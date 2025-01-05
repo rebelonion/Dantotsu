@@ -1,0 +1,112 @@
+name: Extension Issue Handling
+on:
+  issues:
+    types: [opened, labeled]
+
+jobs:
+  handle-extension-issues:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Issue Content
+        id: check-issue
+        env:
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          # Regex patterns for extension-related issues
+          EXTENSION_REGEX_PATTERNS=(
+            # Extension not working (more flexible match)
+            ".*(\w+)\s*(extension)?\s*(not working|doesn't work|does not work|cant work|can't work).*"
+            
+            # No extension available
+            ".*(no|can't find|cannot find|missing).*extension.*"
+
+            # No repo or repositories available
+            ".*(no|can't find|cannot find|missing).*repo(s)?\s*(available|found|accessible).*"
+            
+            # Specific server/stream issues
+            ".*(no streams|server).*(available|working).*"
+            
+            # Variants of extension problems
+            ".*{.*}.*not working.*"
+            ".*{.*}.*extension.*(issue|problem).*"
+          )
+          
+          # Convert to lowercase for case-insensitive matching
+          LOWER_TITLE=$(echo "$ISSUE_TITLE" | tr '[:upper:]' '[:lower:]')
+          LOWER_BODY=$(echo "$ISSUE_BODY" | tr '[:upper:]' '[:lower:]')
+          
+          # Flag to track issue type
+          IS_EXTENSION_ISSUE=false
+          IS_NO_EXTENSION_ISSUE=false
+          
+          # Check title and body against regex patterns
+          for pattern in "${EXTENSION_REGEX_PATTERNS[@]}"; do
+            if [[ "$LOWER_TITLE" =~ $pattern ]] || [[ "$LOWER_BODY" =~ $pattern ]]; then
+              IS_EXTENSION_ISSUE=true
+              
+              # Special check for no extensions available
+              if [[ "$LOWER_TITLE" =~ "no extension" ]] || [[ "$LOWER_TITLE" =~ "can't find extension" ]]; then
+                IS_NO_EXTENSION_ISSUE=true
+              fi
+              
+              break
+            fi
+          done
+          
+          # Explicitly output boolean values
+          if [ "$IS_EXTENSION_ISSUE" = true ]; then
+            echo "is_extension_issue=true" >> $GITHUB_OUTPUT
+          else
+            echo "is_extension_issue=false" >> $GITHUB_OUTPUT
+          fi
+          
+          if [ "$IS_NO_EXTENSION_ISSUE" = true ]; then
+            echo "is_no_extension_issue=true" >> $GITHUB_OUTPUT
+          else
+            echo "is_no_extension_issue=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Comment and Close Extension Issue
+        if: steps.check-issue.outputs.is_extension_issue == 'true'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const issueNumber = context.issue.number;
+            
+            // Check if it's a "No Extension" issue
+            if (${{ steps.check-issue.outputs.is_no_extension_issue }}) {
+              // DMCA notice message
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                body: "# Automated Message\n" +
+                "On 13 June 2024, the official Aniyomi repository got a DMCA notice and had to remove all of their extensions. Because of this, we will not be providing anyone with any links or extensions to avoid legal problems.\n" +
+                "# How to add repos?\n" +
+                "Although we do not give or maintain any repositories, we support adding custom repository links to your Dantotsu. \n" +
+                "Go to `Profile > Settings > Extensions` then paste your anime or manga links there.\n" +
+                "# How to find repos?\n" +
+                "It's very easy. Search on Google. But remember that the URL must end with <u><b>index.min.json</b></u> or else it won't work.\n" +
+                "`TLDR: We will not give repo links.`"
+              });
+            } else {
+              // Standard extension issue message
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                body: `Dantotsu doesn't maintain extensions.
+                If the extension doesn't work we cannot help you. 
+                Contact the owner of Respective Repo for extension-related problems`
+              });
+            }
+            
+            // Close the issue
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              state: 'closed'
+            });
