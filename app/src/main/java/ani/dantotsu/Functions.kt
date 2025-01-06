@@ -157,6 +157,8 @@ import java.util.TimeZone
 import java.util.Timer
 import java.util.TimerTask
 import kotlin.collections.set
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 import kotlin.math.log2
 import kotlin.math.max
 import kotlin.math.min
@@ -1523,4 +1525,14 @@ fun getLanguageName(language: String): String? {
         }
     }
     return null
+}
+
+@OptIn(ExperimentalEncodingApi::class)
+fun String.decodeBase64ToString(): String {
+    return try {
+        String(Base64.decode(this), Charsets.UTF_8)
+    } catch (e: Exception) {
+        Logger.log(e)
+        ""
+    }
 }
