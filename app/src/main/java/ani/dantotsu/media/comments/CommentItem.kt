@@ -15,7 +15,6 @@ import ani.dantotsu.databinding.ItemCommentsBinding
 import ani.dantotsu.getAppString
 import ani.dantotsu.loadImage
 import ani.dantotsu.openImage
-import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.setAnimation
 import ani.dantotsu.snackString

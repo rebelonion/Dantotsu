@@ -38,7 +38,7 @@ class CircleView(context: Context, attrs: AttributeSet?) : View(context, attrs) 
 
         fun setColor(int: Int) {
             paint.color = if (int < booleanList.size && booleanList[int]) {
-                 Color.GRAY
+                Color.GRAY
             } else {
                 if (isUser) secondColor else primaryColor
             }
@@ -58,7 +58,7 @@ class CircleView(context: Context, attrs: AttributeSet?) : View(context, attrs) 
         } else {
             val effectiveAngle = totalAngle / parts
             for (i in 0 until parts) {
-                val startAngle = i * (effectiveAngle + gapAngle) -90f
+                val startAngle = i * (effectiveAngle + gapAngle) - 90f
                 path.reset()
                 path.addArc(
                     centerX - radius,
@@ -74,7 +74,7 @@ class CircleView(context: Context, attrs: AttributeSet?) : View(context, attrs) 
 
     }
 
-    fun setParts(parts: Int, list : List<Boolean> = mutableListOf(), isUser: Boolean)  {
+    fun setParts(parts: Int, list: List<Boolean> = mutableListOf(), isUser: Boolean) {
         this.parts = parts
         this.booleanList = list
         this.isUser = isUser

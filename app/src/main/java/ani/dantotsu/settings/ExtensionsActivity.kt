@@ -169,8 +169,12 @@ class ExtensionsActivity : AppCompatActivity() {
             customAlertDialog().apply {
                 setTitle("Language")
                 singleChoiceItems(languageOptions, index) { selected ->
-                    PrefManager.setVal(PrefName.LangSort, LanguageMapper.Companion.Language.entries[selected].code)
-                    val currentFragment = supportFragmentManager.findFragmentByTag("f${viewPager.currentItem}")
+                    PrefManager.setVal(
+                        PrefName.LangSort,
+                        LanguageMapper.Companion.Language.entries[selected].code
+                    )
+                    val currentFragment =
+                        supportFragmentManager.findFragmentByTag("f${viewPager.currentItem}")
                     if (currentFragment is SearchQueryHandler) {
                         currentFragment.notifyDataChanged()
                     }

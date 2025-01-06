@@ -5,7 +5,6 @@ import ani.dantotsu.currContext
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaNameAdapter
 import ani.dantotsu.media.Selected
-import ani.dantotsu.media.emptyMedia
 import ani.dantotsu.parsers.AnimeParser
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.BaseParser
@@ -63,11 +62,11 @@ class SubscriptionHelper {
                     val show = parser.loadSavedShowResponse(subscribeMedia.id)
                         ?: forceLoadShowResponse(subscribeMedia, selected, parser)
                         ?: throw Exception(
-                        currContext()?.getString(
-                            R.string.failed_to_load_data,
-                            subscribeMedia.id
+                            currContext()?.getString(
+                                R.string.failed_to_load_data,
+                                subscribeMedia.id
+                            )
                         )
-                    )
                     show.sAnime?.let {
                         parser.getLatestEpisode(
                             show.link, show.extra,
@@ -103,11 +102,11 @@ class SubscriptionHelper {
                     val show = parser.loadSavedShowResponse(subscribeMedia.id)
                         ?: forceLoadShowResponse(subscribeMedia, selected, parser)
                         ?: throw Exception(
-                        currContext()?.getString(
-                            R.string.failed_to_load_data,
-                            subscribeMedia.id
+                            currContext()?.getString(
+                                R.string.failed_to_load_data,
+                                subscribeMedia.id
+                            )
                         )
-                    )
                     show.sManga?.let {
                         parser.getLatestChapter(
                             show.link, show.extra,
@@ -123,7 +122,11 @@ class SubscriptionHelper {
             }
         }
 
-        private suspend fun forceLoadShowResponse(subscribeMedia: SubscribeMedia, selected: Selected, parser: BaseParser): ShowResponse? {
+        private suspend fun forceLoadShowResponse(
+            subscribeMedia: SubscribeMedia,
+            selected: Selected,
+            parser: BaseParser
+        ): ShowResponse? {
             val tempMedia = Media(
                 id = subscribeMedia.id,
                 name = null,

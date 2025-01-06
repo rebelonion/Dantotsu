@@ -120,8 +120,10 @@ class NovelExtensionManager(private val context: Context) {
      * @param extension The anime extension to be installed.
      */
     fun installExtension(extension: NovelExtension.Available): Observable<InstallStep> {
-        return installer.downloadAndInstall(api.getNovelApkUrl(extension), extension.pkgName,
-            extension.name, MediaType.NOVEL)
+        return installer.downloadAndInstall(
+            api.getNovelApkUrl(extension), extension.pkgName,
+            extension.name, MediaType.NOVEL
+        )
     }
 
     /**

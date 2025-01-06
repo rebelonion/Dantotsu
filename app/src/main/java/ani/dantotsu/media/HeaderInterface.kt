@@ -9,7 +9,7 @@ import android.view.animation.Animation
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.databinding.ItemSearchHeaderBinding
 
-abstract class HeaderInterface: RecyclerView.Adapter<HeaderInterface.SearchHeaderViewHolder>() {
+abstract class HeaderInterface : RecyclerView.Adapter<HeaderInterface.SearchHeaderViewHolder>() {
     private val itemViewType = 6969
     var search: Runnable? = null
     var requestFocus: Runnable? = null

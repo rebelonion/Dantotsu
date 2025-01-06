@@ -145,7 +145,10 @@ class AnilistMutations {
         return result?.get("errors") == null
     }
 
-    suspend fun updateCustomLists(animeCustomLists: List<String>?, mangaCustomLists: List<String>?): Boolean {
+    suspend fun updateCustomLists(
+        animeCustomLists: List<String>?,
+        mangaCustomLists: List<String>?
+    ): Boolean {
         val query = """
             mutation (${"$"}animeListOptions: MediaListOptionsInput, ${"$"}mangaListOptions: MediaListOptionsInput) {
                 UpdateUser(animeListOptions: ${"$"}animeListOptions, mangaListOptions: ${"$"}mangaListOptions) {
@@ -291,7 +294,8 @@ class AnilistMutations {
                     isFollower
                 }
             }
-        """.trimIndent())
+        """.trimIndent()
+        )
     }
 
     suspend fun toggleLike(id: Int, type: String): ToggleLike? {
@@ -302,7 +306,8 @@ class AnilistMutations {
                     __typename
                 }
             }
-        """.trimIndent())
+        """.trimIndent()
+        )
     }
 
     suspend fun postActivity(text: String, edit: Int? = null): String {
@@ -316,10 +321,16 @@ class AnilistMutations {
         """.trimIndent()
         val result = executeQuery<JsonObject>(query)
         val errors = result?.get("errors")
-        return errors?.toString() ?: (currContext()?.getString(ani.dantotsu.R.string.success) ?: "Success")
+        return errors?.toString() ?: (currContext()?.getString(ani.dantotsu.R.string.success)
+            ?: "Success")
     }
 
-    suspend fun postMessage(userId: Int, text: String, edit: Int? = null, isPrivate: Boolean = false): String {
+    suspend fun postMessage(
+        userId: Int,
+        text: String,
+        edit: Int? = null,
+        isPrivate: Boolean = false
+    ): String {
         val encodedText = text.replace("", "").stringSanitizer()
         val query = """
             mutation {
@@ -335,7 +346,8 @@ class AnilistMutations {
         """.trimIndent()
         val result = executeQuery<JsonObject>(query)
         val errors = result?.get("errors")
-        return errors?.toString() ?: (currContext()?.getString(ani.dantotsu.R.string.success) ?: "Success")
+        return errors?.toString() ?: (currContext()?.getString(ani.dantotsu.R.string.success)
+            ?: "Success")
     }
 
     suspend fun postReply(activityId: Int, text: String, edit: Int? = null): String {
@@ -353,7 +365,8 @@ class AnilistMutations {
         """.trimIndent()
         val result = executeQuery<JsonObject>(query)
         val errors = result?.get("errors")
-        return errors?.toString() ?: (currContext()?.getString(ani.dantotsu.R.string.success) ?: "Success")
+        return errors?.toString() ?: (currContext()?.getString(ani.dantotsu.R.string.success)
+            ?: "Success")
     }
 
     suspend fun postReview(summary: String, body: String, mediaId: Int, score: Int): String {
@@ -373,7 +386,8 @@ class AnilistMutations {
         """.trimIndent()
         val result = executeQuery<JsonObject>(query)
         val errors = result?.get("errors")
-        return errors?.toString() ?: (currContext()?.getString(ani.dantotsu.R.string.success) ?: "Success")
+        return errors?.toString() ?: (currContext()?.getString(ani.dantotsu.R.string.success)
+            ?: "Success")
     }
 
     suspend fun deleteActivityReply(activityId: Int): Boolean {

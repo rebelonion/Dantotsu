@@ -35,11 +35,11 @@ class UsersAdapter(private val user: MutableList<User>, private val grid: Boolea
                 parent,
                 false
             ) else
-            ItemFollowerBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
+                ItemFollowerBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
         )
     }
 

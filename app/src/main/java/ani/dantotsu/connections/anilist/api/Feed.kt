@@ -14,6 +14,7 @@ data class FeedResponse(
         val page: ActivityPage
     ) : java.io.Serializable
 }
+
 @Serializable
 data class ActivityPage(
     @SerialName("activities")

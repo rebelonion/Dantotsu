@@ -290,7 +290,8 @@ class PlayerSettingsActivity :
             PrefManager.setVal(PrefName.UseInternalCast, isChecked)
         }
 
-        binding.playerSettingsAdditionalCodec.isChecked = PrefManager.getVal(PrefName.UseAdditionalCodec)
+        binding.playerSettingsAdditionalCodec.isChecked =
+            PrefManager.getVal(PrefName.UseAdditionalCodec)
         binding.playerSettingsAdditionalCodec.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.UseAdditionalCodec, isChecked)
         }

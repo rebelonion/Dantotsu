@@ -262,8 +262,6 @@ class Stories @JvmOverloads constructor(
     }
 
 
-
-
     private fun rightPanelTouch() {
         Logger.log("rightPanelTouch: $storyIndex")
         if (storyIndex == activityList.size) {
@@ -366,8 +364,8 @@ class Stories @JvmOverloads constructor(
                         if (
                             story.status?.contains("completed") == false &&
                             !story.status.contains("plans") &&
-                            !story.status.contains("repeating")&&
-                            !story.status.contains("paused")&&
+                            !story.status.contains("repeating") &&
+                            !story.status.contains("paused") &&
                             !story.status.contains("dropped")
                         ) {
                             "of ${story.media?.title?.userPreferred}"
@@ -469,6 +467,7 @@ class Stories @JvmOverloads constructor(
             }
         }
     }
+
     private var startClickTime = 0L
     private var startX = 0f
     private var startY = 0f
@@ -478,7 +477,8 @@ class Stories @JvmOverloads constructor(
         onTouchView(view, event)
         return true
     }
-    private fun onTouchView(view: View, event: MotionEvent, isText: Boolean = false){
+
+    private fun onTouchView(view: View, event: MotionEvent, isText: Boolean = false) {
         val maxClickDuration = 200
         val screenWidth = view.width
         val leftHalf = screenWidth / 2
@@ -492,6 +492,7 @@ class Stories @JvmOverloads constructor(
                 pause()
                 isLongPress = false
             }
+
             MotionEvent.ACTION_MOVE -> {
                 val deltaX = event.x - startX
                 val deltaY = event.y - startY
@@ -499,6 +500,7 @@ class Stories @JvmOverloads constructor(
                     isLongPress = true
                 }
             }
+
             MotionEvent.ACTION_UP -> {
                 val clickDuration = Calendar.getInstance().timeInMillis - startClickTime
                 if (isText) {

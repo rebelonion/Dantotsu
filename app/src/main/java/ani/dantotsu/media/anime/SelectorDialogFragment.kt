@@ -2,7 +2,6 @@ package ani.dantotsu.media.anime
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.DialogInterface
@@ -446,7 +445,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                     var subtitleToDownload: Subtitle? = null
                     requireActivity().customAlertDialog().apply {
                         setTitle(R.string.download_subtitle)
-                        singleChoiceItems(subtitleNames.toTypedArray()) {which ->
+                        singleChoiceItems(subtitleNames.toTypedArray()) { which ->
                             subtitleToDownload = subtitles[which]
                         }
                         setPosButton(R.string.download) {
@@ -483,7 +482,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                     )
                 } else {
                     val downloadAddonManager: DownloadAddonManager = Injekt.get()
-                    if (!downloadAddonManager.isAvailable()){
+                    if (!downloadAddonManager.isAvailable()) {
                         val context = currContext() ?: requireContext()
                         context.customAlertDialog().apply {
                             setTitle(R.string.download_addon_not_installed)
@@ -564,17 +563,21 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                             snackString(R.string.no_video_selected)
                         }
                     }
+
                     fun checkAudioTracks() {
                         val audioTracks = extractor.audioTracks.map { it.lang }
                         if (audioTracks.isNotEmpty()) {
                             val audioNamesArray = audioTracks.toTypedArray()
                             val checkedItems = BooleanArray(audioNamesArray.size) { false }
 
-                            currContext.customAlertDialog().apply{ // ToTest
+                            currContext.customAlertDialog().apply { // ToTest
                                 setTitle(R.string.download_audio_tracks)
                                 multiChoiceItems(audioNamesArray, checkedItems) {
                                     it.forEachIndexed { index, isChecked ->
-                                        val audioPair = Pair(extractor.audioTracks[index].url, extractor.audioTracks[index].lang)
+                                        val audioPair = Pair(
+                                            extractor.audioTracks[index].url,
+                                            extractor.audioTracks[index].lang
+                                        )
                                         if (isChecked) {
                                             selectedAudioTracks.add(audioPair)
                                         } else {
@@ -606,7 +609,8 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                             setTitle(R.string.download_subtitle)
                             multiChoiceItems(subtitleNamesArray, checkedItems) {
                                 it.forEachIndexed { index, isChecked ->
-                                    val subtitlePair = Pair(subtitles[index].file.url, subtitles[index].language)
+                                    val subtitlePair =
+                                        Pair(subtitles[index].file.url, subtitles[index].language)
                                     if (isChecked) {
                                         selectedSubtitles.add(subtitlePair)
                                     } else {

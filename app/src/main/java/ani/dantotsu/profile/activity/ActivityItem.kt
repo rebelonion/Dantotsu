@@ -16,8 +16,8 @@ import ani.dantotsu.profile.User
 import ani.dantotsu.profile.UsersDialogFragment
 import ani.dantotsu.setAnimation
 import ani.dantotsu.snackString
-import ani.dantotsu.util.AniMarkdown.Companion.getBasicAniHTML
 import ani.dantotsu.util.ActivityMarkdownCreator
+import ani.dantotsu.util.AniMarkdown.Companion.getBasicAniHTML
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.viewbinding.BindableItem
 import kotlinx.coroutines.CoroutineScope
@@ -52,14 +52,19 @@ class ActivityItem(
         }
         binding.activityRepliesContainer.setOnClickListener {
             RepliesBottomDialog.newInstance(activity.id)
-                .show((context as  FragmentActivity).supportFragmentManager, "replies")
+                .show((context as FragmentActivity).supportFragmentManager, "replies")
         }
         binding.replyCount.text = activity.replyCount.toString()
-        binding.activityReplies.setColorFilter(ContextCompat.getColor(binding.root.context, R.color.bg_opp))
+        binding.activityReplies.setColorFilter(
+            ContextCompat.getColor(
+                binding.root.context,
+                R.color.bg_opp
+            )
+        )
         binding.activityLikeContainer.setOnLongClickListener {
             UsersDialogFragment().apply {
                 userList(userList)
-                show((context as  FragmentActivity).supportFragmentManager, "dialog")
+                show((context as FragmentActivity).supportFragmentManager, "dialog")
             }
             true
         }
@@ -84,7 +89,8 @@ class ActivityItem(
                 }
             }
         }
-        binding.activityDelete.isVisible = activity.userId == Anilist.userid || activity.messenger?.id == Anilist.userid
+        binding.activityDelete.isVisible =
+            activity.userId == Anilist.userid || activity.messenger?.id == Anilist.userid
         binding.activityDelete.setOnClickListener {
             scope.launch {
                 val res = Anilist.mutation.deleteActivity(activity.id)
@@ -161,7 +167,8 @@ class ActivityItem(
             "MessageActivity" -> {
                 binding.activityBannerContainer.visibility = View.GONE
                 binding.activityContent.visibility = View.VISIBLE
-                binding.activityPrivate.visibility = if (activity.isPrivate == true) View.VISIBLE else View.GONE
+                binding.activityPrivate.visibility =
+                    if (activity.isPrivate == true) View.VISIBLE else View.GONE
                 if (!(context as android.app.Activity).isDestroyed) {
                     val markwon = buildMarkwon(context, false)
                     markwon.setMarkdown(

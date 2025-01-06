@@ -5,9 +5,9 @@ import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.os.Build
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import android.view.View
 import ani.dantotsu.R
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName

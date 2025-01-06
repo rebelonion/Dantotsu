@@ -30,7 +30,6 @@ import ani.dantotsu.bottomBar
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.currActivity
 import ani.dantotsu.currContext
-import ani.dantotsu.download.DownloadCompat
 import ani.dantotsu.download.DownloadCompat.Companion.loadMediaCompat
 import ani.dantotsu.download.DownloadCompat.Companion.loadOfflineAnimeModelCompat
 import ani.dantotsu.download.DownloadedType
@@ -209,7 +208,9 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                 setMessage("Are you sure you want to delete ${item.title}?")
                 setPosButton(R.string.yes) {
                     downloadManager.removeMedia(item.title, type)
-                    val mediaIds = PrefManager.getAnimeDownloadPreferences().all?.filter { it.key.contains(item.title) }?.values ?: emptySet()
+                    val mediaIds =
+                        PrefManager.getAnimeDownloadPreferences().all?.filter { it.key.contains(item.title) }?.values
+                            ?: emptySet()
                     if (mediaIds.isEmpty()) {
                         snackString("No media found")  // if this happens, terrible things have happened
                     }
@@ -287,10 +288,12 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
         }
         downloadsJob = Job()
         CoroutineScope(Dispatchers.IO + downloadsJob).launch {
-            val animeTitles = downloadManager.animeDownloadedTypes.map { it.titleName.findValidName() }.distinct()
+            val animeTitles =
+                downloadManager.animeDownloadedTypes.map { it.titleName.findValidName() }.distinct()
             val newAnimeDownloads = mutableListOf<OfflineAnimeModel>()
             for (title in animeTitles) {
-                val tDownloads = downloadManager.animeDownloadedTypes.filter { it.titleName.findValidName() == title }
+                val tDownloads =
+                    downloadManager.animeDownloadedTypes.filter { it.titleName.findValidName() == title }
                 val download = tDownloads.firstOrNull() ?: continue
                 val offlineAnimeModel = loadOfflineAnimeModel(download)
                 if (offlineAnimeModel.title == "unknown") offlineAnimeModel.title = title

@@ -67,10 +67,13 @@ class SubscriptionsBottomDialog : BottomSheetDialogFragment() {
         return when {
             animeExtension.installedExtensionsFlow.value.any { it.name == parserName } ->
                 animeExtension.installedExtensionsFlow.value.find { it.name == parserName }?.icon
+
             mangaExtensions.installedExtensionsFlow.value.any { it.name == parserName } ->
                 mangaExtensions.installedExtensionsFlow.value.find { it.name == parserName }?.icon
+
             novelExtensions.installedExtensionsFlow.value.any { it.name == parserName } ->
                 novelExtensions.installedExtensionsFlow.value.find { it.name == parserName }?.icon
+
             else -> null
         }
     }

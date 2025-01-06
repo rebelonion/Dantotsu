@@ -100,6 +100,7 @@ class MediaDetailsViewModel : ViewModel() {
             if (kitsuEpisodes.value == null) kitsuEpisodes.postValue(Kitsu.getKitsuEpisodesDetails(s))
         }
     }
+
     private val anifyEpisodes: MutableLiveData<Map<String, Episode>> =
         MutableLiveData<Map<String, Episode>>(null)
 

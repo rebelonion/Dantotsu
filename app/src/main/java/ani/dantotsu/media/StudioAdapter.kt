@@ -55,7 +55,11 @@ class StudioAdapter(
                     ).toBundle()
                 )
             }
-            itemView.setOnLongClickListener { copyToClipboard(studioList[bindingAdapterPosition].name ?: ""); true }
+            itemView.setOnLongClickListener {
+                copyToClipboard(
+                    studioList[bindingAdapterPosition].name
+                ); true
+            }
         }
     }
 }

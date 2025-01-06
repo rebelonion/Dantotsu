@@ -41,7 +41,8 @@ class TorrentServerService : Service() {
         flags: Int,
         startId: Int,
     ): Int {
-        extension = Injekt.get<TorrentAddonManager>().extension?.extension ?: return START_NOT_STICKY
+        extension =
+            Injekt.get<TorrentAddonManager>().extension?.extension ?: return START_NOT_STICKY
         intent?.let {
             if (it.action != null) {
                 when (it.action) {

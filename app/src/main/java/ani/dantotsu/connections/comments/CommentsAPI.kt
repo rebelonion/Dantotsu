@@ -372,6 +372,7 @@ object CommentsAPI {
         }
         errorMessage("Failed to login after multiple attempts")
     }
+
     private fun errorMessage(reason: String) {
         if (commentsEnabled) Logger.log(reason)
         if (isOnline && commentsEnabled) snackString(reason)
@@ -410,7 +411,7 @@ object CommentsAPI {
         return map
     }
 
-    private fun requestBuilder(client: OkHttpClient = Injekt.get<NetworkHelper>().client): Requests {
+    fun requestBuilder(client: OkHttpClient = Injekt.get<NetworkHelper>().client): Requests {
         return Requests(
             client,
             headerBuilder()

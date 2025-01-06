@@ -107,9 +107,9 @@ class App : MultiDexApplication() {
 
         if (PrefManager.getVal<Int>(PrefName.CommentsEnabled) == 0) {
             if (BuildConfig.FLAVOR.contains("fdroid")) {
-              PrefManager.setVal(PrefName.CommentsEnabled, 2)
+                PrefManager.setVal(PrefName.CommentsEnabled, 2)
             } else {
-              PrefManager.setVal(PrefName.CommentsEnabled, 1)
+                PrefManager.setVal(PrefName.CommentsEnabled, 1)
             }
         }
 
@@ -136,9 +136,9 @@ class App : MultiDexApplication() {
             downloadAddonManager = Injekt.get()
             torrentAddonManager.init()
             downloadAddonManager.init()
-            if (PrefManager.getVal<Int>(PrefName.CommentsEnabled) == 1) { 
+            if (PrefManager.getVal<Int>(PrefName.CommentsEnabled) == 1) {
                 CommentsAPI.fetchAuthToken(this@App)
-             }
+            }
 
             val useAlarmManager = PrefManager.getVal<Boolean>(PrefName.UseAlarmManager)
             val scheduler = TaskScheduler.create(this@App, useAlarmManager)

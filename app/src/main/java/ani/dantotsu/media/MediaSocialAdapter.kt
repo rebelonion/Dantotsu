@@ -44,7 +44,10 @@ class MediaSocialAdapter(
             profileUserName.text = user.name
             profileInfo.apply {
                 text = when (user.status) {
-                    "CURRENT" -> if (type == "ANIME") getAppString(R.string.watching) else getAppString(R.string.reading)
+                    "CURRENT" -> if (type == "ANIME") getAppString(R.string.watching) else getAppString(
+                        R.string.reading
+                    )
+
                     else -> user.status ?: ""
                 }
                 visibility = View.VISIBLE
@@ -63,10 +66,12 @@ class MediaSocialAdapter(
             profileCompactProgressContainer.visibility = View.VISIBLE
 
             profileUserAvatar.setOnClickListener {
-                ContextCompat.startActivity(root.context,
+                ContextCompat.startActivity(
+                    root.context,
                     Intent(root.context, ProfileActivity::class.java)
                         .putExtra("userId", user.id),
-                    null)
+                    null
+                )
             }
             profileUserAvatarContainer.setOnLongClickListener {
                 ImageViewDialog.newInstance(

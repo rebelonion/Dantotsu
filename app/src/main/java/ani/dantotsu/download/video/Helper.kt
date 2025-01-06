@@ -177,6 +177,7 @@ object Helper {
             downloadManager
         }
     }
+
     @Deprecated("exoplayer download manager is no longer used")
     @OptIn(UnstableApi::class)
     fun getSimpleCache(context: Context): SimpleCache {
@@ -189,6 +190,7 @@ object Helper {
             simpleCache!!
         }
     }
+
     @Synchronized
     @Deprecated("exoplayer download manager is no longer used")
     private fun getDownloadDirectory(context: Context): File {
@@ -200,12 +202,16 @@ object Helper {
         }
         return downloadDirectory!!
     }
+
     @Deprecated("exoplayer download manager is no longer used")
     private var download: DownloadManager? = null
+
     @Deprecated("exoplayer download manager is no longer used")
     private const val DOWNLOAD_CONTENT_DIRECTORY = "Anime_Downloads"
+
     @Deprecated("exoplayer download manager is no longer used")
     private var simpleCache: SimpleCache? = null
+
     @Deprecated("exoplayer download manager is no longer used")
     private var downloadDirectory: File? = null
 }

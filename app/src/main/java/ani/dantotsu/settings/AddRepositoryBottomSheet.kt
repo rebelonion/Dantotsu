@@ -33,7 +33,7 @@ class RepoItem(
     val url: String,
     private val mediaType: MediaType,
     val onRemove: (String, MediaType) -> Unit
-) :BindableItem<ItemRepoBinding>() {
+) : BindableItem<ItemRepoBinding>() {
     override fun getLayout() = R.layout.item_repo
 
     override fun bind(viewBinding: ItemRepoBinding, position: Int) {
@@ -88,7 +88,7 @@ class AddRepositoryBottomSheet : BottomSheetDialogFragment() {
         )
         adapter.addAll(repositories.map { RepoItem(it, mediaType, ::onRepositoryRemoved) })
 
-        binding.repositoryInput.hint = when(mediaType) {
+        binding.repositoryInput.hint = when (mediaType) {
             MediaType.ANIME -> getString(R.string.anime_add_repository)
             MediaType.MANGA -> getString(R.string.manga_add_repository)
             MediaType.NOVEL -> getString(R.string.novel_add_repository)
@@ -110,7 +110,8 @@ class AddRepositoryBottomSheet : BottomSheetDialogFragment() {
 
         binding.repositoryInput.setOnEditorActionListener { textView, action, keyEvent ->
             if (action == EditorInfo.IME_ACTION_DONE ||
-                (keyEvent?.action == KeyEvent.ACTION_UP && keyEvent.keyCode == KeyEvent.KEYCODE_ENTER)) {
+                (keyEvent?.action == KeyEvent.ACTION_UP && keyEvent.keyCode == KeyEvent.KEYCODE_ENTER)
+            ) {
                 val url = textView.text.toString()
                 if (url.isNotBlank()) {
                     val error = isValidUrl(url)
@@ -215,6 +216,7 @@ class AddRepositoryBottomSheet : BottomSheetDialogFragment() {
                         Injekt.get<AnimeExtensionManager>().findAvailableExtensions()
                     }
                 }
+
                 MediaType.MANGA -> {
                     val manga =
                         PrefManager.getVal<Set<String>>(PrefName.MangaExtensionRepos)
@@ -224,6 +226,7 @@ class AddRepositoryBottomSheet : BottomSheetDialogFragment() {
                         Injekt.get<MangaExtensionManager>().findAvailableExtensions()
                     }
                 }
+
                 MediaType.NOVEL -> {
                     val novel =
                         PrefManager.getVal<Set<String>>(PrefName.NovelExtensionRepos)
@@ -247,6 +250,7 @@ class AddRepositoryBottomSheet : BottomSheetDialogFragment() {
                         Injekt.get<AnimeExtensionManager>().findAvailableExtensions()
                     }
                 }
+
                 MediaType.MANGA -> {
                     val manga =
                         PrefManager.getVal<Set<String>>(PrefName.MangaExtensionRepos)
@@ -256,6 +260,7 @@ class AddRepositoryBottomSheet : BottomSheetDialogFragment() {
                         Injekt.get<MangaExtensionManager>().findAvailableExtensions()
                     }
                 }
+
                 MediaType.NOVEL -> {
                     val novel =
                         PrefManager.getVal<Set<String>>(PrefName.NovelExtensionRepos)

@@ -20,9 +20,9 @@ import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.R
 import ani.dantotsu.Refresh
 import ani.dantotsu.bottomBar
+import ani.dantotsu.connections.anilist.AniMangaSearchResults
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.AnilistMangaViewModel
-import ani.dantotsu.connections.anilist.AniMangaSearchResults
 import ani.dantotsu.connections.anilist.getUserId
 import ani.dantotsu.databinding.FragmentMangaBinding
 import ani.dantotsu.media.MediaAdaptor
@@ -169,7 +169,10 @@ class MangaFragment : Fragment() {
                 }
                 model.getPopularManga().observe(viewLifecycleOwner) {
                     if (it != null) {
-                        mangaPageAdapter.updateTrendingManga(MediaAdaptor(0, it, requireActivity()), it)
+                        mangaPageAdapter.updateTrendingManga(
+                            MediaAdaptor(0, it, requireActivity()),
+                            it
+                        )
                     }
                 }
                 model.getPopularManhwa().observe(viewLifecycleOwner) {
@@ -262,8 +265,9 @@ class MangaFragment : Fragment() {
                 running = true
                 scope.launch {
                     withContext(Dispatchers.IO) {
-                        Anilist.userid = PrefManager.getNullableVal<String>(PrefName.AnilistUserId, null)
-                            ?.toIntOrNull()
+                        Anilist.userid =
+                            PrefManager.getNullableVal<String>(PrefName.AnilistUserId, null)
+                                ?.toIntOrNull()
                         if (Anilist.userid == null) {
                             getUserId(requireContext()) {
                                 load()

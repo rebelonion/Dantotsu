@@ -41,5 +41,6 @@ class SubscriptionItem(
 
     override fun getLayout(): Int = R.layout.item_subscription
 
-    override fun initializeViewBinding(view: View): ItemSubscriptionBinding = ItemSubscriptionBinding.bind(view)
+    override fun initializeViewBinding(view: View): ItemSubscriptionBinding =
+        ItemSubscriptionBinding.bind(view)
 }

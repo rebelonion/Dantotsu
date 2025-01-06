@@ -14,8 +14,6 @@ import ani.dantotsu.setAnimation
 import ani.dantotsu.snackString
 import ani.dantotsu.util.Logger
 import ani.dantotsu.util.customAlertDialog
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.model.GlideUrl
 
 class NovelResponseAdapter(
     val fragment: NovelReadFragment,
@@ -41,7 +39,8 @@ class NovelResponseAdapter(
         setAnimation(fragment.requireContext(), holder.binding.root)
         binding.itemMediaImage.loadImage(novel.coverUrl, 400, 0)
 
-        val color =fragment.requireContext().getThemeColor(com.google.android.material.R.attr.colorOnBackground)
+        val color = fragment.requireContext()
+            .getThemeColor(com.google.android.material.R.attr.colorOnBackground)
         binding.itemEpisodeTitle.text = novel.name
         binding.itemEpisodeFiller.text =
             if (downloadedCheckCallback.downloadedCheck(novel)) {

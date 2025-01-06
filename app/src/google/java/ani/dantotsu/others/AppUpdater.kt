@@ -18,7 +18,9 @@ import ani.dantotsu.Mapper
 import ani.dantotsu.R
 import ani.dantotsu.buildMarkwon
 import ani.dantotsu.client
+import ani.dantotsu.connections.comments.CommentsAPI
 import ani.dantotsu.currContext
+import ani.dantotsu.decodeBase64ToString
 import ani.dantotsu.logError
 import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.settings.saving.PrefManager
@@ -37,26 +39,88 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 object AppUpdater {
+    private val fallbackStableUrl: String
+        get() = "aHR0cHM6Ly9hcGkuZGFudG90c3UuYXBwL3VwZGF0ZXMvc3RhYmxl".decodeBase64ToString()
+    private val fallbackBetaUrl: String
+        get() = "aHR0cHM6Ly9hcGkuZGFudG90c3UuYXBwL3VwZGF0ZXMvYmV0YQ==".decodeBase64ToString()
+
+    @Serializable
+    data class FallbackResponse(
+        val version: String,
+        val changelog: String,
+        val downloadUrl: String? = null
+    )
+
+    private suspend fun fetchUpdateInfo(repo: String, isDebug: Boolean): Pair<String, String>? {
+        return try {
+            fetchFromGithub(repo, isDebug)
+        } catch (e: Exception) {
+            Logger.log("Github fetch failed, trying fallback: ${e.message}")
+            try {
+                fetchFromFallback(isDebug)
+            } catch (e: Exception) {
+                Logger.log("Fallback fetch failed: ${e.message}")
+                null
+            }
+        }
+    }
+
+    private suspend fun fetchFromGithub(repo: String, isDebug: Boolean): Pair<String, String> {
+        return if (isDebug) {
+            val res = client.get("https://api.github.com/repos/$repo/releases")
+                .parsed<JsonArray>().map {
+                    Mapper.json.decodeFromJsonElement<GithubResponse>(it)
+                }
+            val r = res.filter { it.prerelease }.filter { !it.tagName.contains("fdroid") }
+                .maxByOrNull {
+                    it.timeStamp()
+                } ?: throw Exception("No Pre Release Found")
+            val v = r.tagName.substringAfter("v", "")
+            (r.body ?: "") to v.ifEmpty { throw Exception("Weird Version : ${r.tagName}") }
+        } else {
+            val res = client.get("https://raw.githubusercontent.com/$repo/main/stable.md").text
+            res to res.substringAfter("# ").substringBefore("\n")
+        }
+    }
+
+    private suspend fun fetchFromFallback(isDebug: Boolean): Pair<String, String> {
+        val url = if (isDebug) fallbackBetaUrl else fallbackStableUrl
+        val response = CommentsAPI.requestBuilder().get(url).parsed<FallbackResponse>()
+        return response.changelog to response.version
+    }
+
+    private suspend fun fetchApkUrl(repo: String, version: String, isDebug: Boolean): String? {
+        return try {
+            fetchApkUrlFromGithub(repo, version)
+        } catch (e: Exception) {
+            Logger.log("Github APK fetch failed, trying fallback: ${e.message}")
+            try {
+                fetchApkUrlFromFallback(version, isDebug)
+            } catch (e: Exception) {
+                Logger.log("Fallback APK fetch failed: ${e.message}")
+                null
+            }
+        }
+    }
+
+    private suspend fun fetchApkUrlFromGithub(repo: String, version: String): String? {
+        val apks = client.get("https://api.github.com/repos/$repo/releases/tags/v$version")
+            .parsed<GithubResponse>().assets?.filter {
+                it.browserDownloadURL.endsWith(".apk")
+            }
+        return apks?.firstOrNull()?.browserDownloadURL
+    }
+
+    private suspend fun fetchApkUrlFromFallback(version: String, isDebug: Boolean): String? {
+        val url = if (isDebug) fallbackBetaUrl else fallbackStableUrl
+        return CommentsAPI.requestBuilder().get("$url/$version").parsed<FallbackResponse>().downloadUrl
+    }
+
     suspend fun check(activity: FragmentActivity, post: Boolean = false) {
         if (post) snackString(currContext()?.getString(R.string.checking_for_update))
         val repo = activity.getString(R.string.repo)
         tryWithSuspend {
-            val (md, version) = if (BuildConfig.DEBUG) {
-                val res = client.get("https://api.github.com/repos/$repo/releases")
-                    .parsed<JsonArray>().map {
-                        Mapper.json.decodeFromJsonElement<GithubResponse>(it)
-                    }
-                val r = res.filter { it.prerelease }.filter { !it.tagName.contains("fdroid") }
-                    .maxByOrNull {
-                        it.timeStamp()
-                    } ?: throw Exception("No Pre Release Found")
-                val v = r.tagName.substringAfter("v", "")
-                (r.body ?: "") to v.ifEmpty { throw Exception("Weird Version : ${r.tagName}") }
-            } else {
-                val res =
-                    client.get("https://raw.githubusercontent.com/$repo/main/stable.md").text
-                res to res.substringAfter("# ").substringBefore("\n")
-            }
+            val (md, version) = fetchUpdateInfo(repo, BuildConfig.DEBUG) ?: return@tryWithSuspend
 
             Logger.log("Git Version : $version")
             val dontShow = PrefManager.getCustomVal("dont_ask_for_update_$version", false)
@@ -69,7 +133,7 @@ object AppUpdater {
                     )
                     addView(
                         TextView(activity).apply {
-                            val markWon = try {  //slower phones can destroy the activity before this is done
+                            val markWon = try {
                                 buildMarkwon(activity, false)
                             } catch (e: IllegalArgumentException) {
                                 return@runOnUiThread
@@ -89,17 +153,11 @@ object AppUpdater {
                     setPositiveButton(currContext()!!.getString(R.string.lets_go)) {
                         MainScope().launch(Dispatchers.IO) {
                             try {
-                                val apks =
-                                    client.get("https://api.github.com/repos/$repo/releases/tags/v$version")
-                                        .parsed<GithubResponse>().assets?.filter {
-                                            it.browserDownloadURL.endsWith(
-                                                ".apk"
-                                            )
-                                        }
-                                val apkToDownload = apks?.first()
-                                apkToDownload?.browserDownloadURL.apply {
-                                    if (this != null) activity.downloadUpdate(version, this)
-                                    else openLinkInBrowser("https://github.com/repos/$repo/releases/tag/v$version")
+                                val apkUrl = fetchApkUrl(repo, version, BuildConfig.DEBUG)
+                                if (apkUrl != null) {
+                                    activity.downloadUpdate(version, apkUrl)
+                                } else {
+                                    openLinkInBrowser("https://github.com/repos/$repo/releases/tag/v$version")
                                 }
                             } catch (e: Exception) {
                                 logError(e)
@@ -112,8 +170,7 @@ object AppUpdater {
                     }
                     show(activity.supportFragmentManager, "dialog")
                 }
-            }
-            else {
+            } else {
                 if (post) snackString(currContext()?.getString(R.string.no_update_found))
             }
         }
@@ -144,8 +201,7 @@ object AppUpdater {
 
 
     //Blatantly kanged from https://github.com/LagradOst/CloudStream-3/blob/master/app/src/main/java/com/lagradost/cloudstream3/utils/InAppUpdater.kt
-    private fun Activity.downloadUpdate(version: String, url: String): Boolean {
-
+    private fun Activity.downloadUpdate(version: String, url: String) {
         toast(getString(R.string.downloading_update, version))
 
         val downloadManager = this.getSystemService<DownloadManager>()!!
@@ -167,7 +223,7 @@ object AppUpdater {
             logError(e)
             -1
         }
-        if (id == -1L) return true
+        if (id == -1L) return
         ContextCompat.registerReceiver(
             this,
             object : BroadcastReceiver() {
@@ -188,7 +244,6 @@ object AppUpdater {
             }, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE),
             ContextCompat.RECEIVER_EXPORTED
         )
-        return true
     }
 
     private fun openApk(context: Context, uri: Uri) {

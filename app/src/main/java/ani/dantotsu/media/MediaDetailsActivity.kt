@@ -251,10 +251,12 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         fun total() {
             val text = SpannableStringBuilder().apply {
 
-                val white = this@MediaDetailsActivity.getThemeColor(com.google.android.material.R.attr.colorOnBackground)
+                val white =
+                    this@MediaDetailsActivity.getThemeColor(com.google.android.material.R.attr.colorOnBackground)
                 if (media.userStatus != null) {
                     append(if (media.anime != null) getString(R.string.watched_num) else getString(R.string.read_num))
-                    val colorSecondary = getThemeColor(com.google.android.material.R.attr.colorSecondary)
+                    val colorSecondary =
+                        getThemeColor(com.google.android.material.R.attr.colorSecondary)
                     bold { color(colorSecondary) { append("${media.userProgress}") } }
                     append(
                         if (media.anime != null) getString(R.string.episodes_out_of) else getString(

@@ -82,9 +82,18 @@ class SettingsNotificationActivity : AppCompatActivity() {
                                 setTitle(R.string.subscriptions_checking_time)
                                 singleChoiceItems(timeNames, curTime) { i ->
                                     curTime = i
-                                    it.settingsTitle.text = getString(R.string.subscriptions_checking_time_s, timeNames[i])
-                                    PrefManager.setVal(PrefName.SubscriptionNotificationInterval, curTime)
-                                    TaskScheduler.create(context, PrefManager.getVal(PrefName.UseAlarmManager)).scheduleAllTasks(context)
+                                    it.settingsTitle.text = getString(
+                                        R.string.subscriptions_checking_time_s,
+                                        timeNames[i]
+                                    )
+                                    PrefManager.setVal(
+                                        PrefName.SubscriptionNotificationInterval,
+                                        curTime
+                                    )
+                                    TaskScheduler.create(
+                                        context,
+                                        PrefManager.getVal(PrefName.UseAlarmManager)
+                                    ).scheduleAllTasks(context)
                                 }
                                 show()
                             }
@@ -124,8 +133,9 @@ class SettingsNotificationActivity : AppCompatActivity() {
                                 .setMultiChoiceItems(
                                     types.map { name ->
                                         name.replace("_", " ").lowercase().replaceFirstChar {
-                                        if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString()
-                                    } }.toTypedArray(),
+                                            if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString()
+                                        }
+                                    }.toTypedArray(),
                                     selected
                                 ) { _, which, isChecked ->
                                     val type = types[which]

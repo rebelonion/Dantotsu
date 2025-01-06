@@ -1,23 +1,15 @@
 package ani.dantotsu.media
 
 
-import android.app.Activity
 import android.content.Intent
 import android.view.View
-import androidx.activity.ComponentActivity
-import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
-import androidx.core.util.Pair
-import androidx.core.view.ViewCompat
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.Query
 import ani.dantotsu.databinding.ItemReviewsBinding
 import ani.dantotsu.loadImage
 import ani.dantotsu.openImage
-import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.profile.activity.ActivityItemBuilder
 import ani.dantotsu.toast
@@ -40,7 +32,7 @@ class ReviewAdapter(
         binding.reviewUserAvatar.loadImage(review.user?.avatar?.medium)
         binding.reviewText.text = review.summary
         binding.reviewPostTime.text = ActivityItemBuilder.getDateTime(review.createdAt)
-        val text = "[${review.score/ 10.0f}]"
+        val text = "[${review.score / 10.0f}]"
         binding.reviewTag.text = text
         binding.root.setOnClickListener {
             ContextCompat.startActivity(
@@ -85,6 +77,7 @@ class ReviewAdapter(
     override fun initializeViewBinding(view: View): ItemReviewsBinding {
         return ItemReviewsBinding.bind(view)
     }
+
     private fun userVote(type: String) {
         when (type) {
             "NO_VOTE" -> {

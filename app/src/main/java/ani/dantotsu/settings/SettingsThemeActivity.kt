@@ -47,7 +47,8 @@ class SettingsThemeActivity : AppCompatActivity(), SimpleDialog.OnDialogResultLi
                     val mainIntent = Intent.makeRestartActivityTask(
                         packageManager.getLaunchIntentForPackage(packageName)!!.component
                     )
-                    val component = ComponentName(packageName, SettingsActivity::class.qualifiedName!!)
+                    val component =
+                        ComponentName(packageName, SettingsActivity::class.qualifiedName!!)
                     try {
                         startActivity(Intent().setComponent(component))
                     } catch (e: Exception) {

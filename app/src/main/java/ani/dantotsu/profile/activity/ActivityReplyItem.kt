@@ -14,8 +14,8 @@ import ani.dantotsu.loadImage
 import ani.dantotsu.profile.User
 import ani.dantotsu.profile.UsersDialogFragment
 import ani.dantotsu.snackString
-import ani.dantotsu.util.AniMarkdown.Companion.getBasicAniHTML
 import ani.dantotsu.util.ActivityMarkdownCreator
+import ani.dantotsu.util.AniMarkdown.Companion.getBasicAniHTML
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.viewbinding.BindableItem
 import kotlinx.coroutines.CoroutineScope
@@ -26,7 +26,7 @@ import kotlinx.coroutines.withContext
 
 class ActivityReplyItem(
     private val reply: ActivityReply,
-    private val parentId : Int,
+    private val parentId: Int,
     private val fragActivity: FragmentActivity,
     private val parentAdapter: GroupieAdapter,
     private val clickCallback: (Int, type: String) -> Unit,
@@ -46,7 +46,7 @@ class ActivityReplyItem(
         binding.activityLike.setColorFilter(if (reply.isLiked) likeColor else notLikeColor)
         val markwon = buildMarkwon(context)
         markwon.setMarkdown(binding.activityContent, getBasicAniHTML(reply.text))
-        
+
         val userList = arrayListOf<User>()
         reply.likes?.forEach { i ->
             userList.add(User(i.id, i.name.toString(), i.avatar?.medium, i.bannerImage))

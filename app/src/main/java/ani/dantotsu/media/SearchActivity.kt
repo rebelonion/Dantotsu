@@ -13,10 +13,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import ani.dantotsu.connections.anilist.AniMangaSearchResults
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.AnilistSearch
 import ani.dantotsu.connections.anilist.AnilistSearch.SearchType
-import ani.dantotsu.connections.anilist.AniMangaSearchResults
 import ani.dantotsu.connections.anilist.CharacterSearchResults
 import ani.dantotsu.connections.anilist.StaffSearchResults
 import ani.dantotsu.connections.anilist.StudioSearchResults
@@ -377,7 +377,10 @@ class SearchActivity : AppCompatActivity() {
             }
 
             SearchType.CHARACTER -> {
-                characterAdaptor.notifyItemRangeRemoved(0, model.characterSearchResults.results.size)
+                characterAdaptor.notifyItemRangeRemoved(
+                    0,
+                    model.characterSearchResults.results.size
+                )
                 model.characterSearchResults.results.clear()
             }
 

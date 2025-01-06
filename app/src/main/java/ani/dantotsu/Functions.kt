@@ -117,7 +117,6 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withC
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.Target
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -138,12 +137,9 @@ import io.noties.markwon.html.TagHandlerNoOp
 import io.noties.markwon.image.AsyncDrawable
 import io.noties.markwon.image.glide.GlideImagesPlugin
 import jp.wasabeef.glide.transformations.BlurTransformation
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import nl.joery.animatedbottombar.AnimatedBottomBar
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -157,6 +153,8 @@ import java.util.TimeZone
 import java.util.Timer
 import java.util.TimerTask
 import kotlin.collections.set
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 import kotlin.math.log2
 import kotlin.math.max
 import kotlin.math.min
@@ -854,6 +852,7 @@ fun savePrefsToDownloads(
         }
     )
 }
+
 @SuppressLint("StringFormatMatches")
 fun savePrefs(serialized: String, path: String, title: String, context: Context): File? {
     var file = File(path, "$title.ani")
@@ -921,6 +920,7 @@ fun shareImage(title: String, bitmap: Bitmap, context: Context) {
     intent.putExtra(Intent.EXTRA_STREAM, contentUri)
     context.startActivity(Intent.createChooser(intent, "Share $title"))
 }
+
 @SuppressLint("StringFormatMatches")
 fun saveImage(image: Bitmap, path: String, imageFileName: String): File? {
     val imageFile = File(path, "$imageFileName.png")
@@ -1467,6 +1467,7 @@ fun buildMarkwon(
                         }
                         return false
                     }
+
                     override fun onLoadFailed(
                         e: GlideException?,
                         model: Any?,
@@ -1495,9 +1496,9 @@ fun buildMarkwon(
 }
 
 
-
 fun getYoutubeId(url: String): String {
-    val regex = """(?:youtube\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|(?:youtu\.be|youtube\.com)/)([^"&?/\s]{11})|youtube\.com/""".toRegex()
+    val regex =
+        """(?:youtube\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|(?:youtu\.be|youtube\.com)/)([^"&?/\s]{11})|youtube\.com/""".toRegex()
     val matchResult = regex.find(url)
     return matchResult?.groupValues?.getOrNull(1) ?: ""
 }
@@ -1523,4 +1524,14 @@ fun getLanguageName(language: String): String? {
         }
     }
     return null
+}
+
+@OptIn(ExperimentalEncodingApi::class)
+fun String.decodeBase64ToString(): String {
+    return try {
+        String(Base64.decode(this), Charsets.UTF_8)
+    } catch (e: Exception) {
+        Logger.log(e)
+        ""
+    }
 }

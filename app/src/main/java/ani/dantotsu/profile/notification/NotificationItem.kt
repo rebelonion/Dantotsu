@@ -60,7 +60,8 @@ class NotificationItem(
                                     PrefName.SubscriptionNotificationStore,
                                     null
                                 ) ?: listOf()
-                                val newList = list.filter { (it.time / 1000L).toInt() != notification.createdAt}
+                                val newList =
+                                    list.filter { (it.time / 1000L).toInt() != notification.createdAt }
                                 PrefManager.setVal(PrefName.SubscriptionNotificationStore, newList)
                                 parentAdapter.remove(this@NotificationItem)
                             }

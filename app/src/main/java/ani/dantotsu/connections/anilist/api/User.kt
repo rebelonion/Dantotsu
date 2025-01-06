@@ -69,7 +69,7 @@ data class User(
     // The user's previously used names.
     // @SerialName("previousNames") var previousNames: List<UserPreviousName>?,
 
-): java.io.Serializable
+) : java.io.Serializable
 
 @Serializable
 data class UserOptions(
@@ -123,8 +123,10 @@ data class UserStatisticTypes(
 enum class UserTitleLanguage {
     @SerialName("ENGLISH")
     ENGLISH,
+
     @SerialName("ROMAJI")
     ROMAJI,
+
     @SerialName("NATIVE")
     NATIVE
 }
@@ -133,8 +135,10 @@ enum class UserTitleLanguage {
 enum class UserStaffNameLanguage {
     @SerialName("ROMAJI_WESTERN")
     ROMAJI_WESTERN,
+
     @SerialName("ROMAJI")
     ROMAJI,
+
     @SerialName("NATIVE")
     NATIVE
 }
@@ -143,12 +147,16 @@ enum class UserStaffNameLanguage {
 enum class ScoreFormat {
     @SerialName("POINT_100")
     POINT_100,
+
     @SerialName("POINT_10_DECIMAL")
     POINT_10_DECIMAL,
+
     @SerialName("POINT_10")
     POINT_10,
+
     @SerialName("POINT_5")
     POINT_5,
+
     @SerialName("POINT_3")
     POINT_3,
 }

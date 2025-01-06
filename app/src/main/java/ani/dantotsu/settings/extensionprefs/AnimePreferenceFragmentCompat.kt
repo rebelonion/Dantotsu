@@ -2,13 +2,7 @@ package ani.dantotsu.settings.extensionprefs
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.graphics.Typeface
-import android.os.Build
 import android.os.Bundle
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.DialogPreference
@@ -38,10 +32,12 @@ class AnimeSourcePreferencesFragment : PreferenceFragmentCompat() {
             preferenceManager.createPreferenceScreen(requireContext())
         }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ThemeManager(requireActivity()).applyTheme()
     }
+
     private var onCloseAction: (() -> Unit)? = null
 
     override fun onDestroyView() {
@@ -104,7 +100,8 @@ class InitialAnimeSourcePreferencesFragment(
             preferenceManager.createPreferenceScreen(requireContext())
         }
         //set background color
-        val color = requireContext().getThemeColor(com.google.android.material.R.attr.backgroundColor,)
+        val color =
+            requireContext().getThemeColor(com.google.android.material.R.attr.backgroundColor)
         view?.setBackgroundColor(color)
     }
 

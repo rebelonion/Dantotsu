@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import ani.dantotsu.R
@@ -37,7 +36,7 @@ class OfflineFragment : Fragment() {
                 PrefManager.setVal(PrefName.OfflineMode, false)
                 startMainActivity(requireActivity())
             } else {
-                if (isOnline(requireContext()) ) {
+                if (isOnline(requireContext())) {
                     startMainActivity(requireActivity())
                 }
             }

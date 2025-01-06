@@ -46,7 +46,7 @@ class UserStatusAdapter(private val user: ArrayList<User>) :
                             .putExtra("type", "activity"),
                         null
                     )
-                }else{
+                } else {
                     ContextCompat.startActivity(
                         itemView.context,
                         Intent(
@@ -76,10 +76,15 @@ class UserStatusAdapter(private val user: ArrayList<User>) :
         setAnimation(b.root.context, b.root)
         val user = user[position]
         b.profileUserAvatar.loadImage(user.pfp)
-        b.profileUserName.text = if (Anilist.userid == user.id) getAppString(R.string.your_story) else user.name
+        b.profileUserName.text =
+            if (Anilist.userid == user.id) getAppString(R.string.your_story) else user.name
         val watchedActivity = PrefManager.getCustomVal<Set<Int>>("activities", setOf())
         val booleanList = user.activity.map { watchedActivity.contains(it.id) }
-        b.profileUserStatusIndicator.setParts(user.activity.size, booleanList, user.id == Anilist.userid)
+        b.profileUserStatusIndicator.setParts(
+            user.activity.size,
+            booleanList,
+            user.id == Anilist.userid
+        )
 
     }
 

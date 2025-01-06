@@ -211,16 +211,16 @@ class SettingsAccountActivity : AppCompatActivity() {
         binding.settingsRecyclerView.adapter = SettingsAdapter(
             arrayListOf(
                 Settings(
-                        type = 2,
-                        name = getString(R.string.enable_rpc),
-                        desc = getString(R.string.enable_rpc_desc),
-                        icon = R.drawable.interests_24,
-                        isChecked = PrefManager.getVal(PrefName.rpcEnabled),
-                        switch = { isChecked, _ ->
-                            PrefManager.setVal(PrefName.rpcEnabled, isChecked)
-                        },
-                        isVisible = Discord.token != null
-                   ),
+                    type = 2,
+                    name = getString(R.string.enable_rpc),
+                    desc = getString(R.string.enable_rpc_desc),
+                    icon = R.drawable.interests_24,
+                    isChecked = PrefManager.getVal(PrefName.rpcEnabled),
+                    switch = { isChecked, _ ->
+                        PrefManager.setVal(PrefName.rpcEnabled, isChecked)
+                    },
+                    isVisible = Discord.token != null
+                ),
                 Settings(
                     type = 1,
                     name = getString(R.string.anilist_settings),
@@ -235,30 +235,31 @@ class SettingsAccountActivity : AppCompatActivity() {
                     isActivity = true
                 ),
                 Settings(
-                        type = 2,
-                        name = getString(R.string.comments_button),
-                        desc = getString(R.string.comments_button_desc),
-                        icon = R.drawable.ic_round_comment_24,
-                        isChecked = PrefManager.getVal<Int>(PrefName.CommentsEnabled) == 1,
-                        switch = { isChecked, _ ->
-                            PrefManager.setVal(PrefName.CommentsEnabled, if (isChecked) 1 else 2 )
-                            reload()
-                        },
-                        isVisible = Anilist.token != null
-                   ),
+                    type = 2,
+                    name = getString(R.string.comments_button),
+                    desc = getString(R.string.comments_button_desc),
+                    icon = R.drawable.ic_round_comment_24,
+                    isChecked = PrefManager.getVal<Int>(PrefName.CommentsEnabled) == 1,
+                    switch = { isChecked, _ ->
+                        PrefManager.setVal(PrefName.CommentsEnabled, if (isChecked) 1 else 2)
+                        reload()
+                    },
+                    isVisible = Anilist.token != null
+                ),
             )
         )
         binding.settingsRecyclerView.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
     }
+
     fun reload() {
-                snackString(getString(R.string.restart_app_extra))
-                //snackString(R.string.restart_app_extra)
-                    //?.setDuration(Snackbar.LENGTH_LONG)
-                    //?.setAction(R.string.do_it) {
-                        //startMainActivity(this@SettingsAccountActivity)
-                    //} Disabled for now. Doesn't update the ADDRESS even after this
+        snackString(getString(R.string.restart_app_extra))
+        //snackString(R.string.restart_app_extra)
+        //?.setDuration(Snackbar.LENGTH_LONG)
+        //?.setAction(R.string.do_it) {
+        //startMainActivity(this@SettingsAccountActivity)
+        //} Disabled for now. Doesn't update the ADDRESS even after this
     }
 }
 

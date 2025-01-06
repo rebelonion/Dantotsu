@@ -110,7 +110,7 @@ class ExtensionTestSettingsBottomDialog : BottomSheetDialogFragment() {
     }
 
     private fun setupAdapter() {
-        val namesAndUrls: Map<String,Drawable?> = when (extensionType) {
+        val namesAndUrls: Map<String, Drawable?> = when (extensionType) {
             "anime" -> animeExtension.installedExtensionsFlow.value.associate { it.name to it.icon }
             "manga" -> mangaExtensions.installedExtensionsFlow.value.associate { it.name to it.icon }
             "novel" -> novelExtensions.installedExtensionsFlow.value.associate { it.name to it.icon }

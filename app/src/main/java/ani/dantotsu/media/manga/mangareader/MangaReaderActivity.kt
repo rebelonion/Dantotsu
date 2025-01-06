@@ -2,7 +2,6 @@ package ani.dantotsu.media.manga.mangareader
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -58,8 +57,6 @@ import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsViewModel
 import ani.dantotsu.media.MediaNameAdapter
 import ani.dantotsu.media.MediaSingleton
-import ani.dantotsu.media.anime.ExoplayerView
-import ani.dantotsu.media.anime.ExoplayerView.Companion
 import ani.dantotsu.media.manga.MangaCache
 import ani.dantotsu.media.manga.MangaChapter
 import ani.dantotsu.others.ImageViewDialog
@@ -196,8 +193,9 @@ class MangaReaderActivity : AppCompatActivity() {
                 finish()
                 return@addCallback
             }
-            val chapter = (MediaNameAdapter.findChapterNumber(media.manga!!.selectedChapter!!.number)
-                ?.minus(1L) ?: 0).toString()
+            val chapter =
+                (MediaNameAdapter.findChapterNumber(media.manga!!.selectedChapter!!.number)
+                    ?.minus(1L) ?: 0).toString()
             if (chapter == "0.0" && PrefManager.getVal(PrefName.ChapterZeroReader)
                 // Not asking individually or incognito
                 && !showProgressDialog && !PrefManager.getVal<Boolean>(PrefName.Incognito)

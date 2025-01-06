@@ -57,6 +57,7 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Sear
 
         searchHistoryAdapter = SearchHistoryAdapter(type) {
             binding.searchBarText.setText(it)
+            binding.searchBarText.setSelection(it.length)
         }
         binding.searchHistoryList.layoutManager = LinearLayoutManager(binding.root.context)
         binding.searchHistoryList.adapter = searchHistoryAdapter

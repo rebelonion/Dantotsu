@@ -346,7 +346,9 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
         binding.searchGenresGrid.isChecked = false
 
         binding.searchFilterTags.adapter =
-            FilterChipAdapter(Anilist.tags?.get(activity.aniMangaResult.isAdult) ?: listOf()) { chip ->
+            FilterChipAdapter(
+                Anilist.tags?.get(activity.aniMangaResult.isAdult) ?: listOf()
+            ) { chip ->
                 val tag = chip.text.toString()
                 chip.isChecked = selectedTags.contains(tag)
                 chip.isCloseIconVisible = exTags.contains(tag)

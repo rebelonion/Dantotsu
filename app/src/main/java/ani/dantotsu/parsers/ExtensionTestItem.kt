@@ -168,7 +168,7 @@ class ExtensionTestItem(
             return
         }
         val serverResultStart = System.currentTimeMillis()
-        val serverResult = extension.loadImages("",  chapterResult.first().sChapter)
+        val serverResult = extension.loadImages("", chapterResult.first().sChapter)
         serverResultData.time = (System.currentTimeMillis() - serverResultStart).toInt()
         serverResultData.size = serverResult.size
         withContext(Dispatchers.Main) {
@@ -266,8 +266,10 @@ class ExtensionTestItem(
         )
         binding.searchResultText.isVisible = true
         if (searchResultData.size == 0) {
-            val text = context.getString(R.string.title_search_test,
-                context.getString(R.string.no_results_found))
+            val text = context.getString(
+                R.string.title_search_test,
+                context.getString(R.string.no_results_found)
+            )
             binding.searchResultText.text = text
             binding.searchResultText.setCompoundDrawablesWithIntrinsicBounds(
                 R.drawable.ic_circle_cancel, 0, 0, 0
@@ -277,8 +279,10 @@ class ExtensionTestItem(
             )
             return
         }
-        val text = context.getString(R.string.title_search_test,
-            context.getString(R.string.results_found, searchResultData.size.toString()))
+        val text = context.getString(
+            R.string.title_search_test,
+            context.getString(R.string.results_found, searchResultData.size.toString())
+        )
         binding.searchResultText.text = text + "\n${searchResultData.time}ms"
         binding.searchResultText.setCompoundDrawablesWithIntrinsicBounds(
             R.drawable.ic_circle_check, 0, 0, 0
@@ -297,13 +301,21 @@ class ExtensionTestItem(
         )
         binding.episodeResultText.isVisible = true
         if (episodeResultData.size == 0) {
-            val text = when(extensionType) {
-                "anime" -> context.getString(R.string.episode_search_test,
-                    context.getString(R.string.no_results_found))
-                "manga" -> context.getString(R.string.chapter_search_test,
-                    context.getString(R.string.no_results_found))
-                else -> context.getString(R.string.book_search_test,
-                    context.getString(R.string.no_results_found))
+            val text = when (extensionType) {
+                "anime" -> context.getString(
+                    R.string.episode_search_test,
+                    context.getString(R.string.no_results_found)
+                )
+
+                "manga" -> context.getString(
+                    R.string.chapter_search_test,
+                    context.getString(R.string.no_results_found)
+                )
+
+                else -> context.getString(
+                    R.string.book_search_test,
+                    context.getString(R.string.no_results_found)
+                )
             }
             binding.episodeResultText.text = text
             binding.episodeResultText.setCompoundDrawablesWithIntrinsicBounds(
@@ -314,13 +326,21 @@ class ExtensionTestItem(
             )
             return
         }
-        val text = when(extensionType) {
-            "anime" -> context.getString(R.string.episode_search_test,
-                context.getString(R.string.results_found, episodeResultData.size.toString()))
-            "manga" -> context.getString(R.string.chapter_search_test,
-                context.getString(R.string.results_found, episodeResultData.size.toString()))
-            else -> context.getString(R.string.book_search_test,
-                context.getString(R.string.results_found, episodeResultData.size.toString()))
+        val text = when (extensionType) {
+            "anime" -> context.getString(
+                R.string.episode_search_test,
+                context.getString(R.string.results_found, episodeResultData.size.toString())
+            )
+
+            "manga" -> context.getString(
+                R.string.chapter_search_test,
+                context.getString(R.string.results_found, episodeResultData.size.toString())
+            )
+
+            else -> context.getString(
+                R.string.book_search_test,
+                context.getString(R.string.results_found, episodeResultData.size.toString())
+            )
         }
         binding.episodeResultText.text = text + "\n${episodeResultData.time}ms"
         binding.episodeResultText.setCompoundDrawablesWithIntrinsicBounds(
@@ -348,13 +368,21 @@ class ExtensionTestItem(
         )
         binding.serverResultText.isVisible = true
         if (serverResultData.size == 0) {
-            val text = when(extensionType) {
-                "anime" -> context.getString(R.string.video_search_test,
-                    context.getString(R.string.no_results_found))
-                "manga" -> context.getString(R.string.image_search_test,
-                    context.getString(R.string.no_results_found))
-                else -> context.getString(R.string.book_search_test,
-                    context.getString(R.string.no_results_found))
+            val text = when (extensionType) {
+                "anime" -> context.getString(
+                    R.string.video_search_test,
+                    context.getString(R.string.no_results_found)
+                )
+
+                "manga" -> context.getString(
+                    R.string.image_search_test,
+                    context.getString(R.string.no_results_found)
+                )
+
+                else -> context.getString(
+                    R.string.book_search_test,
+                    context.getString(R.string.no_results_found)
+                )
             }
             binding.serverResultText.text = text + "\n${serverResultData.time}ms"
             binding.serverResultText.setCompoundDrawablesWithIntrinsicBounds(
@@ -365,13 +393,21 @@ class ExtensionTestItem(
             )
             return
         }
-        val text = when(extensionType) {
-            "anime" -> context.getString(R.string.video_search_test,
-                context.getString(R.string.results_found, serverResultData.size.toString()))
-            "manga" -> context.getString(R.string.image_search_test,
-                context.getString(R.string.results_found, serverResultData.size.toString()))
-            else -> context.getString(R.string.book_search_test,
-                context.getString(R.string.results_found, serverResultData.size.toString()))
+        val text = when (extensionType) {
+            "anime" -> context.getString(
+                R.string.video_search_test,
+                context.getString(R.string.results_found, serverResultData.size.toString())
+            )
+
+            "manga" -> context.getString(
+                R.string.image_search_test,
+                context.getString(R.string.results_found, serverResultData.size.toString())
+            )
+
+            else -> context.getString(
+                R.string.book_search_test,
+                context.getString(R.string.results_found, serverResultData.size.toString())
+            )
         }
         binding.serverResultText.text = text
         binding.serverResultText.setCompoundDrawablesWithIntrinsicBounds(

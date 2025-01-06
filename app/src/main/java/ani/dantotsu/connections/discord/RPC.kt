@@ -8,8 +8,8 @@ import ani.dantotsu.settings.saving.PrefName
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
-import kotlin.coroutines.CoroutineContext
 import java.util.concurrent.TimeUnit.SECONDS
+import kotlin.coroutines.CoroutineContext
 
 @Suppress("MemberVisibilityCanBePrivate")
 open class RPC(val token: String, val coroutineContext: CoroutineContext) {
@@ -34,6 +34,7 @@ open class RPC(val token: String, val coroutineContext: CoroutineContext) {
             val stopTimestamp: Long? = null,
             val buttons: MutableList<Link> = mutableListOf()
         )
+
         suspend fun createPresence(data: RPCData): String {
             val json = Json {
                 encodeDefaults = true
