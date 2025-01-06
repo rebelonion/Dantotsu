@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="pt-rBR">
-    <string name="slogan">O NOVO e melhor &amp; de Animes e Mangás para Android.</string>
-    <string name="login">Acessar</string>
+    <string name="slogan">O NOVO Melhor aplicativo de Animes e Mangás para Android.</string>
+    <string name="login">Logar</string>
     <string name="logout">Sair</string>
     <string name="anilist_link">https://anilist.co/user/%1$s/</string>
     <string name="myanilist_link">https://myanimelist.net/profile/%1$s/</string>
     <string name="discord_link">https://discord.com/users/%1$s/</string>
     <string name="home">Início</string>
     <string name="anime">Anime</string>
-    <string name="browse_anime">Buscar Anime</string>
+    <string name="browse_anime">Explorar Animes</string>
     <string name="manga">Mangá</string>
-    <string name="browse_manga">Buscar Mangás</string>
-    <string name="novels">Livros</string>
-    <string name="info">Informações</string>
+    <string name="browse_manga">Explorar Mangás</string>
+    <string name="novels">Novels</string>
+    <string name="info">Info</string>
     <string name="watch">Assistir</string>
     <string name="read">Ler</string>
     <string name="language">Idioma</string>
-    <string name="anime_list">Lista de Animes</string>
-    <string name="manga_list">Lista de Mangás</string>
+    <string name="anime_list">Meus Animes</string>
+    <string name="manga_list">Meus Mangás</string>
     <string name="sad">X(</string>
     <string name="oh">:o</string>
     <string name="colon">" : "</string>
@@ -27,12 +27,12 @@
     <string name="search_results">Resultados da Busca</string>
     <string name="sort_by">Ordenar por</string>
     <string name="genre">Gênero</string>
-    <string name="top_score">Melhor Pontuação</string>
-    <string name="updated">Atualizado Recentemente</string>
+    <string name="top_score">Melhores</string>
+    <string name="updated">Novos Episódios</string>
     <string name="trending_anime">Animes em Alta</string>
     <string name="popular_anime">Animes Populares</string>
     <string name="trending_manga">Mangás em Alta</string>
-    <string name="trending_novel">Livros em Tendência</string>
+    <string name="trending_novel">Novels em Alta</string>
     <string name="popular_manga">Mangás Populares</string>
     <string name="username">Nome de Usuário</string>
     <string name="chapters_read">Capítulos Lidos</string>
@@ -54,24 +54,24 @@
         <item>Assistindo</item>
         <item>Concluído</item>
         <item>Pausado</item>
-        <item>Largado</item>
+        <item>Dropado</item>
         <item>Planejando</item>
         <item>Favoritos</item>
-        <item>Assistindo Novamente</item>
+        <item>Reassistindo</item>
         <item>Relendo</item>
         <item>Todos</item>
     </string-array>
     <string name="nothing_here">Não há nada aqui</string>
     <string name="followers">Seguidores</string>
     <string name="write_a_message">Escreva uma mensagem</string>
-    <string name="status">SITUAÇÃO</string>
+    <string name="status">STATUS</string>
     <string-array name="status_anime">
         <item>PLANEJANDO</item>
         <item>ASSISTINDO</item>
         <item>CONCLUÍDO</item>
         <item>RE-ASSISTINDO</item>
         <item>PAUSADO</item>
-        <item>LARGADO</item>
+        <item>DROPADO</item>
     </string-array>
     <string-array name="status_manga">
         <item>PLANEJANDO</item>
@@ -79,7 +79,7 @@
         <item>CONCLUÍDO</item>
         <item>RE-LENDO</item>
         <item>PAUSADO</item>
-        <item>LARGADO</item>
+        <item>DROPADO</item>
     </string-array>
     <string name="progress">PROGRESSO</string>
     <string name="score">NOTA</string>
@@ -93,7 +93,7 @@
     <string name="name_romaji">Nome em Romaji/Transcrição</string>
     <string name="mean_score">Nota Média</string>
     <string name="format">Formato</string>
-    <string name="status_title">Condição</string>
+    <string name="status_title">Status</string>
     <string name="total_eps">Lista de Episódios</string>
     <string name="episodes"> Episódio(s)</string>
     <string name="chapters"> Capítulo(s)</string>
@@ -987,12 +987,12 @@
     <string name="clear_stored_episode">Limpar Dados de Episódio Armazenados</string>
     <string name="clear_stored_chapter">Limpar Dados de Capítulo Armazenados</string>
     <string name="use_additional_codec">Suporte a Codificadores Adicionais</string>
-    <string name="textview_sub">Textview Subtitles (Experimental)</string>
-    <string name="textview_sub_stroke">Subtitle Stroke</string>
-    <string name="textview_sub_bottom_margin">Bottom Margin</string>
-    <string name="add_repository">Add Repository</string>
-    <string name="add_repository_desc">A repository link should look like this: https://raw.githubusercontent.com/username/repo/branch/index.min.json\nOr: username/repo/branch</string>
-    <string name="current_repositories">Current Repositories</string>
+    <string name="textview_sub">Legendas Textview (Experimental)</string>
+    <string name="textview_sub_stroke">Borda da Legenda</string>
+    <string name="textview_sub_bottom_margin">Margem Inferior</string>
+    <string name="add_repository">Adicionar Repositório</string>
+    <string name="add_repository_desc">Um link de repositório deve se parecer com isso: https://raw.githubusercontent.com/username/repo/branch/index.min.json\nOu: username/repo/branch</string>
+    <string name="current_repositories">Repositórios Atuais</string>
     <string name="add_repository_warning">Warning: Extensions from the repository can run arbitrary code on your device. Only use repositories you trust. \n\nBy adding a repository, you agree to: \n\n1. Not use the app for viewing or distributing copyrighted content. \n2. Not use the app for any illegal activities. \n3. Not use the app for any activities that violate the terms of service of the content providers. \n\nThe app or it\'s maintainer are not affiliated in any way with extension providers. The developers are not responsible for any damages caused by the app. \n\nBy adding a repository, you agree to these terms.</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="privacy_policy_desc">Read our privacy policy</string>
