@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.animation.doOnEnd
 import androidx.core.content.res.ResourcesCompat
@@ -82,7 +83,7 @@ class CommentsFragment : Fragment() {
             activity.binding.commentInputLayout
         )
 
-        //get the media id from the intent
+        // Get the media id from the intent
         val mediaId = arguments?.getInt("mediaId") ?: -1
         mediaName = arguments?.getString("mediaName") ?: "unknown"
         if (mediaId == -1) {
@@ -105,9 +106,14 @@ class CommentsFragment : Fragment() {
         binding.commentsRefresh.setOnRefreshListener {
             lifecycleScope.launch {
                 loadAndDisplayComments()
+                binding.commentCounter.text = commentCounter(mediaId)
                 binding.commentsRefresh.isRefreshing = false
             }
             activity.binding.commentReplyToContainer.visibility = View.GONE
+        }
+
+        lifecycleScope.launch {
+            binding.commentCounter.text = commentCounter(mediaId)
         }
 
         binding.commentsList.adapter = adapter
@@ -256,7 +262,7 @@ class CommentsFragment : Fragment() {
                     }
                 }
 
-                //adds additional comments to the section
+                // Adds additional comments to the section
                 private suspend fun updateUIWithComment(comment: Comment) {
                     withContext(Dispatchers.Main) {
                         section.add(
@@ -317,7 +323,7 @@ class CommentsFragment : Fragment() {
             }
 
             activity.binding.commentLabel.setOnClickListener {
-                //alert dialog to enter a number, with a cancel and ok button
+                // Alert dialog to enter a number, with a cancel and ok button
                 activity.customAlertDialog().apply {
                     val customView = DialogEdittextBinding.inflate(layoutInflater)
                     setTitle("Enter a chapter/episode number tag")
@@ -608,6 +614,30 @@ class CommentsFragment : Fragment() {
             show()
         }
     }
+
+
+    private suspend fun commentCounter(mediaId: Int): String {
+        var totalComments = 0
+        var currentPage = 1
+
+        while (true) {
+            val response = CommentsAPI.getCommentsForId(mediaId, page = currentPage, tag = null, sort = null)
+            totalPages = response?.totalPages ?: 1
+            totalComments += response?.comments?.size ?: 0
+
+            if (currentPage >= totalPages) {
+                break
+            }
+            currentPage++
+        }
+
+        return if (totalComments > 0) {
+            resources.getString(R.string.comments_counter, totalComments.toString())
+        } else {
+            resources.getString(R.string.no_comments_found)
+        }
+    }
+
 
     private fun processComment() {
         val commentText = activity.binding.commentInput.text.toString()
