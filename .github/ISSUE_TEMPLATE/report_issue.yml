@@ -1,0 +1,101 @@
+name: 🐛 Issue Report
+description: Report a bug or problem in Dantotsu
+labels: [bug]
+body:
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: Outline the steps needed to trigger the issue.
+      placeholder: |
+        Example:
+          1. Navigate to the home screen.
+          2. Click on "Start."
+          3. Observe the error message.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-outcome
+    attributes:
+      label: Expected Outcome
+      description: Describe what you expected to happen.
+      placeholder: |
+        Example:
+          "The application should have successfully loaded the dashboard..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual-outcome
+    attributes:
+      label: Actual Outcome
+      description: Detail what actually occurred when following the steps.
+      placeholder: |
+        Example:
+          "The app crashed and displayed an error message instead..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: error-logs
+    attributes:
+      label: Error Logs (if applicable)
+      description: |
+        If the issue involves crashes, please attach relevant logs. Access them via **Settings → About → Log to file → Share**.
+      placeholder: |
+        Paste the logs here or upload as an attachment.
+      
+  - type: input
+    id: dartotsu-version
+    attributes:
+      label: Dartotsu Version
+      description: Specify the version of Dartotsu in which the issue occurred.
+      placeholder: |
+        Example: "1.2.3"
+    validations:
+      required: true
+
+  - type: input
+    id: os-version
+    attributes:
+      label: Operating System Version
+      description: Mention the OS version you are using.
+      placeholder: |
+        Example: "Android 12"
+    validations:
+      required: true
+
+  - type: input
+    id: device-info
+    attributes:
+      label: Device Information
+      description: Provide your device name and model.
+      placeholder: |
+        Example: "Samsung Galaxy S21"
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-information
+    attributes:
+      label: Additional Information
+      placeholder: |
+        Include any other relevant details or attachments that may help diagnose the issue.
+
+  - type: checkboxes
+    id: submission-checklist
+    attributes:
+      label: Submission Checklist
+      description: Ensure you've reviewed these items before submitting your report.
+      options:
+        - label: I have searched existing issues to confirm this is not a duplicate.
+          required: true
+        - label: I have provided a clear and descriptive title.
+          required: true
+        - label: I am using the **[latest](https://github.com/rebelonion/Dantotsu/latest)** version of Dantotsu. If not, I have provided a reason for not updating.
+          required: true
+        - label: I have updated all relevant extensions or dependencies.
+          required: true
+        - label: I have filled out all the requested information accurately.
+          required: true

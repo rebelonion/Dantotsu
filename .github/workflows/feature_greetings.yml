@@ -1,0 +1,86 @@
+name: Feature Request Greeting
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  greeting:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      
+    - name: Check if the issue is labeled as a Feature Request
+      id: check_feature_label
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        ISSUE_NUMBER=$(jq -r '.issue.number' "$GITHUB_EVENT_PATH")
+        LABELS=$(gh issue view $ISSUE_NUMBER --json labels --jq '.labels[].name')
+        
+        if echo "$LABELS" | grep -q 'enhancement'; then
+          echo "This issue is labeled as a feature request. Checking if the issue creator is the repository owner."
+          echo "skip_label_check=false" >> $GITHUB_ENV
+        else
+          echo "This issue is not labeled as a feature request. Skipping greeting message."
+          echo "skip_label_check=true" >> $GITHUB_ENV
+        fi
+
+    - name: Check if the user has submitted a feature request before
+      if: env.skip_label_check == 'false'
+      id: check_first_request
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        ISSUE_AUTHOR=$(jq -r '.issue.user.login' "$GITHUB_EVENT_PATH")
+        REPO_OWNER=$(jq -r '.repository.owner.login' "$GITHUB_EVENT_PATH")
+        ISSUE_NUMBER=$(jq -r '.issue.number' "$GITHUB_EVENT_PATH")
+        
+        if [ "$ISSUE_AUTHOR" = "$REPO_OWNER" ]; then
+          echo "The issue creator is the repository owner. Skipping greeting message."
+          echo "skip_first_request=true" >> $GITHUB_ENV
+        else
+          echo "Checking for previous feature requests..."
+          # Get all issues (both open and closed) by the author except the current one
+          PREVIOUS_REQUESTS=$(gh issue list --author "$ISSUE_AUTHOR" --label "New Feature" --state all --json number --jq '. | map(select(.number != '$ISSUE_NUMBER')) | length')
+          echo "User $ISSUE_AUTHOR has submitted $PREVIOUS_REQUESTS feature request(s) previously"
+          
+          if [ "$PREVIOUS_REQUESTS" -eq 0 ]; then
+            echo "This is the user's first feature request. Sending greeting message."
+            echo "skip_first_request=false" >> $GITHUB_ENV
+          else
+            echo "User has previous feature requests. Skipping greeting message."
+            echo "skip_first_request=true" >> $GITHUB_ENV
+          fi
+        fi
+
+    - name: Send Greeting Message
+      if: env.skip_label_check == 'false' && env.skip_first_request == 'false'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const issueNumber = context.payload.issue.number;
+          const message = `
+          **💡 Thank you for your feature request!**
+            Your request has been successfully submitted and is now under consideration. We value your input in shaping the future of Dantotsu.
+
+          **📈 What to Expect Next**
+          - Our team will review your request and assess its feasibility.
+          - We may reach out for additional details or clarification.
+          - Updates on the request will be provided, and it may be scheduled for future development.
+
+          **👥 Stay Connected**
+          - **[Discord](https://discord.com/invite/4HPZ5nAWwM)**: Join our community to discuss ideas and stay updated.
+          - **[Telegram](https://t.me/dantotsuapp)**: Connect with us directly for real-time updates.
+
+          We appreciate your suggestion and look forward to potentially implementing it!
+          `;
+          await github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: issueNumber,
+            body: message
+          });
