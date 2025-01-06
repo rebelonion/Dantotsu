@@ -56,7 +56,8 @@ class AnilistSettingsActivity : AppCompatActivity() {
             }
 
             val currentTitleLang = Anilist.titleLanguage
-            val titleFormat = UserTitleLanguage.entries.firstOrNull { it.name == currentTitleLang } ?: UserTitleLanguage.ENGLISH
+            val titleFormat = UserTitleLanguage.entries.firstOrNull { it.name == currentTitleLang }
+                ?: UserTitleLanguage.ENGLISH
 
             settingsAnilistTitleLanguage.setText(titleLang[titleFormat.ordinal])
             settingsAnilistTitleLanguage.setAdapter(
@@ -78,7 +79,9 @@ class AnilistSettingsActivity : AppCompatActivity() {
             }
 
             val currentStaffNameLang = Anilist.staffNameLanguage
-            val staffNameFormat = UserStaffNameLanguage.entries.firstOrNull { it.name == currentStaffNameLang } ?: UserStaffNameLanguage.ROMAJI_WESTERN
+            val staffNameFormat =
+                UserStaffNameLanguage.entries.firstOrNull { it.name == currentStaffNameLang }
+                    ?: UserStaffNameLanguage.ROMAJI_WESTERN
 
             settingsAnilistStaffLanguage.setText(staffNameLang[staffNameFormat.ordinal])
             settingsAnilistStaffLanguage.setAdapter(
@@ -99,8 +102,9 @@ class AnilistSettingsActivity : AppCompatActivity() {
                 settingsAnilistStaffLanguage.clearFocus()
             }
 
-            val currentMergeTimeDisplay = activityMergeTimeMap.entries.firstOrNull { it.value == Anilist.activityMergeTime }?.key
-                ?: "${Anilist.activityMergeTime} mins"
+            val currentMergeTimeDisplay =
+                activityMergeTimeMap.entries.firstOrNull { it.value == Anilist.activityMergeTime }?.key
+                    ?: "${Anilist.activityMergeTime} mins"
             settingsAnilistActivityMergeTime.setText(currentMergeTimeDisplay)
             settingsAnilistActivityMergeTime.setAdapter(
                 ArrayAdapter(context, R.layout.item_dropdown, activityMergeTimeMap.keys.toList())
@@ -117,7 +121,8 @@ class AnilistSettingsActivity : AppCompatActivity() {
             }
 
             val currentScoreFormat = Anilist.scoreFormat
-            val scoreFormat = ScoreFormat.entries.firstOrNull{ it.name == currentScoreFormat } ?: ScoreFormat.POINT_100
+            val scoreFormat = ScoreFormat.entries.firstOrNull { it.name == currentScoreFormat }
+                ?: ScoreFormat.POINT_100
             settingsAnilistScoreFormat.setText(scoreFormats[scoreFormat.ordinal])
             settingsAnilistScoreFormat.setAdapter(
                 ArrayAdapter(context, R.layout.item_dropdown, scoreFormats)
@@ -139,7 +144,8 @@ class AnilistSettingsActivity : AppCompatActivity() {
                 settingsAnilistScoreFormat.clearFocus()
             }
 
-            val currentRowOrder = rowOrderMap.entries.firstOrNull { it.value == Anilist.rowOrder }?.key ?: "Score"
+            val currentRowOrder =
+                rowOrderMap.entries.firstOrNull { it.value == Anilist.rowOrder }?.key ?: "Score"
             settingsAnilistRowOrder.setText(currentRowOrder)
             settingsAnilistRowOrder.setAdapter(
                 ArrayAdapter(context, R.layout.item_dropdown, rowOrderMap.keys.toList())
@@ -155,7 +161,8 @@ class AnilistSettingsActivity : AppCompatActivity() {
                 settingsAnilistRowOrder.clearFocus()
             }
 
-            val containers = listOf(binding.animeCustomListsContainer, binding.mangaCustomListsContainer)
+            val containers =
+                listOf(binding.animeCustomListsContainer, binding.mangaCustomListsContainer)
             val customLists = listOf(Anilist.animeCustomLists, Anilist.mangaCustomLists)
             val buttons = listOf(binding.addAnimeListButton, binding.addMangaListButton)
 
@@ -175,7 +182,8 @@ class AnilistSettingsActivity : AppCompatActivity() {
                 saveCustomLists()
             }
 
-            val currentTimezone = Anilist.timezone?.let { Anilist.getDisplayTimezone(it, context) } ?: context.getString(R.string.selected_no_time_zone)
+            val currentTimezone = Anilist.timezone?.let { Anilist.getDisplayTimezone(it, context) }
+                ?: context.getString(R.string.selected_no_time_zone)
             settingsAnilistTimezone.setText(currentTimezone)
             settingsAnilistTimezone.setAdapter(
                 ArrayAdapter(context, R.layout.item_dropdown, Anilist.timeZone)

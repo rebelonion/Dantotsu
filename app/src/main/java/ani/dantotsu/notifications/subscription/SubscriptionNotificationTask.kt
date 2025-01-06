@@ -127,8 +127,10 @@ class SubscriptionNotificationTask : Task {
                                 banner = media.banner
                             )
                         )
-                        PrefManager.setVal(PrefName.UnreadCommentNotifications,
-                            PrefManager.getVal<Int>(PrefName.UnreadCommentNotifications) + 1)
+                        PrefManager.setVal(
+                            PrefName.UnreadCommentNotifications,
+                            PrefManager.getVal<Int>(PrefName.UnreadCommentNotifications) + 1
+                        )
                         val notification = createNotification(
                             context.applicationContext,
                             media,
@@ -240,7 +242,7 @@ class SubscriptionNotificationTask : Task {
         if (newStore.size >= 100) {
             newStore.remove(newStore.minByOrNull { it.time })
         }
-        if (newStore.any { it.title == notification.title && it.content == notification.content}) {
+        if (newStore.any { it.title == notification.title && it.content == notification.content }) {
             return
         }
 

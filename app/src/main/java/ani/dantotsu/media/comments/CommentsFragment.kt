@@ -2,7 +2,6 @@ package ani.dantotsu.media.comments
 
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -12,7 +11,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.animation.doOnEnd
 import androidx.core.content.res.ResourcesCompat
@@ -33,7 +31,6 @@ import ani.dantotsu.setBaseline
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
-import ani.dantotsu.toast
 import ani.dantotsu.util.Logger
 import ani.dantotsu.util.customAlertDialog
 import com.xwray.groupie.GroupieAdapter
@@ -587,19 +584,19 @@ class CommentsFragment : Fragment() {
     private fun showCommentRulesDialog() {
         activity.customAlertDialog().apply {
             setTitle("Commenting Rules")
-            .setMessage(
-                "🚨 BREAK ANY RULE = YOU'RE GONE\n\n" +
-                "1. NO RACISM, DISCRIMINATION, OR HATE SPEECH\n" +
-                "2. NO SPAMMING OR SELF-PROMOTION\n" +
-                "3. ABSOLUTELY NO NSFW CONTENT\n" +
-                "4. ENGLISH ONLY – NO EXCEPTIONS\n" +
-                "5. NO IMPERSONATION, HARASSMENT, OR ABUSE\n" +
-                "6. NO ILLEGAL CONTENT OR EXTREME DISRESPECT TOWARDS ANY FANDOM\n" +
-                "7. DO NOT REQUEST OR SHARE REPOSITORIES/EXTENSIONS\n" +
-                "8. SPOILERS ALLOWED ONLY WITH SPOILER TAGS AND A WARNING\n" +
-                "9. NO SEXUALIZING OR INAPPROPRIATE COMMENTS ABOUT MINOR CHARACTERS\n" +
-                "10. IF IT'S WRONG, DON'T POST IT!\n\n"
-            )
+                .setMessage(
+                    "🚨 BREAK ANY RULE = YOU'RE GONE\n\n" +
+                            "1. NO RACISM, DISCRIMINATION, OR HATE SPEECH\n" +
+                            "2. NO SPAMMING OR SELF-PROMOTION\n" +
+                            "3. ABSOLUTELY NO NSFW CONTENT\n" +
+                            "4. ENGLISH ONLY – NO EXCEPTIONS\n" +
+                            "5. NO IMPERSONATION, HARASSMENT, OR ABUSE\n" +
+                            "6. NO ILLEGAL CONTENT OR EXTREME DISRESPECT TOWARDS ANY FANDOM\n" +
+                            "7. DO NOT REQUEST OR SHARE REPOSITORIES/EXTENSIONS\n" +
+                            "8. SPOILERS ALLOWED ONLY WITH SPOILER TAGS AND A WARNING\n" +
+                            "9. NO SEXUALIZING OR INAPPROPRIATE COMMENTS ABOUT MINOR CHARACTERS\n" +
+                            "10. IF IT'S WRONG, DON'T POST IT!\n\n"
+                )
             setPosButton("I Understand") {
                 PrefManager.setVal(PrefName.FirstComment, false)
                 processComment()

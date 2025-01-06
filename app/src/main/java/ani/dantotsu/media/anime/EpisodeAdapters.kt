@@ -1,6 +1,5 @@
 package ani.dantotsu.media.anime
 
-import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,6 @@ import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.R
 import ani.dantotsu.connections.updateProgress
-import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ItemEpisodeCompactBinding
 import ani.dantotsu.databinding.ItemEpisodeGridBinding
 import ani.dantotsu.databinding.ItemEpisodeListBinding

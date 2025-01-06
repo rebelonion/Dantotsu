@@ -70,7 +70,7 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
             if (allSettings.isNotEmpty()) {
                 var selectedSetting = allSettings[0]
                 if (allSettings.size > 1) {
-                    val names = allSettings.map { LanguageMapper.getLanguageName(it.lang) }
+                    val names = allSettings.map { getLanguageName(it.lang) }
                         .toTypedArray()
                     var selectedIndex = 0
                     requireContext().customAlertDialog().apply {

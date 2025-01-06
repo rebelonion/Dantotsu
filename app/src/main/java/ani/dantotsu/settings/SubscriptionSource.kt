@@ -1,6 +1,5 @@
 package ani.dantotsu.settings
 
-import android.app.AlertDialog
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.view.View
@@ -36,7 +35,8 @@ class SubscriptionSource(
             true
         }
         binding.extensionIconImageView.visibility = View.VISIBLE
-        val layoutParams = binding.extensionIconImageView.layoutParams as ViewGroup.MarginLayoutParams
+        val layoutParams =
+            binding.extensionIconImageView.layoutParams as ViewGroup.MarginLayoutParams
         layoutParams.leftMargin = 28
         binding.extensionIconImageView.layoutParams = layoutParams
 
@@ -55,11 +55,12 @@ class SubscriptionSource(
 
     private fun updateSubscriptionCount() {
         binding.subscriptionCount.text = subscriptions.size.toString()
-        binding.subscriptionCount.visibility = if (subscriptions.isEmpty()) View.GONE else View.VISIBLE
+        binding.subscriptionCount.visibility =
+            if (subscriptions.isEmpty()) View.GONE else View.VISIBLE
     }
 
     private fun showRemoveAllSubscriptionsDialog(context: Context) {
-        context.customAlertDialog().apply{
+        context.customAlertDialog().apply {
             setTitle(R.string.remove_all_subscriptions)
             setMessage(R.string.remove_all_subscriptions_desc, parserName)
             setPosButton(R.string.ok) { removeAllSubscriptions() }
@@ -96,9 +97,11 @@ class SubscriptionSource(
         val startPosition = adapter.getAdapterPosition(this) + 1
         if (isExpanded) {
             subscriptions.forEachIndexed { index, subscribeMedia ->
-                adapter.add(startPosition + index, SubscriptionItem(subscribeMedia.id, subscribeMedia, adapter) { removedId ->
-                    removeSubscription(removedId)
-                })
+                adapter.add(
+                    startPosition + index,
+                    SubscriptionItem(subscribeMedia.id, subscribeMedia, adapter) { removedId ->
+                        removeSubscription(removedId)
+                    })
             }
         } else {
             repeat(subscriptions.size) {
@@ -109,5 +112,6 @@ class SubscriptionSource(
 
     override fun getLayout(): Int = R.layout.item_extension
 
-    override fun initializeViewBinding(view: View): ItemExtensionBinding = ItemExtensionBinding.bind(view)
+    override fun initializeViewBinding(view: View): ItemExtensionBinding =
+        ItemExtensionBinding.bind(view)
 }

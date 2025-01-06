@@ -189,7 +189,7 @@ data class MediaTitle(
 
     // The currently authenticated users preferred title language. Default romaji for non-authenticated
     @SerialName("userPreferred") var userPreferred: String,
-): java.io.Serializable
+) : java.io.Serializable
 
 @Serializable
 enum class MediaType {
@@ -239,6 +239,7 @@ data class AiringSchedule(
     // The associate media of the airing episode
     @SerialName("media") var media: Media?,
 )
+
 @Serializable
 data class MediaStreamingEpisode(
     // The title of the episode
@@ -253,6 +254,7 @@ data class MediaStreamingEpisode(
     // The site location of the streaming episode
     @SerialName("site") var site: String?,
 )
+
 @Serializable
 data class MediaCoverImage(
     // The cover image url of the media at its largest size. If this size isn't available, large will be provided instead.

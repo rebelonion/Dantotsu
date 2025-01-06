@@ -18,9 +18,8 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
-import java.util.ArrayList
 
-class MediaListViewActivity: AppCompatActivity() {
+class MediaListViewActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMediaListViewBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +51,8 @@ class MediaListViewActivity: AppCompatActivity() {
         binding.listAppBar.setBackgroundColor(primaryColor)
         binding.listTitle.setTextColor(primaryTextColor)
         val screenWidth = resources.displayMetrics.run { widthPixels / density }
-        val mediaList = passedMedia ?: intent.getSerialized("media") as? ArrayList<Media> ?: ArrayList()
+        val mediaList =
+            passedMedia ?: intent.getSerialized("media") as? ArrayList<Media> ?: ArrayList()
         if (passedMedia != null) passedMedia = null
         val view = PrefManager.getCustomVal("mediaView", 0)
         var mediaView: View = when (view) {

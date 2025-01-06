@@ -18,6 +18,7 @@ import ani.dantotsu.Mapper
 import ani.dantotsu.R
 import ani.dantotsu.buildMarkwon
 import ani.dantotsu.client
+import ani.dantotsu.connections.comments.CommentsAPI
 import ani.dantotsu.currContext
 import ani.dantotsu.decodeBase64ToString
 import ani.dantotsu.logError
@@ -84,7 +85,7 @@ object AppUpdater {
 
     private suspend fun fetchFromFallback(isDebug: Boolean): Pair<String, String> {
         val url = if (isDebug) fallbackBetaUrl else fallbackStableUrl
-        val response = client.get(url).parsed<FallbackResponse>()
+        val response = CommentsAPI.requestBuilder().get(url).parsed<FallbackResponse>()
         return response.changelog to response.version
     }
 
@@ -112,7 +113,7 @@ object AppUpdater {
 
     private suspend fun fetchApkUrlFromFallback(version: String, isDebug: Boolean): String? {
         val url = if (isDebug) fallbackBetaUrl else fallbackStableUrl
-        return client.get("$url/$version").parsed<FallbackResponse>().downloadUrl
+        return CommentsAPI.requestBuilder().get("$url/$version").parsed<FallbackResponse>().downloadUrl
     }
 
     suspend fun check(activity: FragmentActivity, post: Boolean = false) {
@@ -200,8 +201,7 @@ object AppUpdater {
 
 
     //Blatantly kanged from https://github.com/LagradOst/CloudStream-3/blob/master/app/src/main/java/com/lagradost/cloudstream3/utils/InAppUpdater.kt
-    private fun Activity.downloadUpdate(version: String, url: String): Boolean {
-
+    private fun Activity.downloadUpdate(version: String, url: String) {
         toast(getString(R.string.downloading_update, version))
 
         val downloadManager = this.getSystemService<DownloadManager>()!!
@@ -223,7 +223,7 @@ object AppUpdater {
             logError(e)
             -1
         }
-        if (id == -1L) return true
+        if (id == -1L) return
         ContextCompat.registerReceiver(
             this,
             object : BroadcastReceiver() {
@@ -244,7 +244,6 @@ object AppUpdater {
             }, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE),
             ContextCompat.RECEIVER_EXPORTED
         )
-        return true
     }
 
     private fun openApk(context: Context, uri: Uri) {

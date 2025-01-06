@@ -261,13 +261,14 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
             val chapters = loadedChapters[media.selected!!.sourceIndex]
             if (chapters != null) {
                 headerAdapter.options = getScanlators(chapters)
-                val filteredChapters = if (model.mangaReadSources?.get(media.selected!!.sourceIndex) is OfflineMangaParser) {
-                    chapters
-                } else {
-                    chapters.filterNot { (_, chapter) ->
-                        chapter.scanlator in headerAdapter.hiddenScanlators
+                val filteredChapters =
+                    if (model.mangaReadSources?.get(media.selected!!.sourceIndex) is OfflineMangaParser) {
+                        chapters
+                    } else {
+                        chapters.filterNot { (_, chapter) ->
+                            chapter.scanlator in headerAdapter.hiddenScanlators
+                        }
                     }
-                }
 
                 media.manga?.chapters = filteredChapters.toMutableMap()
 
@@ -397,17 +398,18 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
                         selectedSetting = allSettings[which]
                         itemSelected = true
 
-                        val fragment = MangaSourcePreferencesFragment().getInstance(selectedSetting.id) {
-                            changeUIVisibility(true)
-                            loadChapters(media.selected!!.sourceIndex, true)
-                        }
+                        val fragment =
+                            MangaSourcePreferencesFragment().getInstance(selectedSetting.id) {
+                                changeUIVisibility(true)
+                                loadChapters(media.selected!!.sourceIndex, true)
+                            }
                         parentFragmentManager.beginTransaction()
                             .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
                             .replace(R.id.fragmentExtensionsContainer, fragment)
                             .addToBackStack(null)
                             .commit()
                     }
-                    onDismiss{
+                    onDismiss {
                         if (!itemSelected) {
                             changeUIVisibility(true)
                         }
@@ -590,7 +592,9 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
 
         // Find latest chapter for subscription
         selected.latest =
-            media.manga?.chapters?.values?.maxOfOrNull { MediaNameAdapter.findChapterNumber(it.number) ?: 0f } ?: 0f
+            media.manga?.chapters?.values?.maxOfOrNull {
+                MediaNameAdapter.findChapterNumber(it.number) ?: 0f
+            } ?: 0f
         selected.latest =
             media.userProgress?.toFloat()?.takeIf { selected.latest < it } ?: selected.latest
 

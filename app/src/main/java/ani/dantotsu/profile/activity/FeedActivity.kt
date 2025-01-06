@@ -1,26 +1,21 @@
 package ani.dantotsu.profile.activity
 
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.updateLayoutParams
-import androidx.core.view.updateMargins
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.R
-import ani.dantotsu.databinding.ActivityFeedBinding
 import ani.dantotsu.databinding.ActivityNotificationBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.navBarHeight
+import ani.dantotsu.profile.activity.ActivityFragment.Companion.ActivityType
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
-import ani.dantotsu.profile.activity.ActivityFragment.Companion.ActivityType
-import ani.dantotsu.profile.notification.NotificationActivity
 import nl.joery.animatedbottombar.AnimatedBottomBar
 
 class FeedActivity : AppCompatActivity() {
@@ -50,9 +45,12 @@ class FeedActivity : AppCompatActivity() {
 
         binding.notificationBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
         val getOne = intent.getIntExtra("activityId", -1)
-        if (getOne != -1) { navBar.visibility = View.GONE }
+        if (getOne != -1) {
+            navBar.visibility = View.GONE
+        }
         binding.notificationViewPager.isUserInputEnabled = false
-        binding.notificationViewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle, getOne)
+        binding.notificationViewPager.adapter =
+            ViewPagerAdapter(supportFragmentManager, lifecycle, getOne)
         binding.notificationViewPager.setOffscreenPageLimit(4)
         binding.notificationViewPager.setCurrentItem(selected, false)
         navBar.selectTabAt(selected)
@@ -83,7 +81,11 @@ class FeedActivity : AppCompatActivity() {
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {
-                0 -> ActivityFragment.newInstance(if (activityId != -1) ActivityType.ONE else ActivityType.USER, activityId = activityId)
+                0 -> ActivityFragment.newInstance(
+                    if (activityId != -1) ActivityType.ONE else ActivityType.USER,
+                    activityId = activityId
+                )
+
                 else -> ActivityFragment.newInstance(ActivityType.GLOBAL)
             }
         }

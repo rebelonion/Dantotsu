@@ -6,11 +6,16 @@ import android.media.MediaPlayer
 
 class AudioHelper(private val context: Context) {
 
-    private val audioManager: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    private val audioManager: AudioManager =
+        context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
     private var mediaPlayer: MediaPlayer? = null
 
     fun routeAudioToSpeaker() {
-        audioManager.requestAudioFocus(null, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN)
+        audioManager.requestAudioFocus(
+            null,
+            AudioManager.STREAM_MUSIC,
+            AudioManager.AUDIOFOCUS_GAIN
+        )
         audioManager.mode = AudioManager.MODE_IN_COMMUNICATION
         audioManager.isSpeakerphoneOn = true
     }

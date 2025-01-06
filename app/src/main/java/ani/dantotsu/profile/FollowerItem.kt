@@ -36,10 +36,10 @@ class FollowerItem(
     }
 
     override fun getLayout(): Int {
-        return if(grid) R.layout.item_follower_grid else R.layout.item_follower
+        return if (grid) R.layout.item_follower_grid else R.layout.item_follower
     }
 
     override fun initializeViewBinding(view: View): ViewBinding {
-        return if(grid) ItemFollowerGridBinding.bind(view) else ItemFollowerBinding.bind(view)
+        return if (grid) ItemFollowerGridBinding.bind(view) else ItemFollowerBinding.bind(view)
     }
 }

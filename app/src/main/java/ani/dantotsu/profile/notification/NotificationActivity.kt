@@ -9,17 +9,20 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.R
-import ani.dantotsu.settings.saving.PrefManager
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.databinding.ActivityNotificationBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.navBarHeight
+import ani.dantotsu.profile.notification.NotificationFragment.Companion.NotificationType.COMMENT
+import ani.dantotsu.profile.notification.NotificationFragment.Companion.NotificationType.MEDIA
+import ani.dantotsu.profile.notification.NotificationFragment.Companion.NotificationType.ONE
+import ani.dantotsu.profile.notification.NotificationFragment.Companion.NotificationType.SUBSCRIPTION
+import ani.dantotsu.profile.notification.NotificationFragment.Companion.NotificationType.USER
+import ani.dantotsu.profile.notification.NotificationFragment.Companion.newInstance
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
-import ani.dantotsu.profile.notification.NotificationFragment.Companion.NotificationType.*
-import ani.dantotsu.profile.notification.NotificationFragment.Companion.newInstance
 import nl.joery.animatedbottombar.AnimatedBottomBar
 
 class NotificationActivity : AppCompatActivity() {
@@ -58,7 +61,8 @@ class NotificationActivity : AppCompatActivity() {
         val getOne = intent.getIntExtra("activityId", -1)
         if (getOne != -1) navBar.isVisible = false
         binding.notificationViewPager.isUserInputEnabled = false
-        binding.notificationViewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle, getOne, CommentsEnabled)
+        binding.notificationViewPager.adapter =
+            ViewPagerAdapter(supportFragmentManager, lifecycle, getOne, CommentsEnabled)
         binding.notificationViewPager.setCurrentItem(selected, false)
         navBar.selectTabAt(selected)
         navBar.setOnTabSelectListener(object : AnimatedBottomBar.OnTabSelectListener {

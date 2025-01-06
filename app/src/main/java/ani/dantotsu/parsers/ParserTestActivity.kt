@@ -73,6 +73,7 @@ class ParserTestActivity : AppCompatActivity() {
                         }
                     }
                 }
+
                 "manga" -> {
                     ExtensionTestSettingsBottomDialog.extensionsToTest.forEach { name ->
                         val extension =
@@ -89,6 +90,7 @@ class ParserTestActivity : AppCompatActivity() {
                         }
                     }
                 }
+
                 "novel" -> {
                     ExtensionTestSettingsBottomDialog.extensionsToTest.forEach { name ->
                         val extension =

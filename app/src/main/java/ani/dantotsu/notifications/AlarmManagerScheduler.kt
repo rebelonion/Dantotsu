@@ -22,13 +22,13 @@ class AlarmManagerScheduler(private val context: Context) : TaskScheduler {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         val intent = when {
-            taskType == TaskType.COMMENT_NOTIFICATION && PrefManager.getVal<Int>(PrefName.CommentsEnabled) == 1 -> 
+            taskType == TaskType.COMMENT_NOTIFICATION && PrefManager.getVal<Int>(PrefName.CommentsEnabled) == 1 ->
                 Intent(context, CommentNotificationReceiver::class.java)
 
-            taskType == TaskType.ANILIST_NOTIFICATION -> 
+            taskType == TaskType.ANILIST_NOTIFICATION ->
                 Intent(context, AnilistNotificationReceiver::class.java)
 
-            taskType == TaskType.SUBSCRIPTION_NOTIFICATION -> 
+            taskType == TaskType.SUBSCRIPTION_NOTIFICATION ->
                 Intent(context, SubscriptionNotificationReceiver::class.java)
 
             else -> return
@@ -63,13 +63,13 @@ class AlarmManagerScheduler(private val context: Context) : TaskScheduler {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         val intent = when {
-            taskType == TaskType.COMMENT_NOTIFICATION && PrefManager.getVal<Int>(PrefName.CommentsEnabled) == 1 -> 
+            taskType == TaskType.COMMENT_NOTIFICATION && PrefManager.getVal<Int>(PrefName.CommentsEnabled) == 1 ->
                 Intent(context, CommentNotificationReceiver::class.java)
 
-            taskType == TaskType.ANILIST_NOTIFICATION -> 
+            taskType == TaskType.ANILIST_NOTIFICATION ->
                 Intent(context, AnilistNotificationReceiver::class.java)
 
-            taskType == TaskType.SUBSCRIPTION_NOTIFICATION -> 
+            taskType == TaskType.SUBSCRIPTION_NOTIFICATION ->
                 Intent(context, SubscriptionNotificationReceiver::class.java)
 
             else -> return

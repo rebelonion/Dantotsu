@@ -26,9 +26,17 @@ interface DownloadAddonApiV2 {
         statCallback: (Double) -> Unit
     ): Long
 
-    suspend fun customFFMpeg(command: String, videoUrls: List<String>, logCallback: (String) -> Unit): Long
+    suspend fun customFFMpeg(
+        command: String,
+        videoUrls: List<String>,
+        logCallback: (String) -> Unit
+    ): Long
 
-    suspend fun customFFProbe(command: String, videoUrls: List<String>, logCallback: (String) -> Unit)
+    suspend fun customFFProbe(
+        command: String,
+        videoUrls: List<String>,
+        logCallback: (String) -> Unit
+    )
 
     fun getState(sessionId: Long): String
 

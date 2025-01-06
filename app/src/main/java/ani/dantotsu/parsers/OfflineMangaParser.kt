@@ -33,7 +33,7 @@ class OfflineMangaParser : MangaParser() {
             directory.listFiles().forEach {
                 val scanlator = downloadManager.mangaDownloadedTypes.find { items ->
                     items.titleName == mangaLink &&
-                    items.chapterName == it.name
+                            items.chapterName == it.name
                 }?.scanlator ?: "Unknown"
                 if (it.isDirectory) {
                     val chapter = MangaChapter(

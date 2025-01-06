@@ -147,7 +147,7 @@ fun Media?.deleteFromList(
     scope.launch {
         withContext(Dispatchers.IO) {
             this@deleteFromList?.let { media ->
-                val _id = id ?: Anilist.query.userMediaDetails(media).userListId;
+                val _id = id ?: Anilist.query.userMediaDetails(media).userListId
                 _id?.let { listId ->
                     try {
                         Anilist.mutation.deleteList(listId)

@@ -30,10 +30,12 @@ class AlertDialogBuilder(private val context: Context) {
         this.cancelable = cancelable
         return this
     }
+
     fun setOnShowListener(onShow: () -> Unit): AlertDialogBuilder {
         this.onShow = onShow
         return this
     }
+
     fun setOnCancelListener(onCancel: () -> Unit): AlertDialogBuilder {
         this.onCancel = onCancel
         return this
@@ -63,6 +65,7 @@ class AlertDialogBuilder(private val context: Context) {
         this.customView = view
         return this
     }
+
     fun setCustomView(layoutResId: Int): AlertDialogBuilder {
         this.customView = View.inflate(context, layoutResId, null)
         return this
@@ -74,7 +77,11 @@ class AlertDialogBuilder(private val context: Context) {
         return this
     }
 
-    fun setPosButton(int: Int, formatArgs: Int? = null, onClick: (() -> Unit)? = null): AlertDialogBuilder {
+    fun setPosButton(
+        int: Int,
+        formatArgs: Int? = null,
+        onClick: (() -> Unit)? = null
+    ): AlertDialogBuilder {
         this.posButtonTitle = context.getString(int, formatArgs)
         this.onPositiveButtonClick = onClick
         return this
@@ -86,7 +93,11 @@ class AlertDialogBuilder(private val context: Context) {
         return this
     }
 
-    fun setNegButton(int: Int, formatArgs: Int? = null, onClick: (() -> Unit)? = null): AlertDialogBuilder {
+    fun setNegButton(
+        int: Int,
+        formatArgs: Int? = null,
+        onClick: (() -> Unit)? = null
+    ): AlertDialogBuilder {
         this.negButtonTitle = context.getString(int, formatArgs)
         this.onNegativeButtonClick = onClick
         return this
@@ -98,7 +109,11 @@ class AlertDialogBuilder(private val context: Context) {
         return this
     }
 
-    fun setNeutralButton(int: Int, formatArgs: Int? = null, onClick: (() -> Unit)? = null): AlertDialogBuilder {
+    fun setNeutralButton(
+        int: Int,
+        formatArgs: Int? = null,
+        onClick: (() -> Unit)? = null
+    ): AlertDialogBuilder {
         this.neutralButtonTitle = context.getString(int, formatArgs)
         this.onNeutralButtonClick = onClick
         return this
@@ -114,14 +129,22 @@ class AlertDialogBuilder(private val context: Context) {
         return this
     }
 
-    fun singleChoiceItems(items: Array<String>, selectedItemIndex: Int = -1, onItemSelected: (Int) -> Unit): AlertDialogBuilder {
+    fun singleChoiceItems(
+        items: Array<String>,
+        selectedItemIndex: Int = -1,
+        onItemSelected: (Int) -> Unit
+    ): AlertDialogBuilder {
         this.items = items
         this.selectedItemIndex = selectedItemIndex
         this.onItemSelected = onItemSelected
         return this
     }
 
-    fun multiChoiceItems(items: Array<String>, checkedItems: BooleanArray? = null, onItemsSelected: (BooleanArray) -> Unit): AlertDialogBuilder {
+    fun multiChoiceItems(
+        items: Array<String>,
+        checkedItems: BooleanArray? = null,
+        onItemsSelected: (BooleanArray) -> Unit
+    ): AlertDialogBuilder {
         this.items = items
         this.checkedItems = checkedItems ?: BooleanArray(items.size) { false }
         this.onItemsSelected = onItemsSelected
@@ -182,8 +205,8 @@ class AlertDialogBuilder(private val context: Context) {
             onShow?.invoke()
         }
         dialog.window?.apply {
-        setDimAmount(0.8f)
-        attributes.windowAnimations = android.R.style.Animation_Dialog
+            setDimAmount(0.8f)
+            attributes.windowAnimations = android.R.style.Animation_Dialog
         }
         dialog.show()
     }

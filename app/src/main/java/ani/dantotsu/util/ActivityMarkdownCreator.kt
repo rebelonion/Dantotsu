@@ -140,6 +140,7 @@ class ActivityMarkdownCreator : AppCompatActivity() {
                             } else {
                                 Anilist.mutation.postReply(parentId, text)
                             }
+
                             "message" -> if (isEdit) {
                                 Anilist.mutation.postMessage(userId, text, editId)
                             } else {

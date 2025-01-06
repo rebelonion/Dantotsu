@@ -102,7 +102,7 @@ class LoginFragment : Fragment() {
         requireActivity().customAlertDialog().apply {
             setTitle("Enter Password")
             setCustomView(dialogView.root)
-            setPosButton(R.string.ok){
+            setPosButton(R.string.ok) {
                 val editText = dialogView.userAgentTextBox
                 if (editText.text?.isNotBlank() == true) {
                     editText.text?.toString()?.trim()?.toCharArray(password)

@@ -156,17 +156,28 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                                     openLinkInBrowser(getString(R.string.anilist_link, user.name))
                                     true
                                 }
+
                                 R.id.action_share_profile -> {
                                     val shareIntent = Intent(Intent.ACTION_SEND)
                                     shareIntent.type = "text/plain"
-                                    shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.anilist_link, user.name))
-                                    startActivity(Intent.createChooser(shareIntent, "Share Profile"))
+                                    shareIntent.putExtra(
+                                        Intent.EXTRA_TEXT,
+                                        getString(R.string.anilist_link, user.name)
+                                    )
+                                    startActivity(
+                                        Intent.createChooser(
+                                            shareIntent,
+                                            "Share Profile"
+                                        )
+                                    )
                                     true
                                 }
+
                                 R.id.action_copy_user_id -> {
                                     copyToClipboard(user.id.toString(), true)
                                     true
                                 }
+
                                 else -> false
                             }
                         }

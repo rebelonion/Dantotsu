@@ -78,7 +78,8 @@ class ChapterLoaderDialog : BottomSheetDialogFragment() {
         _binding = BottomSheetSelectorBinding.inflate(inflater, container, false)
         val window = dialog?.window
         window?.statusBarColor = Color.TRANSPARENT
-        window?.navigationBarColor = requireContext().getThemeColor(com.google.android.material.R.attr.colorSurface)
+        window?.navigationBarColor =
+            requireContext().getThemeColor(com.google.android.material.R.attr.colorSurface)
         return binding.root
     }
 

@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import ani.dantotsu.BottomSheetDialogFragment
 import ani.dantotsu.databinding.BottomSheetProxyBinding
+import ani.dantotsu.restartApp
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.restartApp
 
 class ProxyDialogFragment : BottomSheetDialogFragment() {
     private var _binding: BottomSheetProxyBinding? = null
@@ -16,8 +16,10 @@ class ProxyDialogFragment : BottomSheetDialogFragment() {
 
     private var proxyHost: String? = PrefManager.getVal<String>(PrefName.Socks5ProxyHost).orEmpty()
     private var proxyPort: String? = PrefManager.getVal<String>(PrefName.Socks5ProxyPort).orEmpty()
-    private var proxyUsername: String? = PrefManager.getVal<String>(PrefName.Socks5ProxyUsername).orEmpty()
-    private var proxyPassword: String? = PrefManager.getVal<String>(PrefName.Socks5ProxyPassword).orEmpty()
+    private var proxyUsername: String? =
+        PrefManager.getVal<String>(PrefName.Socks5ProxyUsername).orEmpty()
+    private var proxyPassword: String? =
+        PrefManager.getVal<String>(PrefName.Socks5ProxyPassword).orEmpty()
     private var authEnabled: Boolean = PrefManager.getVal<Boolean>(PrefName.ProxyAuthEnabled)
     private val proxyEnabled: Boolean = PrefManager.getVal<Boolean>(PrefName.EnableSocks5Proxy)
 

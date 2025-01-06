@@ -20,7 +20,6 @@ import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.MediaPageTransformer
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
-import ani.dantotsu.connections.anilist.AnilistSearch.SearchType.Companion.toAnilistString
 import ani.dantotsu.databinding.ItemAnimePageBinding
 import ani.dantotsu.databinding.LayoutTrendingBinding
 import ani.dantotsu.getAppString
@@ -266,7 +265,15 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
         }
     }
 
-    fun init(adaptor: MediaAdaptor, recyclerView: RecyclerView, progress: View, title: View , more: View , string: String,  media : MutableList<Media>) {
+    fun init(
+        adaptor: MediaAdaptor,
+        recyclerView: RecyclerView,
+        progress: View,
+        title: View,
+        more: View,
+        string: String,
+        media: MutableList<Media>
+    ) {
         progress.visibility = View.GONE
         recyclerView.adapter = adaptor
         recyclerView.layoutManager =

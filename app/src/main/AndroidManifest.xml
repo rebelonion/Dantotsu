@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+`<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -113,10 +113,8 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:host="*"/>
                 <data android:mimeType="application/epub+zip"/>
                 <data android:mimeType="application/x-mobipocket-ebook" />
                 <data android:mimeType="application/vnd.amazon.ebook" />
@@ -385,10 +383,10 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:scheme="content" />
+                <data android:scheme="file" />
                 <data android:mimeType="*/*" />
                 <data android:pathPattern=".*\\.ani" />
                 <data android:pathPattern=".*\\.sani" />
-                <data android:host="*" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

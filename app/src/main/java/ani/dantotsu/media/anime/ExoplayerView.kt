@@ -12,8 +12,6 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.content.res.Resources
-import android.graphics.Color
 import android.graphics.drawable.Animatable
 import android.hardware.SensorManager
 import android.media.AudioManager
@@ -72,12 +70,10 @@ import androidx.media3.common.MimeTypes
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.PlaybackParameters
 import androidx.media3.common.Player
-import androidx.media3.common.text.Cue
-import androidx.media3.common.text.CueGroup
 import androidx.media3.common.TrackGroup
 import androidx.media3.common.TrackSelectionOverride
 import androidx.media3.common.Tracks
-import androidx.media3.common.util.Util
+import androidx.media3.common.text.CueGroup
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DefaultDataSource
@@ -137,11 +133,11 @@ import ani.dantotsu.others.AniSkip
 import ani.dantotsu.others.AniSkip.getType
 import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.others.ResettableTimer
+import ani.dantotsu.others.Xubtitle
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.HAnimeSources
 import ani.dantotsu.parsers.Subtitle
-import ani.dantotsu.others.Xubtitle
 import ani.dantotsu.parsers.SubtitleType
 import ani.dantotsu.parsers.Video
 import ani.dantotsu.parsers.VideoExtractor
@@ -164,6 +160,7 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.material.slider.Slider
 import com.lagradost.nicehttp.ignoreAllSSLErrors
+import io.github.anilbeesetti.nextlib.media3ext.ffdecoder.NextRenderersFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -171,7 +168,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import io.github.anilbeesetti.nextlib.media3ext.ffdecoder.NextRenderersFactory
 import java.util.Calendar
 import java.util.Locale
 import java.util.Timer
@@ -237,7 +233,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
     private var downloadId: String? = null
     private var hasExtSubtitles = false
-    private var audioLanguages = mutableListOf<Pair<String,String>>()
+    private var audioLanguages = mutableListOf<Pair<String, String>>()
 
     companion object {
         var initialized = false
@@ -408,14 +404,14 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
 
         textView.apply {
-              when (PrefManager.getVal<Int>(PrefName.Outline)) {
-                  0 -> applyOutline(secondaryColor, subStroke)
-                  1 -> applyShineEffect(secondaryColor)
-                  2 -> applyDropShadow(secondaryColor, subStroke)
-                  3 -> {}
-                  else -> applyOutline(secondaryColor, subStroke)
-              }
-           }
+            when (PrefManager.getVal<Int>(PrefName.Outline)) {
+                0 -> applyOutline(secondaryColor, subStroke)
+                1 -> applyShineEffect(secondaryColor)
+                2 -> applyDropShadow(secondaryColor, subStroke)
+                3 -> {}
+                else -> applyOutline(secondaryColor, subStroke)
+            }
+        }
 
         textView.alpha =
             when (PrefManager.getVal<Boolean>(PrefName.Subtitles)) {
@@ -423,8 +419,9 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 false -> 0f
             }
 
-          val textElevation = PrefManager.getVal<Float>(PrefName.SubBottomMargin) / 50 * resources.displayMetrics.heightPixels
-          textView.translationY = -textElevation
+        val textElevation =
+            PrefManager.getVal<Float>(PrefName.SubBottomMargin) / 50 * resources.displayMetrics.heightPixels
+        textView.translationY = -textElevation
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -1309,13 +1306,13 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
     }
 
-    private fun discordRPC(){
+    private fun discordRPC() {
         val context = this
         val ep = episode
         val offline: Boolean = PrefManager.getVal(PrefName.OfflineMode)
         val incognito: Boolean = PrefManager.getVal(PrefName.Incognito)
         val rpcenabled: Boolean = PrefManager.getVal(PrefName.rpcEnabled)
-         if ((isOnline(context) && !offline) && Discord.token != null && !incognito && rpcenabled) {
+        if ((isOnline(context) && !offline) && Discord.token != null && !incognito && rpcenabled) {
             lifecycleScope.launch {
                 val discordMode = PrefManager.getCustomVal("discord_mode", "dantotsu")
                 val buttons = when (discordMode) {
@@ -1340,7 +1337,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                     else -> mutableListOf()
                 }
                 val startTimestamp = Calendar.getInstance()
-                val durationInSeconds = if (exoPlayer.duration != C.TIME_UNSET) (exoPlayer.duration / 1000).toInt() else 1440
+                val durationInSeconds =
+                    if (exoPlayer.duration != C.TIME_UNSET) (exoPlayer.duration / 1000).toInt() else 1440
 
                 val endTimestamp = Calendar.getInstance().apply {
                     timeInMillis = startTimestamp.timeInMillis
@@ -1376,6 +1374,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             }
         }
     }
+
     private fun initPlayer() {
         checkNotch()
 
@@ -1451,7 +1450,13 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 null -> {
                     when (episode.selectedSubtitle) {
                         null -> null
-                        -1 -> ext.subtitles.find { it.language.contains( lang, ignoreCase = true ) || it.language.contains( getLanguageCode(lang), ignoreCase = true ) }
+                        -1 -> ext.subtitles.find {
+                            it.language.contains(
+                                lang,
+                                ignoreCase = true
+                            ) || it.language.contains(getLanguageCode(lang), ignoreCase = true)
+                        }
+
                         else -> ext.subtitles.getOrNull(episode.selectedSubtitle!!)
                     }
                 }
@@ -1704,17 +1709,17 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             .build()
 
         hideSystemBars()
-        
+
         val useExtensionDecoder = PrefManager.getVal<Boolean>(PrefName.UseAdditionalCodec)
         val decoder = if (useExtensionDecoder) {
-          DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER
+            DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER
         } else {
-          DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF
+            DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF
         }
         val renderersFactory = NextRenderersFactory(this)
-             .setEnableDecoderFallback(true)
-             .setExtensionRendererMode(decoder)
-        
+            .setEnableDecoderFallback(true)
+            .setExtensionRendererMode(decoder)
+
         exoPlayer = ExoPlayer.Builder(this, renderersFactory)
             .setMediaSourceFactory(DefaultMediaSourceFactory(cacheFactory))
             .setTrackSelector(trackSelector)
@@ -1738,13 +1743,13 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             var activeSubtitles = ArrayDeque<String>(3)
             var lastSubtitle: String? = null
             var lastPosition: Long = 0
-        
+
             override fun onCues(cueGroup: CueGroup) {
                 if (PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
                     exoSubtitleView.visibility = View.GONE
                     customSubtitleView.visibility = View.VISIBLE
-                    val newCues = cueGroup.cues.map { it.text.toString() ?: "" }
-         
+                    val newCues = cueGroup.cues.map { it.text.toString() }
+
                     if (newCues.isEmpty()) {
                         customSubtitleView.text = ""
                         activeSubtitles.clear()
@@ -1752,23 +1757,25 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                         lastPosition = 0
                         return
                     }
-        
+
                     val currentPosition = exoPlayer.currentPosition
-        
-                    if ((lastSubtitle?.length ?: 0) < 20 || (lastPosition != 0L && currentPosition - lastPosition > 1500)) {
+
+                    if ((lastSubtitle?.length
+                            ?: 0) < 20 || (lastPosition != 0L && currentPosition - lastPosition > 1500)
+                    ) {
                         activeSubtitles.clear()
                     }
-        
-                   for (newCue in newCues) {
-                      if (newCue !in activeSubtitles) {
-                          if (activeSubtitles.size >= 2) {
-                              activeSubtitles.removeLast()
-                          }
-                          activeSubtitles.addFirst(newCue)
-                          lastSubtitle = newCue
-                          lastPosition = currentPosition
-                      }
-                  }
+
+                    for (newCue in newCues) {
+                        if (newCue !in activeSubtitles) {
+                            if (activeSubtitles.size >= 2) {
+                                activeSubtitles.removeLast()
+                            }
+                            activeSubtitles.addFirst(newCue)
+                            lastSubtitle = newCue
+                            lastPosition = currentPosition
+                        }
+                    }
 
                     customSubtitleView.text = activeSubtitles.joinToString("\n")
                 } else {
@@ -1779,8 +1786,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             }
         })
 
-          applySubtitleStyles(customSubtitleView)
-          setupSubFormatting(playerView)
+        applySubtitleStyles(customSubtitleView)
+        setupSubFormatting(playerView)
 
         try {
             val rightNow = Calendar.getInstance()

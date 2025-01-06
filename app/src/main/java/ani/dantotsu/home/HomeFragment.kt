@@ -469,7 +469,9 @@ class HomeFragment : Fragment() {
                 scope.launch {
                     withContext(Dispatchers.IO) {
                         // Get user data first
-                        Anilist.userid = PrefManager.getNullableVal<String>(PrefName.AnilistUserId, null)?.toIntOrNull()
+                        Anilist.userid =
+                            PrefManager.getNullableVal<String>(PrefName.AnilistUserId, null)
+                                ?.toIntOrNull()
                         if (Anilist.userid == null) {
                             withContext(Dispatchers.Main) {
                                 getUserId(requireContext()) {

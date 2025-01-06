@@ -20,8 +20,8 @@ import ani.dantotsu.R
 import ani.dantotsu.currActivity
 import ani.dantotsu.currContext
 import ani.dantotsu.databinding.DialogLayoutBinding
-import ani.dantotsu.databinding.ItemMediaSourceBinding
 import ani.dantotsu.databinding.ItemChipBinding
+import ani.dantotsu.databinding.ItemMediaSourceBinding
 import ani.dantotsu.displayTimer
 import ani.dantotsu.isOnline
 import ani.dantotsu.loadImage
@@ -61,7 +61,8 @@ class AnimeWatchAdapter(
     private var _binding: ItemMediaSourceBinding? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val bind = ItemMediaSourceBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val bind =
+            ItemMediaSourceBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(bind)
     }
 
@@ -285,7 +286,7 @@ class AnimeWatchAdapter(
                     fragment.requireContext().customAlertDialog().apply {
                         setTitle(" Delete Progress for all episodes of ${media.nameRomaji}")
                         setMessage("This will delete all the locally stored progress for all episodes")
-                        setPosButton(R.string.ok){
+                        setPosButton(R.string.ok) {
                             val prefix = "${media.id}_"
                             val regex = Regex("^${prefix}\\d+$")
 
@@ -300,7 +301,7 @@ class AnimeWatchAdapter(
                     }
                 }
 
-                resetProgressDef.text = getString(currContext()!!,R.string.clear_stored_episode)
+                resetProgressDef.text = getString(currContext()!!, R.string.clear_stored_episode)
 
                 // Hidden
                 mangaScanlatorContainer.visibility = View.GONE
@@ -327,7 +328,7 @@ class AnimeWatchAdapter(
             fragment.requireContext().customAlertDialog().apply {
                 setTitle(" Delete Progress for all episodes of ${media.nameRomaji}")
                 setMessage("This will delete all the locally stored progress for all episodes")
-                setPosButton(R.string.ok){
+                setPosButton(R.string.ok) {
                     val prefix = "${media.id}_"
                     val regex = Regex("^${prefix}\\d+$")
 
@@ -478,7 +479,8 @@ class AnimeWatchAdapter(
                 binding.sourceProgressBar.visibility = View.GONE
 
                 val sourceFound = media.anime.episodes!!.isNotEmpty()
-                val isDownloadedSource = watchSources[media.selected!!.sourceIndex] is OfflineAnimeParser
+                val isDownloadedSource =
+                    watchSources[media.selected!!.sourceIndex] is OfflineAnimeParser
 
                 if (isDownloadedSource) {
                     binding.sourceNotFound.text = if (sourceFound) {
@@ -487,7 +489,8 @@ class AnimeWatchAdapter(
                         currActivity()!!.getString(R.string.download_not_found)
                     }
                 } else {
-                    binding.sourceNotFound.text = currActivity()!!.getString(R.string.source_not_found)
+                    binding.sourceNotFound.text =
+                        currActivity()!!.getString(R.string.source_not_found)
                 }
 
                 binding.sourceNotFound.isGone = sourceFound

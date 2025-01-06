@@ -22,9 +22,9 @@ import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.R
 import ani.dantotsu.Refresh
 import ani.dantotsu.bottomBar
+import ani.dantotsu.connections.anilist.AniMangaSearchResults
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.AnilistAnimeViewModel
-import ani.dantotsu.connections.anilist.AniMangaSearchResults
 import ani.dantotsu.connections.anilist.getUserId
 import ani.dantotsu.databinding.FragmentAnimeBinding
 import ani.dantotsu.media.MediaAdaptor
@@ -277,8 +277,9 @@ class AnimeFragment : Fragment() {
                 running = true
                 scope.launch {
                     withContext(Dispatchers.IO) {
-                        Anilist.userid = PrefManager.getNullableVal<String>(PrefName.AnilistUserId, null)
-                            ?.toIntOrNull()
+                        Anilist.userid =
+                            PrefManager.getNullableVal<String>(PrefName.AnilistUserId, null)
+                                ?.toIntOrNull()
                         if (Anilist.userid == null) {
                             getUserId(requireContext()) {
                                 load()

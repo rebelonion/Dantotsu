@@ -34,7 +34,8 @@ fun characterInformation(includeMediaInfo: Boolean) = """
       month
       day
     }
-    ${if (includeMediaInfo) """
+    ${
+    if (includeMediaInfo) """
     media(page: 0,sort:[POPULARITY_DESC,SCORE_DESC]) {
       $standardPageInformation
       edges {
@@ -79,7 +80,8 @@ fun characterInformation(includeMediaInfo: Boolean) = """
           }
         }
       }
-    }""".prepare() else ""}
+    }""".prepare() else ""
+}
 """.prepare()
 
 fun studioInformation(page: Int, perPage: Int) = """

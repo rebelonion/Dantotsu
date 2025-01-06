@@ -20,7 +20,6 @@ import ani.dantotsu.initActivity
 import ani.dantotsu.loadImage
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.openImage
-import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.profile.activity.ActivityItemBuilder
 import ani.dantotsu.statusBarHeight
@@ -52,8 +51,9 @@ class ReviewViewActivity : AppCompatActivity() {
         binding.userAvatar.loadImage(review.user?.avatar?.medium)
         binding.userTime.text = ActivityItemBuilder.getDateTime(review.createdAt)
         binding.userContainer.setOnClickListener {
-            startActivity(Intent(this, ProfileActivity::class.java)
-                .putExtra("userId", review.user?.id)
+            startActivity(
+                Intent(this, ProfileActivity::class.java)
+                    .putExtra("userId", review.user?.id)
             )
         }
         binding.userAvatar.openImage(
@@ -61,8 +61,9 @@ class ReviewViewActivity : AppCompatActivity() {
             review.user?.avatar?.medium ?: ""
         )
         binding.userAvatar.setOnClickListener {
-            startActivity(Intent(this, ProfileActivity::class.java)
-                .putExtra("userId", review.user?.id)
+            startActivity(
+                Intent(this, ProfileActivity::class.java)
+                    .putExtra("userId", review.user?.id)
             )
         }
         binding.profileUserBio.settings.loadWithOverviewMode = true

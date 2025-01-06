@@ -1,6 +1,5 @@
 package ani.dantotsu.settings
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -43,7 +42,8 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                 setTitle(getString(R.string.home_layout_show))
                 multiChoiceItems(
                     items = views,
-                    checkedItems = PrefManager.getVal<List<Boolean>>(PrefName.HomeLayout).toBooleanArray()
+                    checkedItems = PrefManager.getVal<List<Boolean>>(PrefName.HomeLayout)
+                        .toBooleanArray()
                 ) { selectedItems ->
                     for (i in selectedItems.indices) {
                         set[i] = selectedItems[i]
@@ -69,7 +69,8 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
             PrefManager.setVal(PrefName.ImmersiveMode, isChecked)
             restartApp()
         }
-        binding.uiSettingsHideRedDot.isChecked = !PrefManager.getVal<Boolean>(PrefName.ShowNotificationRedDot)
+        binding.uiSettingsHideRedDot.isChecked =
+            !PrefManager.getVal<Boolean>(PrefName.ShowNotificationRedDot)
         binding.uiSettingsHideRedDot.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.ShowNotificationRedDot, !isChecked)
         }

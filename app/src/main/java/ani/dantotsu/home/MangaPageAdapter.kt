@@ -266,10 +266,10 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
         adaptor: MediaAdaptor,
         recyclerView: RecyclerView,
         progress: View,
-        title: View ,
-        more: View ,
+        title: View,
+        more: View,
         string: String,
-        media : MutableList<Media>
+        media: MutableList<Media>
     ) {
         progress.visibility = View.GONE
         recyclerView.adapter = adaptor

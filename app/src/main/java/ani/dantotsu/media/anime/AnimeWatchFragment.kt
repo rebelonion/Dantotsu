@@ -1,7 +1,6 @@
 package ani.dantotsu.media.anime
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -28,10 +27,8 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import ani.dantotsu.FileUrl
 import ani.dantotsu.R
 import ani.dantotsu.addons.download.DownloadAddonManager
-import ani.dantotsu.connections.anilist.api.MediaStreamingEpisode
 import ani.dantotsu.databinding.FragmentMediaSourceBinding
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
@@ -49,7 +46,6 @@ import ani.dantotsu.media.MediaType
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.notifications.subscription.SubscriptionHelper
 import ani.dantotsu.notifications.subscription.SubscriptionHelper.Companion.saveSubscription
-import ani.dantotsu.others.Anify
 import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.parsers.AnimeParser
 import ani.dantotsu.parsers.AnimeSources
@@ -236,13 +232,16 @@ class AnimeWatchFragment : Fragment() {
                     episodes.forEach { (i, episode) ->
                         if (media.anime?.anifyEpisodes != null) {
                             if (media.anime!!.anifyEpisodes!!.containsKey(i)) {
-                                episode.desc = media.anime!!.anifyEpisodes!![i]?.desc ?: episode.desc
+                                episode.desc =
+                                    media.anime!!.anifyEpisodes!![i]?.desc ?: episode.desc
                                 episode.title = if (MediaNameAdapter.removeEpisodeNumberCompletely(
                                         episode.title ?: ""
                                     ).isBlank()
-                                ) media.anime!!.anifyEpisodes!![i]?.title ?: episode.title else episode.title
+                                ) media.anime!!.anifyEpisodes!![i]?.title
+                                    ?: episode.title else episode.title
                                     ?: media.anime!!.anifyEpisodes!![i]?.title ?: episode.title
-                                episode.thumb = media.anime!!.anifyEpisodes!![i]?.thumb ?: episode.thumb
+                                episode.thumb =
+                                    media.anime!!.anifyEpisodes!![i]?.thumb ?: episode.thumb
 
                             }
                         }
@@ -255,13 +254,16 @@ class AnimeWatchFragment : Fragment() {
                         }
                         if (media.anime?.kitsuEpisodes != null) {
                             if (media.anime!!.kitsuEpisodes!!.containsKey(i)) {
-                                episode.desc = media.anime!!.kitsuEpisodes!![i]?.desc ?: episode.desc
+                                episode.desc =
+                                    media.anime!!.kitsuEpisodes!![i]?.desc ?: episode.desc
                                 episode.title = if (MediaNameAdapter.removeEpisodeNumberCompletely(
                                         episode.title ?: ""
                                     ).isBlank()
-                                ) media.anime!!.kitsuEpisodes!![i]?.title ?: episode.title else episode.title
-                                ?: media.anime!!.kitsuEpisodes!![i]?.title ?: episode.title
-                                episode.thumb = media.anime!!.kitsuEpisodes!![i]?.thumb ?: episode.thumb
+                                ) media.anime!!.kitsuEpisodes!![i]?.title
+                                    ?: episode.title else episode.title
+                                    ?: media.anime!!.kitsuEpisodes!![i]?.title ?: episode.title
+                                episode.thumb =
+                                    media.anime!!.kitsuEpisodes!![i]?.thumb ?: episode.thumb
                             }
                         }
                     }
@@ -400,29 +402,30 @@ class AnimeWatchFragment : Fragment() {
                 requireContext()
                     .customAlertDialog()
                     .apply {
-                    setTitle("Select a Source")
-                    singleChoiceItems(names) { which ->
-                        selectedSetting = allSettings[which]
-                        itemSelected = true
-                        requireActivity().runOnUiThread {
-                            val fragment = AnimeSourcePreferencesFragment().getInstance(selectedSetting.id) {
-                                changeUIVisibility(true)
-                                loadEpisodes(media.selected!!.sourceIndex, true)
+                        setTitle("Select a Source")
+                        singleChoiceItems(names) { which ->
+                            selectedSetting = allSettings[which]
+                            itemSelected = true
+                            requireActivity().runOnUiThread {
+                                val fragment =
+                                    AnimeSourcePreferencesFragment().getInstance(selectedSetting.id) {
+                                        changeUIVisibility(true)
+                                        loadEpisodes(media.selected!!.sourceIndex, true)
+                                    }
+                                parentFragmentManager.beginTransaction()
+                                    .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
+                                    .replace(R.id.fragmentExtensionsContainer, fragment)
+                                    .addToBackStack(null)
+                                    .commit()
                             }
-                            parentFragmentManager.beginTransaction()
-                                .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
-                                .replace(R.id.fragmentExtensionsContainer, fragment)
-                                .addToBackStack(null)
-                                .commit()
                         }
-                    }
-                    onDismiss {
-                        if (!itemSelected) {
-                            changeUIVisibility(true)
+                        onDismiss {
+                            if (!itemSelected) {
+                                changeUIVisibility(true)
+                            }
                         }
+                        show()
                     }
-                    show()
-                }
             } else {
                 // If there's only one setting, proceed with the fragment transaction
                 requireActivity().runOnUiThread {

@@ -55,7 +55,11 @@ class CharacterAdapter(
                     ).toBundle()
                 )
             }
-            itemView.setOnLongClickListener { copyToClipboard(characterList[bindingAdapterPosition].name ?: ""); true }
+            itemView.setOnLongClickListener {
+                copyToClipboard(
+                    characterList[bindingAdapterPosition].name ?: ""
+                ); true
+            }
         }
     }
 }

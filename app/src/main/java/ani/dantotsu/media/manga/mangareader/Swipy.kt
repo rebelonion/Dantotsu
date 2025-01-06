@@ -55,6 +55,7 @@ class Swipy @JvmOverloads constructor(
                         else
                             VerticalPosition.Top
                     }
+
                     !it.canScrollVertically(1) -> VerticalPosition.Bottom
                     !it.canScrollVertically(-1) -> VerticalPosition.Top
                     else -> VerticalPosition.None
@@ -67,6 +68,7 @@ class Swipy @JvmOverloads constructor(
                         else
                             HorizontalPosition.Left
                     }
+
                     !it.canScrollHorizontally(1) -> HorizontalPosition.Right
                     !it.canScrollHorizontally(-1) -> HorizontalPosition.Left
                     else -> HorizontalPosition.None
@@ -97,12 +99,14 @@ class Swipy @JvmOverloads constructor(
                 initialDown = if (vertical) ev.getY(0) else ev.getX(0)
                 isBeingDragged = false
             }
+
             MotionEvent.ACTION_MOVE -> {
                 val pointerIndex = ev.findPointerIndex(activePointerId)
                 if (pointerIndex >= 0) {
                     startDragging(if (vertical) ev.getY(pointerIndex) else ev.getX(pointerIndex))
                 }
             }
+
             MotionEvent.ACTION_POINTER_UP -> onSecondaryPointerUp(ev)
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                 isBeingDragged = false
@@ -122,6 +126,7 @@ class Swipy @JvmOverloads constructor(
                 activePointerId = ev.getPointerId(0)
                 isBeingDragged = false
             }
+
             MotionEvent.ACTION_MOVE -> {
                 pointerIndex = ev.findPointerIndex(activePointerId)
                 if (pointerIndex >= 0) {
@@ -130,28 +135,36 @@ class Swipy @JvmOverloads constructor(
                     if (isBeingDragged) handleDrag(pos)
                 }
             }
+
             MotionEvent.ACTION_POINTER_DOWN -> {
                 pointerIndex = ev.actionIndex
                 if (pointerIndex >= 0) activePointerId = ev.getPointerId(pointerIndex)
             }
+
             MotionEvent.ACTION_POINTER_UP -> onSecondaryPointerUp(ev)
             MotionEvent.ACTION_UP -> {
                 resetSwipes()
                 pointerIndex = ev.findPointerIndex(activePointerId)
-                if (pointerIndex >= 0) finishSpinner(if (vertical) ev.getY(pointerIndex) else ev.getX(pointerIndex))
+                if (pointerIndex >= 0) finishSpinner(
+                    if (vertical) ev.getY(pointerIndex) else ev.getX(
+                        pointerIndex
+                    )
+                )
                 activePointerId = INVALID_POINTER
                 return false
             }
+
             MotionEvent.ACTION_CANCEL -> return false
         }
         return true
     }
 
     private fun startDragging(pos: Float) {
-        val posDiff = if ((vertical && verticalPos == VerticalPosition.Top) || (!vertical && horizontalPos == HorizontalPosition.Left))
-            pos - initialDown
-        else
-            initialDown - pos
+        val posDiff =
+            if ((vertical && verticalPos == VerticalPosition.Top) || (!vertical && horizontalPos == HorizontalPosition.Left))
+                pos - initialDown
+            else
+                initialDown - pos
         if (posDiff > touchSlop && !isBeingDragged) {
             initialMotion = initialDown + touchSlop
             isBeingDragged = true
@@ -185,7 +198,7 @@ class Swipy @JvmOverloads constructor(
             leftBeingSwiped.invoke(0f)
         }
     }
-    
+
     private fun finishSpinner(overscrollDistance: Float) {
         if (vertical) {
             val totalDragDistance = Resources.getSystem().displayMetrics.heightPixels / dragDivider

@@ -53,7 +53,8 @@ class ChartBuilder {
             scrollPos: Float? = null,
             normalize: Boolean = false
         ): AAOptions {
-            val primaryColor = context.getThemeColor(com.google.android.material.R.attr.colorPrimary)
+            val primaryColor =
+                context.getThemeColor(com.google.android.material.R.attr.colorPrimary)
             var chartType = passedChartType
             var aaChartType = passedAaChartType
             var categories = passedCategories
@@ -303,7 +304,8 @@ class ChartBuilder {
         }
 
         private fun setColors(aaOptions: AAOptions, context: Context) {
-            val backgroundColor = context.getThemeColor(com.google.android.material.R.attr.colorSurfaceVariant)
+            val backgroundColor =
+                context.getThemeColor(com.google.android.material.R.attr.colorSurfaceVariant)
             val backgroundStyle = AAStyle().color(
                 AAColor.rgbaColor(
                     Color.red(backgroundColor),
@@ -312,7 +314,8 @@ class ChartBuilder {
                     1f
                 )
             )
-            val colorOnBackground = context.getThemeColor(com.google.android.material.R.attr.colorOnSurface)
+            val colorOnBackground =
+                context.getThemeColor(com.google.android.material.R.attr.colorOnSurface)
             val onBackgroundStyle = AAStyle().color(
                 AAColor.rgbaColor(
                     Color.red(colorOnBackground),

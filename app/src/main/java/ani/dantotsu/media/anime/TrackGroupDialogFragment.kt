@@ -63,8 +63,12 @@ class TrackGroupDialogFragment(
         override fun onBindViewHolder(holder: StreamViewHolder, position: Int) {
             val binding = holder.binding
             trackGroups[position].let { trackGroup ->
-                if (overrideTrackNames?.getOrNull(position - (trackGroups.size - (overrideTrackNames?.size?:0))) != null) {
-                    val pair = overrideTrackNames!![position - (trackGroups.size - overrideTrackNames!!.size)]
+                if (overrideTrackNames?.getOrNull(
+                        position - (trackGroups.size - (overrideTrackNames?.size ?: 0))
+                    ) != null
+                ) {
+                    val pair =
+                        overrideTrackNames!![position - (trackGroups.size - overrideTrackNames!!.size)]
                     binding.subtitleTitle.text =
                         "[${pair.second}] ${pair.first}"
                 } else when (val language = trackGroup.getTrackFormat(0).language?.lowercase()) {

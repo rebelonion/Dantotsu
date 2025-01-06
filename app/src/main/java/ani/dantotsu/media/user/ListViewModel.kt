@@ -50,10 +50,10 @@ class ListViewModel : ViewModel() {
                     search,
                     ignoreCase = true
                 ) == true || media.synonyms.any { it.contains(search, ignoreCase = true) } ||
-                media.nameRomaji.contains(
-                    search,
-                    ignoreCase = true
-                )
+                        media.nameRomaji.contains(
+                            search,
+                            ignoreCase = true
+                        )
             } as ArrayList<Media>
         }.toMutableMap()
 
