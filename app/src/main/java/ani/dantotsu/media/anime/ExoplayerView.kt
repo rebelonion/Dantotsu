@@ -152,6 +152,7 @@ import ani.dantotsu.toPx
 import ani.dantotsu.toast
 import ani.dantotsu.tryWithSuspend
 import ani.dantotsu.util.Logger
+import ani.dantotsu.util.customAlertDialog
 import com.anggrayudi.storage.file.extension
 import com.bumptech.glide.Glide
 import com.google.android.gms.cast.framework.CastButtonFactory
@@ -181,8 +182,10 @@ import kotlin.math.roundToInt
 
 @UnstableApi
 @SuppressLint("ClickableViewAccessibility")
-class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityListener {
-
+class ExoplayerView :
+    AppCompatActivity(),
+    Player.Listener,
+    SessionAvailabilityListener {
     private val resumeWindow = "resumeWindow"
     private val resumePosition = "resumePosition"
     private val playerFullscreen = "playerFullscreen"
@@ -283,10 +286,11 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             val displayCutout = window.decorView.rootWindowInsets.displayCutout
             if (displayCutout != null) {
                 if (displayCutout.boundingRects.size > 0) {
-                    notchHeight = min(
-                        displayCutout.boundingRects[0].width(),
-                        displayCutout.boundingRects[0].height()
-                    )
+                    notchHeight =
+                        min(
+                            displayCutout.boundingRects[0].width(),
+                            displayCutout.boundingRects[0].height(),
+                        )
                     checkNotch()
                 }
             }
@@ -297,7 +301,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
     private fun checkNotch() {
         if (notchHeight != 0) {
             val orientation = resources.configuration.orientation
-            playerView.findViewById<View>(R.id.exo_controller_margin)
+            playerView
+                .findViewById<View>(R.id.exo_controller_margin)
                 .updateLayoutParams<ViewGroup.MarginLayoutParams> {
                     if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
                         marginStart = notchHeight
@@ -327,28 +332,30 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
         val secondaryColor = PrefManager.getVal<Int>(PrefName.SecondaryColor)
 
-        val outline = when (PrefManager.getVal<Int>(PrefName.Outline)) {
-            0 -> EDGE_TYPE_OUTLINE // Normal
-            1 -> EDGE_TYPE_DEPRESSED // Shine
-            2 -> EDGE_TYPE_DROP_SHADOW // Drop shadow
-            3 -> EDGE_TYPE_NONE // No outline
-            else -> EDGE_TYPE_OUTLINE // Normal
-        }
+        val outline =
+            when (PrefManager.getVal<Int>(PrefName.Outline)) {
+                0 -> EDGE_TYPE_OUTLINE // Normal
+                1 -> EDGE_TYPE_DEPRESSED // Shine
+                2 -> EDGE_TYPE_DROP_SHADOW // Drop shadow
+                3 -> EDGE_TYPE_NONE // No outline
+                else -> EDGE_TYPE_OUTLINE // Normal
+            }
 
         val subBackground = PrefManager.getVal<Int>(PrefName.SubBackground)
 
         val subWindow = PrefManager.getVal<Int>(PrefName.SubWindow)
 
-        val font = when (PrefManager.getVal<Int>(PrefName.Font)) {
-            0 -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
-            1 -> ResourcesCompat.getFont(this, R.font.poppins_bold)
-            2 -> ResourcesCompat.getFont(this, R.font.poppins)
-            3 -> ResourcesCompat.getFont(this, R.font.poppins_thin)
-            4 -> ResourcesCompat.getFont(this, R.font.century_gothic_regular)
-            5 -> ResourcesCompat.getFont(this, R.font.levenim_mt_bold)
-            6 -> ResourcesCompat.getFont(this, R.font.blocky)
-            else -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
-        }
+        val font =
+            when (PrefManager.getVal<Int>(PrefName.Font)) {
+                0 -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
+                1 -> ResourcesCompat.getFont(this, R.font.poppins_bold)
+                2 -> ResourcesCompat.getFont(this, R.font.poppins)
+                3 -> ResourcesCompat.getFont(this, R.font.poppins_thin)
+                4 -> ResourcesCompat.getFont(this, R.font.century_gothic_regular)
+                5 -> ResourcesCompat.getFont(this, R.font.levenim_mt_bold)
+                6 -> ResourcesCompat.getFont(this, R.font.blocky)
+                else -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
+            }
         val fontSize = PrefManager.getVal<Int>(PrefName.FontSize).toFloat()
 
         playerView.subtitleView?.let { subtitles ->
@@ -362,8 +369,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                     subWindow,
                     outline,
                     secondaryColor,
-                    font
-                )
+                    font,
+                ),
             )
 
             subtitles.alpha =
@@ -387,16 +394,17 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
         val fontSize = PrefManager.getVal<Int>(PrefName.FontSize).toFloat()
 
-        val font = when (PrefManager.getVal<Int>(PrefName.Font)) {
-            0 -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
-            1 -> ResourcesCompat.getFont(this, R.font.poppins_bold)
-            2 -> ResourcesCompat.getFont(this, R.font.poppins)
-            3 -> ResourcesCompat.getFont(this, R.font.poppins_thin)
-            4 -> ResourcesCompat.getFont(this, R.font.century_gothic_regular)
-            5 -> ResourcesCompat.getFont(this, R.font.levenim_mt_bold)
-            6 -> ResourcesCompat.getFont(this, R.font.blocky)
-            else -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
-        }
+        val font =
+            when (PrefManager.getVal<Int>(PrefName.Font)) {
+                0 -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
+                1 -> ResourcesCompat.getFont(this, R.font.poppins_bold)
+                2 -> ResourcesCompat.getFont(this, R.font.poppins)
+                3 -> ResourcesCompat.getFont(this, R.font.poppins_thin)
+                4 -> ResourcesCompat.getFont(this, R.font.century_gothic_regular)
+                5 -> ResourcesCompat.getFont(this, R.font.levenim_mt_bold)
+                6 -> ResourcesCompat.getFont(this, R.font.blocky)
+                else -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
+            }
 
         textView.setBackgroundColor(subBackground)
         textView.setTextColor(primaryColor)
@@ -419,8 +427,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 false -> 0f
             }
 
-        val textElevation =
-            PrefManager.getVal<Float>(PrefName.SubBottomMargin) / 50 * resources.displayMetrics.heightPixels
+        val textElevation = PrefManager.getVal<Float>(PrefName.SubBottomMargin) / 50 * resources.displayMetrics.heightPixels
         textView.translationY = -textElevation
     }
 
@@ -431,8 +438,9 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         binding = ActivityExoplayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //Initialize
-        isCastApiAvailable = GoogleApiAvailability.getInstance()
+        // Initialize
+        isCastApiAvailable = GoogleApiAvailability
+            .getInstance()
             .isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
         try {
             castContext =
@@ -531,27 +539,34 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             isPlayerPlaying = savedInstanceState.getBoolean(playerOnPlay)
         }
 
-        //BackButton
+        // BackButton
         playerView.findViewById<ImageButton>(R.id.exo_back).setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        //TimeStamps
+        // TimeStamps
         model.timeStamps.observe(this) { it ->
             isTimeStampsLoaded = true
-            exoSkipOpEd.visibility = if (it != null) {
-                val adGroups = it.flatMap {
-                    listOf(
-                        it.interval.startTime.toLong() * 1000,
-                        it.interval.endTime.toLong() * 1000
-                    )
-                }.toLongArray()
-                val playedAdGroups = it.flatMap {
-                    listOf(false, false)
-                }.toBooleanArray()
-                playerView.setExtraAdGroupMarkers(adGroups, playedAdGroups)
-                View.VISIBLE
-            } else View.GONE
+            exoSkipOpEd.visibility =
+                if (it != null) {
+                    val adGroups =
+                        it
+                            .flatMap {
+                                listOf(
+                                    it.interval.startTime.toLong() * 1000,
+                                    it.interval.endTime.toLong() * 1000,
+                                )
+                            }.toLongArray()
+                    val playedAdGroups =
+                        it
+                            .flatMap {
+                                listOf(false, false)
+                            }.toBooleanArray()
+                    playerView.setExtraAdGroupMarkers(adGroups, playedAdGroups)
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
         }
 
         exoSkipOpEd.alpha = if (PrefManager.getVal(PrefName.AutoSkipOPED)) 1f else 0.3f
@@ -566,7 +581,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             exoSkipOpEd.alpha = if (PrefManager.getVal(PrefName.AutoSkipOPED)) 1f else 0.3f
         }
 
-        //Play Pause
+        // Play Pause
         exoPlay.setOnClickListener {
             if (isInitialized) {
                 isPlayerPlaying = exoPlayer.isPlaying
@@ -590,19 +605,21 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         // Picture-in-picture
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             pipEnabled =
-                packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE) && PrefManager.getVal(
-                    PrefName.Pip
+                packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE) &&
+                PrefManager.getVal(
+                    PrefName.Pip,
                 )
             if (pipEnabled) {
                 exoPip.visibility = View.VISIBLE
                 exoPip.setOnClickListener {
                     enterPipMode()
                 }
-            } else exoPip.visibility = View.GONE
+            } else {
+                exoPip.visibility = View.GONE
+            }
         }
 
-
-        //Lock Button
+        // Lock Button
         var locked = false
         val container = playerView.findViewById<View>(R.id.exo_controller_cont)
         val screen = playerView.findViewById<View>(R.id.exo_black_screen)
@@ -624,13 +641,14 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             timeline.setForceDisabled(false)
         }
 
-        //Skip Time Button
+        // Skip Time Button
         var skipTime = PrefManager.getVal<Int>(PrefName.SkipTime)
         if (skipTime > 0) {
             exoSkip.findViewById<TextView>(R.id.exo_skip_time).text = skipTime.toString()
             exoSkip.setOnClickListener {
-                if (isInitialized)
+                if (isInitialized) {
                     exoPlayer.seekTo(exoPlayer.currentPosition + skipTime * 1000)
+                }
             }
             exoSkip.setOnLongClickListener {
                 val dialog = Dialog(this, R.style.MyPopup)
@@ -639,7 +657,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 dialog.setCanceledOnTouchOutside(true)
                 dialog.window?.setLayout(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
                 )
                 if (skipTime <= 120) {
                     dialog.findViewById<Slider>(R.id.seekbar).value = skipTime.toFloat()
@@ -648,20 +666,24 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 }
                 dialog.findViewById<Slider>(R.id.seekbar).addOnChangeListener { _, value, _ ->
                     skipTime = value.toInt()
-                    //saveData(player, settings)
+                    // saveData(player, settings)
                     PrefManager.setVal(PrefName.SkipTime, skipTime)
                     playerView.findViewById<TextView>(R.id.exo_skip_time).text =
                         skipTime.toString()
                     dialog.findViewById<TextView>(R.id.seekbar_value).text =
                         skipTime.toString()
                 }
-                dialog.findViewById<Slider>(R.id.seekbar)
-                    .addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
-                        override fun onStartTrackingTouch(slider: Slider) {}
-                        override fun onStopTrackingTouch(slider: Slider) {
-                            dialog.dismiss()
-                        }
-                    })
+                dialog
+                    .findViewById<Slider>(R.id.seekbar)
+                    .addOnSliderTouchListener(
+                        object : Slider.OnSliderTouchListener {
+                            override fun onStartTrackingTouch(slider: Slider) {}
+
+                            override fun onStopTrackingTouch(slider: Slider) {
+                                dialog.dismiss()
+                            }
+                        },
+                    )
                 dialog.findViewById<TextView>(R.id.seekbar_title).text =
                     getString(R.string.skip_time)
                 dialog.findViewById<TextView>(R.id.seekbar_value).text =
@@ -676,99 +698,136 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         }
 
         val gestureSpeed = (300 * PrefManager.getVal<Float>(PrefName.AnimationSpeed)).toLong()
-        //Player UI Visibility Handler
-        val brightnessRunnable = Runnable {
-            if (exoBrightnessCont.alpha == 1f)
-                lifecycleScope.launch {
-                    ObjectAnimator.ofFloat(exoBrightnessCont, "alpha", 1f, 0f)
-                        .setDuration(gestureSpeed).start()
-                    delay(gestureSpeed)
-                    exoBrightnessCont.visibility = View.GONE
-                    checkNotch()
+        // Player UI Visibility Handler
+        val brightnessRunnable =
+            Runnable {
+                if (exoBrightnessCont.alpha == 1f) {
+                    lifecycleScope.launch {
+                        ObjectAnimator
+                            .ofFloat(exoBrightnessCont, "alpha", 1f, 0f)
+                            .setDuration(gestureSpeed)
+                            .start()
+                        delay(gestureSpeed)
+                        exoBrightnessCont.visibility = View.GONE
+                        checkNotch()
+                    }
                 }
-        }
-        val volumeRunnable = Runnable {
-            if (exoVolumeCont.alpha == 1f)
-                lifecycleScope.launch {
-                    ObjectAnimator.ofFloat(exoVolumeCont, "alpha", 1f, 0f).setDuration(gestureSpeed)
-                        .start()
-                    delay(gestureSpeed)
-                    exoVolumeCont.visibility = View.GONE
-                    checkNotch()
-                }
-        }
-        playerView.setControllerVisibilityListener(PlayerView.ControllerVisibilityListener { visibility ->
-            if (visibility == View.GONE) {
-                hideSystemBars()
-                brightnessRunnable.run()
-                volumeRunnable.run()
             }
-        })
+        val volumeRunnable =
+            Runnable {
+                if (exoVolumeCont.alpha == 1f) {
+                    lifecycleScope.launch {
+                        ObjectAnimator
+                            .ofFloat(exoVolumeCont, "alpha", 1f, 0f)
+                            .setDuration(gestureSpeed)
+                            .start()
+                        delay(gestureSpeed)
+                        exoVolumeCont.visibility = View.GONE
+                        checkNotch()
+                    }
+                }
+            }
+        playerView.setControllerVisibilityListener(
+            PlayerView.ControllerVisibilityListener { visibility ->
+                if (visibility == View.GONE) {
+                    hideSystemBars()
+                    brightnessRunnable.run()
+                    volumeRunnable.run()
+                }
+            },
+        )
         val overshoot = AnimationUtils.loadInterpolator(this, R.anim.over_shoot)
         val controllerDuration = (300 * PrefManager.getVal<Float>(PrefName.AnimationSpeed)).toLong()
+
         fun handleController() {
             if (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) !isInPictureInPictureMode else true) {
                 if (playerView.isControllerFullyVisible) {
-                    ObjectAnimator.ofFloat(
-                        playerView.findViewById(R.id.exo_controller),
-                        "alpha",
-                        1f,
-                        0f
-                    )
-                        .setDuration(controllerDuration).start()
-                    ObjectAnimator.ofFloat(
-                        playerView.findViewById(R.id.exo_bottom_cont),
-                        "translationY",
-                        0f,
-                        128f
-                    )
-                        .apply { interpolator = overshoot;duration = controllerDuration;start() }
-                    ObjectAnimator.ofFloat(
-                        playerView.findViewById(R.id.exo_timeline_cont),
-                        "translationY",
-                        0f,
-                        128f
-                    )
-                        .apply { interpolator = overshoot;duration = controllerDuration;start() }
-                    ObjectAnimator.ofFloat(
-                        playerView.findViewById(R.id.exo_top_cont),
-                        "translationY",
-                        0f,
-                        -128f
-                    )
-                        .apply { interpolator = overshoot;duration = controllerDuration;start() }
+                    ObjectAnimator
+                        .ofFloat(
+                            playerView.findViewById(R.id.exo_controller),
+                            "alpha",
+                            1f,
+                            0f,
+                        ).setDuration(controllerDuration)
+                        .start()
+                    ObjectAnimator
+                        .ofFloat(
+                            playerView.findViewById(R.id.exo_bottom_cont),
+                            "translationY",
+                            0f,
+                            128f,
+                        ).apply {
+                            interpolator = overshoot
+                            duration = controllerDuration
+                            start()
+                        }
+                    ObjectAnimator
+                        .ofFloat(
+                            playerView.findViewById(R.id.exo_timeline_cont),
+                            "translationY",
+                            0f,
+                            128f,
+                        ).apply {
+                            interpolator = overshoot
+                            duration = controllerDuration
+                            start()
+                        }
+                    ObjectAnimator
+                        .ofFloat(
+                            playerView.findViewById(R.id.exo_top_cont),
+                            "translationY",
+                            0f,
+                            -128f,
+                        ).apply {
+                            interpolator = overshoot
+                            duration = controllerDuration
+                            start()
+                        }
                     playerView.postDelayed({ playerView.hideController() }, controllerDuration)
                 } else {
                     checkNotch()
                     playerView.showController()
-                    ObjectAnimator.ofFloat(
-                        playerView.findViewById(R.id.exo_controller),
-                        "alpha",
-                        0f,
-                        1f
-                    )
-                        .setDuration(controllerDuration).start()
-                    ObjectAnimator.ofFloat(
-                        playerView.findViewById(R.id.exo_bottom_cont),
-                        "translationY",
-                        128f,
-                        0f
-                    )
-                        .apply { interpolator = overshoot;duration = controllerDuration;start() }
-                    ObjectAnimator.ofFloat(
-                        playerView.findViewById(R.id.exo_timeline_cont),
-                        "translationY",
-                        128f,
-                        0f
-                    )
-                        .apply { interpolator = overshoot;duration = controllerDuration;start() }
-                    ObjectAnimator.ofFloat(
-                        playerView.findViewById(R.id.exo_top_cont),
-                        "translationY",
-                        -128f,
-                        0f
-                    )
-                        .apply { interpolator = overshoot;duration = controllerDuration;start() }
+                    ObjectAnimator
+                        .ofFloat(
+                            playerView.findViewById(R.id.exo_controller),
+                            "alpha",
+                            0f,
+                            1f,
+                        ).setDuration(controllerDuration)
+                        .start()
+                    ObjectAnimator
+                        .ofFloat(
+                            playerView.findViewById(R.id.exo_bottom_cont),
+                            "translationY",
+                            128f,
+                            0f,
+                        ).apply {
+                            interpolator = overshoot
+                            duration = controllerDuration
+                            start()
+                        }
+                    ObjectAnimator
+                        .ofFloat(
+                            playerView.findViewById(R.id.exo_timeline_cont),
+                            "translationY",
+                            128f,
+                            0f,
+                        ).apply {
+                            interpolator = overshoot
+                            duration = controllerDuration
+                            start()
+                        }
+                    ObjectAnimator
+                        .ofFloat(
+                            playerView.findViewById(R.id.exo_top_cont),
+                            "translationY",
+                            -128f,
+                            0f,
+                        ).apply {
+                            interpolator = overshoot
+                            duration = controllerDuration
+                            start()
+                        }
                 }
             }
         }
@@ -782,26 +841,29 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         val fastForwardCard = playerView.findViewById<View>(R.id.exo_fast_forward)
         val fastRewindCard = playerView.findViewById<View>(R.id.exo_fast_rewind)
 
-
-        //Seeking
+        // Seeking
         val seekTimerF = ResettableTimer()
         val seekTimerR = ResettableTimer()
         var seekTimesF = 0
         var seekTimesR = 0
 
-        fun seek(forward: Boolean, event: MotionEvent? = null) {
+        fun seek(
+            forward: Boolean,
+            event: MotionEvent? = null,
+        ) {
             val seekTime = PrefManager.getVal<Int>(PrefName.SeekTime)
-            val (card, text) = if (forward) {
-                val text = "+${seekTime * ++seekTimesF}"
-                forwardText.text = text
-                handler.post { exoPlayer.seekTo(exoPlayer.currentPosition + seekTime * 1000) }
-                fastForwardCard to forwardText
-            } else {
-                val text = "-${seekTime * ++seekTimesR}"
-                rewindText.text = text
-                handler.post { exoPlayer.seekTo(exoPlayer.currentPosition - seekTime * 1000) }
-                fastRewindCard to rewindText
-            }
+            val (card, text) =
+                if (forward) {
+                    val text = "+${seekTime * ++seekTimesF}"
+                    forwardText.text = text
+                    handler.post { exoPlayer.seekTo(exoPlayer.currentPosition + seekTime * 1000) }
+                    fastForwardCard to forwardText
+                } else {
+                    val text = "-${seekTime * ++seekTimesR}"
+                    rewindText.text = text
+                    handler.post { exoPlayer.seekTo(exoPlayer.currentPosition - seekTime * 1000) }
+                    fastRewindCard to rewindText
+                }
 
             //region Double Tap Animation
             val showCardAnim = ObjectAnimator.ofFloat(card, "alpha", 0f, 1f).setDuration(300)
@@ -836,21 +898,27 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             isSeeking = true
 
             if (forward) {
-                seekTimerR.reset(object : TimerTask() {
-                    override fun run() {
-                        isSeeking = false
-                        stopAnim()
-                        seekTimesF = 0
-                    }
-                }, 850)
+                seekTimerR.reset(
+                    object : TimerTask() {
+                        override fun run() {
+                            isSeeking = false
+                            stopAnim()
+                            seekTimesF = 0
+                        }
+                    },
+                    850,
+                )
             } else {
-                seekTimerF.reset(object : TimerTask() {
-                    override fun run() {
-                        isSeeking = false
-                        stopAnim()
-                        seekTimesR = 0
-                    }
-                }, 850)
+                seekTimerF.reset(
+                    object : TimerTask() {
+                        override fun run() {
+                            isSeeking = false
+                            stopAnim()
+                            seekTimesR = 0
+                        }
+                    },
+                    850,
+                )
             }
         }
 
@@ -874,27 +942,30 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         keyMap[KEYCODE_DPAD_RIGHT] = { seek(true) }
         keyMap[KEYCODE_DPAD_LEFT] = { seek(false) }
 
-        //Screen Gestures
+        // Screen Gestures
         if (PrefManager.getVal<Boolean>(PrefName.Gestures) || PrefManager.getVal<Boolean>(PrefName.DoubleTap)) {
-
-            fun doubleTap(forward: Boolean, event: MotionEvent) {
+            fun doubleTap(
+                forward: Boolean,
+                event: MotionEvent,
+            ) {
                 if (!locked && isInitialized && PrefManager.getVal<Boolean>(PrefName.DoubleTap)) {
                     seek(forward, event)
                 }
             }
 
-            //Brightness
+            // Brightness
             var brightnessTimer = Timer()
             exoBrightnessCont.visibility = View.GONE
 
             fun brightnessHide() {
                 brightnessTimer.cancel()
                 brightnessTimer.purge()
-                val timerTask: TimerTask = object : TimerTask() {
-                    override fun run() {
-                        handler.post(brightnessRunnable)
+                val timerTask: TimerTask =
+                    object : TimerTask() {
+                        override fun run() {
+                            handler.post(brightnessRunnable)
+                        }
                     }
-                }
                 brightnessTimer = Timer()
                 brightnessTimer.schedule(timerTask, 3000)
             }
@@ -908,20 +979,22 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 brightnessHide()
             }
 
-            //Volume
+            // Volume
             var volumeTimer = Timer()
             exoVolumeCont.visibility = View.GONE
 
             val volumeMax = audioManager.getStreamMaxVolume(STREAM_MUSIC)
             exoVolume.value = audioManager.getStreamVolume(STREAM_MUSIC).toFloat() / volumeMax * 10
+
             fun volumeHide() {
                 volumeTimer.cancel()
                 volumeTimer.purge()
-                val timerTask: TimerTask = object : TimerTask() {
-                    override fun run() {
-                        handler.post(volumeRunnable)
+                val timerTask: TimerTask =
+                    object : TimerTask() {
+                        override fun run() {
+                            handler.post(volumeRunnable)
+                        }
                     }
-                }
                 volumeTimer = Timer()
                 volumeTimer.schedule(timerTask, 3000)
             }
@@ -931,6 +1004,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 volumeHide()
             }
             val fastForward = playerView.findViewById<TextView>(R.id.exo_fast_forward_text)
+
             fun fastForward() {
                 isFastForwarding = true
                 exoPlayer.setPlaybackSpeed(exoPlayer.playbackParameters.speed * 2)
@@ -947,29 +1021,32 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 }
             }
 
-            //FastRewind (Left Panel)
-            val fastRewindDetector = GestureDetector(this, object : GesturesListener() {
-                override fun onLongClick(event: MotionEvent) {
-                    if (PrefManager.getVal(PrefName.FastForward)) fastForward()
-                }
-
-                override fun onDoubleClick(event: MotionEvent) {
-                    doubleTap(false, event)
-                }
-
-                override fun onScrollYClick(y: Float) {
-                    if (!locked && PrefManager.getVal(PrefName.Gestures)) {
-                        exoBrightness.value = clamp(exoBrightness.value + y / 100, 0f, 10f)
-                        if (exoBrightnessCont.visibility != View.VISIBLE) {
-                            exoBrightnessCont.visibility = View.VISIBLE
+            // FastRewind (Left Panel)
+            val fastRewindDetector =
+                GestureDetector(
+                    this,
+                    object : GesturesListener() {
+                        override fun onLongClick(event: MotionEvent) {
+                            if (PrefManager.getVal(PrefName.FastForward)) fastForward()
                         }
-                        exoBrightnessCont.alpha = 1f
-                    }
-                }
 
-                override fun onSingleClick(event: MotionEvent) =
-                    if (isSeeking) doubleTap(false, event) else handleController()
-            })
+                        override fun onDoubleClick(event: MotionEvent) {
+                            doubleTap(false, event)
+                        }
+
+                        override fun onScrollYClick(y: Float) {
+                            if (!locked && PrefManager.getVal(PrefName.Gestures)) {
+                                exoBrightness.value = clamp(exoBrightness.value + y / 100, 0f, 10f)
+                                if (exoBrightnessCont.visibility != View.VISIBLE) {
+                                    exoBrightnessCont.visibility = View.VISIBLE
+                                }
+                                exoBrightnessCont.alpha = 1f
+                            }
+                        }
+
+                        override fun onSingleClick(event: MotionEvent) = if (isSeeking) doubleTap(false, event) else handleController()
+                    },
+                )
             val rewindArea = playerView.findViewById<View>(R.id.exo_rewind_area)
             rewindArea.isClickable = true
             rewindArea.setOnTouchListener { v, event ->
@@ -979,29 +1056,32 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 true
             }
 
-            //FastForward (Right Panel)
-            val fastForwardDetector = GestureDetector(this, object : GesturesListener() {
-                override fun onLongClick(event: MotionEvent) {
-                    if (PrefManager.getVal(PrefName.FastForward)) fastForward()
-                }
-
-                override fun onDoubleClick(event: MotionEvent) {
-                    doubleTap(true, event)
-                }
-
-                override fun onScrollYClick(y: Float) {
-                    if (!locked && PrefManager.getVal(PrefName.Gestures)) {
-                        exoVolume.value = clamp(exoVolume.value + y / 100, 0f, 10f)
-                        if (exoVolumeCont.visibility != View.VISIBLE) {
-                            exoVolumeCont.visibility = View.VISIBLE
+            // FastForward (Right Panel)
+            val fastForwardDetector =
+                GestureDetector(
+                    this,
+                    object : GesturesListener() {
+                        override fun onLongClick(event: MotionEvent) {
+                            if (PrefManager.getVal(PrefName.FastForward)) fastForward()
                         }
-                        exoVolumeCont.alpha = 1f
-                    }
-                }
 
-                override fun onSingleClick(event: MotionEvent) =
-                    if (isSeeking) doubleTap(true, event) else handleController()
-            })
+                        override fun onDoubleClick(event: MotionEvent) {
+                            doubleTap(true, event)
+                        }
+
+                        override fun onScrollYClick(y: Float) {
+                            if (!locked && PrefManager.getVal(PrefName.Gestures)) {
+                                exoVolume.value = clamp(exoVolume.value + y / 100, 0f, 10f)
+                                if (exoVolumeCont.visibility != View.VISIBLE) {
+                                    exoVolumeCont.visibility = View.VISIBLE
+                                }
+                                exoVolumeCont.alpha = 1f
+                            }
+                        }
+
+                        override fun onSingleClick(event: MotionEvent) = if (isSeeking) doubleTap(true, event) else handleController()
+                    },
+                )
             val forwardArea = playerView.findViewById<View>(R.id.exo_forward_area)
             forwardArea.isClickable = true
             forwardArea.setOnTouchListener { v, event ->
@@ -1012,7 +1092,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             }
         }
 
-        //Handle Media
+        // Handle Media
         if (!initialized) return startMainActivity(this)
         model.setMedia(media)
         title = media.userPreferredName
@@ -1026,8 +1106,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             epChanging = !it
         }
 
-
-        //Anime Title
+        // Anime Title
         animeTitle.text = media.userPreferredName
 
         episodeArr = episodes.keys.toList()
@@ -1037,16 +1116,18 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         episodes.forEach {
             val episode = it.value
             val cleanedTitle = MediaNameAdapter.removeEpisodeNumberCompletely(episode.title ?: "")
-            episodeTitleArr.add("Episode ${episode.number}${if (episode.filler) " [Filler]" else ""}${if (cleanedTitle.isNotBlank() && cleanedTitle != "null") ": $cleanedTitle" else ""}")
+            episodeTitleArr.add(
+                "Episode ${episode.number}${if (episode.filler) " [Filler]" else ""}${if (cleanedTitle.isNotBlank() && cleanedTitle != "null") ": $cleanedTitle" else ""}",
+            )
         }
 
-        //Episode Change
+        // Episode Change
         fun change(index: Int) {
             if (isInitialized) {
                 changingServer = false
                 PrefManager.setCustomVal(
                     "${media.id}_${episodeArr[currentEpisodeIndex]}",
-                    exoPlayer.currentPosition
+                    exoPlayer.currentPosition,
                 )
                 exoPlayer.seekTo(0)
                 val prev = episodeArr[currentEpisodeIndex]
@@ -1057,29 +1138,37 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 model.epChanged.postValue(false)
                 model.setEpisode(episodes[media.anime!!.selectedEpisode!!]!!, "change")
                 model.onEpisodeClick(
-                    media, media.anime!!.selectedEpisode!!, this.supportFragmentManager,
+                    media,
+                    media.anime!!.selectedEpisode!!,
+                    this.supportFragmentManager,
                     false,
-                    prev
+                    prev,
                 )
             }
         }
 
-        //EpisodeSelector
+        // EpisodeSelector
         episodeTitle.adapter = NoPaddingArrayAdapter(this, R.layout.item_dropdown, episodeTitleArr)
         episodeTitle.setSelection(currentEpisodeIndex)
-        episodeTitle.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-                if (position != currentEpisodeIndex) {
-                    disappeared = false
-                    functionstarted = false
-                    change(position)
+        episodeTitle.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    p0: AdapterView<*>?,
+                    p1: View?,
+                    position: Int,
+                    p3: Long,
+                ) {
+                    if (position != currentEpisodeIndex) {
+                        disappeared = false
+                        functionstarted = false
+                        change(position)
+                    }
                 }
+
+                override fun onNothingSelected(parent: AdapterView<*>) {}
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>) {}
-        }
-
-        //Next Episode
+        // Next Episode
         exoNext = playerView.findViewById(R.id.exo_next_ep)
         exoNext.setOnClickListener {
             if (isInitialized) {
@@ -1091,14 +1180,15 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 }
             }
         }
-        //Prev Episode
+        // Prev Episode
         exoPrev = playerView.findViewById(R.id.exo_prev_ep)
         exoPrev.setOnClickListener {
             if (currentEpisodeIndex > 0) {
                 disappeared = false
                 change(currentEpisodeIndex - 1)
-            } else
+            } else {
                 snackString(getString(R.string.first_episode))
+            }
         }
 
         model.getEpisode().observe(this) { ep ->
@@ -1110,45 +1200,48 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 currentEpisodeIndex = episodeArr.indexOf(ep.number)
                 episodeTitle.setSelection(currentEpisodeIndex)
                 if (isInitialized) releasePlayer()
-                playbackPosition = PrefManager.getCustomVal(
-                    "${media.id}_${ep.number}",
-                    0
-                )
+                playbackPosition =
+                    PrefManager.getCustomVal(
+                        "${media.id}_${ep.number}",
+                        0,
+                    )
                 initPlayer()
                 preloading = false
                 updateProgress()
             }
         }
 
-        //FullScreen
+        // FullScreen
         isFullscreen = PrefManager.getCustomVal("${media.id}_fullscreenInt", isFullscreen)
-        playerView.resizeMode = when (isFullscreen) {
-            0 -> AspectRatioFrameLayout.RESIZE_MODE_FIT
-            1 -> AspectRatioFrameLayout.RESIZE_MODE_ZOOM
-            2 -> AspectRatioFrameLayout.RESIZE_MODE_FILL
-            else -> AspectRatioFrameLayout.RESIZE_MODE_FIT
-        }
-
-        exoScreen.setOnClickListener {
-            if (isFullscreen < 2) isFullscreen += 1 else isFullscreen = 0
-            playerView.resizeMode = when (isFullscreen) {
+        playerView.resizeMode =
+            when (isFullscreen) {
                 0 -> AspectRatioFrameLayout.RESIZE_MODE_FIT
                 1 -> AspectRatioFrameLayout.RESIZE_MODE_ZOOM
                 2 -> AspectRatioFrameLayout.RESIZE_MODE_FILL
                 else -> AspectRatioFrameLayout.RESIZE_MODE_FIT
             }
+
+        exoScreen.setOnClickListener {
+            if (isFullscreen < 2) isFullscreen += 1 else isFullscreen = 0
+            playerView.resizeMode =
+                when (isFullscreen) {
+                    0 -> AspectRatioFrameLayout.RESIZE_MODE_FIT
+                    1 -> AspectRatioFrameLayout.RESIZE_MODE_ZOOM
+                    2 -> AspectRatioFrameLayout.RESIZE_MODE_FILL
+                    else -> AspectRatioFrameLayout.RESIZE_MODE_FIT
+                }
             snackString(
                 when (isFullscreen) {
                     0 -> "Original"
                     1 -> "Zoom"
                     2 -> "Stretch"
                     else -> "Original"
-                }
+                },
             )
             PrefManager.setCustomVal("${media.id}_fullscreenInt", isFullscreen)
         }
 
-        //Cast
+        // Cast
         if (PrefManager.getVal(PrefName.Cast)) {
             playerView.findViewById<CustomCastButton>(R.id.exo_cast).apply {
                 visibility = View.VISIBLE
@@ -1165,24 +1258,25 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             }
         }
 
-        //Settings
+        // Settings
         exoSettings.setOnClickListener {
             PrefManager.setCustomVal(
                 "${media.id}_${media.anime!!.selectedEpisode}",
-                exoPlayer.currentPosition
+                exoPlayer.currentPosition,
             )
-            val intent = Intent(this, PlayerSettingsActivity::class.java).apply {
-                putExtra("subtitle", subtitle)
-            }
+            val intent =
+                Intent(this, PlayerSettingsActivity::class.java).apply {
+                    putExtra("subtitle", subtitle)
+                }
             exoPlayer.pause()
             onChangeSettings.launch(intent)
         }
 
-        //Speed
+        // Speed
         val speeds =
-            if (PrefManager.getVal(PrefName.CursedSpeeds))
+            if (PrefManager.getVal(PrefName.CursedSpeeds)) {
                 arrayOf(1f, 1.25f, 1.5f, 1.75f, 2f, 2.5f, 3f, 4f, 5f, 10f, 25f, 50f)
-            else
+            } else {
                 arrayOf(
                     0.25f,
                     0.33f,
@@ -1196,38 +1290,39 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                     1.5f,
                     1.66f,
                     1.75f,
-                    2f
+                    2f,
                 )
+            }
 
         val speedsName = speeds.map { "${it}x" }.toTypedArray()
-        //var curSpeed = loadData("${media.id}_speed", this) ?: settings.defaultSpeed
-        var curSpeed = PrefManager.getCustomVal(
-            "${media.id}_speed",
-            PrefManager.getVal<Int>(PrefName.DefaultSpeed)
-        )
+        // var curSpeed = loadData("${media.id}_speed", this) ?: settings.defaultSpeed
+        var curSpeed =
+            PrefManager.getCustomVal(
+                "${media.id}_speed",
+                PrefManager.getVal<Int>(PrefName.DefaultSpeed),
+            )
 
         playbackParameters = PlaybackParameters(speeds[curSpeed])
         var speed: Float
-        val speedDialog =
-            AlertDialog.Builder(this, R.style.MyPopup).setTitle(getString(R.string.speed))
         exoSpeed.setOnClickListener {
-            val dialog = speedDialog.setSingleChoiceItems(speedsName, curSpeed) { dialog, i ->
-                if (isInitialized) {
+            customAlertDialog().apply {
+                setTitle(R.string.speed)
+                singleChoiceItems(speedsName, curSpeed) { i ->
                     PrefManager.setCustomVal("${media.id}_speed", i)
                     speed = speeds[i]
                     curSpeed = i
                     playbackParameters = PlaybackParameters(speed)
                     exoPlayer.playbackParameters = playbackParameters
-                    dialog.dismiss()
                     hideSystemBars()
                 }
-            }.show()
-            dialog.window?.setDimAmount(0.8f)
+                setOnCancelListener { hideSystemBars() }
+                show()
+            }
         }
-        speedDialog.setOnCancelListener { hideSystemBars() }
 
         if (PrefManager.getVal(PrefName.AutoPlay)) {
             var touchTimer = Timer()
+
             fun touched() {
                 interacted = true
                 touchTimer.apply {
@@ -1235,11 +1330,14 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                     purge()
                 }
                 touchTimer = Timer()
-                touchTimer.schedule(object : TimerTask() {
-                    override fun run() {
-                        interacted = false
-                    }
-                }, 1000 * 60 * 60)
+                touchTimer.schedule(
+                    object : TimerTask() {
+                        override fun run() {
+                            interacted = false
+                        }
+                    },
+                    1000 * 60 * 60,
+                )
             }
             playerView.findViewById<View>(R.id.exo_touch_view).setOnTouchListener { _, _ ->
                 touched()
@@ -1248,62 +1346,73 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         }
 
         isFullscreen = PrefManager.getVal(PrefName.Resize)
-        playerView.resizeMode = when (isFullscreen) {
-            0 -> AspectRatioFrameLayout.RESIZE_MODE_FIT
-            1 -> AspectRatioFrameLayout.RESIZE_MODE_ZOOM
-            2 -> AspectRatioFrameLayout.RESIZE_MODE_FILL
-            else -> AspectRatioFrameLayout.RESIZE_MODE_FIT
-        }
+        playerView.resizeMode =
+            when (isFullscreen) {
+                0 -> AspectRatioFrameLayout.RESIZE_MODE_FIT
+                1 -> AspectRatioFrameLayout.RESIZE_MODE_ZOOM
+                2 -> AspectRatioFrameLayout.RESIZE_MODE_FILL
+                else -> AspectRatioFrameLayout.RESIZE_MODE_FIT
+            }
 
         preloading = false
         val incognito: Boolean = PrefManager.getVal(PrefName.Incognito)
         val showProgressDialog =
-            if (PrefManager.getVal(PrefName.AskIndividualPlayer)) PrefManager.getCustomVal(
-                "${media.id}_ProgressDialog",
+            if (PrefManager.getVal(PrefName.AskIndividualPlayer)) {
+                PrefManager.getCustomVal(
+                    "${media.id}_ProgressDialog",
+                    true,
+                )
+            } else {
+                false
+            }
+        if (!incognito &&
+            showProgressDialog &&
+            Anilist.userid != null &&
+            if (media.isAdult) {
+                PrefManager.getVal(
+                    PrefName.UpdateForHPlayer,
+                )
+            } else {
                 true
-            ) else false
-        if (!incognito && showProgressDialog && Anilist.userid != null && if (media.isAdult) PrefManager.getVal(
-                PrefName.UpdateForHPlayer
-            ) else true
+            }
         ) {
-            AlertDialog.Builder(this, R.style.MyPopup)
-                .setTitle(getString(R.string.auto_update, media.userPreferredName))
-                .apply {
-                    setOnCancelListener { hideSystemBars() }
-                    setCancelable(false)
-                    setPositiveButton(getString(R.string.yes)) { dialog, _ ->
-                        PrefManager.setCustomVal(
-                            "${media.id}_ProgressDialog",
-                            false
-                        )
-                        PrefManager.setCustomVal(
-                            "${media.id}_save_progress",
-                            true
-                        )
-                        dialog.dismiss()
-                        model.setEpisode(episodes[media.anime!!.selectedEpisode!!]!!, "invoke")
-                    }
-                    setNegativeButton(getString(R.string.no)) { dialog, _ ->
-                        PrefManager.setCustomVal(
-                            "${media.id}_ProgressDialog",
-                            false
-                        )
-                        PrefManager.setCustomVal(
-                            "${media.id}_save_progress",
-                            false
-                        )
-                        toast(getString(R.string.reset_auto_update))
-                        dialog.dismiss()
-                        model.setEpisode(episodes[media.anime!!.selectedEpisode!!]!!, "invoke")
-                    }
-                    show()
+            customAlertDialog().apply {
+                setTitle(getString(R.string.auto_update, media.userPreferredName))
+                setCancelable(false)
+                setPosButton(R.string.yes) {
+                    PrefManager.setCustomVal(
+                        "${media.id}_ProgressDialog",
+                        false,
+                    )
+                    PrefManager.setCustomVal(
+                        "${media.id}_save_progress",
+                        true,
+                    )
+                    model.setEpisode(episodes[media.anime!!.selectedEpisode!!]!!, "invoke")
                 }
-        } else model.setEpisode(episodes[media.anime!!.selectedEpisode!!]!!, "invoke")
+                setNegButton(R.string.no) {
+                    PrefManager.setCustomVal(
+                        "${media.id}_ProgressDialog",
+                        false,
+                    )
+                    PrefManager.setCustomVal(
+                        "${media.id}_save_progress",
+                        false,
+                    )
+                    toast(getString(R.string.reset_auto_update))
+                    model.setEpisode(episodes[media.anime!!.selectedEpisode!!]!!, "invoke")
+                }
+                setOnCancelListener { hideSystemBars() }
+                show()
+            }
+        } else {
+            model.setEpisode(episodes[media.anime!!.selectedEpisode!!]!!, "invoke")
+        }
 
-        //Start the recursive Fun
-        if (PrefManager.getVal(PrefName.TimeStampsEnabled))
+        // Start the recursive Fun
+        if (PrefManager.getVal(PrefName.TimeStampsEnabled)) {
             updateTimeStamp()
-
+        }
     }
 
     private fun discordRPC() {
@@ -1315,60 +1424,67 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         if ((isOnline(context) && !offline) && Discord.token != null && !incognito && rpcenabled) {
             lifecycleScope.launch {
                 val discordMode = PrefManager.getCustomVal("discord_mode", "dantotsu")
-                val buttons = when (discordMode) {
-                    "nothing" -> mutableListOf(
-                        RPC.Link(getString(R.string.view_anime), media.shareLink ?: ""),
-                    )
-
-                    "dantotsu" -> mutableListOf(
-                        RPC.Link(getString(R.string.view_anime), media.shareLink ?: ""),
-                        RPC.Link("Watch on Dantotsu", getString(R.string.dantotsu))
-                    )
-
-                    "anilist" -> {
-                        val userId = PrefManager.getVal<String>(PrefName.AnilistUserId)
-                        val anilistLink = "https://anilist.co/user/$userId/"
-                        mutableListOf(
-                            RPC.Link(getString(R.string.view_anime), media.shareLink ?: ""),
-                            RPC.Link("View My AniList", anilistLink)
-                        )
-                    }
-
-                    else -> mutableListOf()
-                }
-                val startTimestamp = Calendar.getInstance()
-                val durationInSeconds =
-                    if (exoPlayer.duration != C.TIME_UNSET) (exoPlayer.duration / 1000).toInt() else 1440
-
-                val endTimestamp = Calendar.getInstance().apply {
-                    timeInMillis = startTimestamp.timeInMillis
-                    add(Calendar.SECOND, durationInSeconds)
-                }
-                val presence = RPC.createPresence(
-                    RPC.Companion.RPCData(
-                        applicationId = Discord.application_Id,
-                        type = RPC.Type.WATCHING,
-                        activityName = media.userPreferredName,
-                        details = ep.title?.takeIf { it.isNotEmpty() } ?: getString(
-                            R.string.episode_num,
-                            ep.number
-                        ),
-                        startTimestamp = startTimestamp.timeInMillis,
-                        stopTimestamp = endTimestamp.timeInMillis,
-                        state = "Episode : ${ep.number}/${media.anime?.totalEpisodes ?: "??"}",
-                        largeImage = media.cover?.let {
-                            RPC.Link(
-                                media.userPreferredName,
-                                it
+                val buttons =
+                    when (discordMode) {
+                        "nothing" ->
+                            mutableListOf(
+                                RPC.Link(getString(R.string.view_anime), media.shareLink ?: ""),
                             )
-                        },
-                        smallImage = RPC.Link("Dantotsu", Discord.small_Image),
-                        buttons = buttons
+
+                        "dantotsu" ->
+                            mutableListOf(
+                                RPC.Link(getString(R.string.view_anime), media.shareLink ?: ""),
+                                RPC.Link("Watch on Dantotsu", getString(R.string.dantotsu)),
+                            )
+
+                        "anilist" -> {
+                            val userId = PrefManager.getVal<String>(PrefName.AnilistUserId)
+                            val anilistLink = "https://anilist.co/user/$userId/"
+                            mutableListOf(
+                                RPC.Link(getString(R.string.view_anime), media.shareLink ?: ""),
+                                RPC.Link("View My AniList", anilistLink),
+                            )
+                        }
+
+                        else -> mutableListOf()
+                    }
+                val startTimestamp = Calendar.getInstance()
+                val durationInSeconds = if (exoPlayer.duration != C.TIME_UNSET) (exoPlayer.duration / 1000).toInt() else 1440
+
+                val endTimestamp =
+                    Calendar.getInstance().apply {
+                        timeInMillis = startTimestamp.timeInMillis
+                        add(Calendar.SECOND, durationInSeconds)
+                    }
+                val presence =
+                    RPC.createPresence(
+                        RPC.Companion.RPCData(
+                            applicationId = Discord.application_Id,
+                            type = RPC.Type.WATCHING,
+                            activityName = media.userPreferredName,
+                            details =
+                                ep.title?.takeIf { it.isNotEmpty() } ?: getString(
+                                    R.string.episode_num,
+                                    ep.number,
+                                ),
+                            startTimestamp = startTimestamp.timeInMillis,
+                            stopTimestamp = endTimestamp.timeInMillis,
+                            state = "Episode : ${ep.number}/${media.anime?.totalEpisodes ?: "??"}",
+                            largeImage =
+                                media.cover?.let {
+                                    RPC.Link(
+                                        media.userPreferredName,
+                                        it,
+                                    )
+                                },
+                            smallImage = RPC.Link("Dantotsu", Discord.small_Image),
+                            buttons = buttons,
+                        ),
                     )
-                )
-                val intent = Intent(context, DiscordService::class.java).apply {
-                    putExtra("presence", presence)
-                }
+                val intent =
+                    Intent(context, DiscordService::class.java).apply {
+                        putExtra("presence", presence)
+                    }
                 DiscordServiceRunningSingleton.running = true
                 startService(intent)
             }
@@ -1380,15 +1496,18 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
         PrefManager.setCustomVal(
             "${media.id}_current_ep",
-            media.anime!!.selectedEpisode!!
+            media.anime!!.selectedEpisode!!,
         )
 
         @Suppress("UNCHECKED_CAST")
-        val list = (PrefManager.getNullableCustomVal(
-            "continueAnimeList",
-            listOf<Int>(),
-            List::class.java
-        ) as List<Int>).toMutableList()
+        val list =
+            (
+                PrefManager.getNullableCustomVal(
+                    "continueAnimeList",
+                    listOf<Int>(),
+                    List::class.java,
+                ) as List<Int>
+            ).toMutableList()
         if (list.contains(media.id)) list.remove(media.id)
         list.add(media.id)
         PrefManager.setCustomVal("continueAnimeList", list)
@@ -1400,63 +1519,64 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         val ext = episode.extractors?.find { it.server.name == episode.selectedExtractor } ?: return
         extractor = ext
         video = ext.videos.getOrNull(episode.selectedVideo) ?: return
-        val subLanguages = arrayOf(
-            "Albanian",
-            "Arabic",
-            "Bosnian",
-            "Bulgarian",
-            "Chinese",
-            "Croatian",
-            "Czech",
-            "Danish",
-            "Dutch",
-            "English",
-            "Estonian",
-            "Finnish",
-            "French",
-            "Georgian",
-            "German",
-            "Greek",
-            "Hebrew",
-            "Hindi",
-            "Indonesian",
-            "Irish",
-            "Italian",
-            "Japanese",
-            "Korean",
-            "Lithuanian",
-            "Luxembourgish",
-            "Macedonian",
-            "Mongolian",
-            "Norwegian",
-            "Polish",
-            "Portuguese",
-            "Punjabi",
-            "Romanian",
-            "Russian",
-            "Serbian",
-            "Slovak",
-            "Slovenian",
-            "Spanish",
-            "Turkish",
-            "Ukrainian",
-            "Urdu",
-            "Vietnamese",
-        )
+        val subLanguages =
+            arrayOf(
+                "Albanian",
+                "Arabic",
+                "Bosnian",
+                "Bulgarian",
+                "Chinese",
+                "Croatian",
+                "Czech",
+                "Danish",
+                "Dutch",
+                "English",
+                "Estonian",
+                "Finnish",
+                "French",
+                "Georgian",
+                "German",
+                "Greek",
+                "Hebrew",
+                "Hindi",
+                "Indonesian",
+                "Irish",
+                "Italian",
+                "Japanese",
+                "Korean",
+                "Lithuanian",
+                "Luxembourgish",
+                "Macedonian",
+                "Mongolian",
+                "Norwegian",
+                "Polish",
+                "Portuguese",
+                "Punjabi",
+                "Romanian",
+                "Russian",
+                "Serbian",
+                "Slovak",
+                "Slovenian",
+                "Spanish",
+                "Turkish",
+                "Ukrainian",
+                "Urdu",
+                "Vietnamese",
+            )
         val lang = subLanguages[PrefManager.getVal(PrefName.SubLanguage)]
         subtitle = intent.getSerialized("subtitle")
-            ?: when (val subLang: String? =
-                PrefManager.getNullableCustomVal("subLang_${media.id}", null, String::class.java)) {
+            ?: when (
+                val subLang: String? =
+                    PrefManager.getNullableCustomVal("subLang_${media.id}", null, String::class.java)
+            ) {
                 null -> {
                     when (episode.selectedSubtitle) {
                         null -> null
-                        -1 -> ext.subtitles.find {
-                            it.language.contains(
-                                lang,
-                                ignoreCase = true
-                            ) || it.language.contains(getLanguageCode(lang), ignoreCase = true)
-                        }
-
+                        -1 ->
+                            ext.subtitles.find {
+                                it.language.contains(lang, ignoreCase = true) ||
+                                    it.language.contains(getLanguageCode(lang), ignoreCase = true)
+                            }
                         else -> ext.subtitles.getOrNull(episode.selectedSubtitle!!)
                     }
                 }
@@ -1465,7 +1585,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 else -> ext.subtitles.find { it.language == subLang }
             }
 
-        //Subtitles
+        // Subtitles
         hasExtSubtitles = ext.subtitles.isNotEmpty()
         if (hasExtSubtitles) {
             exoSubtitle.isVisible = hasExtSubtitles
@@ -1477,43 +1597,43 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             emptyList<MediaItem.SubtitleConfiguration>().toMutableList()
         ext.subtitles.forEach { subtitle ->
             val subtitleUrl = if (!hasExtSubtitles) video!!.file.url else subtitle.file.url
-            //var localFile: String? = null
+            // var localFile: String? = null
             if (subtitle.type == SubtitleType.UNKNOWN) {
                 runBlocking {
                     val type = SubtitleDownloader.loadSubtitleType(subtitleUrl)
                     val fileUri = Uri.parse(subtitleUrl)
-                    sub += MediaItem.SubtitleConfiguration
-                        .Builder(fileUri)
-                        .setSelectionFlags(C.SELECTION_FLAG_DEFAULT)
-                        .setMimeType(
-                            when (type) {
-                                SubtitleType.VTT -> MimeTypes.TEXT_SSA
-                                SubtitleType.ASS -> MimeTypes.TEXT_SSA
-                                SubtitleType.SRT -> MimeTypes.TEXT_SSA
-                                else -> MimeTypes.TEXT_SSA
-                            }
-                        )
-                        .setId("69")
-                        .setLanguage(subtitle.language)
-                        .build()
+                    sub +=
+                        MediaItem.SubtitleConfiguration
+                            .Builder(fileUri)
+                            .setSelectionFlags(C.SELECTION_FLAG_DEFAULT)
+                            .setMimeType(
+                                when (type) {
+                                    SubtitleType.VTT -> MimeTypes.TEXT_SSA
+                                    SubtitleType.ASS -> MimeTypes.TEXT_SSA
+                                    SubtitleType.SRT -> MimeTypes.TEXT_SSA
+                                    else -> MimeTypes.TEXT_SSA
+                                },
+                            ).setId("69")
+                            .setLanguage(subtitle.language)
+                            .build()
                 }
                 println("sub: $sub")
             } else {
                 val subUri = Uri.parse(subtitleUrl)
-                sub += MediaItem.SubtitleConfiguration
-                    .Builder(subUri)
-                    .setSelectionFlags(C.SELECTION_FLAG_FORCED)
-                    .setMimeType(
-                        when (subtitle.type) {
-                            SubtitleType.VTT -> MimeTypes.TEXT_VTT
-                            SubtitleType.ASS -> MimeTypes.TEXT_SSA
-                            SubtitleType.SRT -> MimeTypes.APPLICATION_SUBRIP
-                            else -> MimeTypes.TEXT_UNKNOWN
-                        }
-                    )
-                    .setId("69")
-                    .setLanguage(subtitle.language)
-                    .build()
+                sub +=
+                    MediaItem.SubtitleConfiguration
+                        .Builder(subUri)
+                        .setSelectionFlags(C.SELECTION_FLAG_FORCED)
+                        .setMimeType(
+                            when (subtitle.type) {
+                                SubtitleType.VTT -> MimeTypes.TEXT_VTT
+                                SubtitleType.ASS -> MimeTypes.TEXT_SSA
+                                SubtitleType.SRT -> MimeTypes.APPLICATION_SUBRIP
+                                else -> MimeTypes.TEXT_UNKNOWN
+                            },
+                        ).setId("69")
+                        .setLanguage(subtitle.language)
+                        .build()
             }
         }
 
@@ -1521,98 +1641,137 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             ext.onVideoPlayed(video)
         }
 
-        val httpClient = okHttpClient.newBuilder().apply {
-            ignoreAllSSLErrors()
-            followRedirects(true)
-            followSslRedirects(true)
-        }.build()
-        val dataSourceFactory = DataSource.Factory {
-            val dataSource: HttpDataSource = OkHttpDataSource.Factory(httpClient).createDataSource()
-            defaultHeaders.forEach {
-                dataSource.setRequestProperty(it.key, it.value)
+        val httpClient =
+            okHttpClient
+                .newBuilder()
+                .apply {
+                    ignoreAllSSLErrors()
+                    followRedirects(true)
+                    followSslRedirects(true)
+                }.build()
+        val dataSourceFactory =
+            DataSource.Factory {
+                val dataSource: HttpDataSource = OkHttpDataSource.Factory(httpClient).createDataSource()
+                defaultHeaders.forEach {
+                    dataSource.setRequestProperty(it.key, it.value)
+                }
+                video?.file?.headers?.forEach {
+                    dataSource.setRequestProperty(it.key, it.value)
+                }
+                dataSource
             }
-            video?.file?.headers?.forEach {
-                dataSource.setRequestProperty(it.key, it.value)
-            }
-            dataSource
-        }
         val dafuckDataSourceFactory = DefaultDataSource.Factory(this)
-        cacheFactory = CacheDataSource.Factory().apply {
-            setCache(VideoCache.getInstance(this@ExoplayerView))
-            if (ext.server.offline) {
-                setUpstreamDataSourceFactory(dafuckDataSourceFactory)
-            } else {
-                setUpstreamDataSourceFactory(dataSourceFactory)
+        cacheFactory =
+            CacheDataSource.Factory().apply {
+                setCache(VideoCache.getInstance(this@ExoplayerView))
+                if (ext.server.offline) {
+                    setUpstreamDataSourceFactory(dafuckDataSourceFactory)
+                } else {
+                    setUpstreamDataSourceFactory(dataSourceFactory)
+                }
+                setCacheWriteDataSinkFactory(null)
             }
-            setCacheWriteDataSinkFactory(null)
-        }
 
-        val mimeType = when (video?.format) {
-            VideoType.M3U8 -> MimeTypes.APPLICATION_M3U8
-            VideoType.DASH -> MimeTypes.APPLICATION_MPD
-            else -> MimeTypes.APPLICATION_MP4
-        }
+        val mimeType =
+            when (video?.format) {
+                VideoType.M3U8 -> MimeTypes.APPLICATION_M3U8
+                VideoType.DASH -> MimeTypes.APPLICATION_MPD
+                else -> MimeTypes.APPLICATION_MP4
+            }
 
-        val downloadedMediaItem = if (ext.server.offline) {
-            val titleName = ext.server.name.split("/").first()
-            val episodeName = ext.server.name.split("/").last()
-            downloadId = PrefManager.getAnimeDownloadPreferences()
-                .getString("$titleName - $episodeName", null)
-                ?: PrefManager.getAnimeDownloadPreferences()
-                    .getString(ext.server.name, null)
-            val exoItem = if (downloadId != null) {
-                Helper.downloadManager(this)
-                    .downloadIndex.getDownload(downloadId!!)?.request?.toMediaItem()
-            } else null
-            if (exoItem != null) {
-                exoItem
-            } else {
-
-                val directory =
-                    getSubDirectory(this, MediaType.ANIME, false, titleName, episodeName)
-                if (directory != null) {
-                    val files = directory.listFiles()
-                    println(files)
-                    val docFile = directory.listFiles().firstOrNull {
-                        it.name?.endsWith(".mp4") == true || it.name?.endsWith(".mkv") == true
-                                || it.name?.endsWith(".${Injekt.get<DownloadAddonManager>().extension?.extension?.getFileExtension()?.first ?: "ts"}") == true
-                    }
-                    if (docFile != null) {
-                        val uri = docFile.uri
-                        val downloadedMimeType = when (docFile.extension) {
-                            "mp4" -> MimeTypes.APPLICATION_MP4
-                            "mkv" -> MimeTypes.APPLICATION_MATROSKA
-                            else -> MimeTypes.APPLICATION_MP4
-                        }
-                        MediaItem.Builder().setUri(uri).setMimeType(downloadedMimeType).build()
+        val downloadedMediaItem =
+            if (ext.server.offline) {
+                val titleName =
+                    ext.server.name
+                        .split("/")
+                        .first()
+                val episodeName =
+                    ext.server.name
+                        .split("/")
+                        .last()
+                downloadId = PrefManager
+                    .getAnimeDownloadPreferences()
+                    .getString("$titleName - $episodeName", null)
+                    ?: PrefManager
+                        .getAnimeDownloadPreferences()
+                        .getString(ext.server.name, null)
+                val exoItem =
+                    if (downloadId != null) {
+                        Helper
+                            .downloadManager(this)
+                            .downloadIndex
+                            .getDownload(downloadId!!)
+                            ?.request
+                            ?.toMediaItem()
                     } else {
-                        snackString("File not found")
                         null
                     }
+                if (exoItem != null) {
+                    exoItem
                 } else {
-                    snackString("Directory not found")
-                    null
+                    val directory =
+                        getSubDirectory(this, MediaType.ANIME, false, titleName, episodeName)
+                    if (directory != null) {
+                        val files = directory.listFiles()
+                        println(files)
+                        val docFile =
+                            directory.listFiles().firstOrNull {
+                                it.name?.endsWith(".mp4") == true ||
+                                    it.name?.endsWith(".mkv") == true ||
+                                    it.name?.endsWith(
+                                        ".${Injekt
+                                            .get<DownloadAddonManager>()
+                                            .extension
+                                            ?.extension
+                                            ?.getFileExtension()
+                                            ?.first ?: "ts"}",
+                                    ) ==
+                                    true
+                            }
+                        if (docFile != null) {
+                            val uri = docFile.uri
+                            val downloadedMimeType =
+                                when (docFile.extension) {
+                                    "mp4" -> MimeTypes.APPLICATION_MP4
+                                    "mkv" -> MimeTypes.APPLICATION_MATROSKA
+                                    else -> MimeTypes.APPLICATION_MP4
+                                }
+                            MediaItem
+                                .Builder()
+                                .setUri(uri)
+                                .setMimeType(downloadedMimeType)
+                                .build()
+                        } else {
+                            snackString("File not found")
+                            null
+                        }
+                    } else {
+                        snackString("Directory not found")
+                        null
+                    }
+                }
+            } else {
+                null
+            }
+
+        mediaItem =
+            if (downloadedMediaItem == null) {
+                val builder = MediaItem.Builder().setUri(video!!.file.url).setMimeType(mimeType)
+                Logger.log("url: ${video!!.file.url}")
+                Logger.log("mimeType: $mimeType")
+                builder.setSubtitleConfigurations(sub)
+                builder.build()
+            } else {
+                if (sub.isNotEmpty()) {
+                    val addedSubsDownloadedMediaItem = downloadedMediaItem.buildUpon()
+                    val addLanguage = sub[0].buildUpon().setLanguage("en").build()
+                    addedSubsDownloadedMediaItem.setSubtitleConfigurations(listOf(addLanguage))
+                    episode.selectedSubtitle = 0
+                    addedSubsDownloadedMediaItem.build()
+                } else {
+                    downloadedMediaItem
                 }
             }
-        } else null
-
-        mediaItem = if (downloadedMediaItem == null) {
-            val builder = MediaItem.Builder().setUri(video!!.file.url).setMimeType(mimeType)
-            Logger.log("url: ${video!!.file.url}")
-            Logger.log("mimeType: $mimeType")
-            builder.setSubtitleConfigurations(sub)
-            builder.build()
-        } else {
-            if (sub.isNotEmpty()) {
-                val addedSubsDownloadedMediaItem = downloadedMediaItem.buildUpon()
-                val addLanguage = sub[0].buildUpon().setLanguage("en").build()
-                addedSubsDownloadedMediaItem.setSubtitleConfigurations(listOf(addLanguage))
-                episode.selectedSubtitle = 0
-                addedSubsDownloadedMediaItem.build()
-            } else {
-                downloadedMediaItem
-            }
-        }
 
         val audioMediaItem = mutableListOf<MediaItem>()
         audioLanguages.clear()
@@ -1621,179 +1780,201 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             if (code == "all") code = "un"
             audioLanguages.add(Pair(it.lang, code))
             audioMediaItem.add(
-                MediaItem.Builder()
+                MediaItem
+                    .Builder()
                     .setUri(it.url)
                     .setMimeType(MimeTypes.AUDIO_UNKNOWN)
                     .setTag(code)
-                    .build()
+                    .build(),
             )
         }
 
-        val audioSources = audioMediaItem.map { mediaItem ->
-            if (mediaItem.localConfiguration?.uri.toString().contains(".m3u8")) {
-                HlsMediaSource.Factory(cacheFactory).createMediaSource(mediaItem)
-            } else {
-                DefaultMediaSourceFactory(cacheFactory).createMediaSource(mediaItem)
-            }
-        }.toTypedArray()
-        val videoMediaSource = DefaultMediaSourceFactory(cacheFactory)
-            .createMediaSource(mediaItem)
+        val audioSources =
+            audioMediaItem
+                .map { mediaItem ->
+                    if (mediaItem.localConfiguration
+                            ?.uri
+                            .toString()
+                            .contains(".m3u8")
+                    ) {
+                        HlsMediaSource.Factory(cacheFactory).createMediaSource(mediaItem)
+                    } else {
+                        DefaultMediaSourceFactory(cacheFactory).createMediaSource(mediaItem)
+                    }
+                }.toTypedArray()
+        val videoMediaSource =
+            DefaultMediaSourceFactory(cacheFactory)
+                .createMediaSource(mediaItem)
         mediaSource = MergingMediaSource(videoMediaSource, *audioSources)
 
-
-        //Source
+        // Source
         exoSource.setOnClickListener {
             sourceClick()
         }
 
-        //Quality Track
+        // Quality Track
         trackSelector = DefaultTrackSelector(this)
-        val parameters = trackSelector.buildUponParameters()
-            .setAllowVideoMixedMimeTypeAdaptiveness(true)
-            .setAllowVideoNonSeamlessAdaptiveness(true)
-            .setSelectUndeterminedTextLanguage(true)
-            .setAllowAudioMixedMimeTypeAdaptiveness(true)
-            .setAllowMultipleAdaptiveSelections(true)
-            .setPreferredTextLanguage(subtitle?.language ?: Locale.getDefault().language)
-            .setPreferredTextRoleFlags(C.ROLE_FLAG_SUBTITLE)
-            .setRendererDisabled(TRACK_TYPE_VIDEO, false)
-            .setRendererDisabled(TRACK_TYPE_AUDIO, false)
-            .setRendererDisabled(TRACK_TYPE_TEXT, false)
-            .setMaxVideoSize(1, 1)
+        val parameters =
+            trackSelector
+                .buildUponParameters()
+                .setAllowVideoMixedMimeTypeAdaptiveness(true)
+                .setAllowVideoNonSeamlessAdaptiveness(true)
+                .setSelectUndeterminedTextLanguage(true)
+                .setAllowAudioMixedMimeTypeAdaptiveness(true)
+                .setAllowMultipleAdaptiveSelections(true)
+                .setPreferredTextLanguage(subtitle?.language ?: Locale.getDefault().language)
+                .setPreferredTextRoleFlags(C.ROLE_FLAG_SUBTITLE)
+                .setRendererDisabled(TRACK_TYPE_VIDEO, false)
+                .setRendererDisabled(TRACK_TYPE_AUDIO, false)
+                .setRendererDisabled(TRACK_TYPE_TEXT, false)
+                .setMaxVideoSize(1, 1)
         // .setOverrideForType(TrackSelectionOverride(trackSelector, TRACK_TYPE_VIDEO))
-        if (PrefManager.getVal(PrefName.SettingsPreferDub))
+        if (PrefManager.getVal(PrefName.SettingsPreferDub)) {
             parameters.setPreferredAudioLanguage(Locale.getDefault().language)
+        }
         trackSelector.setParameters(parameters)
 
         if (playbackPosition != 0L && !changingServer && !PrefManager.getVal<Boolean>(PrefName.AlwaysContinue)) {
-            val time = String.format(
-                "%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(playbackPosition),
-                TimeUnit.MILLISECONDS.toMinutes(playbackPosition) - TimeUnit.HOURS.toMinutes(
-                    TimeUnit.MILLISECONDS.toHours(
-                        playbackPosition
-                    )
-                ),
-                TimeUnit.MILLISECONDS.toSeconds(playbackPosition) - TimeUnit.MINUTES.toSeconds(
-                    TimeUnit.MILLISECONDS.toMinutes(
-                        playbackPosition
-                    )
+            val time =
+                String.format(
+                    "%02d:%02d:%02d",
+                    TimeUnit.MILLISECONDS.toHours(playbackPosition),
+                    TimeUnit.MILLISECONDS.toMinutes(playbackPosition) -
+                        TimeUnit.HOURS.toMinutes(
+                            TimeUnit.MILLISECONDS.toHours(
+                                playbackPosition,
+                            ),
+                        ),
+                    TimeUnit.MILLISECONDS.toSeconds(playbackPosition) -
+                        TimeUnit.MINUTES.toSeconds(
+                            TimeUnit.MILLISECONDS.toMinutes(
+                                playbackPosition,
+                            ),
+                        ),
                 )
-            )
-            val dialog = AlertDialog.Builder(this, R.style.MyPopup)
-                .setTitle(getString(R.string.continue_from, time)).apply {
+                customAlertDialog().apply {
+                    setTitle(getString(R.string.continue_from, time))
                     setCancelable(false)
-                    setPositiveButton(getString(R.string.yes)) { d, _ ->
+                    setPosButton(getString(R.string.yes)) {
                         buildExoplayer()
-                        d.dismiss()
                     }
-                    setNegativeButton(getString(R.string.no)) { d, _ ->
+                    setNegButton(getString(R.string.no)) {
                         playbackPosition = 0L
                         buildExoplayer()
-                        d.dismiss()
                     }
-                }.show()
-            dialog.window?.setDimAmount(0.8f)
-        } else buildExoplayer()
+                    show()
+                }
+        } else {
+            buildExoplayer()
+        }
     }
 
     private fun buildExoplayer() {
-        //Player
-        val loadControl = DefaultLoadControl.Builder()
-            .setBackBuffer(1000 * 60 * 2, true)
-            .setBufferDurationsMs(
-                DEFAULT_MIN_BUFFER_MS,
-                DEFAULT_MAX_BUFFER_MS,
-                BUFFER_FOR_PLAYBACK_MS,
-                BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS
-            )
-            .build()
+        // Player
+        val loadControl =
+            DefaultLoadControl
+                .Builder()
+                .setBackBuffer(1000 * 60 * 2, true)
+                .setBufferDurationsMs(
+                    DEFAULT_MIN_BUFFER_MS,
+                    DEFAULT_MAX_BUFFER_MS,
+                    BUFFER_FOR_PLAYBACK_MS,
+                    BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS,
+                ).build()
 
         hideSystemBars()
 
         val useExtensionDecoder = PrefManager.getVal<Boolean>(PrefName.UseAdditionalCodec)
-        val decoder = if (useExtensionDecoder) {
-            DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER
-        } else {
-            DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF
-        }
-        val renderersFactory = NextRenderersFactory(this)
-            .setEnableDecoderFallback(true)
-            .setExtensionRendererMode(decoder)
-
-        exoPlayer = ExoPlayer.Builder(this, renderersFactory)
-            .setMediaSourceFactory(DefaultMediaSourceFactory(cacheFactory))
-            .setTrackSelector(trackSelector)
-            .setLoadControl(loadControl)
-            .build().apply {
-                playWhenReady = true
-                this.playbackParameters = this@ExoplayerView.playbackParameters
-                setMediaSource(mediaSource)
-                prepare()
-                PrefManager.getCustomVal(
-                    "${media.id}_${media.anime!!.selectedEpisode}_max",
-                    Long.MAX_VALUE
-                )
-                    .takeIf { it != Long.MAX_VALUE }
-                    ?.let { if (it <= playbackPosition) playbackPosition = max(0, it - 5) }
-                seekTo(playbackPosition)
+        val decoder =
+            if (useExtensionDecoder) {
+                DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER
+            } else {
+                DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF
             }
+        val renderersFactory =
+            NextRenderersFactory(this)
+                .setEnableDecoderFallback(true)
+                .setExtensionRendererMode(decoder)
+
+        exoPlayer =
+            ExoPlayer
+                .Builder(this, renderersFactory)
+                .setMediaSourceFactory(DefaultMediaSourceFactory(cacheFactory))
+                .setTrackSelector(trackSelector)
+                .setLoadControl(loadControl)
+                .build()
+                .apply {
+                    playWhenReady = true
+                    this.playbackParameters = this@ExoplayerView.playbackParameters
+                    setMediaSource(mediaSource)
+                    prepare()
+                    PrefManager
+                        .getCustomVal(
+                            "${media.id}_${media.anime!!.selectedEpisode}_max",
+                            Long.MAX_VALUE,
+                        ).takeIf { it != Long.MAX_VALUE }
+                        ?.let { if (it <= playbackPosition) playbackPosition = max(0, it - 5) }
+                    seekTo(playbackPosition)
+                }
         playerView.player = exoPlayer
 
-        exoPlayer.addListener(object : Player.Listener {
-            var activeSubtitles = ArrayDeque<String>(3)
-            var lastSubtitle: String? = null
-            var lastPosition: Long = 0
+        exoPlayer.addListener(
+            object : Player.Listener {
+                var activeSubtitles = ArrayDeque<String>(3)
+                var lastSubtitle: String? = null
+                var lastPosition: Long = 0
 
-            override fun onCues(cueGroup: CueGroup) {
-                if (PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
-                    exoSubtitleView.visibility = View.GONE
-                    customSubtitleView.visibility = View.VISIBLE
-                    val newCues = cueGroup.cues.map { it.text.toString() }
+                override fun onCues(cueGroup: CueGroup) {
+                    if (PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
+                        exoSubtitleView.visibility = View.GONE
+                        customSubtitleView.visibility = View.VISIBLE
+                        val newCues = cueGroup.cues.map { it.text.toString() ?: "" }
 
-                    if (newCues.isEmpty()) {
-                        customSubtitleView.text = ""
-                        activeSubtitles.clear()
-                        lastSubtitle = null
-                        lastPosition = 0
-                        return
-                    }
-
-                    val currentPosition = exoPlayer.currentPosition
-
-                    if ((lastSubtitle?.length
-                            ?: 0) < 20 || (lastPosition != 0L && currentPosition - lastPosition > 1500)
-                    ) {
-                        activeSubtitles.clear()
-                    }
-
-                    for (newCue in newCues) {
-                        if (newCue !in activeSubtitles) {
-                            if (activeSubtitles.size >= 2) {
-                                activeSubtitles.removeLast()
-                            }
-                            activeSubtitles.addFirst(newCue)
-                            lastSubtitle = newCue
-                            lastPosition = currentPosition
+                        if (newCues.isEmpty()) {
+                            customSubtitleView.text = ""
+                            activeSubtitles.clear()
+                            lastSubtitle = null
+                            lastPosition = 0
+                            return
                         }
-                    }
 
-                    customSubtitleView.text = activeSubtitles.joinToString("\n")
-                } else {
-                    customSubtitleView.text = ""
-                    customSubtitleView.visibility = View.GONE
-                    exoSubtitleView.visibility = View.VISIBLE
+                        val currentPosition = exoPlayer.currentPosition
+
+                        if ((lastSubtitle?.length ?: 0) < 20 || (lastPosition != 0L && currentPosition - lastPosition > 1500)) {
+                            activeSubtitles.clear()
+                        }
+
+                        for (newCue in newCues) {
+                            if (newCue !in activeSubtitles) {
+                                if (activeSubtitles.size >= 2) {
+                                    activeSubtitles.removeLast()
+                                }
+                                activeSubtitles.addFirst(newCue)
+                                lastSubtitle = newCue
+                                lastPosition = currentPosition
+                            }
+                        }
+
+                        customSubtitleView.text = activeSubtitles.joinToString("\n")
+                    } else {
+                        customSubtitleView.text = ""
+                        customSubtitleView.visibility = View.GONE
+                        exoSubtitleView.visibility = View.VISIBLE
+                    }
                 }
-            }
-        })
+            },
+        )
 
         applySubtitleStyles(customSubtitleView)
         setupSubFormatting(playerView)
 
         try {
             val rightNow = Calendar.getInstance()
-            mediaSession = MediaSession.Builder(this, exoPlayer)
-                .setId(rightNow.timeInMillis.toString())
-                .build()
+            mediaSession =
+                MediaSession
+                    .Builder(this, exoPlayer)
+                    .setId(rightNow.timeInMillis.toString())
+                    .build()
         } catch (e: Exception) {
             toast(e.toString())
         }
@@ -1807,10 +1988,11 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         }
 
         val isDisabled = (subtitle == null && hasExtSubtitles)
-        exoPlayer.trackSelectionParameters = exoPlayer.trackSelectionParameters
-            .buildUpon()
-            .setTrackTypeDisabled(TRACK_TYPE_TEXT, isDisabled)
-            .build()
+        exoPlayer.trackSelectionParameters =
+            exoPlayer.trackSelectionParameters
+                .buildUpon()
+                .setTrackTypeDisabled(TRACK_TYPE_TEXT, isDisabled)
+                .build()
     }
 
     private fun releasePlayer() {
@@ -1826,7 +2008,6 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             DiscordServiceRunningSingleton.running = false
             stopService(stopIntent)
         }
-
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -1844,18 +2025,22 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
         media.selected!!.server = null
         PrefManager.setCustomVal(
-            "${media.id}_${media.anime!!.selectedEpisode}", exoPlayer.currentPosition
+            "${media.id}_${media.anime!!.selectedEpisode}",
+            exoPlayer.currentPosition,
         )
         model.saveSelected(media.id, media.selected!!)
         model.onEpisodeClick(
-            media, episode.number, this.supportFragmentManager,
-            launch = false
+            media,
+            episode.number,
+            this.supportFragmentManager,
+            launch = false,
         )
     }
 
     private fun subClick() {
         PrefManager.setCustomVal(
-            "${media.id}_${media.anime!!.selectedEpisode}", exoPlayer.currentPosition
+            "${media.id}_${media.anime!!.selectedEpisode}",
+            exoPlayer.currentPosition,
         )
         model.saveSelected(media.id, media.selected!!)
         SubtitleDialogFragment().show(supportFragmentManager, "dialog")
@@ -1871,7 +2056,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             if (exoPlayer.currentPosition > 5000) {
                 PrefManager.setCustomVal(
                     "${media.id}_${media.anime!!.selectedEpisode}",
-                    exoPlayer.currentPosition
+                    exoPlayer.currentPosition,
                 )
             }
         }
@@ -1895,6 +2080,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
     }
 
     private var wasPlaying = false
+
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         if (PrefManager.getVal(PrefName.FocusPause) && !epChanging) {
             if (isInitialized && !hasFocus) wasPlaying = exoPlayer.isPlaying
@@ -1912,9 +2098,12 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             isPlayerPlaying = isPlaying
             playerView.keepScreenOn = isPlaying
             (exoPlay.drawable as Animatable?)?.start()
-            if (!this.isDestroyed) Glide.with(this)
-                .load(if (isPlaying) R.drawable.anim_play_to_pause else R.drawable.anim_pause_to_play)
-                .into(exoPlay)
+            if (!this.isDestroyed) {
+                Glide
+                    .with(this)
+                    .load(if (isPlaying) R.drawable.anim_play_to_pause else R.drawable.anim_pause_to_play)
+                    .into(exoPlay)
+            }
         }
     }
 
@@ -1922,7 +2111,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         super.onRenderedFirstFrame()
         PrefManager.setCustomVal(
             "${media.id}_${media.anime!!.selectedEpisode}_max",
-            exoPlayer.duration
+            exoPlayer.duration,
         )
         val height = (exoPlayer.videoFormat ?: return).height
         val width = (exoPlayer.videoFormat ?: return).width
@@ -1931,10 +2120,11 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
         videoInfo.text = getString(R.string.video_quality, height)
 
-        if (exoPlayer.duration < playbackPosition)
+        if (exoPlayer.duration < playbackPosition) {
             exoPlayer.seekTo(0)
+        }
 
-        //if playbackPosition is within 92% of the episode length, reset it to 0
+        // if playbackPosition is within 92% of the episode length, reset it to 0
         if (playbackPosition > exoPlayer.duration.toFloat() * 0.92) {
             playbackPosition = 0
             exoPlayer.seekTo(0)
@@ -1945,20 +2135,25 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             lifecycleScope.launch(Dispatchers.IO) {
                 model.loadTimeStamps(
                     media.idMAL,
-                    media.anime?.selectedEpisode?.trim()?.toIntOrNull(),
+                    media.anime
+                        ?.selectedEpisode
+                        ?.trim()
+                        ?.toIntOrNull(),
                     dur / 1000,
-                    PrefManager.getVal(PrefName.UseProxyForTimeStamps)
+                    PrefManager.getVal(PrefName.UseProxyForTimeStamps),
                 )
             }
         }
     }
 
-    //Link Preloading
+    // Link Preloading
     private var preloading = false
+
     private fun updateProgress() {
         if (isInitialized) {
-            if (exoPlayer.currentPosition.toFloat() / exoPlayer.duration > PrefManager.getVal<Float>(
-                    PrefName.WatchPercentage
+            if (exoPlayer.currentPosition.toFloat() / exoPlayer.duration >
+                PrefManager.getVal<Float>(
+                    PrefName.WatchPercentage,
                 )
             ) {
                 preloading = true
@@ -1966,134 +2161,148 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                     val ep = episodes[episodeArr[currentEpisodeIndex + i]] ?: return@nextEpisode
                     val selected = media.selected ?: return@nextEpisode
                     lifecycleScope.launch(Dispatchers.IO) {
-                        if (media.selected!!.server != null)
+                        if (media.selected!!.server != null) {
                             model.loadEpisodeSingleVideo(ep, selected, false)
-                        else
+                        } else {
                             model.loadEpisodeVideos(ep, selected.sourceIndex, false)
+                        }
                     }
                 }
             }
         }
-        if (!preloading) handler.postDelayed({
-            updateProgress()
-        }, 2500)
+        if (!preloading) {
+            handler.postDelayed({
+                updateProgress()
+            }, 2500)
+        }
     }
 
-    //TimeStamp Updating
+    // TimeStamp Updating
     private var currentTimeStamp: AniSkip.Stamp? = null
     private var skippedTimeStamps: MutableList<AniSkip.Stamp> = mutableListOf()
+
     private fun updateTimeStamp() {
         if (isInitialized) {
             val playerCurrentTime = exoPlayer.currentPosition / 1000
-            currentTimeStamp = model.timeStamps.value?.find { timestamp ->
-                timestamp.interval.startTime < playerCurrentTime
-                        && playerCurrentTime < (timestamp.interval.endTime - 1)
-            }
+            currentTimeStamp =
+                model.timeStamps.value?.find { timestamp ->
+                    timestamp.interval.startTime < playerCurrentTime &&
+                        playerCurrentTime < (timestamp.interval.endTime - 1)
+                }
 
             val new = currentTimeStamp
-            timeStampText.text = if (new != null) {
-                fun disappearSkip() {
-                    functionstarted = true
-                    skipTimeButton.visibility = View.VISIBLE
-                    exoSkip.visibility = View.GONE
-                    skipTimeText.text = new.skipType.getType()
-                    skipTimeButton.setOnClickListener {
-                        exoPlayer.seekTo((new.interval.endTime * 1000).toLong())
-                    }
-                    var timer: CountDownTimer? = null
-                    fun cancelTimer() {
-                        timer?.cancel()
-                        timer = null
-                        return
-                    }
-                    timer = object : CountDownTimer(5000, 1000) {
-                        override fun onTick(millisUntilFinished: Long) {
-                            if (new == null) {
-                                skipTimeButton.visibility = View.GONE
-                                exoSkip.isVisible = PrefManager.getVal<Int>(PrefName.SkipTime) > 0
-                                disappeared = false
-                                functionstarted = false
-                                cancelTimer()
-                            }
-                        }
-
-                        override fun onFinish() {
-                            skipTimeButton.visibility = View.GONE
-                            exoSkip.isVisible = PrefManager.getVal<Int>(PrefName.SkipTime) > 0
-                            disappeared = true
-                            functionstarted = false
-                            cancelTimer()
-                        }
-                    }
-                    timer?.start()
-
-                }
-                if (PrefManager.getVal(PrefName.ShowTimeStampButton)) {
-
-                    if (!functionstarted && !disappeared && PrefManager.getVal(PrefName.AutoHideTimeStamps)) {
-                        disappearSkip()
-                    } else if (!PrefManager.getVal<Boolean>(PrefName.AutoHideTimeStamps)) {
+            timeStampText.text =
+                if (new != null) {
+                    fun disappearSkip() {
+                        functionstarted = true
                         skipTimeButton.visibility = View.VISIBLE
                         exoSkip.visibility = View.GONE
                         skipTimeText.text = new.skipType.getType()
                         skipTimeButton.setOnClickListener {
                             exoPlayer.seekTo((new.interval.endTime * 1000).toLong())
                         }
-                    }
+                        var timer: CountDownTimer? = null
 
+                        fun cancelTimer() {
+                            timer?.cancel()
+                            timer = null
+                            return
+                        }
+                        timer =
+                            object : CountDownTimer(5000, 1000) {
+                                override fun onTick(millisUntilFinished: Long) {
+                                    if (new == null) {
+                                        skipTimeButton.visibility = View.GONE
+                                        exoSkip.isVisible = PrefManager.getVal<Int>(PrefName.SkipTime) > 0
+                                        disappeared = false
+                                        functionstarted = false
+                                        cancelTimer()
+                                    }
+                                }
+
+                                override fun onFinish() {
+                                    skipTimeButton.visibility = View.GONE
+                                    exoSkip.isVisible = PrefManager.getVal<Int>(PrefName.SkipTime) > 0
+                                    disappeared = true
+                                    functionstarted = false
+                                    cancelTimer()
+                                }
+                            }
+                        timer?.start()
+                    }
+                    if (PrefManager.getVal(PrefName.ShowTimeStampButton)) {
+                        if (!functionstarted && !disappeared && PrefManager.getVal(PrefName.AutoHideTimeStamps)) {
+                            disappearSkip()
+                        } else if (!PrefManager.getVal<Boolean>(PrefName.AutoHideTimeStamps)) {
+                            skipTimeButton.visibility = View.VISIBLE
+                            exoSkip.visibility = View.GONE
+                            skipTimeText.text = new.skipType.getType()
+                            skipTimeButton.setOnClickListener {
+                                exoPlayer.seekTo((new.interval.endTime * 1000).toLong())
+                            }
+                        }
+                    }
+                    if (PrefManager.getVal(PrefName.AutoSkipOPED) &&
+                        (new.skipType == "op" || new.skipType == "ed") &&
+                        !skippedTimeStamps.contains(new)
+                    ) {
+                        exoPlayer.seekTo((new.interval.endTime * 1000).toLong())
+                        skippedTimeStamps.add(new)
+                    }
+                    if (PrefManager.getVal(PrefName.AutoSkipRecap) &&
+                        new.skipType == "recap" &&
+                        !skippedTimeStamps.contains(
+                            new,
+                        )
+                    ) {
+                        exoPlayer.seekTo((new.interval.endTime * 1000).toLong())
+                        skippedTimeStamps.add(new)
+                    }
+                    new.skipType.getType()
+                } else {
+                    disappeared = false
+                    functionstarted = false
+                    skipTimeButton.visibility = View.GONE
+                    exoSkip.isVisible = PrefManager.getVal<Int>(PrefName.SkipTime) > 0
+                    ""
                 }
-                if (PrefManager.getVal(PrefName.AutoSkipOPED) && (new.skipType == "op" || new.skipType == "ed")
-                    && !skippedTimeStamps.contains(new)
-                ) {
-                    exoPlayer.seekTo((new.interval.endTime * 1000).toLong())
-                    skippedTimeStamps.add(new)
-                }
-                if (PrefManager.getVal(PrefName.AutoSkipRecap) && new.skipType == "recap" && !skippedTimeStamps.contains(
-                        new
-                    )
-                ) {
-                    exoPlayer.seekTo((new.interval.endTime * 1000).toLong())
-                    skippedTimeStamps.add(new)
-                }
-                new.skipType.getType()
-            } else {
-                disappeared = false
-                functionstarted = false
-                skipTimeButton.visibility = View.GONE
-                exoSkip.isVisible = PrefManager.getVal<Int>(PrefName.SkipTime) > 0
-                ""
-            }
         }
         handler.postDelayed({
             updateTimeStamp()
         }, 500)
     }
 
-    fun onSetTrackGroupOverride(trackGroup: Tracks.Group, type: @C.TrackType Int, index: Int = 0) {
+    fun onSetTrackGroupOverride(
+        trackGroup: Tracks.Group,
+        type: @C.TrackType Int,
+        index: Int = 0,
+    ) {
         val isDisabled = trackGroup.getTrackFormat(0).language == "none"
-        exoPlayer.trackSelectionParameters = exoPlayer.trackSelectionParameters
-            .buildUpon()
-            .setTrackTypeDisabled(TRACK_TYPE_TEXT, isDisabled)
-            .setOverrideForType(
-                TrackSelectionOverride(trackGroup.mediaTrackGroup, index)
-            )
-            .build()
+        exoPlayer.trackSelectionParameters =
+            exoPlayer.trackSelectionParameters
+                .buildUpon()
+                .setTrackTypeDisabled(TRACK_TYPE_TEXT, isDisabled)
+                .setOverrideForType(
+                    TrackSelectionOverride(trackGroup.mediaTrackGroup, index),
+                ).build()
         if (type == TRACK_TYPE_TEXT) {
             setupSubFormatting(playerView)
             applySubtitleStyles(customSubtitleView)
         }
-        playerView.subtitleView?.alpha = when (isDisabled) {
-            false -> PrefManager.getVal(PrefName.SubAlpha)
-            true -> 0f
-        }
+        playerView.subtitleView?.alpha =
+            when (isDisabled) {
+                false -> PrefManager.getVal(PrefName.SubAlpha)
+                true -> 0f
+            }
     }
 
-    private val dummyTrack = Tracks.Group(
-        TrackGroup("Dummy Track", Format.Builder().apply { setLanguage("none") }.build()),
-        true,
-        intArrayOf(1),
-        booleanArrayOf(false)
-    )
+    private val dummyTrack =
+        Tracks.Group(
+            TrackGroup("Dummy Track", Format.Builder().apply { setLanguage("none") }.build()),
+            true,
+            intArrayOf(1),
+            booleanArrayOf(false),
+        )
 
     override fun onTracksChanged(tracks: Tracks) {
         val audioTracks: ArrayList<Tracks.Group> = arrayListOf()
@@ -2101,7 +2310,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         tracks.groups.forEach {
             println(
                 "Track__: $it\nTrack__: ${it.length}\nTrack__: ${it.isSelected}\n" +
-                        "Track__: ${it.type}\nTrack__: ${it.mediaTrackGroup.id}"
+                    "Track__: ${it.type}\nTrack__: ${it.mediaTrackGroup.id}",
             )
             when (it.type) {
                 TRACK_TYPE_AUDIO -> {
@@ -2130,31 +2339,33 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         }
     }
 
-    private val onChangeSettings = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { _: ActivityResult ->
-        if (!hasExtSubtitles) {
-            exoPlayer.currentTracks.groups.forEach { trackGroup ->
-                when (trackGroup.type) {
-                    TRACK_TYPE_TEXT -> {
-                        if (PrefManager.getVal(PrefName.Subtitles)) {
-                            onSetTrackGroupOverride(trackGroup, TRACK_TYPE_TEXT)
-                        } else {
-                            onSetTrackGroupOverride(dummyTrack, TRACK_TYPE_TEXT)
+    private val onChangeSettings =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult(),
+        ) { _: ActivityResult ->
+            if (!hasExtSubtitles) {
+                exoPlayer.currentTracks.groups.forEach { trackGroup ->
+                    when (trackGroup.type) {
+                        TRACK_TYPE_TEXT -> {
+                            if (PrefManager.getVal(PrefName.Subtitles)) {
+                                onSetTrackGroupOverride(trackGroup, TRACK_TYPE_TEXT)
+                            } else {
+                                onSetTrackGroupOverride(dummyTrack, TRACK_TYPE_TEXT)
+                            }
                         }
-                    }
 
-                    else -> {}
+                        else -> {}
+                    }
                 }
             }
+            if (isInitialized) exoPlayer.play()
         }
-        if (isInitialized) exoPlayer.play()
-    }
 
     override fun onPlayerError(error: PlaybackException) {
         when (error.errorCode) {
             PlaybackException.ERROR_CODE_IO_BAD_HTTP_STATUS,
-            PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_FAILED -> {
+            PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_FAILED,
+            -> {
                 toast("Source Exception : ${error.message}")
                 isPlayerPlaying = true
                 sourceClick()
@@ -2168,6 +2379,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
     }
 
     private var isBuffering = true
+
     override fun onPlaybackStateChanged(playbackState: Int) {
         if (playbackState == ExoPlayer.STATE_READY) {
             exoPlayer.play()
@@ -2178,24 +2390,30 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         }
         isBuffering = playbackState == Player.STATE_BUFFERING
         if (playbackState == Player.STATE_ENDED && PrefManager.getVal(PrefName.AutoPlay)) {
-            if (interacted) exoNext.performClick()
-            else toast(getString(R.string.autoplay_cancelled))
+            if (interacted) {
+                exoNext.performClick()
+            } else {
+                toast(getString(R.string.autoplay_cancelled))
+            }
         }
         super.onPlaybackStateChanged(playbackState)
     }
 
     private fun updateAniProgress() {
         val incognito: Boolean = PrefManager.getVal(PrefName.Incognito)
-        val episodeEnd = exoPlayer.currentPosition / episodeLength > PrefManager.getVal<Float>(
-            PrefName.WatchPercentage
-        )
+        val episodeEnd =
+            exoPlayer.currentPosition / episodeLength >
+                PrefManager.getVal<Float>(
+                    PrefName.WatchPercentage,
+                )
         val episode0 = currentEpisodeIndex == 0 && PrefManager.getVal(PrefName.ChapterZeroPlayer)
         if (!incognito && (episodeEnd || episode0) && Anilist.userid != null
-        )
+        ) {
             if (PrefManager.getCustomVal(
                     "${media.id}_save_progress",
-                    true
-                ) && (if (media.isAdult) PrefManager.getVal(PrefName.UpdateForHPlayer) else true)
+                    true,
+                ) &&
+                (if (media.isAdult) PrefManager.getVal(PrefName.UpdateForHPlayer) else true)
             ) {
                 if (episode0) {
                     updateProgress(media, "0")
@@ -2205,21 +2423,30 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                     }
                 }
             }
+        }
     }
 
-    private fun nextEpisode(toast: Boolean = true, runnable: ((Int) -> Unit)) {
+    private fun nextEpisode(
+        toast: Boolean = true,
+        runnable: ((Int) -> Unit),
+    ) {
         var isFiller = true
         var i = 1
         while (isFiller) {
             if (episodeArr.size > currentEpisodeIndex + i) {
                 isFiller =
-                    if (PrefManager.getVal(PrefName.AutoSkipFiller)) episodes[episodeArr[currentEpisodeIndex + i]]?.filler
-                        ?: false else false
+                    if (PrefManager.getVal(PrefName.AutoSkipFiller)) {
+                        episodes[episodeArr[currentEpisodeIndex + i]]?.filler
+                            ?: false
+                    } else {
+                        false
+                    }
                 if (!isFiller) runnable.invoke(i)
                 i++
             } else {
-                if (toast)
+                if (toast) {
                     toast(getString(R.string.no_next_episode))
+                }
                 isFiller = false
             }
         }
@@ -2262,7 +2489,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         if (subtitle != null) shareVideo.putExtra("subtitle", subtitleUrl)
         shareVideo.putExtra(
             "title",
-            media.userPreferredName + " : Ep " + episodeTitleArr[currentEpisodeIndex]
+            media.userPreferredName + " : Ep " + episodeTitleArr[currentEpisodeIndex],
         )
         shareVideo.putExtra("poster", episode.thumb?.url ?: media.cover)
         val headers = Bundle()
@@ -2295,7 +2522,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                     PictureInPictureParams
                         .Builder()
                         .setAspectRatio(aspectRatio)
-                        .build()
+                        .build(),
                 )
             } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 enterPictureInPictureMode()
@@ -2316,7 +2543,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         if (isInitialized) {
             PrefManager.setCustomVal(
                 "${media.id}_${episode.number}",
-                exoPlayer.currentPosition
+                exoPlayer.currentPosition,
             )
             if (wasPlaying) exoPlayer.play()
         }
@@ -2337,59 +2564,65 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onPictureInPictureModeChanged(
         isInPictureInPictureMode: Boolean,
-        newConfig: Configuration
+        newConfig: Configuration,
     ) {
         onPiPChanged(isInPictureInPictureMode)
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
     }
 
-    private val keyMap: MutableMap<Int, (() -> Unit)?> = mutableMapOf(
-        KEYCODE_DPAD_RIGHT to null,
-        KEYCODE_DPAD_LEFT to null,
-        KEYCODE_SPACE to { exoPlay.performClick() },
-        KEYCODE_N to { exoNext.performClick() },
-        KEYCODE_B to { exoPrev.performClick() }
-    )
+    private val keyMap: MutableMap<Int, (() -> Unit)?> =
+        mutableMapOf(
+            KEYCODE_DPAD_RIGHT to null,
+            KEYCODE_DPAD_LEFT to null,
+            KEYCODE_SPACE to { exoPlay.performClick() },
+            KEYCODE_N to { exoNext.performClick() },
+            KEYCODE_B to { exoPrev.performClick() },
+        )
 
-    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        return if (keyMap.containsKey(event.keyCode)) {
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean =
+        if (keyMap.containsKey(event.keyCode)) {
             (event.action == ACTION_UP).also {
                 if (isInitialized && it) keyMap[event.keyCode]?.invoke()
             }
         } else {
             super.dispatchKeyEvent(event)
         }
-    }
-
 
     private fun startCastPlayer() {
         if (!isCastApiAvailable) {
             snackString("Cast API not available")
             return
         }
-        //make sure mediaItem is initialized and castPlayer is not null
+        // make sure mediaItem is initialized and castPlayer is not null
         if (!this::mediaItem.isInitialized || castPlayer == null) return
         castPlayer?.setMediaItem(mediaItem)
         castPlayer?.prepare()
         playerView.player = castPlayer
         exoPlayer.stop()
-        castPlayer?.addListener(object : Player.Listener {
-            //if the player is paused changed, we want to update the UI
-            override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
-                super.onPlayWhenReadyChanged(playWhenReady, reason)
-                if (playWhenReady) {
-                    (exoPlay.drawable as Animatable?)?.start()
-                    Glide.with(this@ExoplayerView)
-                        .load(R.drawable.anim_play_to_pause)
-                        .into(exoPlay)
-                } else {
-                    (exoPlay.drawable as Animatable?)?.start()
-                    Glide.with(this@ExoplayerView)
-                        .load(R.drawable.anim_pause_to_play)
-                        .into(exoPlay)
+        castPlayer?.addListener(
+            object : Player.Listener {
+                // if the player is paused changed, we want to update the UI
+                override fun onPlayWhenReadyChanged(
+                    playWhenReady: Boolean,
+                    reason: Int,
+                ) {
+                    super.onPlayWhenReadyChanged(playWhenReady, reason)
+                    if (playWhenReady) {
+                        (exoPlay.drawable as Animatable?)?.start()
+                        Glide
+                            .with(this@ExoplayerView)
+                            .load(R.drawable.anim_play_to_pause)
+                            .into(exoPlay)
+                    } else {
+                        (exoPlay.drawable as Animatable?)?.start()
+                        Glide
+                            .with(this@ExoplayerView)
+                            .load(R.drawable.anim_pause_to_play)
+                            .into(exoPlay)
+                    }
                 }
-            }
-        })
+            },
+        )
     }
 
     private fun startExoPlayer() {
@@ -2409,14 +2642,14 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         startExoPlayer()
     }
 
-
     @SuppressLint("ViewConstructor")
     class ExtendedTimeBar(
         context: Context,
-        attrs: AttributeSet?
+        attrs: AttributeSet?,
     ) : DefaultTimeBar(context, attrs) {
         private var enabled = false
         private var forceDisabled = false
+
         override fun setEnabled(enabled: Boolean) {
             this.enabled = enabled
             super.setEnabled(!forceDisabled && this.enabled)
@@ -2430,7 +2663,6 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 }
 
 class CustomCastButton : MediaRouteButton {
-
     private var castCallback: (() -> Unit)? = null
 
     fun setCastCallback(castCallback: () -> Unit) {
@@ -2444,15 +2676,14 @@ class CustomCastButton : MediaRouteButton {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
         context,
         attrs,
-        defStyleAttr
+        defStyleAttr,
     )
 
-    override fun performClick(): Boolean {
-        return if (PrefManager.getVal(PrefName.UseInternalCast)) {
+    override fun performClick(): Boolean =
+        if (PrefManager.getVal(PrefName.UseInternalCast)) {
             super.performClick()
         } else {
             castCallback?.let { it() }
             true
         }
-    }
 }
