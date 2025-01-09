@@ -82,18 +82,9 @@ class SettingsNotificationActivity : AppCompatActivity() {
                                 setTitle(R.string.subscriptions_checking_time)
                                 singleChoiceItems(timeNames, curTime) { i ->
                                     curTime = i
-                                    it.settingsTitle.text = getString(
-                                        R.string.subscriptions_checking_time_s,
-                                        timeNames[i]
-                                    )
-                                    PrefManager.setVal(
-                                        PrefName.SubscriptionNotificationInterval,
-                                        curTime
-                                    )
-                                    TaskScheduler.create(
-                                        context,
-                                        PrefManager.getVal(PrefName.UseAlarmManager)
-                                    ).scheduleAllTasks(context)
+                                    it.settingsTitle.text = getString(R.string.subscriptions_checking_time_s, timeNames[i])
+                                    PrefManager.setVal(PrefName.SubscriptionNotificationInterval, curTime)
+                                    TaskScheduler.create(context, PrefManager.getVal(PrefName.UseAlarmManager)).scheduleAllTasks(context)
                                 }
                                 show()
                             }
@@ -128,26 +119,26 @@ class SettingsNotificationActivity : AppCompatActivity() {
                                 PrefManager.getVal<Set<String>>(PrefName.AnilistFilteredTypes)
                                     .toMutableSet()
                             val selected = types.map { filteredTypes.contains(it) }.toBooleanArray()
-                            val dialog = AlertDialog.Builder(context, R.style.MyPopup)
-                                .setTitle(R.string.anilist_notification_filters)
-                                .setMultiChoiceItems(
+                            context.customAlertDialog().apply {
+                                 setTitle(R.string.anilist_notification_filters)
+                                 multiChoiceItems(
                                     types.map { name ->
                                         name.replace("_", " ").lowercase().replaceFirstChar {
-                                            if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString()
-                                        }
-                                    }.toTypedArray(),
+                                        if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString()
+                                    } }.toTypedArray(),
                                     selected
-                                ) { _, which, isChecked ->
-                                    val type = types[which]
-                                    if (isChecked) {
+                                ) { updatedSelected ->
+                                types.forEachIndexed { index, type ->
+                                    if (updatedSelected[index]) {
                                         filteredTypes.add(type)
                                     } else {
                                         filteredTypes.remove(type)
                                     }
+                                }
                                     PrefManager.setVal(PrefName.AnilistFilteredTypes, filteredTypes)
-                                }.create()
-                            dialog.window?.setDimAmount(0.8f)
-                            dialog.show()
+                                }
+                                show()
+                            }
                         }
 
                     ),
@@ -160,27 +151,24 @@ class SettingsNotificationActivity : AppCompatActivity() {
                         desc = getString(R.string.anilist_notifications_checking_time_desc),
                         icon = R.drawable.ic_round_notifications_none_24,
                         onClick = {
-                            val selected =
-                                PrefManager.getVal<Int>(PrefName.AnilistNotificationInterval)
-                            val dialog = AlertDialog.Builder(context, R.style.MyPopup)
-                                .setTitle(R.string.subscriptions_checking_time)
-                                .setSingleChoiceItems(
+                            context.customAlertDialog().apply {
+                                 setTitle(R.string.subscriptions_checking_time)
+                                 singleChoiceItems(
                                     aItems.toTypedArray(),
-                                    selected
-                                ) { dialog, i ->
+                                    PrefManager.getVal<Int>(PrefName.AnilistNotificationInterval)
+                                ) { i ->
                                     PrefManager.setVal(PrefName.AnilistNotificationInterval, i)
                                     it.settingsTitle.text =
                                         getString(
                                             R.string.anilist_notifications_checking_time,
                                             aItems[i]
                                         )
-                                    dialog.dismiss()
                                     TaskScheduler.create(
                                         context, PrefManager.getVal(PrefName.UseAlarmManager)
                                     ).scheduleAllTasks(context)
-                                }.create()
-                            dialog.window?.setDimAmount(0.8f)
-                            dialog.show()
+                                }
+                                show()
+                            }
                         }
                     ),
                     Settings(
@@ -192,27 +180,24 @@ class SettingsNotificationActivity : AppCompatActivity() {
                         desc = getString(R.string.comment_notification_checking_time_desc),
                         icon = R.drawable.ic_round_notifications_none_24,
                         onClick = {
-                            val selected =
-                                PrefManager.getVal<Int>(PrefName.CommentNotificationInterval)
-                            val dialog = AlertDialog.Builder(context, R.style.MyPopup)
-                                .setTitle(R.string.subscriptions_checking_time)
-                                .setSingleChoiceItems(
+                            context.customAlertDialog().apply {
+                                 setTitle(R.string.subscriptions_checking_time)
+                                 singleChoiceItems(
                                     cItems.toTypedArray(),
-                                    selected
-                                ) { dialog, i ->
+                                    PrefManager.getVal<Int>(PrefName.CommentNotificationInterval)
+                                ) {  i ->
                                     PrefManager.setVal(PrefName.CommentNotificationInterval, i)
                                     it.settingsTitle.text =
                                         getString(
                                             R.string.comment_notification_checking_time,
                                             cItems[i]
                                         )
-                                    dialog.dismiss()
                                     TaskScheduler.create(
                                         context, PrefManager.getVal(PrefName.UseAlarmManager)
                                     ).scheduleAllTasks(context)
-                                }.create()
-                            dialog.window?.setDimAmount(0.8f)
-                            dialog.show()
+                                }
+                                show()
+                            }
                         }
                     ),
                     Settings(
@@ -239,10 +224,10 @@ class SettingsNotificationActivity : AppCompatActivity() {
                         isChecked = PrefManager.getVal(PrefName.UseAlarmManager),
                         switch = { isChecked, view ->
                             if (isChecked) {
-                                val alertDialog = AlertDialog.Builder(context, R.style.MyPopup)
-                                    .setTitle(R.string.use_alarm_manager)
-                                    .setMessage(R.string.use_alarm_manager_confirm)
-                                    .setPositiveButton(R.string.use) { dialog, _ ->
+                                context.customAlertDialog().apply {
+                                     setTitle(R.string.use_alarm_manager)
+                                     setMessage(R.string.use_alarm_manager_confirm)
+                                     setPosButton(R.string.use) {
                                         PrefManager.setVal(PrefName.UseAlarmManager, true)
                                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                                             if (!(getSystemService(Context.ALARM_SERVICE) as AlarmManager).canScheduleExactAlarms()) {
@@ -252,15 +237,13 @@ class SettingsNotificationActivity : AppCompatActivity() {
                                                 view.settingsButton.isChecked = true
                                             }
                                         }
-                                        dialog.dismiss()
-                                    }.setNegativeButton(R.string.cancel) { dialog, _ ->
+                                    }
+                                    setNegButton(R.string.cancel) {
                                         view.settingsButton.isChecked = false
                                         PrefManager.setVal(PrefName.UseAlarmManager, false)
-
-                                        dialog.dismiss()
-                                    }.create()
-                                alertDialog.window?.setDimAmount(0.8f)
-                                alertDialog.show()
+                                    }
+                                    show()
+                                }
                             } else {
                                 PrefManager.setVal(PrefName.UseAlarmManager, false)
                                 TaskScheduler.create(context, true).cancelAllTasks()
