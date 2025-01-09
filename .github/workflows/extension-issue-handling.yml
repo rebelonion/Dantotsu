@@ -13,8 +13,8 @@ jobs:
         with:
           script: |
             const repos = [
-              "https://raw.githubusercontent.com/ni3x/aniyomi-extensions/repo/index.min.json"
-              "https://raw.githubusercontent.com/Kohi-den/extensions/main/index.min.json"
+              "https://raw.githubusercontent.com/Dark25/aniyomi-extensions/repo/index.min.json",
+              "https://raw.githubusercontent.com/Kohi-den/extensions/main/index.min.json",
               "https://raw.githubusercontent.com/keiyoushi/extensions/repo/index.min.json"
             ];
             
@@ -49,98 +49,79 @@ jobs:
                 .toLowerCase()
                 .replace(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]/g, ' ')
                 .replace(/\s+/g, ' ')
-                .trim()
-                .replace(/\d+/g, '');
+                .trim();
               console.log(`🔍 Normalizing: "${original}" -> "${normalized}"`);
               return normalized;
             }
 
             function findExtensionMatch(content, extensionNames) {
               console.log('\n📖 Checking content:', content);
-              const normalizedContent = normalizeExtensionName(content);
               for (const extension of extensionNames) {
-                console.log(`\n⚡ Checking against extension: ${extension}`);
                 const normalizedExtension = normalizeExtensionName(extension);
-                if (normalizedContent.includes(normalizedExtension)) {
-                  console.log(`✅ Direct match found! "${extension}"`);
+                console.log(`\n⚡ Checking against extension: ${extension}`);
+                
+                // Check if extension name appears as a complete word or phrase
+                if (content.toLowerCase().includes(` ${normalizedExtension} `) ||
+                    content.toLowerCase().startsWith(`${normalizedExtension} `) ||
+                    content.toLowerCase().endsWith(` ${normalizedExtension}`)) {
+                  console.log(`✅ Complete word/phrase match found! "${extension}"`);
                   return extension;
                 }
-                const extensionParts = normalizedExtension.split('');
-                let possibleSplits = '';
-                for (let i = 0; i < extensionParts.length - 1; i++) {
-                  possibleSplits += extensionParts[i] + ' ';
-                }
-                possibleSplits += extensionParts[extensionParts.length - 1];
-                if (normalizedContent.includes(possibleSplits)) {
-                  console.log(`✅ Split match found! "${extension}" (as "${possibleSplits}")`);
-                  return extension;
-                }
+                console.log(`❌ No match found for "${extension}"`);
               }
-              console.log('❌ No extension match found');
+              console.log('❌ No extension match found in content');
               return null;
             }
 
+            function isExtensionRelatedIssue(title, body) {
+              const commonProblemWords = [
+                'doesnt', 'doesn\'t', 'not', 'error', 'broken', 'issue', 'problem',
+                'crash', 'fail', 'failed', 'failing', 'down', 'work', 'working',
+                'loading', 'load', 'dead', 'fix', 'broken', 'bug', 'bugs', 'problems',
+                'issues', 'errors', 'cant', 'can\'t', 'cannot', 'wrong', 'help',
+                'stuck', 'freezing', 'freeze', 'frozen', 'stopped', 'stopping',
+                'blank', 'empty', 'missing', 'unavailable', 'slow'
+              ];
+              
+              const content = (title + ' ' + body).toLowerCase();
+              const foundWords = commonProblemWords.filter(word => content.includes(word));
+              
+              if (foundWords.length > 0) {
+                console.log('✅ Found problem-indicating words:', foundWords.join(', '));
+                return true;
+              }
+              console.log('❌ No problem-indicating words found');
+              return false;
+            }
+            
             const extensionNames = process.env.EXTENSION_NAMES.split(',');
             const issueTitle = context.payload.issue.title;
             const issueBody = context.payload.issue.body || '';
+            
             console.log('\n🎯 Checking Issue:');
             console.log('Title:', issueTitle);
             console.log('Body:', issueBody);
             
-            const regexPatterns = [
-              ".*(extension|extensions|repo|repositories|source|sources|stream|server).*not working.*",
-              ".*(extension|extensions|repo|repositories|source|sources|stream|server).*doesn't work.*",
-              ".*(extension|extensions|repo|repositories|source|sources|stream|server).*does not work.*",
-              ".*(extension|extensions|repo|repositories|source|sources|stream|server).*cant work.*",
-              ".*(extension|extensions|repo|repositories|source|sources|stream|server).*can't work.*",
-              ".*(no|can't find|cannot find|missing).*extension(s)?.*",
-              ".*(no|can't find|cannot find|missing).*repo(s|sitories)?.*",
-              ".*(no|can't find|cannot find|missing).*source(s)?.*",
-              ".*(no|can't find|cannot find|missing).*stream(s)?.*",
-              ".*(no|can't find|cannot find|missing).*server.*",
-              ".*(server|stream).*not available.*",
-              ".*(server|stream).*unavailable.*",
-              ".*(server|stream).*down.*",
-              ".*{.*}.*(extension|repo|repositories|source|sources).*not working.*",
-              ".*{.*}.*(extension|repo|repositories|source|sources).*issue.*",
-              ".*{.*}.*(extension|repo|repositories|source|sources).*problem.*",
-              ".*(extension|extensions|repo|repositories|source|sources|stream|server).*not available.*",
-              ".*(extension|extensions|repo|repositories|source|sources|stream|server).*missing.*",
-              ".*nothing came up.*source.*look elsewhere.*",
-              ".*no results.*source.*look somewhere else.*",
-              ".*no content.*source.*"
-            ];
-            
             let isExtensionIssue = false;
             let detectedExtension = null;
 
-            console.log('\n🔍 Checking for extension matches...');
+            console.log('\n🔍 Step 1: Checking for extension matches...');
             detectedExtension = findExtensionMatch(issueTitle, extensionNames) || 
                               findExtensionMatch(issueBody, extensionNames);
             
+            console.log('\n🔍 Step 2: Checking if issue is extension-related...');
             if (detectedExtension) {
-              isExtensionIssue = true;
-              console.log('✅ Extension detected:', detectedExtension);
+              isExtensionIssue = isExtensionRelatedIssue(issueTitle, issueBody);
+              console.log(`Extension found: ${detectedExtension}`);
+              console.log(`Is problem-related: ${isExtensionIssue}`);
             } else {
-              console.log('\n🔍 No specific extension found, checking regex patterns...');
-              for (const pattern of regexPatterns) {
-                const regex = new RegExp(pattern, 'i');
-                if (regex.test(issueTitle.toLowerCase())) {
-                  console.log(`✅ Regex pattern matched in title: "${pattern}"`);
-                  isExtensionIssue = true;
-                  break;
-                }
-                if (regex.test(issueBody.toLowerCase())) {
-                  console.log(`✅ Regex pattern matched in body: "${pattern}"`);
-                  isExtensionIssue = true;
-                  break;
-                }
-              }
+              console.log('❌ No extension found, skipping problem check');
             }
             
             console.log('\n📊 Final Results:');
             console.log('Is Extension Issue:', isExtensionIssue);
-            console.log('Detected Extension:', detectedExtension || 'Unknown Extension');
+            console.log('Detected Extension:', detectedExtension || 'None');
+            
             core.setOutput('is_extension_issue', isExtensionIssue.toString());
             core.setOutput('detected_extension', detectedExtension || 'Unknown Extension');
         env:
@@ -156,6 +137,7 @@ jobs:
             const reportedExtension = "${{ steps.check-issue.outputs.detected_extension || 'Unknown Extension' }}";
             console.log('🔒 Closing issue:', issueNumber);
             console.log('Extension reported:', reportedExtension);
+            
             const currentLabels = await github.rest.issues.listLabelsOnIssue({
               owner: context.repo.owner,
               repo: context.repo.repo,
