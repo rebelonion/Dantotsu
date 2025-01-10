@@ -1,53 +1,47 @@
-# 3.1.0
+# 3.2.0
 
-- **New Features:**
-  - Addons
-    - Torrent support addon
-    - Anime downloading addon (mkv files pog)
-    - Available in app settings
-  - Anilist reviews in app
-  - Media subscriptions added to notification tab
-  - Notification filtering
-  - Ability to post activitys
-  - Ability to reply to activities
-  - Extension tester
-  - Media subscription Viewer
-  - Instagram-style stories
-  - More audio options for some extensions
-  - Ability to hide items on the home screen
-  - Ability to set a downloads directory
-  - 2 functioning widgets
-  - App lock ( ͡° ͜ʖ ͡°)
-  - More manga and anime feeds on the home page
-  - Settings page redesign
-  - New app crash notifier
-  - Voice actors
-  - Additional repo support
-  - Various UI uplifts
+Features:
+1. Searching Users, characters, studios and staff (rebelonion)
+2. Better repo adding (rebelonion)
+3. Adding repos by online button (rebelonion)
+4. More AniList settings (ibo)
+5. Copy username and better profile dropdown menu (ibo)
+6. More staff info (rebelonion)
+7. Progress bar (aayush262)
+8. Toggleable RPC (Sadwhy)
+9. Smooth theme transitions (Sadwhy)
+10. Toggleable Comments (Sadwhy)
+11. Added button to view rules (Ankit Grai)
+12. Added additional codec support (Sadwhy)
+13. Socks5 proxy support (Sadwhy)
+14. Added anime clear progress (Ankit Grai)
+15. Custom subtitle view (Sadwhy)
+16. Color picker for subtitles (Sadwhy)
+17. Added option to select preferred language for subs (tutel)
+18. Animated dantotsu icon (aayush262)
 
-- **Bugfixes:**
-  - Scanlator/language not saving after leaving app
-  - notification red dot not hiding on home pages
-  - comment/activity scrolling not working on some parts of the screen
-  - comment notifications falling to the bottom of the list
-  - Fixed some sources without audio
-  - Initial app loading time reduced
-  - activity text more visible
-  - novel extensions not installing
-  - Many sources not working
-  - Subscription notifications not using the correct source
-  - Notification red dot showing with no new notifications
-  - Various bug/crash fixes
-  - General theme tweaks
-  - Fixed some network-related crashes
-  - Subscription notifications not working for some people
-  - Fix for file permissions on older Android versions
-  - Search list view not working
-  - Media page opening twice on notification click
+Fixes:
+1. Performance improvements (rebelonion)
+2. Start keyboard expanded in some views (rebelonion)
+3. many scanlators not showing (rebelonion)
+4. StaffNameLanguage crash (ibo)
+5. Remove unneeded logs (Toby Bridle)
+6. Thumbnails (aayush262)
+7. No images in RPC (aayush262)
+8. Scroll to next chapter for single page manga (Ankit Grai)
+9. Local dev problem with injekt dependency (Ankit Grai)
+10. Swipy (Dawn-used-yeet)
+11. Fix crash for EbookReaderView (Vipul Tyagi)
+12. Markdown fixes (rebelonion)
+13. Deletion queries (Toby Bridle)
+14. Manga not reordering automatically (aayush262)
+15. Manga crash (aayush262)
+16. Kotlin issues with SDK 35 (Sadwhy)
+17. Null story list for some users (aayush262)
+18. Manga RTL (Sadwhy)
+19. Markdown options hidden behind keyboard (rebelonion)
+20. Move cursor to end after selecting history item (rebelonion)
+21. Search history not in correct order (rebelonion)
+22. book files not being opened (rebelonion)
 
- - A Special Thanks to all those who contributed :heart:
-
-- **Like what you see?**
-  - Consider supporting me on [Github](https://github.com/sponsors/rebelonion) or [Buy Me a Coffee](https://www.buymeacoffee.com/rebelonion)!
-  
-![alt text](https://media1.tenor.com/m/P7hCyZlzDH4AAAAC/wink-anime.gif)
+A special thanks to all those who helped contribute!
