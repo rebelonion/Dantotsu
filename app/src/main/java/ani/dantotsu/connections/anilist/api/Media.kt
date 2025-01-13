@@ -253,7 +253,7 @@ data class MediaStreamingEpisode(
 
     // The site location of the streaming episode
     @SerialName("site") var site: String?,
-)
+) : java.io.Serializable
 
 @Serializable
 data class MediaCoverImage(
