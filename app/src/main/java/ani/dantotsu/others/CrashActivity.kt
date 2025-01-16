@@ -24,11 +24,11 @@ class CrashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         ThemeManager(this).applyTheme()
         initActivity(this)
-        binding = ActivityCrashBinding.inflate(layoutInflater)
         window.setFlags(
             WindowManager.LayoutParams.FLAG_SECURE,
             WindowManager.LayoutParams.FLAG_SECURE
         )
+        binding = ActivityCrashBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             topMargin = statusBarHeight
