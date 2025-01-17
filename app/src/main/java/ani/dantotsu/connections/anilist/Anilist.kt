@@ -191,11 +191,8 @@ object Anilist {
 
     private val cal: Calendar = Calendar.getInstance()
     private val currentYear = cal.get(Calendar.YEAR)
-    private val currentSeason: Int = when (cal.get(Calendar.MONTH)) {
-        0, 1, 2 -> 0
-        3, 4, 5 -> 1
-        6, 7, 8 -> 2
-        9, 10, 11 -> 3
+    private val currentSeason: Int = when (val month = cal.get(Calendar.MONTH)) {
+        in 0..11 -> month / 3
         else -> 0
     }
 
