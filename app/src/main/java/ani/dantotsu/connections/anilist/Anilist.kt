@@ -198,14 +198,15 @@ object Anilist {
 
     fun getDisplayTimezone(apiTimezone: String, context: Context): String {
         val noTimezone = context.getString(R.string.selected_no_time_zone)
-        val parts = apiTimezone.split(":")
-        if (parts.size != 2) return noTimezone
 
-        val hours = parts[0].toIntOrNull() ?: 0
-        val minutes = parts[1].toIntOrNull() ?: 0
+        val (hours, minutes) = apiTimezone.split(":")
+            .map { it.toIntOrNull() ?: 0 }
+            .takeIf { it.size == 2 } ?: return noTimezone
+
+
         val sign = if (hours >= 0) "+" else "-"
-        val formattedHours = String.format(Locale.US, "%02d", abs(hours))
-        val formattedMinutes = String.format(Locale.US, "%02d", minutes)
+        val formattedHours = "%02d".format(Locale.US, abs(hours))
+        val formattedMinutes = "%02d".format(Locale.US, minutes)
 
         val searchString = "(GMT$sign$formattedHours:$formattedMinutes)"
         return timeZone.find { it.contains(searchString) } ?: noTimezone
