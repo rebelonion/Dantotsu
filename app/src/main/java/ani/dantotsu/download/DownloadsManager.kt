@@ -227,9 +227,6 @@ class DownloadsManager(private val context: Context) {
 
     companion object {
         private const val BASE_LOCATION = "Dantotsu"
-        private const val MANGA_SUB_LOCATION = "Manga"
-        private const val ANIME_SUB_LOCATION = "Anime"
-        private const val NOVEL_SUB_LOCATION = "Novel"
 
 
         /**
@@ -240,23 +237,8 @@ class DownloadsManager(private val context: Context) {
          */
         @Synchronized
         private fun getBaseDirectory(context: Context, type: MediaType): DocumentFile? {
-            val baseDirectory = Uri.parse(PrefManager.getVal<String>(PrefName.DownloadsDir))
-            if (baseDirectory == Uri.EMPTY) return null
-            var base = DocumentFile.fromTreeUri(context, baseDirectory) ?: return null
-            base = base.findOrCreateFolder(BASE_LOCATION, false) ?: return null
-            return when (type) {
-                MediaType.MANGA -> {
-                    base.findOrCreateFolder(MANGA_SUB_LOCATION, false)
-                }
-
-                MediaType.ANIME -> {
-                    base.findOrCreateFolder(ANIME_SUB_LOCATION, false)
-                }
-
-                else -> {
-                    base.findOrCreateFolder(NOVEL_SUB_LOCATION, false)
-                }
-            }
+            return getBaseDirectory(context)
+                    ?.findOrCreateFolder(type.asText(), false)
         }
 
         /**
@@ -291,11 +273,8 @@ class DownloadsManager(private val context: Context) {
             chapter: String? = null
         ): Long {
             val directory = getSubDirectory(context, type, false, title, chapter) ?: return 0
-            var size = 0L
-            directory.listFiles().forEach {
-                size += it.length()
-            }
-            return size
+            return directory.listFiles()
+                            .sumOf { it.length() }
         }
 
         fun addNoMedia(context: Context) {
@@ -309,8 +288,8 @@ class DownloadsManager(private val context: Context) {
         private fun getBaseDirectory(context: Context): DocumentFile? {
             val baseDirectory = Uri.parse(PrefManager.getVal<String>(PrefName.DownloadsDir))
             if (baseDirectory == Uri.EMPTY) return null
-            val base = DocumentFile.fromTreeUri(context, baseDirectory) ?: return null
-            return base.findOrCreateFolder(BASE_LOCATION, false)
+            return DocumentFile.fromTreeUri(context, baseDirectory)
+                                ?.findOrCreateFolder(BASE_LOCATION, false)
         }
 
         private val lock = Any()
