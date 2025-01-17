@@ -73,16 +73,10 @@ class DownloadsManager(private val context: Context) {
         removeMediaCompat(context, title, type)
         val baseDirectory = getBaseDirectory(context, type)
         val directory = baseDirectory?.findFolder(title)
-        if (directory?.exists() == true) {
-            if (directory.deleteRecursively(context, false)) {
-                snackString("Successfully deleted")
-            } else {
-                snackString("Failed to delete directory")
-            }
-        } else {
-            snackString("Directory does not exist")
+        removeDirectory(directory)
+        if (!directory.exists())
             cleanDownloads()
-        }
+
         downloadsList.removeAll { it.titleName == title && it.type == type }
         saveDownloads()
     }
@@ -110,7 +104,7 @@ class DownloadsManager(private val context: Context) {
         //now remove all downloads that do not have a folder
         val doNotHaveFolder = downloadsList.filter { download ->
             val downloadDir = directory?.findFolder(download.titleName)
-            downloadDir?.exists() == false && download.type == type || download.titleName.isBlank()
+            !downloadDir.exists() && download.type == type || download.titleName.isBlank()
         }
         downloadsList.removeAll(doNotHaveFolder)
     }
@@ -198,34 +192,38 @@ class DownloadsManager(private val context: Context) {
             baseDirectory?.findFolder(downloadedType.titleName)
                 ?.findFolder(downloadedType.chapterName)
         downloadsList.removeAll { it.titleName == downloadedType.titleName && it.chapterName == downloadedType.chapterName }
-        // Check if the directory exists and delete it recursively
-        if (directory?.exists() == true) {
-            if (directory.deleteRecursively(context, false) && toast) {
-                snackString("Successfully deleted")
-            } else {
-                snackString("Failed to delete directory")
-            }
-        } else {
-            snackString("Directory does not exist")
-        }
+        removeDirectory(directory, toast)
     }
 
     fun purgeDownloads(type: MediaType) {
         val directory = getBaseDirectory(context, type)
-        if (directory?.exists() == true) {
-            val deleted = directory.deleteRecursively(context, false)
-            if (deleted) {
-                snackString("Successfully deleted")
-            } else {
-                snackString("Failed to delete directory")
-            }
-        } else {
-            snackString("Directory does not exist")
-        }
-
+        removeDirectory(directory)
         downloadsList.removeAll { it.type == type }
         saveDownloads()
     }
+
+    private fun removeDirectory(directory: DocumentFile?) = removeDirectory(directory, true)
+
+    private fun removeDirectory(directory: DocumentFile?, toast: Boolean): Boolean {
+        val (isRemoved, messageStatus) = if (directory.exists()) {
+            if (directory.deleteRecursively(context, false) && toast) {
+                true to "Successfully deleted"
+            } else {
+                false to "Failed to delete directory"
+            }
+        }
+        else {
+            false to "Directory does not exist"
+        }
+        snackString(messageStatus)
+        return isRemoved
+    }
+
+    private fun DocumentFile?.exists(): Boolean = this?.exists() == true
+
+    private fun DocumentFile?.deleteRecursively(context: Context,
+                                                 childrenOnly: Boolean = false
+    ): Boolean = this?.deleteRecursively(context, childrenOnly) == true
 
     companion object {
         private const val BASE_LOCATION = "Dantotsu"
