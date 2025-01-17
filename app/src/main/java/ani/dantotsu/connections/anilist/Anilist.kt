@@ -14,6 +14,8 @@ import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.toast
 import ani.dantotsu.util.Logger
+import com.lagradost.nicehttp.NiceResponse
+import okhttp3.internal.http.HTTP_TOO_MANY_REQUESTS
 import java.util.Calendar
 import java.util.Locale
 import kotlin.math.abs
@@ -286,49 +288,81 @@ object Anilist {
         return try {
             if (show) Logger.log("Anilist Query: $query")
             if (rateLimitReset > System.currentTimeMillis() / 1000) {
-                toast("Rate limited. Try after ${rateLimitReset - (System.currentTimeMillis() / 1000)} seconds")
-                throw Exception("Rate limited after ${rateLimitReset - (System.currentTimeMillis() / 1000)} seconds")
+                handleRateLimit()
             }
-            val data = mapOf(
-                "query" to query,
-                "variables" to variables
-            )
-            val headers = mutableMapOf(
-                "Content-Type" to "application/json; charset=utf-8",
-                "Accept" to "application/json"
-            )
+
+            val data = mapOf("query" to query, "variables" to variables)
+            val headers = buildHeaders(useToken)
 
             if (token != null || force) {
-                if (token != null && useToken) headers["Authorization"] = "Bearer $token"
-
-                val json = client.post(
+                val response = client.post(
                     "https://graphql.anilist.co/",
                     headers,
                     data = data,
                     cacheTime = cache ?: 10
                 )
-                val remaining = json.headers["X-RateLimit-Remaining"]?.toIntOrNull() ?: -1
-                Logger.log("Remaining requests: $remaining")
-                if (json.code == 429) {
-                    val retry = json.headers["Retry-After"]?.toIntOrNull() ?: -1
-                    val passedLimitReset = json.headers["X-RateLimit-Reset"]?.toLongOrNull() ?: 0
-                    if (retry > 0) {
-                        rateLimitReset = passedLimitReset
-                    }
-
-                    toast("Rate limited. Try after $retry seconds")
-                    throw Exception("Rate limited after $retry seconds")
+                handleRemainingRequests(response)
+                if (response.code == HTTP_TOO_MANY_REQUESTS) {
+                    handleTooManyRequests(response)
                 }
-                if (!json.text.startsWith("{")) {
+                if (response.text.isNotValid()) {
                     throw Exception(currContext()?.getString(R.string.anilist_down))
                 }
-                json.parsed()
+
+                response.parsed()
             } else null
         } catch (e: Exception) {
-            if (show) snackString("Error fetching Anilist data: ${e.message}")
-            Logger.log("Anilist Query Error: ${e.message}")
+            handleQueryError(e, show)
             null
         }
     }
+
+    @PublishedApi
+    internal fun handleRateLimit() {
+        val retryAfter = rateLimitReset - (System.currentTimeMillis() / 1000)
+        toast("Rate limited. Try after $retryAfter seconds")
+        throw RateLimitException(retryAfter)
+    }
+
+    @PublishedApi
+    internal fun buildHeaders(useToken: Boolean): MutableMap<String, String> {
+        return mutableMapOf(
+            "Content-Type" to "application/json; charset=utf-8",
+            "Accept" to "application/json"
+        ).apply {
+            if (token != null && useToken)
+                this["Authorization"] = "Bearer $token"
+        }
+
+    }
+
+    @PublishedApi
+    internal fun handleRemainingRequests(response: NiceResponse) {
+        val remaining = response.headers["X-RateLimit-Remaining"]?.toIntOrNull() ?: -1
+        Logger.log("Remaining requests: $remaining")
+    }
+
+    @PublishedApi
+    internal fun handleTooManyRequests(response: NiceResponse) {
+        val retry = response.headers["Retry-After"]?.toIntOrNull() ?: -1
+        val passedLimitReset = response.headers["X-RateLimit-Reset"]?.toLongOrNull() ?: 0
+        if (retry > 0) {
+            rateLimitReset = passedLimitReset
+        }
+
+        toast("Rate limited. Try after $retry seconds")
+        throw RateLimitException(retry.toLong())
+    }
+
+    @PublishedApi
+    internal fun String.isNotValid(): Boolean = !this.startsWith("{")
+
+    @PublishedApi
+    internal fun handleQueryError(e: Exception, show: Boolean) {
+        if (show) snackString("Error fetching Anilist data: ${e.message}")
+        Logger.log("Anilist Query Error: ${e.message}")
+    }
 }
+
+class RateLimitException(retryAfter: Long) : Exception("Rate limited. Try after $retryAfter seconds")
 
