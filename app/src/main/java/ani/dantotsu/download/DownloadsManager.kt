@@ -102,11 +102,11 @@ class DownloadsManager(private val context: Context) {
                       }
 
         //now remove all downloads that do not have a folder
-        val doNotHaveFolder = downloadsList.filter { download ->
+        val downloadsNotHavingFolder = downloadsList.filter { download ->
             val downloadDir = directory?.findFolder(download.titleName)
             !downloadDir.exists() && download.type == type || download.titleName.isBlank()
         }
-        downloadsList.removeAll(doNotHaveFolder)
+        downloadsList.removeAll(downloadsNotHavingFolder)
     }
 
     fun moveDownloadsDir(
