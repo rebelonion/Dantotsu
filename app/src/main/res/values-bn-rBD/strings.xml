@@ -1,0 +1,998 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="bn">
+    <string name="slogan">অ্যান্ড্রয়েড এর জন্য অ্যানিমে &amp; মাঙ্গার নতুন সেরা অ্যাপ</string>
+    <string name="login">লগইন</string>
+    <string name="logout">লগআউট</string>
+    <string name="anilist_link">https://anilist.co/user/%1$s/</string>
+    <string name="myanilist_link">https://myanimelist.net/profile/%1$s/</string>
+    <string name="discord_link">https://discord.com/users/%1$s/</string>
+    <string name="home">হোম</string>
+    <string name="anime">অ্যানিমে</string>
+    <string name="browse_anime">অ্যানিমে ব্রাউজ করুন</string>
+    <string name="manga">মাঙ্গা</string>
+    <string name="browse_manga">মাঙ্গা ব্রাউজ করুন</string>
+    <string name="novels">নোভেল</string>
+    <string name="info">তথ্য</string>
+    <string name="watch">দেখুন</string>
+    <string name="read">পড়ুন</string>
+    <string name="language">ভাষা</string>
+    <string name="anime_list">অ্যানিমে তালিকা</string>
+    <string name="manga_list">মাঙ্গা তালিকা</string>
+    <string name="sad">X(</string>
+    <string name="oh">:o</string>
+    <string name="colon">" : "</string>
+    <string name="no_internet">ইন্টারনেট সংযোগ নেই</string>
+    <string name="refresh">রিফ্রেশ</string>
+    <string name="search">অনুসন্ধান</string>
+    <string name="search_results">সার্চের ফলাফল</string>
+    <string name="sort_by">সাজান</string>
+    <string name="genre">রীতি</string>
+    <string name="top_score">সর্বোচ্চ স্কোর</string>
+    <string name="updated">কেবল আসলো</string>
+    <string name="trending_anime">ট্রেন্ডিং অ্যানিমে</string>
+    <string name="popular_anime">জনপ্রিয় অ্যানিমে</string>
+    <string name="trending_manga">ট্রেন্ডিং মাঙ্গা</string>
+    <string name="trending_novel">ট্রেন্ডিং উপন্যাস</string>
+    <string name="popular_manga">জনপ্রিয় মাঙ্গা</string>
+    <string name="username">নাম</string>
+    <string name="chapters_read">পড়া গেছের অধ্যায় </string>
+    <string name="chapters_read_n">পড়া\nহয়েছে</string>
+    <string name="episodes_watched">দেখা গেছের পর্ব </string>
+    <string name="episodes_watched_n">দেখা\nহয়েছে</string>
+    <string name="continue_reading">পড়তে থাকুন</string>
+    <string name="continue_watching">দেখতে থাকুন</string>
+    <string name="recommended">প্রস্তাবিত</string>
+    <string name="get_recommendations">প্রস্তাবিতের জন্য কিছু অ্যানিমে বা মাঙ্গা দেখুন/পড়ুন</string>
+    <string name="empty">সব ধরা সমাপ্ত, নতুন কখন?</string>
+    <string name="action_settings">সেটিংস</string>
+    <string name="add_list">Add to List</string>
+    <string name="list_editor">তালিকা সম্পাদক</string>
+    <string name="add_fav">পছন্দের তালিকায় যোগ করুন</string>
+    <string name="notifications">বিজ্ঞপ্তি</string>
+    <string-array name="keys">
+        <item>পড়া</item>
+        <item>দেখা</item>
+        <item>সম্পন্ন</item>
+        <item>বিরতি</item>
+        <item>পরিত্যাগ</item>
+        <item>পরিকল্পিত</item>
+        <item>পছন্দের</item>
+        <item>পুনরাবৃত্তি</item>
+        <item>পুনরালোচনা</item>
+        <item>সব</item>
+    </string-array>
+    <string name="nothing_here">এখানে কিছু নেই</string>
+    <string name="followers">অনুসারী</string>
+    <string name="write_a_message">Write a Message</string>
+    <string name="status">অবস্থা</string>
+    <string-array name="status_anime">
+        <item>পরিকল্পিত</item>
+        <item>দেখা</item>
+        <item>সম্পন্ন</item>
+        <item>পুনরাবৃত্তি</item>
+        <item>বিরতি</item>
+        <item>পরিত্যাগ</item>
+    </string-array>
+    <string-array name="status_manga">
+        <item>পরিকল্পিত</item>
+        <item>পড়া</item>
+        <item>সম্পন্ন</item>
+        <item>পুনরালোচনা</item>
+        <item>বিরতি</item>
+        <item>পরিত্যাগ</item>
+    </string-array>
+    <string name="progress">অগ্রগতি</string>
+    <string name="score">স্কোর</string>
+    <string name="score_suffix">" / 10"</string>
+    <string name="started_at">শুরু হয়েছে</string>
+    <string name="completed_at">সম্পন্ন হয়েছে</string>
+    <string name="save">সংরক্ষণ</string>
+    <string name="delete">মুছে ফেলুন</string>
+    <string name="remove">অপসারণ</string>
+    <string name="name">নাম</string>
+    <string name="name_romaji">নাম রোমাজি</string>
+    <string name="mean_score">গড় স্কোর</string>
+    <string name="format">ফরম্যাট</string>
+    <string name="status_title">অবস্থা</string>
+    <string name="total_eps">মোট পর্ব</string>
+    <string name="episodes"> পর্ব</string>
+    <string name="chapters"> অধ্যায়</string>
+    <string name="total_divider"> | %1$s</string>
+    <string name="total_chaps">মোট অধ্যায়</string>
+    <string name="ep_duration">গড় সময়</string>
+    <string name="min">" মিনিট"</string>
+    <string name="season">ঋতু</string>
+    <string name="start_date">শুরুর তারিখ</string>
+    <string name="end_date">শেষের তারিখ</string>
+    <string name="source">উৎস</string>
+    <string name="main_studio">স্টুডিও</string>
+    <string name="genres">জনরা</string>
+    <string name="description">সারাংশ</string>
+    <string name="characters">চরিত্র</string>
+    <string name="relations">সম্পর্ক</string>
+    <string name="staff">স্টাফ</string>
+    <string name="favourites">পছন্দের</string>
+    <string name="popularity">জনপ্রিয়তা</string>
+    <string name="roles">ভূমিকা</string>
+    <string name="details">বিস্তারিত</string>
+    <string name="play_yt">ইউটিউবে প্লে করুন</string>
+    <string name="eps">পর্ব</string>
+    <string name="ep">পর্ব</string>
+    <string name="chaps">অধ্যায়</string>
+    <string name="chap">অধ্যায়</string>
+    <string name="wrong"><u>ভুল শিরোনাম?</u></string>
+    <string name="source_not_found">এই উৎস থেকে কিছু পাওয়া যায়নি।\n অন্য কোথাও খুঁজে দেখি।</string>
+    <string name="download_not_found">আপনার ডাউনলোডগুলি একটু একা অনুভব করছে…\n কিছু ডাউনলোড করার চেষ্টা করুন।</string>
+    <string name="not_supported">%1$s সমর্থন করা হয়নি!</string>
+    <string name="server_selector">সার্ভার নির্বাচক</string>
+    <string name="auto_select_server">অটো নির্বাচন সার্ভার</string>
+    <string name="make_default">ডিফল্ট তৈরি করুন</string>
+    <string name="filler">ফিলার</string>
+    <string name="adult">প্রাপ্তবয়স্ক</string>
+    <string name="list_only">কেবল তালিকা</string>
+    <string name="tag">ট্যাগ</string>
+    <string name="tags">ট্যাগ</string>
+    <string name="synonyms">প্রতিশব্দ</string>
+    <string name="trailer">ট্রেলার</string>
+    <string name="opening">উদ্ঘাটন</string>
+    <string name="ending">শেষ</string>
+    <string name="prequel">প্রিকুয়াল</string>
+    <string name="sequel">পরবর্তী</string>
+    <string name="anilist_settings">অ্যানিলিস্ট সেটিংস</string>
+    <string name="extension_settings">এক্সটেনশন</string>
+    <string name="downloads">ডাউনলোড</string>
+    <string name="offline_mode">অফলাইন মোড</string>
+    <string name="settings">সেটিংস</string>
+    <string name="extensions">এক্সটেনশন</string>
+    <string name="extension_updates_available">এক্সটেনশন আপডেট আছে</string>
+    <string name="player_settings">প্লেয়ার সেটিংস</string>
+    <string name="recentlyListOnly">সর্বশেষ আপডেট করা অংশগুলিতে শুধুমাত্র আমার প্রদর্শন করুন</string>
+    <string name="download_manager_select">ডাউনলোড ম্যানেজার নির্বাচন করুন</string>
+    <string name="downloadInSd">এসডি কার্ডে ডাউনলোড করুন</string>
+    <string name="noSdFound">কোনও এসডি কার্ড পাওয়া যায়নি।</string>
+    <string name="reader_settings">রিডার সেটিংস</string>
+    <string name="default_source">ডিফল্ট উৎস</string>
+    <string name="show_yt">ইউটিউব লিঙ্ক</string>
+    <string name="default_ep_view">ডিফল্ট পর্ব লেআউট</string>
+    <string name="default_chp_view">ডিফল্ট অধ্যায় লেআউট</string>
+    <string name="ui">ইউআই</string>
+    <string name="common">সাধারণ</string>
+    <string name="theme">থিম</string>
+    <string name="ui_settings">ইউআই সেটিংস</string>
+    <string name="about">সম্পর্কে</string>
+    <string name="desc">"    দান্তোত্সু সাইকোর অশেষ খাতার থেকে তৈরি এবং সরল তথাপি অত্যাধুনিক সৌন্দর্যের উপর ভিত্তি করে তৈরি হয়েছে। এটি শুধুমাত্র একটি অ্যানিলিস্ট অনলি ক্লায়েন্ট, যা আপনাকে এক্সটেনশন এবং মাঙ্গা মাধ্যমে অ্যানিমে ডাউনলোড করা অনুমতি দেয়।\nদান্তোত্সু বর্ণনা হুবুহু অর্থাত্ জাপানি ভাষায় \"শ্রেষ্ঠ শ্রেষ্ঠ\"। হাতে কলমে বলতে চাইলে, এটি অ্যানিমে এবং মাঙ্গার জন্য এন্ড্রয়েডের জন্য সেরা ওয়েব অ্যাপ। আপনি কী বলবেন?"</string>
+    <string name="devs">ডেভেলপার/সাহায্যকারী</string>
+    <string name="disclaimer">দাবি বিবৃতি</string>
+    <string name="full_disclaimer">         - ডানটোত্সু নিজে একটি অ্যানিমে এবং ম্যাঙ্গা ট্র্যাকার সরবরাহ করে এবং কোনও অ্যানিমে বা ম্যাঙ্গা স্ট্রীমিং বা ডাউনলোডিং সুবিধা সরবরাহ করে না।
+        \n\n - ডানটোত্সু বা এর ডেভেলপার / স্টাফ কোনও ডানটোত্সুর ভেতরে পাওয়া কোনও বিষয়বস্তু হোস্ট করে না। অ্যাপে পাওয়া সমস্ত ইমেজ এবং অ্যানিমে / ম্যাঙ্গা তথ্য বিভিন্ন পাবলিক এপিআইসহ (অ্যানিলিস্ট, মাইঅ্যানিমেলিস্ট, কিটসু) থেকে নেওয়া।
+        \n\n - আরওও, ডানটোত্সুর অ্যানিমে / ম্যাঙ্গা লিংক গুলি বিভিন্ন ৩র্ড পার্টি প্লাগইন থেকে নেওয়া এবং এদের কোনও সম্পর্ক ডানটোত্সু বা এর স্টাফের সাথে নেই।
+        \n\n - ডানটোত্সু বা এর মালিকদের পর আপনি অ্যাপের ভেতরে বা বাইরে কোনও বিষয়বস্তুর অপব্যবহারের জন্য দায়ী নয় এবং অ্যাপের কোনও বিষয়বস্তুর বিতরণের জন্য দায়ী হতে পারেন না।
+        \n\n - ডানটোত্সু ব্যবহার করে, আপনি এপ্লিকেশনে পাওয়া সমস্ত বিষয়বস্তুর জন্য ডেভেলপারের দায়িত্ব নেওয়া না হওয়ার সাথে সহমত হন। আপনি এছাড়াও সহমত হন যে আপনি কোনও কপিরাইটেড বিষয়বস্তু ডাউনলোড বা স্ট্রিম করতে ডানটোত্সু ব্যবহার করতে পারবেন না।
+        \n\n - যদি ইন্টারনেট লঙ্ঘনের সমস্যা সংশ্লিষ্ট হয়, দয়া করে উৎস ওয়েবসাইটে যোগাযোগ করুন। ডেভেলপার কোনও আইনি দায়িত্ব ধারণ করে না।
+    </string>
+    <string name="version_current">সংস্করণ %1$s</string>
+    <string-array name="tips">
+        <item>আপনি পর্ব/অধ্যায়ের উপর দীর্ঘ ক্লিক করে এটি পড়া হিসাবে চিহ্নিত করতে পারেন।</item>
+        <item>দীর্ঘ ক্লিক করে শো সরাসরি লিস্ট সম্পাদক খুলতে পারেন।</item>
+        <item>অ্যাপে কিছু আরও ইস্টার ডেকে লুকানো আছে।</item>
+        <item>চ্যালেঞ্জ: জনপ্রিয় অ্যানিমে &amp; মাঙ্গা এর খুব নীচে যান</item>
+        <item>প্রদর্শন শিরোনাম দীর্ঘ ক্লিক করুন।</item>
+        <item>দাম্ন, আপনি কেন আপনার সময় অপচয় করছেন?</item>
+        <item>এই বার্তা কপি করতে আপনি দীর্ঘ ক্লিক করতে পারেন।</item>
+        <item>ওহ কম দেখেছেন! আপনি একটি ইস্টার ডেক খুঁজে ফেলেছেন!?</item>
+        <item>আপনি জানেন আর কে এই অ্যানিমেশন পছন্দ করে?</item>
+        <item>মাল সাপোর্ট? ব্রাহ।</item>
+        <item>উপন্যাস? বেশি মাঝে নাই!</item>
+        <item>অ্যাপ আপডেট চেক করতে লোগোতে দীর্ঘ ক্লিক করুন</item>
+    </string-array>
+    <string-array name="themes">
+        <item>ডিফল্ট</item>
+        <item>থিম ১</item>
+        <item>থিম ২</item>
+        <item>থিম ৩</item>
+        <item> থিম ৪</item>
+    </string-array>
+    <string name="video">ভিডিও</string>
+    <string name="video_info">ভিডিও তথ্য দেখুন</string>
+    <string name="source_info">উৎসের নাম দেখুন</string>
+    <string name="video_info_info">বর্তমান ভিডিওর রেজোলিউশন দেখায়, <b>\"মাল্টি কোয়ালিটি\"</b> সার্ভারের জন্য উপযোগী।</string>
+    <string name="default_quality">অটো মান নির্বাচন</string>
+    <string name="height">উচ্চতা</string>
+    <string name="width">প্রস্থ</string>
+    <string name="default_quality_info">ডিফল্ট ভিডিও যে সর্বনিকটিক মান ব্যবহার করে, শুধুমাত্র \"মাল্টি কোয়ালিটি\" সার্ভারের জন্য প্রয়োজন। একটি ভিডিও চালিয়ে পরবর্তীতে আপনার লিংকগুলি প্রিলোড করার জন্য অটোমেটিক পরিবর্তন হয়।</string>
+    <string name="default_playback_speed">ডিফল্ট প্লেব্যাক গতি: %1$s</string>
+    <string name="cursed_speeds">বর্ণ গতি</string>
+    <string name="resize_mode_button">ডিফল্ট আকার পরিবর্তন করুন</string>
+    <string name="subtitles">সাবটাইটেল</string>
+    <string name="subtitle_toggle">সাবটাইটেল</string>
+    <string name="primary_sub_color_select">সাবটাইটেল রঙ</string>
+    <string name="secondary_sub_color_select">সাবটাইটেল আউটলাইন রং</string>
+    <string name="secondary_sub_outline_type_select">সাবটাইটেল আউটলাইন টাইপ</string>
+    <string name="sub_background_color_select">সাবটাইটেল পেশা রং</string>
+    <string name="sub_window_color_select">সাবটাইটেল উইন্ডোর রং</string>
+    <string name="sub_window_color_info">"সাবটাইটেল উইন্ডো হ'ল সেই অংশ, যেখানে পেশা নেই। (যেখানে পেশার রঙ নেই)"</string>
+    <string name="sub_color_info"><b>দ্রষ্টব্য:</b> উপরের সেটিংস পরিবর্তন করা কেবল সফ্ট-সাবটাইটেলগুলিতে প্রভাব ফেলে!</string>
+    <string name="sub_alpha">সাবটাইটেল সচ্ছতা</string>
+    <string name="sub_text_example">উদাহরণ সাবটাইটেল</string>
+    <string name="sub_font_select">সাবটাইটেল ফন্ট</string>
+    <string name="subtitle_font_size">সাবটাইটেল সাইজ</string>
+    <string name="auto">অটো</string>
+    <string name="auto_play_next_episode">স্বয়ংক্রিয় পরবর্তী পর্ব প্লে করুন</string>
+    <string name="auto_play_next_episode_info">প্লেয়ারের সাথে কোনও ইন্টারঅ্যাকশন না থাকলে 1 ঘণ্টা পর পর অটোমেটিকভাবে অক্ষম হয়ে যায়।</string>
+    <string name="auto_skip_fillers">স্বয়ংক্রিয় পরবর্তী পর্ব হলে ফিলার স্কিপ করুন</string>
+    <string name="auto_skip_fillers_info">পরবর্তী পর্বে যাওয়ার সময় ফিলার পর্বগুলি স্কিপ করে।</string>
+    <string name="update_progress">অগ্রগতি আপডেট করুন</string>
+    <string name="ask_update_progress_anime">প্রতিটি অ্যানিমে জন্য \"একটি\" অনুরোধ করুন</string>
+    <string name="ask_update_progress_manga">প্রতিটি মাঙ্গা জন্য \"একটি\" অনুরোধ করুন</string>
+    <string name="ask_update_progress_info_ep">অফ করলে সব সময় পরবর্তী পর্ব দেখা হলে অটোমেটিকভাবে অগ্রগতি আপডেট হবে।</string>
+    <string name="ask_update_progress_info_chap">অফ করলে সব সময় পরবর্তী অধ্যায় পড়া হলে অটোমেটিকভাবে অগ্রগতি আপডেট হবে।</string>
+    <string name="ask_update_progress_chapter_zero">চ্যাপ্টার 0 এর জন্য অগ্রগতি আপডেট করুন</string>
+    <string name="ask_update_progress_info_zero">চালু করলে নতুন শুরু করা আইটেমগুলি অ্যানিলিস্টে যুক্ত হয় 0 চ্যাপ্টারের সাথে।</string>
+    <string name="ask_update_progress_hentai">হেনটাই এর জন্য অগ্রগতি আপডেট করুন</string>
+    <string name="ask_update_progress_doujin">ডোজিন এর জন্য অগ্রগতি আপডেট করুন</string>
+    <string name="very_bold">আপনি সহজে তার সাথে আপনার</string>
+    <string name="watch_complete_percentage">দেখার পর অগ্রগতি আপডেট শতাংশ</string>
+    <string name="watch_complete_percentage_info">একটি পর্ব দেখার পরে আপনার অ্যানিলিস্ট অগ্রগতি যে শতাংশে আপডেট হবে তা সেট করে। \nএটি এপিসোডের পরবর্তী \% লিংকগুলির জন্য প্রিলোড করার জন্য সেট করে।</string>
+    <string name="behaviour">আচরণ</string>
+    <string name="always_continue">সবসময় যেখানে আপনি থেকে ছাড়া চলতে থাকুন</string>
+    <string name="pause_video_focus">ফোকাসে না থাকলে বন্ধ করুন</string>
+    <string name="gestures">ভলিউম এবং উজ্জ্বলতা জেস্চার</string>
+    <string name="double_tap">সন্ধানের জন্য ডবল ট্যাপ করুন</string>
+    <string name="fast_forward">ফাস্ট ফরোয়ার্ড</string>
+    <string name="double_tap_info">বন্ধ করে ফাস্ট ফরোয়ার্ড এবং পুনঃস্থাপন বোতাম দেখাবে</string>
+    <string name="seek_time">সন্ধানের সময়</string>
+    <string name="seek_time_info">ফাস্ট ফরোয়ার্ড এবং পুনঃস্থাপনের জন্য সেকেন্ডে সময়ের পরিমাণ।</string>
+    <string name="skip_time">স্কিপ টাইম</string>
+    <string name="skip_time_info">সেটিংস স্কিপ বাটনটি লুকায়।</string>
+    <string name="show_cast_button">কাস্ট বাটন দেখান</string>
+    <string name="show_cast_button_info">কাস্ট করতে \"ওয়েব ভিডিও কাস্টার\" অ্যাপ প্রয়োজন।</string>
+    <string name="picture_in_picture">ছবিতে পিকচার ইন পিকচার</string>
+    <string name="always_minimize">সবসময় সর্বোচ্চ করুন</string>
+    <string name="always_minimize_info">PiP সক্রিয় করা প্রয়োজন, প্লেয়ারকে ইউটিউব প্লেয়ারের মতো আচরণ করা হবে তবে ভালো। আরও ভালো\nএছাড়াও PiP বাটনটি লুকিয়ে রাখে।</string>
+    <string name="app">অ্যাপ</string>
+    <string name="immersive_mode">স্ট্যাটাস বার লুকান</string>
+    <string name="immersive_modelist">তালিকা স্ট্যাটাস বার লুকান</string>
+    <string name="immersive_mode_info">পূর্ববর্তীতে আবার পূর্ণভাবে প্রয়োগ করার জন্য অ্যাপ পুনরায় চালু করতে হবে।</string>
+    <string name="home_layout_show">হোমে লেআউট দেখান/লুকান</string>
+    <string-array name="home_layouts">
+        <item>চলমান দেখা</item>
+        <item>প্রিয় অ্যানিমে</item>
+        <item>পরিকল্পিত অ্যানিমে</item>
+        <item>চলমান পড়া</item>
+        <item>প্রিয় মাঙ্গা</item>
+        <item>পরিকল্পিত মাঙ্গা</item>
+        <item>প্রস্তাবিত</item>
+        <item>সামাজিক ফিড</item>
+    </string-array>
+    <string name="startUpTab">ডিফল্ট শুরু ট্যাব</string>
+    <string name="small_view">ট্রেন্ডিং পর্বগুলিতে ছোট দেখান</string>
+    <string name="animations">অ্যানিমেশন</string>
+    <string name="banner_animations">ব্যানার অ্যানিমেশন</string>
+    <string name="layout_animations">লেআউট অ্যানিমেশন</string>
+    <string name="trending_scroller">জনপ্রিয় স্ত্রলার</string>
+    <string name="animation_speed">সার্বিক গতি</string>
+    <string name="empty_fav">এটা আর কেউই পছন্দ করেনি,\nএটি এখানে রাখতে একটি শো পছন্দ করুন।</string>
+    <string name="fav_anime">প্রিয় অ্যানিমে</string>
+    <string name="fav_manga">প্রিয় মাঙ্গা</string>
+    <string name="restart_app">অ্যাপ পুনরায় চালু করবেন?</string>
+    <string name="restart_app_extra">Restart the app to apply changes</string>
+    <string name="next">পরবর্তী</string>
+    <string name="previous">আগে</string>
+    <string name="current_page">বর্তমান পৃষ্ঠা</string>
+    <string name="dubbed">ডাবড</string>
+    <string name="subbed">সাবড</string>
+    <string name="prefer_dub">প্রিয় ডাবড অ্যানিমে</string>
+    <string name="none">কোনও</string>
+    <string name="selected_dns">নির্বাচিত DNS</string>
+    <string name="anime_manga">Anime and Manga</string>
+    <string name="list_settings">List Settings</string>
+    <string name="dns_info">আপনার আইএসপি কোনও উৎস ব্লক করে যেতে পারে তা পরিবর্তন করুন</string>
+    <string name="selected_title_language">Selected Title Language</string>
+    <string name="selected_staff_language">Selected Staff Language</string>
+    <string name="selected_merge_time">Activity Merge Time</string>
+    <string name="selected_score_format">Scoring System</string>
+    <string name="selected_time_zone">Timezone</string>
+    <string name="selected_no_time_zone">No Timezone selected</string>
+    <string name="selected_row_order">Default List Order</string>
+    <string name="custom_anime_list">Custom Anime Lists</string>
+    <string name="custom_manga_list">Custom Manga Lists</string>
+    <string name="delete_custom_list">Delete Custom List</string>
+    <string name="delete_custom_list_confirm">Are you sure you want to delete %1$s ?</string>
+    <string name="keep_screen_on">স্ক্রিন চালিয়ে রাখুন</string>
+    <string name="layout">লেআউট</string>
+    <string name="spaced_pages">ফাঁকা পেজ</string>
+    <string name="direction">দিক</string>
+    <string name="general">সাধারণ</string>
+    <string name="show_system_bars">স্ট্যাটাস এবং নেভিগেশন বার দেখান</string>
+    <string name="auto_detect_webtoon">অটো ডিটেক্ট ওয়েবটুন</string>
+    <string name="auto_detect_webtoon_info">যদি ম্যাঙ্গা জাপান থেকে না হয়, তাহলে রিডারটি ডিফল্ট হবে ওয়েবটুন রিডার সেটিংসে</string>
+    <string name="default_settings">ডিফল্ট সেটিংস</string>
+    <string name="horizontal_scroll_bar">হরিজন্টাল স্ক্রল বার</string>
+    <string name="dual_page">দুটি পৃষ্ঠা</string>
+    <string name="dual_page_info">1 পৃষ্ঠায় 2 ইমেজ দেখায়, ইমেজগুলি যদি একই আকারে না থাকে তবে এটি অদ্ভুত দেখতে পারে</string>
+    <string name="true_colors">সত্য রং</string>
+    <string name="true_colors_info">(32-বিট রং মোড) ইমেজের উপর ব্যান্ডিং হ্রাস করে, কার্যক্ষমতা প্রভাবিত করতে পারে।</string>
+    <string name="image_rotation">ইমেজ রোটেশন</string>
+    <string name="hide_page_numbers">পৃষ্ঠা নম্বর লুকান</string>
+    <string name="sort_by_title">শিরোনাম অনুযায়ী সাজান</string>
+    <string name="sort_by_last_updated">সর্বশেষ আপডেট অনুযায়ী সাজান</string>
+    <string name="sort_by_score">স্কোর অনুযায়ী সাজান</string>
+    <string name="over_scroll">পরবর্তী/পূর্ববর্তী অধ্যায়ে অভিপ্রায় স্ক্রল করুন</string>
+    <string name="volume_buttons">ভলিউম বাটন ব্যবহার করে পৃষ্ঠা পরিবর্তন করুন</string>
+    <string name="list_private">ব্যক্তিগত</string>
+    <string name="wrap_images">ইমেজ মুহুর্ত</string>
+    <string name="wrap_images_info">প্রধানত বড় ডিভাইসের জন্য উপকারী, ইমেজগুলির মধ্যে স্থানের মধ্যে ফাঁকা দূর করে</string>
+    <string name="reload">রিলোড</string>
+    <string name="share">ভাগাভাগি</string>
+    <string name="skip">অবরুদ্ধ করা</string>
+    <string name="other">অন্যান্য</string>
+    <string name="total_repeats">মোট পুনরাবৃত্তি</string>
+    <string name="custom_lists">কাস্টম তালিকা</string>
+    <string name="donate_desc">Dantotsu-র মেনটেইনারকে সাহায্য করতে চান?\nদান করতে বিবেচনা করুন</string>
+    <string name="donate_goal">কোনও দানের লক্ষ্য নেই</string>
+    <string name="filter">ফিল্টার</string>
+    <string name="year">বছর</string>
+    <string name="apply">প্রয়োগ করুন</string>
+    <string name="cancel">বাতিল করুন</string>
+    <string name="edit">সম্পাদনা করুন</string>
+    <string name="publish">প্রকাশ করুন</string>
+    <string name="reply_hint">একটি প্রতিক্রিয়া লিখুন…</string>
+    <string name="this_season">এই ঋতুতে</string>
+    <string name="next_season">পরের ঋতুতে</string>
+    <string name="previous_season">পূর্ববর্তী ঋতুতে</string>
+    <string name="include_media_in_list">তালিকায় মিডিয়া অন্তর্ভুক্ত করুন</string>
+    <string name="release_calendar">ক্যালেন্ডার</string>
+    <string name="planned_anime">পরিকল্পিত অ্যানিমে</string>
+    <string name="planned_manga">পরিকল্পিত ম্যাঙ্গা</string>
+    <string name="image_long_clicking">দীর্ঘ ক্লিক করে ইমেজ খোলা</string>
+    <string name="always_continue_content">সবসময় পুর্ববরতি জিনিস দিয়ে চলবে</string>
+    <string name="open_animanga_directly">Open Anime/Manga search directly</string>
+    <string name="open_animanga_directly_info">Open Anime/Manga search on their respective pages directly</string>
+    <string name="search_source_list">পরবর্তী সোর্স সন্ধান করুন</string>
+    <string name="timestamp_proxy_desc">যদি আপনি হ্যান্ডশেক ফেলে পাচ্ছেন তাহলে উপকারী</string>
+    <string name="timestamp_proxy">সময়সূচীর জন্য প্রক্সি ব্যবহার করুন</string>
+    <string name="check_app_updates">সবসময় অ্যাপ আপডেট চেক করুন</string>
+    <string name="author">লেখক</string>
+    <string name="forks">সংস্করণ</string>
+    <string name="faq">FAQ</string>
+    <string name="accounts">অ্যাকাউন্ট</string>
+    <string name="addons">এডনস</string>
+    <string name="myanimelist">MyAnimeList</string>
+    <string name="login_with_anilist">Anilist সাথে লগইন করুন!</string>
+    <string name="anilist">Anilist</string>
+    <string name="account_help">এটি কিভাবে কাজ করে?</string>
+    <string name="full_account_help">        Dantotsu হল একটি Anilist Based অ্যাপ, তাই আপনার MAL অ্যাকাউন্টের সাথে সিঙ্কিং করতে, এটি একটি Anilist অ্যাকাউন্টের লগইন করা প্রয়োজন।
+        \nAnilist এবং MAL অ্যাকাউন্ট দুটিতে লগইন হলে, অ্যাপটি স্বয়ংক্রিয়ভাবে আপনার MAL অ্যাকাউন্ট আপডেট করবে যখনঃ
+        \n- একটি নতুন মিডিয়া যোগ করা হয়
+        \n- একটি মিডিয়া সম্পাদনা করা হয়
+        \n- একটি মিডিয়া মুছে ফেলা হয়
+    
+        \n\nনোটঃ অ্যাপটি পুরাতন মিডিয়াগুলি আনিলিস্ট থেকে ম্যাল প্রতি সিঙ্ক করবে না, তা সিঙ্ক করা সুপারিশ করা হয়।
+        \n- সহজ পদ্ধতির জন্য দেখুন __FAQs__
+        
+        \n\nএবং মাঝেরটার জন্য:
+        \n- [Anilist ডাটা কিভাবে সিঙ্ক করবেন](https://anilist.co/forum/thread/2654)
+        \n- [MAL ডাটা কিভাবে সিঙ্ক করবেন Anilist](https://anilist.co/forum/thread/3393)
+        
+        \n\n_ম্যাল এবং আনিলিস্ট অ্যাকাউন্টগুলির সিঙ্ক করা প্রয়োজন নেই_
+    </string>
+    <string name="notification_for_checking_subscriptions">সাবস্ক্রিপশন নটিফিক্যশন দেখা হচ্ছে</string>
+    <string name="use_alarm_manager">নির্ভরযোগ্য নোটিফিকেশনের জন্য অ্যালার্ম ম্যানেজার ব্যবহার করুন</string>
+    <string name="use_alarm_manager_reliable">আ্যলার্ম মেনেজার ব্যবহারজো বিশস্ত নটিফিকেশন এর জন্য</string>
+    <string name="use_alarm_manager_confirm">আ্যলার্ম ম্যানেজার ব্যবহার বেটারি অপ্টিমাইজেশান এর বিরুদ্ধে সাহায্য করতে পারে, তবে আরো বেটারি খরচ করতে পারে। এটার আ্যলার্ম ম্যানেজার অনুমতি ও প্রয়োজন হয়.</string>
+    <string name="use">ব্যবহার</string>
+    <string name="remove_all_subscriptions">সব সাবস্ক্রিপশন সরান</string>
+    <string name="remove_all_subscriptions_desc">আপনি কি নিশ্চিত যে আপনি সমস্ত সাবস্ক্রিপশন সরাতে চান %1$s এর জন্য?</string>
+    <string name="checking_subscriptions">সাবস্ক্রিপশন চেক করার জন্য নোটিফিকেশন</string>
+    <string name="subscriptions_checking_time_s">সাবস্ক্রিপশন আপডেট সময়: %1$s</string>
+    <string name="subscriptions_checking_time">সাবস্ক্রিপশন আপডেট সময়</string>
+    <string name="subscriptions_info">Dantotsu-কে প্রতিনির্দিষ্ট সময়ে নতুন পর্ব/অধ্যায় চেক করার জন্য সময়ের পরিমাণ
+    (কম সময় ব্যাটারি ব্যবহারের কারণ হতে পারে)</string>
+    <string name="do_not_update">আপডেট করবেন না</string>
+    <string name="loading_chap_number">অধ্যায় লদিং %1$s</string>
+    <string name="sort_by_release_date">প্রকাশের তারিখ অনুযায়ী সাজান</string>
+    <string name="crop_borders">ক্রপ বর্ডার</string>
+    <string name="note">মন্তব্য</string>
+    <string name="manage_extension_repos">এক্সটেনশন রেপো মেনেজ করুন</string>
+    <string name="installing_extension">এক্সটেনশন ইন্সটল হচ্ছে</string>
+    <string name="installation_failed">ইন্সটল ব্যর্থ %1$s</string>
+    <string name="installation_complete">ইন্সটল সম্পুর্ণ</string>
+    <string name="extension_has_been_installed">এক্সটেনশন টি সফল ভাবে ইন্সটল হয়েছে.</string>
+    <string name="extension_installed">এক্সটেনশন ইন্সটল হয়েছে</string>
+    <string name="installed">ইন্সটল হয়েছে</string>
+    <string name="error_message">ভূল %1$s</string>
+    <string name="install_step">ধাপ %1$s</string>
+    <string name="review">পুনরায় দেখুন</string>
+    <string name="reviews">রিভিউ</string>
+    <string name="discord_nothing_button">শুধুমাত্র প্রথম বাটনটি দেখাবেন</string>
+    <string name="discord_dantotsu_button">দান্ততসু কে দ্বিতিয় বাটন এ দেখাও</string>
+    <string name="discord_anilist_button">আমার আনিলিস্ত প্রফাইল টি এর বিপরিতে দেখাও</string>
+    <string name="discord_rich_presence">দিস্করদ বরলক্স উপস্থিতি</string>
+    <string name="stream_on_dantotsu">দান্ততসু তে স্ত্রীম করুন</string>
+    <string name="view_my_anilist">আমার আনিলিস্ট (AniList)</string>
+    <string name="jobless_message">আইসি! তুমি সত্যিই বেকার\nতুমি শেষ পর্যন্ত এসেছো</string>
+    <string name="file_manager_not_found">SD কার্ড খোলার জন্য কোনও ফাইল ম্যানেজার খুঁজে পাওয়া যাচ্ছে না</string>
+    <string name="error_loading_data">%1$s তথ্য লোড করার সময় ত্রুটি</string>
+    <string name="long_click_to_check_update">অ্যাপ আপডেট চেক করতে বাটনটি দীর্ঘ ক্লিক করুন</string>
+    <string name="saved_to_path">পাথে সংরক্ষিত হয়েছে:\n%s</string>
+    <string name="setting_progress">%1$d এ অগ্রগতি সেট করা হচ্ছে</string>
+    <string name="login_anilist_account">Anilist অ্যাকাউন্টে লগইন করুন!</string>
+    <string name="congrats_vro">অভিনন্দন ভ্রো</string>
+    <string name="please_reload">অনুগ্রহ করে পুনরায় লোড করুন।</string>
+    <string name="copied_text">কপিকৃত \"%1$s\"</string>
+    <string name="back_to_exit">বাহিরে প্রস্তুত হোক দয়া করে আবার ব্যবহার করুন</string>
+    <string name="no_internet_connection">ইন্টারনেট সংযোগ নেই</string>
+    <string name="anilist_not_found">দেখা যাচ্ছে না যে তা Anilist এ পাওয়া যায়নি।</string>
+    <string name="disabled_auto_skip">OP এবং ED এর স্বয়ংক্রিয় বাদ দেওয়া হয়েছে</string>
+    <string name="auto_skip">OP এবং ED এর স্বয়ংক্রিয় অতিক্রম করা হবে</string>
+    <string name="show_skip_time_stamp_button">স্কিপ সময় স্ট্যাম্প বোতাম দেখান</string>
+    <string name="always_load_time_stamps">সবসময় সময়সূচী লোড করুন</string>
+    <string name="auto_hide_time_stamps">নিজের থেকেই সময়ের স্ট্যাম্প গোপন</string>
+    <string name="timestamps">সময়সূচী</string>
+    <string name="auto_skip_op_ed">অটো স্কিপ ওপেনিং/এন্ডিং</string>
+    <string name="requires_time_stamps_to_be_enabled">সময়সূচী সক্রিয় করা প্রয়োজন</string>
+    <string name="hide_skip_button">সময় বাদের স্ট্যাম্প বাটন পাচ সেকেন্দ পরে হারিয়া যাবে</string>
+    <string name="copied_to_clipboard">ক্লিপবোর্ডে কপি করা হয়েছে</string>
+    <string name="first_episode">এটা প্রথম পর্ব!</string>
+    <string name="reset_auto_update">অটো আপডেট রিসেট করতে লিস্ট সম্পাদক বাটনটি দীর্ঘ ক্লিক করুন</string>
+    <string name="autoplay_cancelled">অটোপ্লে বাতিল করা হয়েছে, ১ ঘণ্টা থেকে বেশি কোনও ইন্টারঅ্যাকশন নেই।</string>
+    <string name="auto_select_server_error">সার্ভার স্বয়ংক্রিয় নির্বাচন করা যায়নি, দয়া করে আবার চেষ্টা করুন!</string>
+    <string name="stream_selection_empty">সামগ্রীর জন্য কোনও স্ট্রিম উপলব্ধ নেই। অন্য উৎস চেষ্টা করুন।</string>
+    <string name="logging_in_mal">এমএল লগইন হচ্ছে</string>
+    <string name="getting_user_data">ব্যবহারকারীর তথ্য পেতে</string>
+    <string name="no_next_episode">পরবর্তী পর্ব পাওয়া যায়নি!</string>
+    <string name="enable_banner_animations">সেটিংস থেকে ব্যানার অ্যানিমেশন সক্রিয় করুন</string>
+    <string name="please_login_anilist">অনুগ্রহ করে Anilist এ লগইন করুন!</string>
+    <string name="auto_update_reset">অটো আপডেট প্রগ্রেস এখন রিসেট করা হয়েছে</string>
+    <string name="cant_wait">অপেক্ষা করতে পারছি না, হ্যাঁ? ঠিক আছে X(</string>
+    <string name="downloading">ডাউনলোড করা হচ্ছে...</string>
+    <string name="next_chapter_not_found">পরবর্তী অধ্যায় পাওয়া যায়নি</string>
+    <string name="first_chapter">এটা প্রথম অধ্যায়!</string>
+    <string name="adult_stuff">প্রাপ্ত বয়স্ক বস্তু? ( ͡° ͜ʖ ͡°)</string>
+    <string name="what_did_you_open">তুমি কী ওপেন করেছিলে?</string>
+    <string name="error_getting_data">Anilist থেকে তথ্য পেতে ত্রুটি</string>
+    <string name="empty_response">ফাঁকা প্রতিক্রিয়া, আপনার ইন্টারনেট কোনও পরিস্থিতির কারণে কোনও প্রত্যুত্তর সুগ্রহ করে?</string>
+    <string name="error_loading_mal_user_data">এমএল ব্যবহারকারীর তথ্য লোড করার সময় ত্রুটি</string>
+    <string name="error_loading_mal_data">এমএল থেকে তথ্য লোড করা ব্যর্থ হয়েছে</string>
+    <string name="error_loading_anilist_user_data">Anilist ব্যবহারকারীর তথ্য লোড করার সময় ত্রুটি</string>
+    <string name="episode_not_found">%1$s পর্ব পাওয়া যায়নি</string>
+    <string name="list_updated">তালিকা আপডেট করা হয়েছে</string>
+    <string name="deleted_from_list">তালিকা থেকে মুছে ফেলা হয়েছে</string>
+    <string name="no_list_id">কোনও তালিকা আইডি পাওয়া যায়নি...</string>
+    <string name="checking_for_update">আপডেট চেক করা হচ্ছে</string>
+    <string name="dont_show_again">%1$s এর জন্য আর প্রদর্শন না করুন</string>
+    <string name="no_update_found">কোনও আপডেট পাওয়া যায়নি</string>
+    <string name="downloading_update">%1$s আপডেট ডাউনলোড হচ্ছে</string>
+    <string name="permission_required">দয়া করে অনুমতি দিন ফাইল এবং ফোল্ডারে অ্যাক্সেস করতে সেটিংস থেকে, এবং আবার চেষ্টা করুন।</string>
+    <string name="started_downloading">ডাউনলোড শুরু হয়েছে\n%1$s</string>
+    <string name="install_1dm">1DM ইনস্টল করুন</string>
+    <string name="install_adm">ADM ইনস্টল করুন</string>
+    <string name="error_getting_image_data">ইমেজ তথ্য পেতে ত্রুটি</string>
+    <string name="loading_image_failed">চিত্র লোড করতে ব্যর্থ হয়েছে</string>
+    <string name="copied_device_info">ডিভাইস তথ্য কপি করা হয়েছে</string>
+    <string name="anilist_down">এমন মনে হচ্ছে যে Anilist নিচে আছে, সবাই ভিপিএন বা প্রতীক্ষা করতে পারেন যদি তা ফিরে আসার জন্য অপেক্ষা করতে চান।</string>
+    <string name="failed_to_load_data">%1$d এর সংরক্ষিত তথ্য লোড করতে ব্যর্থ হয়েছে</string>
+    <string name="access_not_available">অ্যাক্সেস পেতে অক্ষম হয়েছিল</string>
+    <string name="mal_login_uri_not_found">মাল লগইন: ইউআরআই পাওয়া যায়নি</string>
+    <string name="mal_login_code_challenge_not_found">মাল লগইন: codeChallenge পাওয়া যায়নি</string>
+    <string name="mal_login_code_not_present">মাল লগইন: রিডাইরেক্টেড ইউআরআইতে কোড উপস্থিত নেই</string>
+    <string name="refresh_token_load_failed">রিফ্রেশ টোকেন: সংরক্ষিত টোকেন লোড করতে ব্যর্থ</string>
+    <string name="refreshing_token_failed">টোকেন রিফ্রেশ করা ব্যর্থ হয়েছে</string>
+    <string name="episode_release_countdown">%1$d পর্ব মুক্তি পেতে হবে</string>
+    <string name="chapter_number">অধ্যায় %1$d</string>
+    <string name="chapter_release_timeout">%1$s has been available for</string>
+    <string name="time_format">%1$d দিন %2$d ঘণ্টা %3$d মিনিট %4$d সেকেন্ড</string>
+    <string-array name="sort_by">
+        <item>স্কোর</item>
+        <item>জনপ্রিয়</item>
+        <item>ট্রেন্ডিং</item>
+        <item>এ-জেড</item>
+        <item>জেড-এ</item>
+        <item>পিওর পেইন</item>
+        <item>বিশুদ্ধ ব্যাথা</item>
+    </string-array>
+    <string name="main_role">প্রধান</string>
+    <string name="supporting_role">সাহায্যী</string>
+    <string name="status_finished">সমাপ্ত</string>
+    <string name="status_releasing">মুক্তি পেতে</string>
+    <string name="status_not_yet_released">এখনো মুক্তি পাওয়া হয় নি</string>
+    <string name="status_cancelled">বাতিল</string>
+    <string name="status_hiatus">মন্দেবিকাল</string>
+    <string name="type_adaptation">অভিবিন্নতা</string>
+    <string name="type_parent">মূল</string>
+    <string name="type_character">চরিত্র</string>
+    <string name="type_summary">সারসংক্ষেপ</string>
+    <string name="type_alternative">বিকল্প</string>
+    <string name="type_other">অন্যান্য</string>
+    <string name="type_source">উৎস</string>
+    <string name="type_contains">অন্তর্ভুক্ত</string>
+    <string name="read_on_dantotsu">Dantotsu এ পড়ুন</string>
+    <string name="watch_on_dantotsu">Dantotsu এ দেখুন</string>
+    <string name="view_profile_in_dantotsu">Dantotsu এ প্রোফাইল দেখুন</string>
+    <string name="continue_episode">অবশ্যই: পর্ব </string>
+    <string name="filler_tag"> - স্থানদখলদার</string>
+    <string name="continue_chapter">অবশ্যই: </string>
+    <string name="episode">"পর্ব "</string>
+    <string name="episode_num">"পর্ব %1$s"</string>
+    <string name="chapter">"অধ্যায় "</string>
+    <string name="chapter_num">"অধ্যায় %1$s"</string>
+    <string name="just_released">- সম্প্রতি মুক্তি পেয়েছেন!</string>
+    <string name="checking_subscriptions_title">সাবস্ক্রিপশন চেক করা হচ্ছে</string>
+    <string name="user_list">%1$s\'s %2$s লিস্ট</string>
+    <string name="speed">গতি</string>
+    <string name="auto_update">%1$s এর জন্য অটো আপডেট করতে?</string>
+    <string name="continue_from">%1$s থেকে চালিয়ে যান?</string>
+    <string name="title_update_progress">Anilist এ আপডেট অগ্রগতি?</string>
+    <string name="incognito_will_not_update">ইনকোগনিটো মোড এখনো অগ্রগতি উপেক্ষা করবে।</string>
+    <string name="dont_ask_again">"%1$s এর জন্য আর প্রশ্ন করবেন না"</string>
+    <string name="default_speed">ডিফল্ট গতি</string>
+    <string name="default_resize_mode">ডিফল্ট পুনরায় আয়তনের মোড</string>
+    <string name="primary_sub_color">প্রাথমিক সাব রং</string>
+    <string name="outline_sub_color">আউটলাইন সাব রং</string>
+    <string name="outline_type">আউটলাইন টাইপ</string>
+    <string name="subtitle_font">সাবটাইটেল ফন্ট</string>
+    <string name="yes">হ্যাঁ</string>
+    <string name="no">না</string>
+    <string name="ok">আচ্ছা</string>
+    <string name="reset">রিসেট</string>
+    <string name="close">বন্ধ করুন</string>
+    <string name="no_chapter">কোন অধ্যায় নেই</string>
+    <string name="content_18">আনিলিস্ট সেটিংস থেকে ১৮+ কন্টেন্ট চালু করুন</string>
+    <string name="available">উপলব্ধ</string>
+    <string name="lets_go">চলো যাই</string>
+    <string name="cope">মুক্তি পেতে</string>
+    <string name="watched_num">"দেখা "</string>
+    <string name="read_num">"পড়া "</string>
+    <string name="episodes_out_of">"পর্ব থেকে "</string>
+    <string name="chapters_out_of">"অধ্যায় থেকে "</string>
+    <string name="episodes_total_of">"মোট "</string>
+    <string name="chapters_total_of">"মোট "</string>
+    <string name="no_description_available">"কোন বর্ণনা পাওয়া যায় নি"</string>
+    <string-array name="manga_directions">
+        <item>উপর থেকে নীচে</item>
+        <item>ডান থেকে বাম</item>
+        <item>নীচে থেকে উপর</item>
+        <item>বাম থেকে ডান</item>
+    </string-array>
+    <string-array name="manga_layouts">
+        <item>পেজড</item>
+        <item>অবিরত পেজড</item>
+        <item>অবিরত</item>
+    </string-array>
+    <string name="selected">নির্বাচিত</string>
+    <string name="found">পাওয়া গেছে</string>
+    <string name="age">"__বয়স:__ "</string>
+    <string name="birthday">\n\"__জন্মদিন:__ \"</string>
+    <string name="gender">\n\"__লিঙ্গ:__ \"</string>
+    <string name="hometown">\n\"__Home Town:__ \"</string>
+    <string name="years_active">\n\"__Years Active:__ \"</string>
+    <string name="date_of_death">\n\"__Date of Death:__ \"</string>
+    <string name="male">পুরুষ</string>
+    <string name="female">মহিলা</string>
+    <string name="question_1">Dantotsu কি?</string>
+    <string name="answer_1">দানতোত্সু (দান-তোত্সু) বাংলায় অর্থ হলো শ্রেষ্ঠতম বা একটি বিশেষ জিনিস। জাপানি অর্থে \"দান\" অর্থ হলো বিচ্ছিন্ন এবং \"তোত্সু\" অর্থ হলো শ্রেষ্ঠত্ব। আমরা বলতে চাই এটি অ্যানিমে এবং ম্যাঙ্গা এর জন্য সেরা ওয়ার্ল্ডওয়াইড ওপেন সোর্স অ্যাপ। আপনি এটি নিজে চেষ্টা করে দেখুন এবং মূল্যায়ন করুন!</string>
+    <string name="question_2">Dantotsu-এর কিছু বৈশিষ্ট্য কি?</string>
+    <string name="answer_2">Dantotsu-র কিছু উল্লেখযোগ্য বৈশিষ্ট্য হলো\n\n- অ্যাড-ফ্রি পাঠাগুলি দেখতে এবং পড়তে সহজ এবং কার্যকর উপায়\n- একটি পূর্ণরূপে ওপেন সোর্স অ্যাপ যেখানে সুন্দর UI এবং অ্যানিমেশন রয়েছে\n- ৩র্ড পার্টি প্লাগিন সমর্থন\n- অ্যানিলিস্ট দ্বারা অ্যানিমে এবং ম্যাঙ্গা সত্যিকালে সময়ে সময়ে সিঙ্ক্রোনাইজ করা। আপনার বর্তমান অবস্থানের ভিত্তিতে অ্যানিমে এবং ম্যাঙ্গা বিভাগীয়ভাবে করুন। (অ্যানিলিস্ট দ্বারা প্রস্তুত)\n- সময়মত আপডেট করা হয় সব ট্রেন্ডিং, জনপ্রিয় এবং চলমান অ্যানিমে ভিত্তিতে সমস্ত শো পাওয়া যায় যা স্কোরের উপর ভিত্তি করে।\n- এনিমে শো, চলচ্চিত্র এবং ম্যাঙ্গা টাইটেল সম্পর্কে বিস্তৃত তথ্য দেখুন। এটা প্রকাশিত অ্যানিলিস্ট ও মাইঅ্যানিমেলিস্টের দ্বারা প্রস্তুত হয়।</string>
+    <string name="question_3">Stable, Beta &amp; Alpha সংস্করণের মধ্যে পার্থক্য কী?</string>
+    <string name="answer_3">একটি স্থির রিলিজ এটি যে সংস্করণ যা আমরা যতটুকু সম্ভব পরীক্ষা করেছি এবং আমরা এটি করতে পারি সেই সহজতম প্রকারে বিশ্বস্ত।\n\nএকটি বেটা রিলিজ এটি পরীক্ষা করার জন্য নতুন বৈশিষ্ট্য বা হট ফিক্স প্রদানের জন্য ডিজাইন করা হয়েছে।\n\nএকটি অ্যালফা রিলিজ একটি বেটা সংস্করণের মতো তবে এতে অনেক বাগ রয়েছে এবং আপনি কেবল আমাদের [ডিসকর্ড] (https://discord.gg/invite/4HPZ5nAWwM) সার্ভারে পাবেন। এটি সচরাচর আপডেট পাওয়া এবং বিচ্ছিন্ন হতে একটি উচ্চ সম্ভাবনা রয়েছে।\n\nআপনি যদি একটি বিশ্বস্ত অ্যাপ চান তবে স্থিতিশীল হয়ে যান। আপনি যদি সর্বশেষ এবং শ্রেষ্ঠ বৈশিষ্ট্য এবং বাগ চান তবে এলফা নিন।</string>
+    <string name="question_4">Dantotsu কি পিসির জন্য উপলব্ধ?</string>
+    <string name="answer_4">বর্তমানে না (Windows এবং Linux উভয়ের জন্য)। এটি কখন উপলব্ধ হবে তা কোনও অনুমান নেই। তবে, আপনি যেকোনো Android এমুলেটর ডাউনলোড করতে এবং এটি চালাতে পারেন। Windows 11 ব্যবহারকারীরা, তারা Windows এ ডান্তোত্সু চালাতে Windows সাবসিস্টেম ব্যবহার করতে পারেন।</string>
+    <string name="question_5">Dantotsu কি iOS এর জন্য উপলব্ধ?</string>
+    <string name="answer_5">না, সেরা আমরা করতে পারি আপেলে Dantotsu ভাসিয়ে খেয়ে দেওয়া।</string>
+    <string name="question_6">আমার পরিসংখ্যান কেন আপডেট হচ্ছে না?</string>
+    <string name="answer_6">এটি প্রতি ৪৮ ঘণ্টা পরপর স্বয়ংক্রিয়ভাবে আপডেট হয় (অ্যানিলিস্টের দ্বারা)। আপনি যদি সত্যিই আপনার পরিসংখ্যান আপডেট করতে চান, তবে আপনি এই [লিঙ্কে](https://anilist.co/settings/lists) যাওয়ার পরে আপনার পরিসংখ্যান প্রয়োজনীয়ভাবে আপডেট করতে পারেন।</string>
+    <string name="question_7">কিভাবে অ্যানিমে ডাউনলোড করবেন?</string>
+    <string name="answer_7">ডাউনলোড করার দুটি পদ্ধতি রয়েছে। অভ্যন্তরীণ এবং বাহ্যিক। যদি আপনি অভ্যন্তরীণভাবে ডাউনলোড করেন, তবে এটি অ্যাপের ভিতরে দেখা যাবে এবং এর জন্য ট্র্যাকিং স্বাভাবিকভাবে কাজ করবে। অন্য বিকল্পটি হল বাহ্যিক ডাউনলোডার ব্যবহার করা। এটি ডাউনলোড করতে একটি ডাউনলোড ম্যানেজার এবং দেখতে একটি পৃথক ভিডিও প্লেয়ার প্রয়োজন। বাহ্যিক ডাউনলোডগুলি Dantotsu অ্যাপের ভিতরে দেখা যাবে না।\n\n• অভ্যন্তরীণভাবে ডাউনলোড করতে:\n\n1. ডাউনলোড বোতামে আলতো চাপুন।\n2. প্রথমবারের জন্য, এটি আপনাকে একটি ডাউনলোড অবস্থান সেট করতে বলবে। আপনার সমস্ত ডাউনলোড সেখানে সংরক্ষণ করা হবে।\n3. সার্ভার এবং ভিডিওর গুণমান বাছুন।\n4. লাভ।\n\n• বাহ্যিকভাবে ডাউনলোড করতে:\n\n1. Google Play Store থেকে 1DM বা ADM ডাউনলোড করুন।\n2. অ্যাপটিতে প্রবেশ করুন, স্টোরেজ অ্যাক্সেস দিন এবং আপনার পছন্দগুলি সেট করুন (ডাউনলোড গতি, ডাউনলোডিং পাথ ইত্যাদি (ঐচ্ছিক))\n3. এখন যান \`Dantotsu &gt; সেটিংস &gt; সাধারণ &gt; ডাউনলোড ম্যানেজার\` এবং আপনার সেট করা ডাউনলোড ম্যানেজারটি নির্বাচন করুন।\n4. আপনার পছন্দের পর্বে যান এবং যেকোনো সার্ভারের ডাউনলোড আইকনে চাপুন। আপনার পছন্দগুলি আবার সেট করতে একটি পপআপ থাকতে পারে, কেবল \"ডাউনলোড\" এ চাপুন এবং এটি নির্দেশিত পথে সংরক্ষিত হবে।\n\nমন্তব্য: একটি ম্যানেজার ছাড়াই বাহ্যিক ডাউনলোডও সম্ভব কিন্তু এটি সুপারিশ করা হয় না।\n\nনার্ড নোট: অভ্যন্তরীণভাবে ডাউনলোড করা পর্বগুলি \`{আপনার সেট করা অবস্থান}/Dantotsu/Anime/*`\nআপনি সেটিংসে আপনার ডাউনলোড অবস্থান পরিবর্তন করতে পারেন কিন্তু আপনার পূর্বে ডাউনলোড করা পর্বগুলি অ্যাপে আর দেখানো হবে না।</string>
+    <string name="question_9">কীভাবে NSFW বিষয়বস্তু সক্রিয় করবেন?</string>
+    <string name="answer_9">আপনি এই [লিঙ্ক](https://anilist.co/settings/media) থেকে ১৮+ বিষয়বস্তুগুলি সক্রিয় করে এনএসএফডব্লিউ বিস্তার করতে পারেন। আপনার আপনার পছন্দের হতে হবে আবিস্তান &gt; এক্সটেনশন &gt; এনএসএফডব্লিউ এক্সটেনশনগুলি সক্রিয় করা অবশ্যই হবে।</string>
+    <string name="question_10">আমার MAL/Kitsu তালিকা কিভাবে Anilist এ আমদানি করব?</string>
+    <string name="answer_10">এটি কীভাবে করা যায়,\n\nএক্সপোর্ট:\n\n1. [লিঙ্ক](https://malscraper.azurewebsites.net) এ যান।\n2. আপনার Kitsu/MAL ব্যবহারকারী নাম দিয়ে আপনার এনিমে এবং ম্যাঙ্গা তালিকা ডাউনলোড করুন। (এগুলি XML ফরম্যাটে থাকবে)\nনোট: আপনার নির্বাচিত ট্র্যাকারের ব্যবহারকারীর নাম লিখতে হবে\n\nআমদানি:\n\n1. আপনার কিতসু/MAL থেকে আপনার এনিমে এবং ম্যাঙ্গা তালিকা নির্যাতন করার পরে, এখন [এখানে](https://anilist.co/settings/import) যান\n2. উপরের বক্সে এনিমে XML ফাইল নির্বাচন/পৌঁছানো করুন।\n|→নীচের বক্সে ম্যাঙ্গা XML ফাইল নির্বাচন/পৌঁছানো করুন।</string>
+    <string name="question_11">আমার অ্যানিলিস্ট / কিটসু লিস্টটি কীভাবে এমএলে ইমপোর্ট করব?</string>
+    <string name="answer_11">এটা কীভাবে করতে হয়, \n\nএক্সপোর্ট:\n\n1. এই [লিঙ্ক](https://malscraper.azurewebsites.net/) এ যান। \n2. আপনার অ্যানিলিস্ট ইউজারনেম / কিটসু আইডি দিন \'ইউজারনেম / কিটসু ব্যবহারকারী আইডি\' বক্সে। \n3. লিস্ট প্রকার নির্বাচন করুন এবং \'ইমপোর্টে আপডেট_অন_ইমপোর্ট\' চালু করুন। \n4. ফাইলটি ডাউনলোড করুন; এটি .xml ফরম্যাটে থাকবে। নিশ্চিত হন যে, আনিমে এবং ম্যাঙ্গা লিস্ট উভয়ই ডাউনলোড করেছেন।\n\nইমপোর্ট:\n1. আপনার এমএল অ্যাকাউন্টে এটি ইমপোর্ট করতে, এই [লিঙ্ক](https://myanimelist.net/import.php) এ যান এবং ইমপোর্ট প্রকার হিসাবে \'মাই অ্যানিমেলিস্ট ইমপোর্ট\' নির্বাচন করুন। \n2. উপর \'ফাইল চয়ন করুন\' এ প্রেস করুন এবং ডাউনলোড করা অ্যানিমে / ম্যাঙ্গা লিস্ট XML ফাইলটি নির্বাচন করুন। \n3. উপর \'ডাটা ইমপোর্ট\' প্রেস করুন। \nঅভিনন্দন, আপনি এখন নির্বাচিত লিস্টটি আপনার এমএল অ্যাকাউন্টে ইমপোর্ট করেছেন।</string>
+    <string name="question_12">কেন আমি নির্দিষ্ট একটি অ্যানিমে / ম্যাঙ্গা শিরোনাম খুঁজে পাচ্ছি না?
+    </string>
+    <string name="answer_12">যদি বলি আপনি ডানটোত্সুতে কাস্টলেভেনিয়া অনুসন্ধান করছেন। কিন্তু অ্যানিলিস্টে এটি নেই, তাই ডানটোত্সুও নেই। উপরের সমস্যার সমাধান হ\'ল নিম্নলিখিতটি:1) আপনার তালিকাতে নেই যেকোনো অ্যানিমে চলুন।2) দেখার বিভাগে যান।3) যেকোনো উৎস নির্বাচন করুন এবং \'ভুল টাইটেল?\' এ প্রেস করুন।4) এখন কাস্টলেভেনিয়া (আপনি অনুসন্ধান করছিলেন সে অ্যানিমে) অনুসন্ধান করুন এবং সিলেক্ট করুন।5) উপভোগ করুন!যদি আপনি এমনকি এই ধাপগুলির মাধ্যমেও অ্যানিমেটি খুঁজে পাতেন না, তবে তা আপনার ভাগ্যের দুর্ভাগ্য। এমনকিছুটা উৎসও নেই। একটি পরিবর্তন উদ্যোগ করুন।</string>
+    <string name="question_13">সম্পূর্ণরূপে ভুল টাইটেল নির্বাচন করা সূত্র ঠিক করার কীভাবে?</string>
+    <string name="answer_13">Dantotsu নিজস্বভাবে কিছু হোস্ট না করে বরং অন্য উৎসের উপর নির্ভর করে। এপিসোড দেখানোর সময়, টাইটেল অনুসন্ধান করার পরে সোর্স দ্বারা প্রথম ফলাফল নির্বাচন করে। Dantotsu-র কোনও উত্তমতা পরীক্ষা করার উপায় নেই যে সেটি বৈধ কিনা, না এটি সেটা চেনার কোনও উপায়। তাই, এটার জন্য, আমাদের উপর \'ভুল টাইটেল?\' আছে যা সোর্স নামের নিচে (উপরের লেআউটে) অবস্থান করে। আপনি এটি ক্লিক করে সঠিক ফলাফল/টাইটেল নির্বাচন করতে পারেন এবং এর এপিসোড উপভোগ করতে পারেন।
+    </string>
+    <string name="question_14">সবুজ ম্যাঙ্গা পড়ার উপায় কী?</string>
+    <string name="answer_14">আপনি কি সবুজ ম্যাঙ্গা খুঁজছেন? আপনার জন্য দু: খোঁজে দেওয়ার আপত্তি জানাতে দুঃখিত, কিন্তু অত্যন্ত কম পরিমাণের ম্যাঙ্গার সবুজ সংস্করণ আছে। যে গুলির সবুজ সংস্করণ আছে তারা সমস্ত কিছু উপলব্ধ Dantotsu-তে রয়েছে। যেমন, আপনি চেইনসও ম্যানের সবুজ সংস্করণ পড়তে চান। তারপরে নিম্নোক্ত পদক্ষেপ অনুসরণ করুন ↓
+    \n1) Chainsawman যান\n2) \'পড়া\' এ প্রেস করুন\n3) যে কোনও কার্যকর উৎস নির্বাচন করুন\n4) \'ভুল টাইটেল\' এ প্রেস করুন\n5) সবুজ সংস্করণ চেইনসও ম্যান নির্বাচন করুন\n6) উপভোগ করুন\n\nনোট: বহুত কম উৎসগুলির সবুজ সংস্করণ উপলব্ধ হওয়া সত্ত্বেও, এটি ইন্টারনেটের যেখানেই উপলব্ধ হওয়া সম্ভব। তাই একটি পাল্টা উৎস চেষ্টা করুন। যদি কোনও উৎসে এটি না থাকে, তবে আপনার চাহিদার ম্যাঙ্গার সবুজ সংস্করণ বাস্তবায়ন নেই।
+    </string>
+    <string name="question_15">হ্যান্ডশেক ব্যর্থ? কেন টাইমস্ট্যাম্প লোড হচ্ছে না?</string>
+    <string name="answer_15">আপনি এই সমস্যাটি সমাধান করতে পারেন এক্সার্সাইজ থেকে \'প্রক্সি\' চালু করে বা \n\`সেটিংস &gt; অ্যানিমে &gt; প্লেয়ার সেটিংস &gt; টাইমস্ট্যাম্প &gt; প্রক্সি\`। যদি টাইমস্ট্যাম্প এখনো লোড হচ্ছে না কিন্তু হ্যান্ডশেক ব্যর্থ পপাপ ঠিক হয়েছে, তবে আপনি যে এপিসোডটি দেখছেন তা এখনো টাইমস্ট্যাম্প নেই এর জন্য।
+    </string>
+    <string name="question_16">কোনও উৎসে কিছু খুঁজতে পারছেন না?</string>
+    <string name="answer_16">কিছু মৌলিক সংশোধনার হতে পারে: \n\n• যদি কোনও হোস্ট থাকে তবে আপডেট করুন। \n• ওয়েব ভিউ খোলুন এবং লোড হতে অপেক্ষা করুন। লোডিং সম্পন্ন হওয়ার পরে, পেছনে যান। (যদি ওয়েব ভিউ 404 বা এর মতো কোনও ত্রুটি প্রদর্শন করে, তাহলে আপনার উৎস নামসংক্রান্ত আবশ্যই নিম্নপ্রতি হয়) \n• আপনার সেটিংস থেকে একটি পাল্টা DNS ব্যবহার করুন, পছন্দসই, লিব্রে। \n• একটি বিশ্বস্ত VPN চেষ্টা করুন। (এটি করার পরে আপনাকে প্রথম পদক্ষেপটি পুনরায় করতে হবে) \n\nযদি উপরের কোনও পদক্ষেপ কাজ না করে, তবে একটি পাল্টা উৎস ব্যবহার করুন অথবা সাহায্যের জন্য আমাদের [ডিসকর্ড](https://discord.gg/invite/4HPZ5nAWwM) এ যোগ দিন।
+    </string>
+    <string name="question_17">কিছু কাজের পরামর্শ এবং ট্রিকস</string>
+    <string name="answer_17">নিম্নলিখিতটি আপনি যে কিছু পরামর্শ এবং ট্রিকস জানতে পারেন - \n \n \n - সেটিংসে ড্যান্টোটসু লোগোটি ধরে রাখলে, আপনি যদি কোনও নতুন আপডেট থাকে তা চেক করতে পারেন নিজস্বভাবে। \n \n - একটি ত্রুটি মেসেজ/ট্যাগ/সমনাম/শিরোনামকে ধরে রাখলে, আপনি এটি কপি করতে পারেন। \n \n - আপনি একটি পর্ব অন্য অ্যাপস দিয়ে খুলতে পারেন যেটি অন্য ভিডিও প্লেয়ার বা ডাউনলোড ম্যানেজার ব্যবহার করে পর্ব স্ট্রীমিং করার সাহায্যে বা পর্ব ডাউনলোড করার সাহায্যে এটি থেকে বোঝায়। \n \n - আপনি এই [লিঙ্ক](https://anilist.co/settings/lists) ব্যবহার করে কাস্টম তালিকা সেট আপ করতে পারেন। (আপনাকে সাইন ইন করা প্রয়োজন) \n \n - আপনার পর্ব/অধ্যায়টি স্বয়ংক্রিয়ভাবে সামগ্রীয়ের পরিচালনা না করার পরে যদি এটি প্রগ্রেস হয় না তবে সেটির স্ট্যাটাস বার (পরিকল্পনা/পুনরাবৃত্তি/দেখছি বোতাম) ধরে রাখুন। পরবর্তী পরবর্তী পর্ব/অধ্যায় শুরু করতে যখন আপনি একটি পর্ব শেষ করেন/প্রয়োজন হয়, তখন আপনি একটি পপআপ পেয়ে যাবেন। সেখানে হ্যাঁ চাপুন।
+    </string>
+    <string name="question_18">আমি Anilist-এ লগ ইন করতে পারছি না।</string>
+    <string name="answer_18">এটি হওয়ার কারণ সম্ভবত আপনি ডিফল্ট ব্রাউজার ব্যবহার করছেন না।\n\n&gt;আপনাকে Anilist-এ লগইন করতে Chrome কে আপনার ডিফল্ট ব্রাউজার হিসেবে সেট করতে হবে।\n\n&gt;লগইন বোতামটি প্রদর্শন করতে কয়েক সেকেন্ড সময় নেয়।\n\nযদি এটি কাজ না করে তবে আপনি সম্ভবত Anilist দ্বারা IP ব্যান হতে পারেন বা আপনার ISP নিজেই Anilist নিষিদ্ধ করেছে। আমরা বিশ্বাস করি এটি অত্যন্ত অসম্ভাব্য তাই আপনার ব্রাউজারে [Anilist](https://anilist.co) খুলুন এবং দেখুন এটি যদি ঘটেছে।</string>
+    <string name="question_19">টরেন্ট কি? আমি এটা কিভাবে ব্যবহার করব?</string>
+    <string name="answer_19">টরেন্ট বা আনুষ্ঠানিকভাবে বিটটরেন্ট হল পিয়ার-টু-পিয়ার ফাইল শেয়ারিংয়ের জন্য একটি ইন্টারনেট যোগাযোগ প্রোটোকল। একটি টরেন্ট নেটওয়ার্ক ফাইল হোস্ট করতে কেন্দ্রীয় সার্ভার ব্যবহার করে না। এটি একটি বিকেন্দ্রীভূত পদ্ধতিতে ফাইলগুলি ভাগ করে। একটি টরেন্ট নেটওয়ার্কের দুটি ধরণের পিয়ার রয়েছে। সিডার এবং লিচার।\n\n• সিডার : এগুলি সেই পিয়ারগুলি যারা ডাউনলোড সম্পন্ন করেছে এবং সম্পূর্ণ ফাইল রয়েছে। এবং এখন তারা এই ফাইলটি অন্য পিয়ারদের সাথে ভাগ করছে যাকে বীজ বলা হয়। অন্তত একটি সিডার ছাড়া একটি টরেন্ট কাজ করতে পারে না। একটি টরেন্টের যত বেশি সিডার থাকে, তত ভাল।\n\n• লিচার : এগুলি সেই পিয়ারগুলি যারা বর্তমানে ফাইলটি ডাউনলোড করছে। যদি তাদের বর্তমানে 40% ডাউনলোড করা থাকে তবে তারা এটি যে কোনও অন্যান্য পিয়ারকে শেয়ার করবে যারা এটি অনুরোধ করে।\n\nএকটি কেন্দ্রীভূত সার্ভারের বিপরীতে, টরেন্টগুলির ব্যান্ডউইথ সীমা নেই। আপনি শত শত সিডার থেকে আপনার ফাইলগুলি আপনার ইন্টারনেট যে সর্বোচ্চ গতিতে অফার করতে পারে তা পেতে পারেন। কিন্তু অনেক আইএসপি টরেন্টগুলিকে ধীর করার জন্য থ্রোটল করে কারণ এটি তাদের অবকাঠামোর উপর দাবি রাখে। এটি এড়াতে একটি VPN ব্যবহার করুন।\n\n• টরেন্ট কীভাবে ব্যবহার করবেন :\n\n1. \`Dantotsu &gt; সেটিংস &gt; অ্যাড-অন &gt; টরেন্ট অ্যাড-অন\` থেকে টরেন্ট অ্যাড-অন ইনস্টল করুন।\n2. একটি উৎস পান যা টরেন্ট সরবরাহ করে।\n3. একটি VPN ব্যবহার করুন। টরেন্টিং করার সময় VPN ব্যবহার করার শুধুমাত্র উপকারিতা রয়েছে। VPN ছাড়া আপনার IP ঠিকানা প্রকাশিত হবে, আপনার ISP আপনার নেটওয়ার্ককে থ্রোটল করবে এবং আপনি একটি প্রথম বিশ্বের দেশে থাকলে আপনাকে সম্ভবত জরিমানা করা হবে। আপনি কী করছেন তা জানেন না তাহলে এটি একটি VPN ছাড়া ব্যবহার করবেন না।\n4. এখন টরেন্টিং শুরু করতে সেই উত্সটি ব্যবহার করুন।</string>
+    <string name="subscribed_notification">সাবস্ক্রাইব করা হয়েছে! নতুন এপিসোড যখন %1$s-তে রিলিজ হবে, তখন আপনি নোটিফিকেশন পাবেন।</string>
+    <string name="unsubscribed_notification">সাবস্ক্রাইব করা হয়েছে, আপনি কোনও নোটিফিকেশন পাবেন না।</string>
+    <string name="episode_plural">পর্ব</string>
+    <string name="episode_singular">পর্ব</string>
+    <string name="chapter_singular">অধ্যায়</string>
+    <string name="chapter_plural">অধ্যায়</string>
+    <string name="filter_status">"স্ট্যাটাস : %1$s"</string>
+    <string name="filter_source">"সোর্স : %1$s"</string>
+    <string name="filter_format">"ফরম্যাট: %1$s"</string>
+    <string name="filter_country">"দেশ : %1$s"</string>
+    <string name="filter_sort">"সারণি: %1$s"</string>
+    <string name="filter_exclude">"%1$s না"</string>
+    <string name="search_by_image">চিত্র দ্বারা অনুসন্ধান</string>
+    <string name="upload_image">চিত্র আপলোড করুন</string>
+    <string name="similarity_text">সামান্যতা: %1$s %%</string>
+    <string name="time_range">%1$s থেকে %2$s পর্যন্ত</string>
+    <string name="invalid_url">অবৈধ URL</string>
+    <string name="no_anilist_id_found">কোনও অনিলিস্ট আইডি পাওয়া যায়নি</string>
+    <string name="error_loading_image">ছবি লোড করার সময় ত্রুটি</string>
+    <string name="discord_logout_success">সফলভাবে লগ আউট হয়েছে</string>
+    <string name="discord_try_again">আবার লগ ইন চেষ্টা করুন</string>
+    <string name="error_loading_discord_user_data">ডিসকর্ড ব্যবহারকারীর তথ্য লোড করার সময় ত্রুটি</string>
+    <string name="discord_warning"><![CDATA[লগইন করার মাধ্যমে, আপনার ডিসকর্ড এখন দেখাবে যে আপনি কি দেখছেন এবং ড্যান্টোটসুতে কি পড়ছেন\n\nআপনি যদি গোপন মোডে থাকেন, তাহলে ড্যান্টোটসু খোলা করার সময় আপনি অনলাইন হয়ে যাবেন।\n\nএটি ডিসকর্ড টস ভঙ্গি করে।\n\nতবে ডিসকর্ড কোনও ব্যক্তিকে কাস্টম রিচ প্রিজেন্স (যেটি ড্যান্টোটসু ব্যবহার করে) ব্যবহার করার জন্য কখনই কারোকে ব্যান করেনি। তবে আপনাকে এখনও সতর্ক করা হয়েছে।\n\nড্যান্টোটসু আপনার অ্যাকাউন্টে কোনও ঘটনা ঘটে না এটি দায়বদ্ধ নয়।]]></string>
+    <string name="warning">সতর্কতা</string>
+    <string name="force_legacy_installer">লেগেসি ইনস্টলার ফোর্স করুন</string>
+    <string name="extensions_settings">এক্সটেনশন</string>
+    <string name="NSFWExtention">এনএসএফডব্লিউ এক্সটেনশন</string>
+    <string name="skip_loading_extension_icons">এক্সটেনশন আইকন লোড করা বাদ দিন</string>
+    <string name="use_material_you">মেটেরিয়াল ইউ ব্যবহার করুন</string>
+    <string name="use_app_theme">অ্যাপ এর থিম ব্যবহার করুন</string>
+    <string name="extension_specific_dns">এক্সটেনশন-নির্দিষ্ট ডিএনএস</string>
+    <string name="theme_">থিমঃ</string>
+    <string name="user_agent">ইউজার এজেন্ট</string>
+    <string name="custom_theme">কাস্টম থিমঃ</string>
+    <string name="use_custom_theme">কাস্টম থিম ব্যবহার করুন</string>
+    <string name="use_unique_theme_for_each_item">প্রতিটি আইটেমের জন্য একক থিম ব্যবহার করুন</string>
+    <string name="oled_theme_variant">ওএলইডি থিম ভ্যারিয়েন্ট</string>
+    <string name="installed_anime">ইনস্টলড অ্যানিমে</string>
+    <string name="available_anime">উপলব্ধ অ্যানিমে</string>
+    <string name="installed_manga">ইনস্টলড ম্যাঙ্গা</string>
+    <string name="color_picker">কালার পিকার</string>
+    <string name="random_selection">এলোমেলো নির্বাচন</string>
+    <string name="listed_in_library">গ্রন্থাগারে তালিকাভুক্ত</string>
+    <string name="incognito_mode">বিজ্ঞাপন মোড</string>
+    <string name="appwidget_text">উদাহরণ</string>
+    <string name="configure">কনফিগার করুন</string>
+    <string name="add_widget">উইজেট যুক্ত করুন</string>
+    <string name="app_widget_description">এটি একটি অ্যাপ উইজেট বর্ণনা</string>
+    <string name="upcoming_anime">আসন্ন আনিমে</string>
+    <string name="airing_image">উড়ান</string>
+    <string name="anime_downloads">অ্যানিমে ডাউনলোড</string>
+    <string name="purge_anime_downloads">সমস্ত অ্যানিমে ডাউনলোড মুছুন</string>
+    <string name="purge_manga_downloads">সমস্ত ম্যাঙ্গা ডাউনলোড মুছুন</string>
+    <string name="purge_novel_downloads">সমস্ত উপন্যাস ডাউনলোড মুছুন</string>
+    <string name="requires_android_12">এ্যান্ড্রয়েড 12+ প্রয়োজন</string>
+    <string name="share_username_in_crash_reports">ক্র্যাশ রিপোর্টসমূহে ব্যবহারকারীর নাম শেয়ার করুন</string>
+    <string name="pinned_sources">পিন্ড উত্স</string>
+    <string name="backup_restore">ব্যাকআপ এবং পুনরুদ্ধার</string>
+    <string name="restore_settings">সেটিংস আমদানি করুন</string>
+    <string name="restore_settings_underline"><u>সেটিংস পুনরুদ্ধার করুন</u></string>
+    <string name="try_internal_cast_experimental">আন্তরিক কাস্ট চেষ্টা করুন (পরীক্ষামূলক)</string>
+    <string name="comments_button">Enable Comments</string>
+    <string name="comments_button_desc">Dantotsu\'s very own comments server</string>
+    <string name="comments">মন্তব্য</string>
+    <string name="newest">নতুন</string>
+    <string name="oldest">পুরাতন</string>
+    <string name="highest_rated">সর্বোচ্চ রেটেড</string>
+    <string name="lowest_rated">নিম্নতম রেটেড</string>
+    <string name="compare"><u>তুলনা করুন</u></string>
+    <string name="view_following">অনুসরণ দেখুন</string>
+    <string name="menu">মেন্যু</string>
+    <string name="view_followers">অনুগামী দেখুন</string>
+    <string name="no_fav_anime">ব্যবহারকারীর পছন্দের কোনও অ্যানিমে নেই</string>
+    <string name="no_fav_manga">ব্যবহারকারীর পছন্দের কোনও ম্যাঙ্গা নেই</string>
+    <string name="fav_character">প্রিয় চরিত্র</string>
+    <string name="fav_staff">প্রিয় স্টাফ</string>
+    <string name="stats">পরিসংখ্যান</string>
+    <string name="days_watched">দিন দেখা হয়েছে</string>
+    <string name="total_anime">মোট অ্যানিমে</string>
+    <string name="anime_mean_score">অ্যানিমের গড় স্কোর</string>
+    <string name="volume_read">পড়া বলিউম</string>
+    <string name="total_manga">মোট ম্যাঙ্গা</string>
+    <string name="manga_mean_score">ম্যাঙ্গার গড় স্কোর</string>
+    <string name="about_me">আমার সম্পর্কে</string>
+    <string name="follow">অনুসরণ করুন</string>
+    <string name="following">ফলোইং</string>
+    <string name="unfollow">ফলো বাতিল</string>
+    <string name="follows_you">আপনাকে ফলো করে</string>
+    <string name="mutual">সমান সমান</string>
+    <string name="success">সফল</string>
+    <string name="error">কোনো সমশ্যা হয়েছে</string>
+    <string name="error_msg">সমস্যা: %1$s</string>
+    <string name="please_wait">দয়া মায়া করে অপেক্ষা করুন</string>
+    <string name="upcoming">আসন্ন</string>
+    <string name="no_shows_to_display">দেখানোর মত কোনো শো নেই</string>
+    <string name="extension_name">এক্সটেনশন এর নাম</string>
+    <string name="extension_version">ভার্সন</string>
+    <string name="enter_password_to_decrypt_file">আপনার পাসওয়ার্ড এনটার করুন ফাইল দেক্র‍িপ্ট করতে</string>
+    <string name="show_rotate_button">ঘুরানোর বাটন দেখান</string>
+    <string name="default_manga_settings">নিরধারিত মাঙা সেটিংস</string>
+    <string name="use_dark_theme">অন্ধকার থিম ব্যবহার করুন</string>
+    <string name="use_oled_theme">ওলেড থিম ব্যবহার করুন</string>
+    <string name="scanlators">স্ক্যানিয়েটরস</string>
+    <string name="exporting_requires_encryption">ক্রেডেন্টিয়াল এক্সপোর্ট করতে পাসওয়ার্ড প্রয়োজন.</string>
+    <string name="manga_queue">মাঙ্গা সারি (WIP)</string>
+    <string name="anime_queue">অনিমে সারি (WIP)</string>
+    <string name="no_offline_manga_found">কোন অফলাইন মঙ্গা খুঁজে পাওয়া যায় নি</string>
+    <string name="sort">বিন্যাস</string>
+    <string name="download">ডাউনলোড</string>
+    <string name="scanlator">স্কেনলেটর</string>
+    <string name="set_cookies">কুকিস সেট করুন</string>
+    <string name="open_website">ওয়েবসাইট খুলুন</string>
+    <string name="log_to_file">ফাইলে লগ</string>
+    <string name="logging_warning">এপ্লিকেশনের গতি হ্রাস পেতে ফাইলে লগিং সক্রিয় করা হয়। সমস্যা অনুভব করছেন তবে মাত্র সক্রিয় করুন।</string>
+    <string name="radius">রেডিয়াস</string>
+    <string name="sampling">স্যাম্প্লিং</string>
+    <string name="blur_banners">ব্লার ব্যানার</string>
+    <string name="blur">ব্লার</string>
+    <string name="hide_scroll_bar">স্ক্রল বার লুকান</string>
+    <string name="share_profile">Share Profile</string>
+    <string name="copy_user_id">Copy user ID</string>
+    <string name="anilist_notification_filters">নোটিফিকেশন বিন্যাস করুন</string>
+    <string name="anilist_notifications_checking_time">অনিলিস্ট নোটিফিকেশন আপডেট সময়সূচি: %1$s</string>
+    <string name="comment_notification_checking_time">মন্তব্য নোটিফিকেশন আপডেট সময়সূচি: %1$s</string>
+    <string name="activities">ক্রিয়াকলাপ</string>
+    <string name="enable_rpc">Enable Discord RPC</string>
+    <string name="enable_rpc_desc">Display your taste to plebs on Discord!</string>
+    <string name="incorrect_password">ভুল পাসওয়ার্ড</string>
+    <string name="password_cannot_be_empty">পাসওয়ার্ড খালি থাকতে পারে না</string>
+    <string name="unknown_file_type">অজ্ঞাত ফাইল টাইপ</string>
+    <string name="error_importing_settings">সেটিংস ইপমোর্ট সম্ভব হয় নি</string>
+    <string name="download_manager">ডাউনলোড ম্যানেজার</string>
+    <string name="enter_password">পাসওয়ার্ড এন্টার</string>
+    <string name="you_cursed">আপনী অবিষপ্ত ওয়েছেন :pwayge:</string>
+    <string name="purge_confirm">আপনি কি সব ডাউনলোড %1$s মুছতে চান?</string>
+    <string name="delete_fail_reason">মুছে ব্যর্থ কারণ %1$s</string>
+    <string name="delete_fail">মুছে ফেলা ব্যর্থ হয়েছে</string>
+    <string name="hide_replies">রিপ্লাই লুকান</string>
+    <string name="view_reply">রিপ্লাই দেখুন</string>
+    <string name="view_replies">রিপ্লাই দেখুন</string>
+    <string name="view_replies_count">%1$d রিপ্লাই দেখুন</string>
+    <string name="replying_to">%1$s কে রিপ্লাই করুন</string>
+    <string name="delete_comment">কমেন্ট মুছুন</string>
+    <string name="delete_comment_confirm">আপনি কি এই কমেন্ট মুছতে চান?</string>
+    <string name="comment_deleted">কমেন্ট মুছা হয়েছে</string>
+    <string name="ban_user">ব্যবহারকারী ব্যান করুন</string>
+    <string name="ban_user_confirm">আপনি কি এই ব্যবহারকারীকে ব্যান করতে চান?</string>
+    <string name="user_banned">ব্যবহারকারী নিষিদ্ধ</string>
+    <string name="report_comment">মন্তব্য রিপোর্ট করুন</string>
+    <string name="report_comment_confirm">নির্ধারিত নিয়মগুলি লঙ্ঘন করলে শুধুমাত্র মন্তব্য রিপোর্ট করুন। আপনি কি নিশ্চিত যে আপনি এই মন্তব্যটি রিপোর্ট করতে চান?</string>
+    <string name="comment_reported">মন্তব্য রিপোর্ট করা হয়েছে</string>
+    <string name="list">তালিকা</string>
+    <string name="grid">গ্রিড</string>
+    <string name="compact">কম্পাক্ট</string>
+    <string name="webview_not_installed">ওয়েবভিউ ইনস্টল করা হয়নি</string>
+    <string name="video_quality">গুণগত: %1$dp</string>
+    <string name="size_unknown">আজানা আকার</string>
+    <string name="mb_size">%1$s MB</string>
+    <string name="button_restore">পুনরুদ্ধার করুন</string>
+    <string name="button_backup">ব্যাকআপ করুন</string>
+    <string name="no_location_selected">কোন অবস্থান নির্বাচিত হয়নি</string>
+    <string name="enjoying_app">অ্যাপটি ব্যবহারে আনন্দ করছেন?</string>
+    <string name="consider_donating">দান করার বিবেচনা করুন!</string>
+    <string name="no_moners">কোনো টাকা নেই :(</string>
+    <string name="you_be_rich">এটা ঠিক আছে, আপনি শীঘ্রই ধনী হবেন :prayge:</string>
+    <string name="donate">দান করুন :)</string>
+    <string name="do_it">এটা করুন!</string>
+    <string name="password">পাসওয়ার্ড</string>
+    <string name="profile_stats_widget">আপনার হোম স্ক্রিন থেকে অগ্রগতি ট্র্যাক করুন</string>
+    <string name="anime_watched">অ্যানিমে\nদেখা</string>
+    <string name="manga_read">ম্যাঙ্গা\nপড়া</string>
+    <string name="loading">লোড হচ্ছে…</string>
+    <string name="user_stats">%1$s এর পরিসংখ্যান</string>
+    <string name="please">অনুগ্রহ করে</string>
+    <string name="log_in">লগ ইন</string>
+    <string name="or_join">অথবা যোগদান করুন</string>
+    <string name="top_background_color">শীর্ষ পৃষ্ঠ রং</string>
+    <string name="bottom_background_color">নীচের পৃষ্ঠ রং</string>
+    <string name="countdown_text_color">কাউন্টডাউন টেক্সট রং</string>
+    <string name="title_color">টাইটেল রং</string>
+    <string name="stat_text_color">পরিসংখ্যান টেক্সট রং</string>
+    <string name="placeholder">প্লেসহোল্ডার</string>
+    <string name="anime_add_repository">অ্যানিমে রিপো যোগ করুন</string>
+    <string name="manga_add_repository">ম্যাঙ্গা রিপো যোগ করুন</string>
+    <string name="novel_add_repository">Add Novel Repo</string>
+    <string name="edit_repositories">রিপোসিটরি সম্পাদনা করুন</string>
+    <string name="rem_repository">রিপোসিটরি মুছে ফেলতে চান?</string>
+    <string name="trending_movies">ট্রেন্ডিং চলচ্চিত্র</string>
+    <string name="include_list">তালিকা অন্তর্ভুক্ত করুন</string>
+    <string name="top_rated">সর্বোচ্চ রেটেড</string>
+    <string name="most_favourite">সবচেয়ে প্রিয়</string>
+    <string name="trending_manhwa">ট্রেন্ডিং মানহোয়া</string>
+    <string name="liked_by">কার পছন্দে আছে</string>
+    <string name="adult_only_content">শুধুমাত্র প্রাপ্তবয়স্কদের জন্য বিষয়বস্তু</string>
+    <string name="dir_error">আপনার পথ সেট করা যাবে না</string>
+    <string name="dir_access">ডাউনলোড অ্যাক্সেস</string>
+    <string name="dir_access_msg">আপনার ডাউনলোড সংরক্ষণের জন্য একটি ডিরেক্টরি নির্বাচন করুন</string>
+    <string name="change_download_location">ডাউনলোড স্থান পরিবর্তন করুন</string>
+    <string name="download_location_msg">আপনি কি নিশ্চিত যে আপনি ডাউনলোড স্থান পরিবর্তন করতে চান?\nপুরাতন ডাউনলোড আর অ্যাক্সেসযোগ্য না থাকতে পারে।</string>
+    <string name="report">রিপোর্ট</string>
+    <string name="ban">প্রতিবন্ধিত করুন</string>
+    <string name="voice_actors">ভয়েস অ্যাক্টরস</string>
+    <string name="download_permission_required">ডাউনলোড করতে অনুমতি প্রয়োজন</string>
+    <string name="media">মিডিয়া</string>
+    <string name="users">ব্যবহারকারী</string>
+    <string name="social">সামাজিক</string>
+    <string name="auto_skip_recap">অটো স্কিপ রিক্যাপ</string>
+    <string name="use_anilist_icon">AniList আইকন ব্যবহার করুন</string>
+    <string name="audio_tracks">অডিও ট্র্যাক</string>
+    <string name="disabled_track">অক্ষম</string>
+    <string name="invalid_track">অবৈধ</string>
+    <string name="unknown_track">\[%1$s\] অজানা</string>
+    <string name="accounts_desc">Anilist, MAL এবং ডিসকর্ড।\nআর কি প্রয়োজন হতে পারে?</string>
+    <string name="theme_desc">আপনার অ্যাপের ভাইবে পরিবর্তন করুন</string>
+    <string name="common_desc">ইউআই এবং অন্যান্য কাকবাবু জিনিসগুলি</string>
+    <string name="anime_desc">কিভাবে দেখতে চান তা নির্বাচন করুন</string>
+    <string name="manga_desc">কিভাবে পড়তে চান তা নির্বাচন করুন</string>
+    <string name="extensions_desc">আপনার নির্ভরযোগ্য রিপোসিটরিগুলি ব্যবস্থাপনা করুন</string>
+    <string name="addons_desc">এপ থেকে আরো সুবিধা লাভ করুন</string>
+    <string name="alsettings_desc">Change your AniList settings</string>
+    <string name="airing_notifications">Airing Anime notifications</string>
+    <string name="airing_notifications_desc">Get notified whenever a new episode drops</string>
+    <string name="display_adult_content">18+ Content</string>
+    <string name="display_adult_content_desc">Enable NSFW content</string>
+    <string name="restrict_messages">Restrict messages to following</string>
+    <string name="restrict_messages_desc">Allow only users I follow to message me</string>
+    <string name="notifications_desc">আপনার সংবাদ এবং আপডেট কাস্টমাইজ করুন</string>
+    <string name="about_desc">Dantotsu সম্পর্কে আরও জানুন</string>
+    <string name="faq_desc">Dantotsu সম্পর্কিত সাধারণ প্রশ্ন</string>
+    <string name="check_app_updates_desc">অ্যাপের আপডেট চেক করুন গিটহাবে</string>
+    <string name="share_username_in_crash_reports_desc">ক্র্যাশ রিপোর্টে ব্যবহারকারীর নাম শেয়ার করুন</string>
+    <string name="devs_desc">Dantotsu এর নিজস্ব অনপেইড শ্রমিকরা</string>
+    <string name="forks_desc">আরো মত Dantotsu</string>
+    <string name="disclaimer_desc">মনে রাখতে হবে এটা</string>
+    <string name="enable_torrent_desc">এটি পটভূমিতে একটি টরেন্ট সার্ভার চালাবে</string>
+    <string name="player_settings_desc">সব প্লেয়ার সম্পর্কিত সেটিংস</string>
+    <string name="purge_anime_downloads_desc">সমস্ত ডাউনলোড করা অ্যানিমে মুছে ফেলুন</string>
+    <string name="prefer_dub_desc">ডাব মিডিয়াকে ডিফল্ট হিসাবে নির্বাচন করুন</string>
+    <string name="show_yt_desc">সাপোর্টেড মিডিয়ার জন্য YouTube লিঙ্ক দেখান</string>
+    <string name="include_list_anime_desc">অ্যানিমে এক্সপ্লোর পেজে তালিকা আইটেমগুলিকে অন্তর্ভুক্ত করুন</string>
+    <string name="ui_settings_desc">সব UI সম্পর্কিত সেটিংস</string>
+    <string name="download_manager_select_desc">অ্যানিমে ডাউনলোড করার জন্য ডিফল্ট ম্যানেজার</string>
+    <string name="backup_restore_desc">আপনার পছন্দের সেটিংস সবজায় রাখুন</string>
+    <string name="change_download_location_desc">যেখানে সমস্ত ডাউনলোড করা জিনিস যায়</string>
+    <string name="always_continue_content_desc">যেখানে সর্বদা যাওয়া হয়েছিল তারকে চালিয়ে যান</string>
+    <string name="search_source_list_desc">আপনার মিডিয়া না থাকলে অটো-সেলেক্ট করুন</string>
+    <string name="recentlyListOnly_desc">সম্প্রতি ট্যাবে শুধুমাত্র আপনার তালিকা আইটেমগুলি দেখান</string>
+    <string name="adult_only_content_desc">এক্সপ্লোর পেজে শুধুমাত্র প্রাপ্তবয়স্ক বিষয় দেখান</string>
+    <string name="anime_add_repository_desc">বিভিন্ন উৎস থেকে অ্যানিমে এক্সটেনশন যোগ করুন</string>
+    <string name="manga_add_repository_desc">বিভিন্ন উৎস থেকে ম্যাঙ্গা এক্সটেনশন যোগ করুন</string>
+    <string name="novel_add_repository_desc">Add Novel Extensions from various sources</string>
+    <string name="user_agent_desc">আপনার ডিফল্ট ব্যবহারকারী এজেন্ট পরিবর্তন করুন</string>
+    <string name="force_legacy_installer_desc">এক্সটেনশন ইনস্টল করতে পুরোনো অ্যান্ড্রয়েড ফোনের জন্য লেগেসি ইনস্টলার ব্যবহার করুন</string>
+    <string name="skip_loading_extension_icons_desc">এক্সটেনশন পেজে এক্সটেনশনগুলির আইকন লোড করা না করুন</string>
+    <string name="NSFWExtention_desc">Enable 18+ extensions from search (May remove some useful extensions)</string>
+    <string name="reader_settings_desc">সব রিডার সম্পর্কিত সেটিংস</string>
+    <string name="purge_manga_downloads_desc">সমস্ত ডাউনলোড করা ম্যাঙ্গা মুছে ফেলুন</string>
+    <string name="purge_novel_downloads_desc">সমস্ত ডাউনলোড করা উপন্যাস মুছে ফেলুন</string>
+    <string name="include_list_desc">ম্যাঙ্গা এক্সপ্লোর পেজে তালিকা আইটেমগুলিকে অন্তর্ভুক্ত করুন</string>
+    <string name="anilist_notification_filters_desc">অগ্রিম করণীয় নির্বাচন করুন</string>
+    <string name="anilist_notifications_checking_time_desc">আপনি যে পর্যায়ে অ্যাপ অনিলিস্ট নোটিফিকেশন চেক করতে চান তা সেট করুন</string>
+    <string name="comment_notification_checking_time_desc">আপনি যে পর্যায়ে অ্যাপ মন্তব্য বিজ্ঞপ্তি চেক করতে চান তা সেট করুন</string>
+    <string name="notification_for_checking_subscriptions_desc">সাবস্ক্রিপশন চেক করার জন্য বিজ্ঞপ্তি দেখান</string>
+    <string name="use_alarm_manager_reliable_desc">ফোনের ব্যাটারি অপ্টিমাইজার পার করতে ব্যবহার করুন</string>
+    <string name="oled_theme_variant_desc">এতে অনেক কালো</string>
+    <string name="use_material_you_desc">আপনার ওয়ালপেপারের মতো একই রং ব্যবহার করুন</string>
+    <string name="use_unique_theme_for_each_item_desc">মিডিয়ার ব্যানার থেকে রং ব্যবহার করুন</string>
+    <string name="use_custom_theme_desc">থিমে নিজের রং ব্যবহার করুন</string>
+    <string name="color_picker_desc">একটি রং নির্বাচন করুন</string>
+    <string name="hide_private">প্রাইভেট মিডিয়া হোম স্ক্রীন থেকে লুকান</string>
+    <string name="hide_private_desc">অ্যাক্সেস করতে \"Continue Watching\"-এ দীর্ঘ ক্লিক করুন</string>
+    <string name="torrent_addon">টরেন্ট অ্যাড-অন</string>
+    <string name="enable_torrent">টরেন্ট চালু করুন</string>
+    <string name="anime_downloader_addon">অ্যানিমে ডাউনলোডার অ্যাড-অন</string>
+    <string name="install_torrent_addon">টরেন্ট অ্যাড-অন ইনস্টল করুন</string>
+    <string name="loaded_successfully">সফলভাবে লোড হয়েছে</string>
+    <string name="not_installed">ইনস্টল করা হয়নি</string>
+    <string name="torrent_extension_not_supported">এই ডিভাইসে টরেন্ট অ্যাড-অন সমর্থিত নয়</string>
+    <string name="update_addon">অ্যাড-অন আপডেট উপলব্ধ</string>
+    <string name="install_addon">অ্যাড-অন ইনস্টল করুন</string>
+    <string name="download_addon_not_found">অ্যাড-অন পাওয়া যায়নি</string>
+    <string name="image">ছবি</string>
+    <string name="clear_history">ইতিহাস সাফ করুন</string>
+    <string name="failed_ext_install_conflict">সংঘর্ষের কারণে এক্সটেনশন ইনস্টল করা ব্যর্থ হয়েছে</string>
+    <string name="reading">পড়া</string>
+    <string name="watching">দেখা</string>
+    <string name="avatar">%1$s\ [অবতার]</string>
+    <string name="cover">%1$s\ [কভার]</string>
+    <string name="banner">%1$s\ [ব্যানার]</string>
+    <string name="your_story">আপনার গল্প</string>
+    <string name="your_progress">আপনার অগ্রগতি</string>
+    <string name="you">আপনি</string>
+    <string name="logout_confirm">আপনি কি নিশ্চিত যে আপনি লগআউট করতে চান?</string>
+    <string name="app_died">অ্যাপ মারা গেছে</string>
+    <string name="an_unexpected_error_occurred">একটি অপ্রত্যাশিত ত্রুটি ঘটেছে।\nদয়া করে এর জন্য একটি ক্র্যাশ রিপোর্ট ডেভেলপারকে পাঠানোর জন্য :)</string>
+    <string name="copy_report">রিপোর্ট অনুলিপি</string>
+    <string name="share_as_file">ফাইল হিসেবে শেয়ার করুন</string>
+    <string name="hide_in_home_screen">হোম স্ক্রিনে লুকান</string>
+    <string name="hidden">লুকানো</string>
+    <string name="no_hidden_items">কোনও লুকানো আইটেম নেই</string>
+    <string name="download_addon_not_installed">ডাউনলোড অ্যাড-অন ইনস্টল করা হয়নি</string>
+    <string name="would_you_like_to_install">আপনি কি এটি ইনস্টল করতে চান?</string>
+    <string name="torrent_addon_not_available">টরেন্ট অ্যাড-অন উপলব্ধ নয়</string>
+    <string name="download_subtitle">সাবটাইটেল ডাউনলোড করুন</string>
+    <string name="download_audio_tracks">অডিও ট্র্যাক ডাউনলোড করুন</string>
+    <string name="no_video_selected">কোনও ভিডিও নির্বাচন করা হয়নি</string>
+    <string name="no_subtitles_available">কোনও সাবটাইটেল উপলব্ধ নয়</string>
+    <string name="vote_out_of_total">(%1$s প্রবন্ধের মধ্যে %2$s এটি পছন্দ করেছেন)</string>
+    <string name="create_new_activity">নতুন কার্যকলাপ তৈরি করুন</string>
+    <string name="create_new_review">নতুন পর্যালোচনা তৈরি করুন</string>
+    <string name="create_new_reply">নতুন প্রতিক্রিয়া তৈরি করুন</string>
+    <string name="create_new_message">নতুন বার্তা তৈরি করুন</string>
+    <string name="create">তৈরি করুন</string>
+    <string name="preview">পূর্বরূপ</string>
+    <string name="cannot_be_empty">পাঠ খালি রাখা যাবে না</string>
+    <string name="reply">উত্তর</string>
+    <string name="replies">উত্তর</string>
+    <string name="open_rules">নির্দেশিকা খুলুন</string>
+    <string name="post_to_anilist_warning">AniList এ পোস্ট করার মাধ্যমে, আপনি AniList এর নিয়ম এবং মানদণ্ডের সাথে সম্মত হন</string>
+    <string name="view_subscriptions">সাবস্ক্রিপশন দেখুন</string>
+    <string name="view_subscriptions_desc">সমস্ত আপনার সাবস্ক্রিপশন দেখুন এবং সম্পাদনা করুন</string>
+    <string name="subscriptions">সাবস্ক্রিপশন</string>
+    <string name="subscription_deleted">সাবস্ক্রিপশন মোছা হয়েছে</string>
+    <string name="foreground_service_not_allowed">অ্যাপ পেছনে আছে যখন ইনস্টল করা যাবে না</string>
+    <string name="ping">পিং</string>
+    <string name="basic">মৌলিক</string>
+    <string name="full">সম্পূর্ণ</string>
+    <string name="test_type">পরীক্ষা প্রকার</string>
+    <string name="extension_type">এক্সটেনশন প্রকার</string>
+    <string name="view_options">বিকল্প দেখুন</string>
+    <string name="extension_test">এক্সটেনশন পরীক্ষা</string>
+    <string name="extension_test_desc">এক্সটেনশনগুলি কাজ করছে কিনা পরীক্ষা করুন</string>
+    <string name="start_test">পরীক্ষা শুরু করুন</string>
+    <string name="no_extensions_selected">কোনও এক্সটেনশন নির্বাচন করা হয়নি</string>
+    <string name="ping_success">পিং সফল: %1$s মিলিসেকেন্ড</string>
+    <string name="ping_error">পিং ব্যর্থ। কোড: %1$s, বার্তা: %2$s</string>
+    <string name="test_not_supported">এই এক্সটেনশনের জন্য পরীক্ষা সমর্থিত নয়</string>
+    <string name="no_results_found">ফলাফল পাওয়া যায়নি। এক্সটেনশন ভাঙা হতে পারে</string>
+    <string name="results_found">%1$s ফলাফল পাওয়া গেছে</string>
+    <string name="title_search_test">শিরোনাম অনুসন্ধান পরীক্ষা: %1$s</string>
+    <string name="episode_search_test">এপিসোড অনুসন্ধান পরীক্ষা: %1$s</string>
+    <string name="chapter_search_test">অধ্যায় অনুসন্ধান পরীক্ষা: %1$s</string>
+    <string name="video_search_test">ভিডিও অনুসন্ধান পরীক্ষা: %1$s</string>
+    <string name="image_search_test">ছবি অনুসন্ধান পরীক্ষা: %1$s</string>
+    <string name="book_search_test">বই অনুসন্ধান পরীক্ষা: %1$s</string>
+    <string name="failed_to_fix">ঠিক করতে ব্যর্থ হয়েছে</string>
+    <string name="running_fixes">ফিক্স চলছে...</string>
+    <string name="test_search">পরীক্ষা অনুসন্ধান</string>
+    <string name="app_lock">অ্যাপ লক</string>
+    <string name="app_lock_desc">অ্যাপটির লক করুন একটি পাসওয়ার্ড দিয়ে\n( ͡° ͜ʖ ͡°)</string>
+    <string name="confirm_password">পাসওয়ার্ড নিশ্চিত করুন</string>
+    <string name="password_mismatch">পাসওয়ার্ড মিলছে না বা ফাঁকি!</string>
+    <string name="enable_biometric">বায়োমেট্রিক সক্রিয় করুন</string>
+    <string name="bio_prompt_info_title">বায়োমেট্রিক প্রমাণীকরণ</string>
+    <string name="bio_prompt_info_desc">অ্যাপটি আনলক করতে আপনার আঙ্গুল বা মুখের ব্যবহার করুন</string>
+    <string name="enable_forgot_password">ভুলে গেলে পাসওয়ার্ড সক্রিয় করুন (10 সেকেন্ডের জন্য পরিষ্কার বোতাম চাপুন)</string>
+    <string name="hide_notification_dot">নোটিফিকেশন ডট লুকান</string>
+    <string name="private_mode">ব্যক্তিগত</string>
+    <string name="omega_cursed">you have been Ǫ̴̺̙͎̤̫͓̮̰̿͝M̴͇̤͗́̾̈́̑̍̿̈͌͝Ȅ̴̡̨̛͉̣̙̩̲̣̤̟̪̣̎͗̎̆̒̉͆̆̕ͅͅǴ̸̯̬̗̠̙͛͐̀̈͋̀̈̽́̎̿͘͘͝ͅĀ̶̧̲̀ͅ ̴̢̟͕̜̓̾̓C̶̬̜̰̘̝̱̫͓͙̭̈́͐͋̓̏̈̍̓̀̌̾̚Ư̸̛̤̱̈́͆̽͊͛̐̓́̑͘̕̕͝R̸̨̨͈̬̱̺͕̪̪̘͕͎̂͛́̅̆̓̀͝ͅS̴̨̨̛̩̭̗̹̰̭̥͉̮̝̠̓̔͆̂͊͆̀̈́̅̕͘̚͝È̴̢̛̝͈̳͉͈͒͒̒̄̏̈̈́D̸̢̡̨̜̞̩̼̫̹̗̮͛̀̈̋̾̇̕̕͜ͅ</string>
+    <string name="omega_freed">you have been freed</string>
+    <string name="subtitle_langauge">Preferred Langauge</string>
+    <string name="socks5">SOCKS5</string>
+    <string name="host">Host</string>
+    <string name="port">Port</string>
+    <string name="authentication">Authentication</string>
+    <string name="proxy">SOCKS5 Proxy</string>
+    <string name="proxy_desc">Route All Your Network Traffic Through a SOCKS5 Proxy</string>
+    <string name="proxy_setup">Proxy Setup</string>
+    <string name="proxy_setup_desc">Configure your Socks5 Proxy</string>
+    <string name="clear_stored_episode">Clear Stored Episode Data</string>
+    <string name="clear_stored_chapter">Clear Stored Chapter Data</string>
+    <string name="use_additional_codec">Additional Codec Support</string>
+    <string name="textview_sub">Textview Subtitles (Experimental)</string>
+    <string name="textview_sub_stroke">Subtitle Stroke</string>
+    <string name="textview_sub_bottom_margin">Bottom Margin</string>
+    <string name="add_repository">Add Repository</string>
+    <string name="add_repository_desc">A repository link should look like this: https://raw.githubusercontent.com/username/repo/branch/index.min.json\nOr: username/repo/branch</string>
+    <string name="current_repositories">Current Repositories</string>
+    <string name="add_repository_warning">Warning: Extensions from the repository can run arbitrary code on your device. Only use repositories you trust. \n\nBy adding a repository, you agree to: \n\n1. Not use the app for viewing or distributing copyrighted content. \n2. Not use the app for any illegal activities. \n3. Not use the app for any activities that violate the terms of service of the content providers. \n\nThe app or it\'s maintainer are not affiliated in any way with extension providers. The developers are not responsible for any damages caused by the app. \n\nBy adding a repository, you agree to these terms.</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="privacy_policy_desc">Read our privacy policy</string>
+    <string name="failed_to_load">Failed to load</string>
+    <string name="studios">Studios</string>
+</resources>
