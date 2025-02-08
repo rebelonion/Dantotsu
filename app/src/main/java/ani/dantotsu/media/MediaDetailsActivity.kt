@@ -386,7 +386,16 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             viewPager.setCurrentItem(selected, false)
         }
         binding.commentInputLayout.isVisible = selected == 2
-        navBar.selectTabAt(selected)
+
+        // Before selecting the tab, add a safety check
+        val tabCount = binding.mediaBottomBar.tabCount
+        if (selected in 0 until tabCount) {
+            binding.mediaBottomBar.selectTabAt(selected)
+        } else {
+            // Default to first tab if selected index is out of bounds
+            binding.mediaBottomBar.selectTabAt(0)
+        }
+
         navBar.setOnTabSelectListener(object : AnimatedBottomBar.OnTabSelectListener {
             override fun onTabSelected(
                 lastIndex: Int,
