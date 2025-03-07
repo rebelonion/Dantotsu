@@ -569,7 +569,7 @@
     <string name="gender">\n\"__লিংগ:__ \"</string>
     <string name="hometown">\n\"__গৃহ চহৰ:__ \"</string>
     <string name="years_active">\n\"__বছৰ সক্ৰিয়:__ \"</string>
-    <string name="date_of_death">\n\"__Date of Death:__ \"</string>
+    <string name="date_of_death">\n\"__মৃত্যুৰ তাৰিখ:__ \"</string>
     <string name="male">পুৰুষ</string>
     <string name="female">মহিলা</string>
     <string name="question_1">Dantotsu কি?</string>
@@ -792,7 +792,7 @@
     <string name="placeholder">স্থানধাৰক</string>
     <string name="anime_add_repository">অনিমে ৰেপ’ যোগ কৰক</string>
     <string name="manga_add_repository">মাংগা ৰেপ’ যোগ কৰক</string>
-    <string name="novel_add_repository">Add Novel Repo</string>
+    <string name="novel_add_repository">নভেল ৰেপো যোগ কৰক</string>
     <string name="edit_repositories">ৰিপ’জিটৰীসমূহ সম্পাদনা কৰক</string>
     <string name="rem_repository">ৰিপোজিটৰী আঁতৰাব নেকি?</string>
     <string name="trending_movies">ট্ৰেণ্ডিং চলচ্চিত্ৰ</string>
@@ -858,7 +858,7 @@
     <string name="adult_only_content_desc">এক্সপলৰ পেজত মাত্ৰ এদালট কণ্টেনত হে দেখুৱাওক</string>
     <string name="anime_add_repository_desc">বিভিন্ন চৌছৰ পৰা এনিমে এক্সটেনচন যোগ কৰক</string>
     <string name="manga_add_repository_desc">বিভিন্ন চৌছৰ পৰা মাংগা এক্সটেনচন যোগ কৰক</string>
-    <string name="novel_add_repository_desc">Add Novel Extensions from various sources</string>
+    <string name="novel_add_repository_desc">বিভিন্ন উৎসৰ পৰা নভেল এক্সটেনচন যোগ কৰক</string>
     <string name="user_agent_desc">আপোনাৰ ডিফল্ট ব্যৱহাৰকাৰী এজেণ্ট সলনি কৰক</string>
     <string name="force_legacy_installer_desc">পুৰাতন এণ্ড্ৰয়ড ফোনসমূহৰ বাবে পুৰাতন ইণ্স্টলাৰ ব্যৱহাৰ কৰক (এক্সটেনছন ইণ্স্টল কৰিবলৈ)</string>
     <string name="skip_loading_extension_icons_desc">এক্সটেনছনৰ পৃষ্ঠাৰ উপৰত চিত্ৰসমূহ ল\'ড নকৰিব</string>
@@ -984,11 +984,11 @@
     <string name="textview_sub_stroke">সাবটাইটল ষ্ট্ৰোক</string>
     <string name="textview_sub_bottom_margin">তলৰ মৰ্জিন</string>
     <string name="add_repository">ৰিপ\'জিটৰী যোগ কৰক</string>
-    <string name="add_repository_desc">A repository link should look like this: https://raw.githubusercontent.com/username/repo/branch/index.min.json\nOr: username/repo/branch</string>
+    <string name="add_repository_desc">এটা ভঁৰাল সংযোগ এনেধৰণৰ হ\'ব লাগে: https://raw.githubusercontent.com/username/repo/branch/index.min.json\nবা: username/repo/branch</string>
     <string name="current_repositories">বৰ্তমান ৰিপ\'জিটৰীসমূহ</string>
     <string name="add_repository_warning">সতৰ্কতা: ৰিপ\'জিটৰীৰ পৰা এক্সটেনচনসমূহে আপোনাৰ ডিভাইচত যিকোনো অযাচিত কোড চলাব পাৰে। কেৱল বিশ্বাসযোগ্য ৰিপ\'জিটৰীসমূহ ব্যৱহাৰ কৰক। \n\nএটি ৰিপ\'জিটৰী যোগ কৰোঁতে, আপুনি সন্মত হৈছে: \n\n1. অ্যাপ্লিকেশ্বনটো কপিৰাইটযুক্ত সামগ্ৰীৰ দৰ্শন বা বিতৰণৰ বাবে ব্যৱহাৰ নকৰিব। \n2. অ্যাপ্লিকেশ্বনটো কোনো অবৈধ কাৰ্যৰ বাবে ব্যৱহাৰ নকৰিব। \n3. অ্যাপ্লিকেশ্বনটো কন্টেন্ট প্ৰদানকাৰীৰ সাৰ্ভিচ চুক্তি লংঘন কৰা কোনো কাৰ্যৰ বাবে ব্যৱহাৰ নকৰিব। \n\nঅ্যাপ্লিকেশ্বন বা ইয়াৰ ৰক্ষণাবেক্ষক এক্সটেনচন প্ৰদানকাৰীৰ সৈতে যিকোনো ধৰণৰ সম্পৰ্কিত নহয়। ডেভেলপাৰসকলে অ্যাপ্লিকেশ্বন দ্বারা সৃষ্ট কোনো ক্ষতিৰ বাবে দায়ী নহয়। \n\nএটি ৰিপ\'জিটৰী যোগ কৰোঁতে, আপুনি এই শর্তসমূহৰ সৈতে সন্মত হৈছে।</string>
     <string name="privacy_policy">গোপনীয়তা নীতি</string>
     <string name="privacy_policy_desc">আমাৰ গোপনীয়তা নীতি পঢ়ক</string>
     <string name="failed_to_load">লোড কৰাত ব্যৰ্থ</string>
-    <string name="studios">Studios</string>
+    <string name="studios">ষ্টুডিঅ\'</string>
 </resources>
