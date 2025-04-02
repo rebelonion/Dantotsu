@@ -8,7 +8,7 @@
     android:padding="16dp">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="326dp"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
@@ -160,8 +160,8 @@
             android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="265dp"
-                android:layout_height="match_parent"
+                android:layout_width="263dp"
+                android:layout_height="60dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -171,14 +171,23 @@
                     android:fontFamily="@font/poppins_bold"
                     android:text="@string/download" />
 
-                <TextView
+                <EditText
                     android:id="@+id/downloadNo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_bold"
                     android:textColor="?attr/colorSecondary"
+                    android:textSize="12dp"
                     tools:ignore="TextContrastCheck"
-                    tools:text="number" />
+                    tools:text="Number" />
+                <!--                <TextView-->
+                <!--                    android:id="@+id/downloadNo"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:fontFamily="@font/poppins_bold"-->
+                <!--                    android:textColor="?attr/colorSecondary"-->
+                <!--                    tools:ignore="TextContrastCheck"-->
+                <!--                    tools:text="number" />-->
             </LinearLayout>
 
             <androidx.cardview.widget.CardView
@@ -191,7 +200,7 @@
                 <ImageButton
                     android:id="@+id/mediaDownloadTop"
                     android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_height="60dp"
                     android:background="?android:attr/selectableItemBackground"
                     app:srcCompat="@drawable/ic_download_24"
                     app:tint="?attr/colorOnBackground"
@@ -313,9 +322,9 @@
                     android:text="@string/reset" />
 
                 <TextView
+                    android:id="@+id/reset_progress_def"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/reset_progress_def"
                     android:fontFamily="@font/poppins_bold"
                     android:text=""
                     android:textColor="?attr/colorSecondary"
