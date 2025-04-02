@@ -232,12 +232,18 @@ class MangaDownloaderService : Service() {
                                 image.page,
                                 image.source
                             )
+                            if (bitmap == null) {
+                                snackString("${task.chapter} - Retrying to download page ${index.ofLength(3)}, attempt ${retryCount + 1}.")
+                            }
                             retryCount++
                         }
 
-                        if (bitmap != null) {
-                            saveToDisk("${index.ofLength(3)}.jpg", outputDir, bitmap)
+                        if (bitmap == null) {
+                            outputDir.deleteRecursively(this@MangaDownloaderService, false)
+                            throw Exception("${task.chapter} - Unable to download all pages after $retryCount attempts. Try again.")
                         }
+
+                        saveToDisk("${index.ofLength(3)}.jpg", outputDir, bitmap)
                         farthest++
 
                         builder.setProgress(task.imageData.size, farthest, false)
