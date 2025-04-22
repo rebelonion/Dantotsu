@@ -485,7 +485,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
                                 scanlator = chapter.scanlator ?: "Unknown",
                                 imageData = images,
                                 sourceMedia = media,
-                                retries = 2,
+                                retries = 25,
                                 simultaneousDownloads = 2
                             )
 
