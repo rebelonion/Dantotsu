@@ -16,6 +16,7 @@ import eu.kanade.tachiyomi.source.online.HttpSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.FileOutputStream
 
 data class ImageData(
@@ -76,7 +77,7 @@ fun saveImage(
             uri?.let {
                 contentResolver.openOutputStream(it)?.use { os ->
                     bitmap.compress(format, quality, os)
-                }
+                } ?: throw FileNotFoundException("Failed to open output stream for URI: $uri")
             }
         } else {
             val directory =
@@ -86,12 +87,20 @@ fun saveImage(
             }
 
             val file = File(directory, filename)
+
+            // Check if the file already exists
+            if (file.exists()) {
+                println("File already exists: ${file.absolutePath}")
+                return
+            }
+
             FileOutputStream(file).use { outputStream ->
                 bitmap.compress(format, quality, outputStream)
             }
         }
+    } catch (e: FileNotFoundException) {
+        println("File not found: ${e.message}")
     } catch (e: Exception) {
-        // Handle exception here
         println("Exception while saving image: ${e.message}")
     }
 }

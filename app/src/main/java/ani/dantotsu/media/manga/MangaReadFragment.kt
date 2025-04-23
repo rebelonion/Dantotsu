@@ -66,6 +66,7 @@ import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.source.ConfigurableSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import uy.kohesive.injekt.Injekt
@@ -232,25 +233,35 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
     }
 
     fun multiDownload(n: Int) {
-        // Get last viewed chapter
-        val selected = media.userProgress
-        val chapters = media.manga?.chapters?.values?.toList()
-        // Filter by selected language
-        val progressChapterIndex = (chapters?.indexOfFirst {
-            MediaNameAdapter.findChapterNumber(it.number)?.toInt() == selected
-        } ?: 0) + 1
-
-        if (progressChapterIndex < 0 || n < 1 || chapters == null) return
-
-        // Calculate the end index
-        val endIndex = minOf(progressChapterIndex + n, chapters.size)
-
-        // Make sure there are enough chapters
-        val chaptersToDownload = chapters.subList(progressChapterIndex, endIndex)
-
-
-        for (chapter in chaptersToDownload) {
+        lifecycleScope.launch {
+            // Get the last viewed chapter
+            val selected = media.userProgress ?: 0
+            val chapters = media.manga?.chapters?.values?.toList()
+            // Ensure chapters are available in the extensions
+            if (chapters.isNullOrEmpty() || n < 1) return@launch
+            // Find the index of the last viewed chapter
+            val progressChapterIndex = (chapters.indexOfFirst {
+                MediaNameAdapter.findChapterNumber(it.number)?.toInt() == selected
+            } + 1).coerceAtLeast(0)
+            // Calculate the end value for the range of chapters to download
+            val endIndex = (progressChapterIndex + n).coerceAtMost(chapters.size)
+            // Get the list of chapters to download
+            val chaptersToDownload = chapters.subList(progressChapterIndex, endIndex)
+            // Trigger the download for each chapter sequentially
+            for (chapter in chaptersToDownload) {
+                try {
+                    downloadChapterSequentially(chapter)
+                } catch (e: Exception) {
+                    Toast.makeText(requireContext(), "Failed to download chapter: ${chapter.title}", Toast.LENGTH_SHORT).show()
+                }
+            }
+            Toast.makeText(requireContext(), "All downloads completed!", Toast.LENGTH_SHORT).show()
+        }
+    }
+    private suspend fun downloadChapterSequentially(chapter: MangaChapter) {
+        withContext(Dispatchers.IO) {
             onMangaChapterDownloadClick(chapter)
+            delay(2000) // A 2-second download
         }
     }
 
