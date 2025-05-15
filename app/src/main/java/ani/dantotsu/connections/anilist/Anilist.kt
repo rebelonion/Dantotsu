@@ -14,6 +14,8 @@ import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.toast
 import ani.dantotsu.util.Logger
+import com.lagradost.nicehttp.NiceResponse
+import okhttp3.internal.http.HTTP_TOO_MANY_REQUESTS
 import java.util.Calendar
 import java.util.Locale
 import kotlin.math.abs
@@ -191,24 +193,22 @@ object Anilist {
 
     private val cal: Calendar = Calendar.getInstance()
     private val currentYear = cal.get(Calendar.YEAR)
-    private val currentSeason: Int = when (cal.get(Calendar.MONTH)) {
-        0, 1, 2 -> 0
-        3, 4, 5 -> 1
-        6, 7, 8 -> 2
-        9, 10, 11 -> 3
+    private val currentSeason: Int = when (val month = cal.get(Calendar.MONTH)) {
+        in 0..11 -> month / 3
         else -> 0
     }
 
     fun getDisplayTimezone(apiTimezone: String, context: Context): String {
         val noTimezone = context.getString(R.string.selected_no_time_zone)
-        val parts = apiTimezone.split(":")
-        if (parts.size != 2) return noTimezone
 
-        val hours = parts[0].toIntOrNull() ?: 0
-        val minutes = parts[1].toIntOrNull() ?: 0
+        val (hours, minutes) = apiTimezone.split(":")
+            .map { it.toIntOrNull() ?: 0 }
+            .takeIf { it.size == 2 } ?: return noTimezone
+
+
         val sign = if (hours >= 0) "+" else "-"
-        val formattedHours = String.format(Locale.US, "%02d", abs(hours))
-        val formattedMinutes = String.format(Locale.US, "%02d", minutes)
+        val formattedHours = "%02d".format(Locale.US, abs(hours))
+        val formattedMinutes = "%02d".format(Locale.US, minutes)
 
         val searchString = "(GMT$sign$formattedHours:$formattedMinutes)"
         return timeZone.find { it.contains(searchString) } ?: noTimezone
@@ -288,49 +288,81 @@ object Anilist {
         return try {
             if (show) Logger.log("Anilist Query: $query")
             if (rateLimitReset > System.currentTimeMillis() / 1000) {
-                toast("Rate limited. Try after ${rateLimitReset - (System.currentTimeMillis() / 1000)} seconds")
-                throw Exception("Rate limited after ${rateLimitReset - (System.currentTimeMillis() / 1000)} seconds")
+                handleRateLimit()
             }
-            val data = mapOf(
-                "query" to query,
-                "variables" to variables
-            )
-            val headers = mutableMapOf(
-                "Content-Type" to "application/json; charset=utf-8",
-                "Accept" to "application/json"
-            )
+
+            val data = mapOf("query" to query, "variables" to variables)
+            val headers = buildHeaders(useToken)
 
             if (token != null || force) {
-                if (token != null && useToken) headers["Authorization"] = "Bearer $token"
-
-                val json = client.post(
+                val response = client.post(
                     "https://graphql.anilist.co/",
                     headers,
                     data = data,
                     cacheTime = cache ?: 10
                 )
-                val remaining = json.headers["X-RateLimit-Remaining"]?.toIntOrNull() ?: -1
-                Logger.log("Remaining requests: $remaining")
-                if (json.code == 429) {
-                    val retry = json.headers["Retry-After"]?.toIntOrNull() ?: -1
-                    val passedLimitReset = json.headers["X-RateLimit-Reset"]?.toLongOrNull() ?: 0
-                    if (retry > 0) {
-                        rateLimitReset = passedLimitReset
-                    }
-
-                    toast("Rate limited. Try after $retry seconds")
-                    throw Exception("Rate limited after $retry seconds")
+                handleRemainingRequests(response)
+                if (response.code == HTTP_TOO_MANY_REQUESTS) {
+                    handleTooManyRequests(response)
                 }
-                if (!json.text.startsWith("{")) {
+                if (response.text.isNotValid()) {
                     throw Exception(currContext()?.getString(R.string.anilist_down))
                 }
-                json.parsed()
+
+                response.parsed()
             } else null
         } catch (e: Exception) {
-            if (show) snackString("Error fetching Anilist data: ${e.message}")
-            Logger.log("Anilist Query Error: ${e.message}")
+            handleQueryError(e, show)
             null
         }
     }
+
+    @PublishedApi
+    internal fun handleRateLimit() {
+        val retryAfter = rateLimitReset - (System.currentTimeMillis() / 1000)
+        toast("Rate limited. Try after $retryAfter seconds")
+        throw RateLimitException(retryAfter)
+    }
+
+    @PublishedApi
+    internal fun buildHeaders(useToken: Boolean): MutableMap<String, String> {
+        return mutableMapOf(
+            "Content-Type" to "application/json; charset=utf-8",
+            "Accept" to "application/json"
+        ).apply {
+            if (token != null && useToken)
+                this["Authorization"] = "Bearer $token"
+        }
+
+    }
+
+    @PublishedApi
+    internal fun handleRemainingRequests(response: NiceResponse) {
+        val remaining = response.headers["X-RateLimit-Remaining"]?.toIntOrNull() ?: -1
+        Logger.log("Remaining requests: $remaining")
+    }
+
+    @PublishedApi
+    internal fun handleTooManyRequests(response: NiceResponse) {
+        val retry = response.headers["Retry-After"]?.toIntOrNull() ?: -1
+        val passedLimitReset = response.headers["X-RateLimit-Reset"]?.toLongOrNull() ?: 0
+        if (retry > 0) {
+            rateLimitReset = passedLimitReset
+        }
+
+        toast("Rate limited. Try after $retry seconds")
+        throw RateLimitException(retry.toLong())
+    }
+
+    @PublishedApi
+    internal fun String.isNotValid(): Boolean = !this.startsWith("{")
+
+    @PublishedApi
+    internal fun handleQueryError(e: Exception, show: Boolean) {
+        if (show) snackString("Error fetching Anilist data: ${e.message}")
+        Logger.log("Anilist Query Error: ${e.message}")
+    }
 }
+
+class RateLimitException(retryAfter: Long) : Exception("Rate limited. Try after $retryAfter seconds")
 

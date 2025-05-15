@@ -14,6 +14,7 @@ import ani.dantotsu.util.Logger
 import com.anggrayudi.storage.callback.FolderCallback
 import com.anggrayudi.storage.file.deleteRecursively
 import com.anggrayudi.storage.file.moveFolderTo
+import com.anggrayudi.storage.file.takeIfWritable
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
@@ -41,12 +42,10 @@ class DownloadsManager(private val context: Context) {
 
     private fun loadDownloads(): List<DownloadedType> {
         val jsonString = PrefManager.getVal(PrefName.DownloadsKeys, null as String?)
-        return if (jsonString != null) {
+        return jsonString?.let {
             val type = object : TypeToken<List<DownloadedType>>() {}.type
-            gson.fromJson(jsonString, type)
-        } else {
-            emptyList()
-        }
+            gson.fromJson(it, type)
+        } ?: emptyList()
     }
 
     fun addDownload(downloadedType: DownloadedType) {
@@ -74,37 +73,16 @@ class DownloadsManager(private val context: Context) {
         removeMediaCompat(context, title, type)
         val baseDirectory = getBaseDirectory(context, type)
         val directory = baseDirectory?.findFolder(title)
-        if (directory?.exists() == true) {
-            val deleted = directory.deleteRecursively(context, false)
-            if (deleted) {
-                snackString("Successfully deleted")
-            } else {
-                snackString("Failed to delete directory")
-            }
-        } else {
-            snackString("Directory does not exist")
+        removeDirectory(directory)
+        if (!directory.exists())
             cleanDownloads()
-        }
-        when (type) {
-            MediaType.MANGA -> {
-                downloadsList.removeAll { it.titleName == title && it.type == MediaType.MANGA }
-            }
 
-            MediaType.ANIME -> {
-                downloadsList.removeAll { it.titleName == title && it.type == MediaType.ANIME }
-            }
-
-            MediaType.NOVEL -> {
-                downloadsList.removeAll { it.titleName == title && it.type == MediaType.NOVEL }
-            }
-        }
+        downloadsList.removeAll { it.titleName == title && it.type == type }
         saveDownloads()
     }
 
     private fun cleanDownloads() {
-        cleanDownload(MediaType.MANGA)
-        cleanDownload(MediaType.ANIME)
-        cleanDownload(MediaType.NOVEL)
+        MediaType.entries.forEach(::cleanDownload)
     }
 
     private fun cleanDownload(type: MediaType) {
@@ -115,23 +93,20 @@ class DownloadsManager(private val context: Context) {
             MediaType.ANIME -> animeDownloadedTypes
             else -> novelDownloadedTypes
         }
-        if (directory?.exists() == true && directory.isDirectory) {
-            val files = directory.listFiles()
-            for (file in files) {
-                if (!downloadsSubLists.any { it.titleName == file.name }) {
-                    file.deleteRecursively(context, false)
-                }
-            }
-        }
+
+        directory?.takeIf { it.exists() && it.isDirectory }
+            ?.listFiles()
+            ?.forEach {
+                        file -> if (downloadsSubLists.none{ it.titleName == file.name })
+                                    file.deleteRecursively(context, false)
+                      }
+
         //now remove all downloads that do not have a folder
-        val iterator = downloadsList.iterator()
-        while (iterator.hasNext()) {
-            val download = iterator.next()
+        val downloadsNotHavingFolder = downloadsList.filter { download ->
             val downloadDir = directory?.findFolder(download.titleName)
-            if ((downloadDir?.exists() == false && download.type == type) || download.titleName.isBlank()) {
-                iterator.remove()
-            }
+            !downloadDir.exists() && download.type == type || download.titleName.isBlank()
         }
+        downloadsList.removeAll(downloadsNotHavingFolder)
     }
 
     fun moveDownloadsDir(
@@ -140,16 +115,18 @@ class DownloadsManager(private val context: Context) {
         newUri: Uri,
         finished: (Boolean, String) -> Unit
     ) {
-        if (oldUri == newUri) {
-            Logger.log("Source and destination are the same")
-            finished(false, "Source and destination are the same")
+        val (isFinished, message) = when (oldUri) {
+            newUri -> false to "Source and destination are the same"
+            Uri.EMPTY -> true to "Old Uri is empty"
+            else -> false to ""
+        }
+
+        if (message.isNotEmpty()) {
+            Logger.log(message)
+            finished(isFinished, message)
             return
         }
-        if (oldUri == Uri.EMPTY) {
-            Logger.log("Old Uri is empty")
-            finished(true, "Old Uri is empty")
-            return
-        }
+
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val oldBase =
@@ -161,40 +138,20 @@ class DownloadsManager(private val context: Context) {
                 folder.moveFolderTo(context, newBase, false, BASE_LOCATION, object :
                     FolderCallback() {
                     override fun onFailed(errorCode: ErrorCode) {
-                        when (errorCode) {
-                            ErrorCode.CANCELED -> finished(false, "Move canceled")
-                            ErrorCode.CANNOT_CREATE_FILE_IN_TARGET -> finished(
-                                false,
-                                "Cannot create file in target"
-                            )
-
-                            ErrorCode.INVALID_TARGET_FOLDER -> finished(
-                                true,
-                                "Invalid target folder"
-                            ) // seems to still work
-                            ErrorCode.NO_SPACE_LEFT_ON_TARGET_PATH -> finished(
-                                false,
-                                "No space left on target path"
-                            )
-
-                            ErrorCode.UNKNOWN_IO_ERROR -> finished(false, "Unknown IO error")
-                            ErrorCode.SOURCE_FOLDER_NOT_FOUND -> finished(
-                                false,
-                                "Source folder not found"
-                            )
-
-                            ErrorCode.STORAGE_PERMISSION_DENIED -> finished(
-                                false,
-                                "Storage permission denied"
-                            )
-
-                            ErrorCode.TARGET_FOLDER_CANNOT_HAVE_SAME_PATH_WITH_SOURCE_FOLDER -> finished(
-                                false,
-                                "Target folder cannot have same path with source folder"
-                            )
-
-                            else -> finished(false, "Failed to move downloads: $errorCode")
+                        val (isFinished, message) = when (errorCode) {
+                            ErrorCode.CANCELED -> false to "Move canceled"
+                            ErrorCode.CANNOT_CREATE_FILE_IN_TARGET -> false to "Cannot create file in target"
+                            ErrorCode.INVALID_TARGET_FOLDER -> true to "Invalid target folder"
+                            ErrorCode.NO_SPACE_LEFT_ON_TARGET_PATH -> false to "No space left on target path"
+                            ErrorCode.UNKNOWN_IO_ERROR -> false to "Unknown IO error"
+                            ErrorCode.SOURCE_FOLDER_NOT_FOUND -> false to "Source folder not found"
+                            ErrorCode.STORAGE_PERMISSION_DENIED -> false to "Storage permission denied"
+                            ErrorCode.TARGET_FOLDER_CANNOT_HAVE_SAME_PATH_WITH_SOURCE_FOLDER ->
+                                false to "Target folder cannot have same path with source folder"
+                            else -> false to "Failed to move downloads: $errorCode"
                         }
+
+                        finished(isFinished, message)
                         Logger.log("Failed to move downloads: $errorCode")
                         super.onFailed(errorCode)
                     }
@@ -235,41 +192,41 @@ class DownloadsManager(private val context: Context) {
             baseDirectory?.findFolder(downloadedType.titleName)
                 ?.findFolder(downloadedType.chapterName)
         downloadsList.removeAll { it.titleName == downloadedType.titleName && it.chapterName == downloadedType.chapterName }
-        // Check if the directory exists and delete it recursively
-        if (directory?.exists() == true) {
-            val deleted = directory.deleteRecursively(context, false)
-            if (deleted) {
-                if (toast) snackString("Successfully deleted")
-            } else {
-                snackString("Failed to delete directory")
-            }
-        } else {
-            snackString("Directory does not exist")
-        }
+        removeDirectory(directory, toast)
     }
 
     fun purgeDownloads(type: MediaType) {
         val directory = getBaseDirectory(context, type)
-        if (directory?.exists() == true) {
-            val deleted = directory.deleteRecursively(context, false)
-            if (deleted) {
-                snackString("Successfully deleted")
-            } else {
-                snackString("Failed to delete directory")
-            }
-        } else {
-            snackString("Directory does not exist")
-        }
-
+        removeDirectory(directory)
         downloadsList.removeAll { it.type == type }
         saveDownloads()
     }
 
+    private fun removeDirectory(directory: DocumentFile?) = removeDirectory(directory, true)
+
+    private fun removeDirectory(directory: DocumentFile?, toast: Boolean): Boolean {
+        val (isRemoved, messageStatus) = if (directory.exists()) {
+            if (directory.deleteRecursively(context, false) && toast) {
+                true to "Successfully deleted"
+            } else {
+                false to "Failed to delete directory"
+            }
+        }
+        else {
+            false to "Directory does not exist"
+        }
+        snackString(messageStatus)
+        return isRemoved
+    }
+
+    private fun DocumentFile?.exists(): Boolean = this?.exists() == true
+
+    private fun DocumentFile?.deleteRecursively(context: Context,
+                                                 childrenOnly: Boolean = false
+    ): Boolean = this?.deleteRecursively(context, childrenOnly) == true
+
     companion object {
         private const val BASE_LOCATION = "Dantotsu"
-        private const val MANGA_SUB_LOCATION = "Manga"
-        private const val ANIME_SUB_LOCATION = "Anime"
-        private const val NOVEL_SUB_LOCATION = "Novel"
 
 
         /**
@@ -280,23 +237,8 @@ class DownloadsManager(private val context: Context) {
          */
         @Synchronized
         private fun getBaseDirectory(context: Context, type: MediaType): DocumentFile? {
-            val baseDirectory = Uri.parse(PrefManager.getVal<String>(PrefName.DownloadsDir))
-            if (baseDirectory == Uri.EMPTY) return null
-            var base = DocumentFile.fromTreeUri(context, baseDirectory) ?: return null
-            base = base.findOrCreateFolder(BASE_LOCATION, false) ?: return null
-            return when (type) {
-                MediaType.MANGA -> {
-                    base.findOrCreateFolder(MANGA_SUB_LOCATION, false)
-                }
-
-                MediaType.ANIME -> {
-                    base.findOrCreateFolder(ANIME_SUB_LOCATION, false)
-                }
-
-                else -> {
-                    base.findOrCreateFolder(NOVEL_SUB_LOCATION, false)
-                }
-            }
+            return getBaseDirectory(context)
+                    ?.findOrCreateFolder(type.asText(), false)
         }
 
         /**
@@ -331,11 +273,8 @@ class DownloadsManager(private val context: Context) {
             chapter: String? = null
         ): Long {
             val directory = getSubDirectory(context, type, false, title, chapter) ?: return 0
-            var size = 0L
-            directory.listFiles().forEach {
-                size += it.length()
-            }
-            return size
+            return directory.listFiles()
+                            .sumOf { it.length() }
         }
 
         fun addNoMedia(context: Context) {
@@ -349,8 +288,8 @@ class DownloadsManager(private val context: Context) {
         private fun getBaseDirectory(context: Context): DocumentFile? {
             val baseDirectory = Uri.parse(PrefManager.getVal<String>(PrefName.DownloadsDir))
             if (baseDirectory == Uri.EMPTY) return null
-            val base = DocumentFile.fromTreeUri(context, baseDirectory) ?: return null
-            return base.findOrCreateFolder(BASE_LOCATION, false)
+            return DocumentFile.fromTreeUri(context, baseDirectory)
+                                ?.findOrCreateFolder(BASE_LOCATION, false)
         }
 
         private val lock = Any()
