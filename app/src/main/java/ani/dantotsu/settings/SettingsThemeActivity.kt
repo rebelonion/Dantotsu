@@ -96,7 +96,8 @@ class SettingsThemeActivity : AppCompatActivity(), SimpleDialog.OnDialogResultLi
             themeSwitcher.apply {
                 setText(themeText)
                 setAdapter(
-                    ArrayAdapter(context,
+                    ArrayAdapter(
+                        context,
                         R.layout.item_dropdown,
                         ThemeManager.Companion.Theme.entries.map {
                             it.theme.substring(

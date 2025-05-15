@@ -50,8 +50,9 @@ open class RPC(val token: String, val coroutineContext: CoroutineContext) {
             val assetApi = RPCExternalAsset(data.applicationId, token!!, client, json)
             suspend fun String.discordUrl() = assetApi.getDiscordUri(this)
 
-            return json.encodeToString(Presence.Response(
-                3,
+            return json.encodeToString(
+                Presence.Response(
+                    3,
                 Presence(
                     activities = listOf(
                         Activity(

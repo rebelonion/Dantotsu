@@ -52,14 +52,15 @@ class SubscriptionsBottomDialog : BottomSheetDialogFragment() {
         }
 
         groupedSubscriptions.forEach { (parserName, mediaList) ->
-            adapter.add(SubscriptionSource(
-                parserName,
-                mediaList.toMutableList(),
-                adapter,
-                getParserIcon(parserName)
-            ) { group ->
-                adapter.remove(group)
-            })
+            adapter.add(
+                SubscriptionSource(
+                    parserName,
+                    mediaList.toMutableList(),
+                    adapter,
+                    getParserIcon(parserName)
+                ) { group ->
+                    adapter.remove(group)
+                })
         }
     }
 

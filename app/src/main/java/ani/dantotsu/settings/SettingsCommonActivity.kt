@@ -193,7 +193,8 @@ class SettingsCommonActivity : AppCompatActivity() {
                                             PrefManager.setVal(PrefName.OverridePassword, true)
                                         }
                                         val password = view.passwordInput.text.toString()
-                                        val confirmPassword = view.confirmPasswordInput.text.toString()
+                                        val confirmPassword =
+                                            view.confirmPasswordInput.text.toString()
                                         if (password == confirmPassword && password.isNotEmpty()) {
                                             PrefManager.setVal(PrefName.AppPassword, password)
                                             if (view.biometricCheckbox.isChecked) {
@@ -201,11 +202,13 @@ class SettingsCommonActivity : AppCompatActivity() {
                                                     BiometricManager
                                                         .from(applicationContext)
                                                         .canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK) ==
-                                                        BiometricManager.BIOMETRIC_SUCCESS
+                                                            BiometricManager.BIOMETRIC_SUCCESS
 
                                                 if (canBiometricPrompt) {
                                                     val biometricPrompt =
-                                                        BiometricPromptUtils.createBiometricPrompt(this@SettingsCommonActivity) { _ ->
+                                                        BiometricPromptUtils.createBiometricPrompt(
+                                                            this@SettingsCommonActivity
+                                                        ) { _ ->
                                                             val token = UUID.randomUUID().toString()
                                                             PrefManager.setVal(
                                                                 PrefName.BiometricToken,
@@ -235,12 +238,14 @@ class SettingsCommonActivity : AppCompatActivity() {
                                     setOnShowListener {
                                         view.passwordInput.requestFocus()
                                         val canAuthenticate =
-                                            BiometricManager.from(applicationContext).canAuthenticate(
-                                                BiometricManager.Authenticators.BIOMETRIC_WEAK,
-                                            ) == BiometricManager.BIOMETRIC_SUCCESS
+                                            BiometricManager.from(applicationContext)
+                                                .canAuthenticate(
+                                                    BiometricManager.Authenticators.BIOMETRIC_WEAK,
+                                                ) == BiometricManager.BIOMETRIC_SUCCESS
                                         view.biometricCheckbox.isVisible = canAuthenticate
                                         view.biometricCheckbox.isChecked =
-                                            PrefManager.getVal(PrefName.BiometricToken, "").isNotEmpty()
+                                            PrefManager.getVal(PrefName.BiometricToken, "")
+                                                .isNotEmpty()
                                         view.forgotPasswordCheckbox.isChecked =
                                             PrefManager.getVal(PrefName.OverridePassword)
                                     }
@@ -314,7 +319,8 @@ class SettingsCommonActivity : AppCompatActivity() {
                                     setTitle(R.string.change_download_location)
                                     setMessage(R.string.download_location_msg)
                                     setPosButton(R.string.ok) {
-                                        val oldUri = PrefManager.getVal<String>(PrefName.DownloadsDir)
+                                        val oldUri =
+                                            PrefManager.getVal<String>(PrefName.DownloadsDir)
                                         launcher.registerForCallback { success ->
                                             if (success) {
                                                 toast(getString(R.string.please_wait))

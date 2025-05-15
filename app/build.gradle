@@ -17,9 +17,8 @@ android {
         applicationId "ani.dantotsu"
         minSdk 21
         targetSdk 35
-        versionCode((System.currentTimeMillis() / 60000).toInteger())
-        versionName "3.2.1"
-        versionCode 300200100
+        versionName "3.2.2"
+        versionCode 300200200
         signingConfig signingConfigs.debug
 
     }

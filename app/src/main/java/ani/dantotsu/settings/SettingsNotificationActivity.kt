@@ -82,9 +82,18 @@ class SettingsNotificationActivity : AppCompatActivity() {
                                 setTitle(R.string.subscriptions_checking_time)
                                 singleChoiceItems(timeNames, curTime) { i ->
                                     curTime = i
-                                    it.settingsTitle.text = getString(R.string.subscriptions_checking_time_s, timeNames[i])
-                                    PrefManager.setVal(PrefName.SubscriptionNotificationInterval, curTime)
-                                    TaskScheduler.create(context, PrefManager.getVal(PrefName.UseAlarmManager)).scheduleAllTasks(context)
+                                    it.settingsTitle.text = getString(
+                                        R.string.subscriptions_checking_time_s,
+                                        timeNames[i]
+                                    )
+                                    PrefManager.setVal(
+                                        PrefName.SubscriptionNotificationInterval,
+                                        curTime
+                                    )
+                                    TaskScheduler.create(
+                                        context,
+                                        PrefManager.getVal(PrefName.UseAlarmManager)
+                                    ).scheduleAllTasks(context)
                                 }
                                 show()
                             }
@@ -120,21 +129,22 @@ class SettingsNotificationActivity : AppCompatActivity() {
                                     .toMutableSet()
                             val selected = types.map { filteredTypes.contains(it) }.toBooleanArray()
                             context.customAlertDialog().apply {
-                                 setTitle(R.string.anilist_notification_filters)
-                                 multiChoiceItems(
+                                setTitle(R.string.anilist_notification_filters)
+                                multiChoiceItems(
                                     types.map { name ->
                                         name.replace("_", " ").lowercase().replaceFirstChar {
-                                        if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString()
-                                    } }.toTypedArray(),
+                                            if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString()
+                                        }
+                                    }.toTypedArray(),
                                     selected
                                 ) { updatedSelected ->
-                                types.forEachIndexed { index, type ->
-                                    if (updatedSelected[index]) {
-                                        filteredTypes.add(type)
-                                    } else {
-                                        filteredTypes.remove(type)
+                                    types.forEachIndexed { index, type ->
+                                        if (updatedSelected[index]) {
+                                            filteredTypes.add(type)
+                                        } else {
+                                            filteredTypes.remove(type)
+                                        }
                                     }
-                                }
                                     PrefManager.setVal(PrefName.AnilistFilteredTypes, filteredTypes)
                                 }
                                 show()
@@ -152,8 +162,8 @@ class SettingsNotificationActivity : AppCompatActivity() {
                         icon = R.drawable.ic_round_notifications_none_24,
                         onClick = {
                             context.customAlertDialog().apply {
-                                 setTitle(R.string.subscriptions_checking_time)
-                                 singleChoiceItems(
+                                setTitle(R.string.subscriptions_checking_time)
+                                singleChoiceItems(
                                     aItems.toTypedArray(),
                                     PrefManager.getVal<Int>(PrefName.AnilistNotificationInterval)
                                 ) { i ->
@@ -181,11 +191,11 @@ class SettingsNotificationActivity : AppCompatActivity() {
                         icon = R.drawable.ic_round_notifications_none_24,
                         onClick = {
                             context.customAlertDialog().apply {
-                                 setTitle(R.string.subscriptions_checking_time)
-                                 singleChoiceItems(
+                                setTitle(R.string.subscriptions_checking_time)
+                                singleChoiceItems(
                                     cItems.toTypedArray(),
                                     PrefManager.getVal<Int>(PrefName.CommentNotificationInterval)
-                                ) {  i ->
+                                ) { i ->
                                     PrefManager.setVal(PrefName.CommentNotificationInterval, i)
                                     it.settingsTitle.text =
                                         getString(
@@ -225,9 +235,9 @@ class SettingsNotificationActivity : AppCompatActivity() {
                         switch = { isChecked, view ->
                             if (isChecked) {
                                 context.customAlertDialog().apply {
-                                     setTitle(R.string.use_alarm_manager)
-                                     setMessage(R.string.use_alarm_manager_confirm)
-                                     setPosButton(R.string.use) {
+                                    setTitle(R.string.use_alarm_manager)
+                                    setMessage(R.string.use_alarm_manager_confirm)
+                                    setPosButton(R.string.use) {
                                         PrefManager.setVal(PrefName.UseAlarmManager, true)
                                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                                             if (!(getSystemService(Context.ALARM_SERVICE) as AlarmManager).canScheduleExactAlarms()) {

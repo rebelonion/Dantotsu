@@ -427,7 +427,8 @@ class ExoplayerView :
                 false -> 0f
             }
 
-        val textElevation = PrefManager.getVal<Float>(PrefName.SubBottomMargin) / 50 * resources.displayMetrics.heightPixels
+        val textElevation =
+            PrefManager.getVal<Float>(PrefName.SubBottomMargin) / 50 * resources.displayMetrics.heightPixels
         textView.translationY = -textElevation
     }
 
@@ -606,9 +607,9 @@ class ExoplayerView :
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             pipEnabled =
                 packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE) &&
-                PrefManager.getVal(
-                    PrefName.Pip,
-                )
+                        PrefManager.getVal(
+                            PrefName.Pip,
+                        )
             if (pipEnabled) {
                 exoPip.visibility = View.VISIBLE
                 exoPip.setOnClickListener {
@@ -1044,7 +1045,8 @@ class ExoplayerView :
                             }
                         }
 
-                        override fun onSingleClick(event: MotionEvent) = if (isSeeking) doubleTap(false, event) else handleController()
+                        override fun onSingleClick(event: MotionEvent) =
+                            if (isSeeking) doubleTap(false, event) else handleController()
                     },
                 )
             val rewindArea = playerView.findViewById<View>(R.id.exo_rewind_area)
@@ -1079,7 +1081,8 @@ class ExoplayerView :
                             }
                         }
 
-                        override fun onSingleClick(event: MotionEvent) = if (isSeeking) doubleTap(true, event) else handleController()
+                        override fun onSingleClick(event: MotionEvent) =
+                            if (isSeeking) doubleTap(true, event) else handleController()
                     },
                 )
             val forwardArea = playerView.findViewById<View>(R.id.exo_forward_area)
@@ -1449,7 +1452,8 @@ class ExoplayerView :
                         else -> mutableListOf()
                     }
                 val startTimestamp = Calendar.getInstance()
-                val durationInSeconds = if (exoPlayer.duration != C.TIME_UNSET) (exoPlayer.duration / 1000).toInt() else 1440
+                val durationInSeconds =
+                    if (exoPlayer.duration != C.TIME_UNSET) (exoPlayer.duration / 1000).toInt() else 1440
 
                 val endTimestamp =
                     Calendar.getInstance().apply {
@@ -1502,12 +1506,12 @@ class ExoplayerView :
         @Suppress("UNCHECKED_CAST")
         val list =
             (
-                PrefManager.getNullableCustomVal(
-                    "continueAnimeList",
-                    listOf<Int>(),
-                    List::class.java,
-                ) as List<Int>
-            ).toMutableList()
+                    PrefManager.getNullableCustomVal(
+                        "continueAnimeList",
+                        listOf<Int>(),
+                        List::class.java,
+                    ) as List<Int>
+                    ).toMutableList()
         if (list.contains(media.id)) list.remove(media.id)
         list.add(media.id)
         PrefManager.setCustomVal("continueAnimeList", list)
@@ -1567,7 +1571,11 @@ class ExoplayerView :
         subtitle = intent.getSerialized("subtitle")
             ?: when (
                 val subLang: String? =
-                    PrefManager.getNullableCustomVal("subLang_${media.id}", null, String::class.java)
+                    PrefManager.getNullableCustomVal(
+                        "subLang_${media.id}",
+                        null,
+                        String::class.java
+                    )
             ) {
                 null -> {
                     when (episode.selectedSubtitle) {
@@ -1575,8 +1583,12 @@ class ExoplayerView :
                         -1 ->
                             ext.subtitles.find {
                                 it.language.contains(lang, ignoreCase = true) ||
-                                    it.language.contains(getLanguageCode(lang), ignoreCase = true)
+                                        it.language.contains(
+                                            getLanguageCode(lang),
+                                            ignoreCase = true
+                                        )
                             }
+
                         else -> ext.subtitles.getOrNull(episode.selectedSubtitle!!)
                     }
                 }
@@ -1651,7 +1663,8 @@ class ExoplayerView :
                 }.build()
         val dataSourceFactory =
             DataSource.Factory {
-                val dataSource: HttpDataSource = OkHttpDataSource.Factory(httpClient).createDataSource()
+                val dataSource: HttpDataSource =
+                    OkHttpDataSource.Factory(httpClient).createDataSource()
                 defaultHeaders.forEach {
                     dataSource.setRequestProperty(it.key, it.value)
                 }
@@ -1717,16 +1730,18 @@ class ExoplayerView :
                         val docFile =
                             directory.listFiles().firstOrNull {
                                 it.name?.endsWith(".mp4") == true ||
-                                    it.name?.endsWith(".mkv") == true ||
-                                    it.name?.endsWith(
-                                        ".${Injekt
-                                            .get<DownloadAddonManager>()
-                                            .extension
-                                            ?.extension
-                                            ?.getFileExtension()
-                                            ?.first ?: "ts"}",
-                                    ) ==
-                                    true
+                                        it.name?.endsWith(".mkv") == true ||
+                                        it.name?.endsWith(
+                                            ".${
+                                                Injekt
+                                                    .get<DownloadAddonManager>()
+                                                    .extension
+                                                    ?.extension
+                                                    ?.getFileExtension()
+                                                    ?.first ?: "ts"
+                                            }",
+                                        ) ==
+                                        true
                             }
                         if (docFile != null) {
                             val uri = docFile.uri
@@ -1840,30 +1855,30 @@ class ExoplayerView :
                     "%02d:%02d:%02d",
                     TimeUnit.MILLISECONDS.toHours(playbackPosition),
                     TimeUnit.MILLISECONDS.toMinutes(playbackPosition) -
-                        TimeUnit.HOURS.toMinutes(
-                            TimeUnit.MILLISECONDS.toHours(
-                                playbackPosition,
+                            TimeUnit.HOURS.toMinutes(
+                                TimeUnit.MILLISECONDS.toHours(
+                                    playbackPosition,
+                                ),
                             ),
-                        ),
                     TimeUnit.MILLISECONDS.toSeconds(playbackPosition) -
-                        TimeUnit.MINUTES.toSeconds(
-                            TimeUnit.MILLISECONDS.toMinutes(
-                                playbackPosition,
+                            TimeUnit.MINUTES.toSeconds(
+                                TimeUnit.MILLISECONDS.toMinutes(
+                                    playbackPosition,
+                                ),
                             ),
-                        ),
                 )
-                customAlertDialog().apply {
-                    setTitle(getString(R.string.continue_from, time))
-                    setCancelable(false)
-                    setPosButton(getString(R.string.yes)) {
-                        buildExoplayer()
-                    }
-                    setNegButton(getString(R.string.no)) {
-                        playbackPosition = 0L
-                        buildExoplayer()
-                    }
-                    show()
+            customAlertDialog().apply {
+                setTitle(getString(R.string.continue_from, time))
+                setCancelable(false)
+                setPosButton(getString(R.string.yes)) {
+                    buildExoplayer()
                 }
+                setNegButton(getString(R.string.no)) {
+                    playbackPosition = 0L
+                    buildExoplayer()
+                }
+                show()
+            }
         } else {
             buildExoplayer()
         }
@@ -1928,7 +1943,7 @@ class ExoplayerView :
                     if (PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
                         exoSubtitleView.visibility = View.GONE
                         customSubtitleView.visibility = View.VISIBLE
-                        val newCues = cueGroup.cues.map { it.text.toString() ?: "" }
+                        val newCues = cueGroup.cues.map { it.text.toString() }
 
                         if (newCues.isEmpty()) {
                             customSubtitleView.text = ""
@@ -1940,7 +1955,9 @@ class ExoplayerView :
 
                         val currentPosition = exoPlayer.currentPosition
 
-                        if ((lastSubtitle?.length ?: 0) < 20 || (lastPosition != 0L && currentPosition - lastPosition > 1500)) {
+                        if ((lastSubtitle?.length
+                                ?: 0) < 20 || (lastPosition != 0L && currentPosition - lastPosition > 1500)
+                        ) {
                             activeSubtitles.clear()
                         }
 
@@ -2187,7 +2204,7 @@ class ExoplayerView :
             currentTimeStamp =
                 model.timeStamps.value?.find { timestamp ->
                     timestamp.interval.startTime < playerCurrentTime &&
-                        playerCurrentTime < (timestamp.interval.endTime - 1)
+                            playerCurrentTime < (timestamp.interval.endTime - 1)
                 }
 
             val new = currentTimeStamp
@@ -2213,7 +2230,8 @@ class ExoplayerView :
                                 override fun onTick(millisUntilFinished: Long) {
                                     if (new == null) {
                                         skipTimeButton.visibility = View.GONE
-                                        exoSkip.isVisible = PrefManager.getVal<Int>(PrefName.SkipTime) > 0
+                                        exoSkip.isVisible =
+                                            PrefManager.getVal<Int>(PrefName.SkipTime) > 0
                                         disappeared = false
                                         functionstarted = false
                                         cancelTimer()
@@ -2222,7 +2240,8 @@ class ExoplayerView :
 
                                 override fun onFinish() {
                                     skipTimeButton.visibility = View.GONE
-                                    exoSkip.isVisible = PrefManager.getVal<Int>(PrefName.SkipTime) > 0
+                                    exoSkip.isVisible =
+                                        PrefManager.getVal<Int>(PrefName.SkipTime) > 0
                                     disappeared = true
                                     functionstarted = false
                                     cancelTimer()
@@ -2310,7 +2329,7 @@ class ExoplayerView :
         tracks.groups.forEach {
             println(
                 "Track__: $it\nTrack__: ${it.length}\nTrack__: ${it.isSelected}\n" +
-                    "Track__: ${it.type}\nTrack__: ${it.mediaTrackGroup.id}",
+                        "Track__: ${it.type}\nTrack__: ${it.mediaTrackGroup.id}",
             )
             when (it.type) {
                 TRACK_TYPE_AUDIO -> {
@@ -2365,7 +2384,7 @@ class ExoplayerView :
         when (error.errorCode) {
             PlaybackException.ERROR_CODE_IO_BAD_HTTP_STATUS,
             PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_FAILED,
-            -> {
+                -> {
                 toast("Source Exception : ${error.message}")
                 isPlayerPlaying = true
                 sourceClick()
@@ -2403,9 +2422,9 @@ class ExoplayerView :
         val incognito: Boolean = PrefManager.getVal(PrefName.Incognito)
         val episodeEnd =
             exoPlayer.currentPosition / episodeLength >
-                PrefManager.getVal<Float>(
-                    PrefName.WatchPercentage,
-                )
+                    PrefManager.getVal<Float>(
+                        PrefName.WatchPercentage,
+                    )
         val episode0 = currentEpisodeIndex == 0 && PrefManager.getVal(PrefName.ChapterZeroPlayer)
         if (!incognito && (episodeEnd || episode0) && Anilist.userid != null
         ) {
