@@ -14,8 +14,6 @@ Dantotsu is an [Anilist](https://anilist.co/) only client.
 
 > **Dantotsu (断トツ; Dan-totsu)** literally means "the best of the best" in Japanese. Try it out for yourself and be the judge!
 
-<a href="https://www.buymeacoffee.com/rebelonion"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=rebelonion&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff" /></a>
-
 ## Terms of Use
 By downloading, installing, or using this application, you agree to:
 - Use the application in compliance with all applicable laws

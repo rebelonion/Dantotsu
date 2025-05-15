@@ -226,8 +226,18 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
             ?: return emptyList())
 
         return try {
-            val videos = source.getVideoList(sEpisode)
-            videos.map { videoToVideoServer(it) }
+            // TODO(1.6): Remove else block when dropping support for ext lib <1.6
+            if ((source as AnimeHttpSource).javaClass.declaredMethods.any { it.name == "getHosterList" }){
+                val hosters = source.getHosterList(sEpisode)
+                val allVideos = hosters.flatMap { hoster ->
+                    val videos = source.getVideoList(hoster)
+                    videos.map { it.copy(videoTitle = "${hoster.hosterName} - ${it.videoTitle}") }
+                }
+                allVideos.map { videoToVideoServer(it) }
+            } else {
+                val videos = source.getVideoList(sEpisode)
+                videos.map { videoToVideoServer(it) }
+            }
         } catch (e: Exception) {
             Logger.log("Exception occurred: ${e.message}")
             emptyList()
@@ -576,7 +586,7 @@ class VideoServerPassthrough(private val videoServer: VideoServer) : VideoExtrac
             number,
             format!!,
             FileUrl(videoUrl, headersMap),
-            if (aniVideo.totalContentLength == 0L) null else aniVideo.bytesDownloaded.toDouble()
+            null
         )
     }
 

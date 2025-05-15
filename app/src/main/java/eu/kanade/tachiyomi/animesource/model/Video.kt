@@ -1,31 +1,101 @@
 package eu.kanade.tachiyomi.animesource.model
 
 import android.net.Uri
-import eu.kanade.tachiyomi.network.ProgressListener
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import okhttp3.Headers
-import rx.subjects.Subject
-import java.io.IOException
-import java.io.ObjectInputStream
-import java.io.ObjectOutputStream
 import java.io.Serializable
 
+@kotlinx.serialization.Serializable
 data class Track(val url: String, val lang: String) : Serializable
 
+@kotlinx.serialization.Serializable
+enum class ChapterType {
+    Opening,
+    Ending,
+    Recap,
+    MixedOp,
+    Other,
+}
+
+@kotlinx.serialization.Serializable
+data class TimeStamp(
+    val start: Double,
+    val end: Double,
+    val name: String,
+    val type: ChapterType = ChapterType.Other,
+)
+
 open class Video(
-    val url: String = "",
-    val quality: String = "",
-    var videoUrl: String? = null,
-    headers: Headers? = null,
-    // "url", "language-label-2", "url2", "language-label-2"
+    var videoUrl: String = "",
+    val videoTitle: String = "",
+    val resolution: Int? = null,
+    val bitrate: Int? = null,
+    val headers: Headers? = null,
+    val preferred: Boolean = false,
     val subtitleTracks: List<Track> = emptyList(),
     val audioTracks: List<Track> = emptyList(),
-) : Serializable, ProgressListener {
+    val timestamps: List<TimeStamp> = emptyList(),
+    val internalData: String = "",
+    val initialized: Boolean = false,
+    // TODO(1.6): Remove after ext lib bump
+    val videoPageUrl: String = "",
+) {
 
-    @Transient
-    var headers: Headers? = headers
+    // TODO(1.6): Remove after ext lib bump
+    @Deprecated("Use videoTitle instead", ReplaceWith("videoTitle"))
+    val quality: String
+        get() = videoTitle
 
+    // TODO(1.6): Remove after ext lib bump
+    @Deprecated("Use videoPageUrl instead", ReplaceWith("videoPageUrl"))
+    val url: String
+        get() = videoPageUrl
+
+    // TODO(1.6): Remove after ext lib bump
+    constructor(
+        url: String,
+        quality: String,
+        videoUrl: String?,
+        headers: Headers? = null,
+        subtitleTracks: List<Track> = emptyList(),
+        audioTracks: List<Track> = emptyList(),
+    ) : this(
+        videoPageUrl = url,
+        videoTitle = quality,
+        videoUrl = videoUrl ?: "null",
+        headers = headers,
+        subtitleTracks = subtitleTracks,
+        audioTracks = audioTracks,
+    )
+
+    // TODO(1.6): Remove after ext lib bump
+    constructor(
+        videoUrl: String = "",
+        videoTitle: String = "",
+        resolution: Int? = null,
+        bitrate: Int? = null,
+        headers: Headers? = null,
+        preferred: Boolean = false,
+        subtitleTracks: List<Track> = emptyList(),
+        audioTracks: List<Track> = emptyList(),
+        timestamps: List<TimeStamp> = emptyList(),
+        internalData: String = "",
+    ) : this(
+        videoUrl = videoUrl,
+        videoTitle = videoTitle,
+        resolution = resolution,
+        bitrate = bitrate,
+        headers = headers,
+        preferred = preferred,
+        subtitleTracks = subtitleTracks,
+        audioTracks = audioTracks,
+        timestamps = timestamps,
+        internalData = internalData,
+        videoPageUrl = "",
+    )
+
+    // TODO(1.6): Remove after ext lib bump
     @Suppress("UNUSED_PARAMETER")
     constructor(
         url: String,
@@ -38,83 +108,132 @@ open class Video(
     @Transient
     @Volatile
     var status: State = State.QUEUE
-
-    @Transient
-    private val _progressFlow = MutableStateFlow(0)
-
-    @Transient
-    val progressFlow = _progressFlow.asStateFlow()
-    var progress: Int
-        get() = _progressFlow.value
         set(value) {
-            _progressFlow.value = value
-        }
-
-    @Transient
-    @Volatile
-    var totalBytesDownloaded: Long = 0L
-
-    @Transient
-    @Volatile
-    var totalContentLength: Long = 0L
-
-    @Transient
-    @Volatile
-    var bytesDownloaded: Long = 0L
-        set(value) {
-            totalBytesDownloaded += if (value < field) {
-                value
-            } else {
-                value - field
-            }
             field = value
         }
 
-    @Transient
-    var progressSubject: Subject<State, State>? = null
+    fun copy(
+        videoUrl: String = this.videoUrl,
+        videoTitle: String = this.videoTitle,
+        resolution: Int? = this.resolution,
+        bitrate: Int? = this.bitrate,
+        headers: Headers? = this.headers,
+        preferred: Boolean = this.preferred,
+        subtitleTracks: List<Track> = this.subtitleTracks,
+        audioTracks: List<Track> = this.audioTracks,
+        timestamps: List<TimeStamp> = this.timestamps,
+        internalData: String = this.internalData,
+    ): Video {
+        return Video(
+            videoUrl = videoUrl,
+            videoTitle = videoTitle,
+            resolution = resolution,
+            bitrate = bitrate,
+            headers = headers,
+            preferred = preferred,
+            subtitleTracks = subtitleTracks,
+            audioTracks = audioTracks,
+            timestamps = timestamps,
+            internalData = internalData,
+        )
+    }
 
-    override fun update(bytesRead: Long, contentLength: Long, done: Boolean) {
-        bytesDownloaded = bytesRead
-        if (contentLength > totalContentLength) {
-            totalContentLength = contentLength
-        }
-        val newProgress = if (totalContentLength > 0) {
-            (100 * totalBytesDownloaded / totalContentLength).toInt()
-        } else {
-            -1
-        }
-        if (progress != newProgress) progress = newProgress
+    fun copy(
+        videoUrl: String = this.videoUrl,
+        videoTitle: String = this.videoTitle,
+        resolution: Int? = this.resolution,
+        bitrate: Int? = this.bitrate,
+        headers: Headers? = this.headers,
+        preferred: Boolean = this.preferred,
+        subtitleTracks: List<Track> = this.subtitleTracks,
+        audioTracks: List<Track> = this.audioTracks,
+        timestamps: List<TimeStamp> = this.timestamps,
+        internalData: String = this.internalData,
+        initialized: Boolean = this.initialized,
+        videoPageUrl: String = this.videoPageUrl,
+    ): Video {
+        return Video(
+            videoUrl = videoUrl,
+            videoTitle = videoTitle,
+            resolution = resolution,
+            bitrate = bitrate,
+            headers = headers,
+            preferred = preferred,
+            subtitleTracks = subtitleTracks,
+            audioTracks = audioTracks,
+            timestamps = timestamps,
+            internalData = internalData,
+            initialized = initialized,
+            videoPageUrl = videoPageUrl,
+        )
     }
 
     enum class State {
         QUEUE,
         LOAD_VIDEO,
-        DOWNLOAD_IMAGE,
         READY,
         ERROR,
     }
+}
 
-    @Throws(IOException::class)
-    private fun writeObject(out: ObjectOutputStream) {
-        out.defaultWriteObject()
-        val headersMap: Map<String, List<String>> = headers?.toMultimap() ?: emptyMap()
-        out.writeObject(headersMap)
-    }
+@kotlinx.serialization.Serializable
+data class SerializableVideo(
+    val videoUrl: String = "",
+    val videoTitle: String = "",
+    val resolution: Int? = null,
+    val bitrate: Int? = null,
+    val headers: List<Pair<String, String>>? = null,
+    val preferred: Boolean = false,
+    val subtitleTracks: List<Track> = emptyList(),
+    val audioTracks: List<Track> = emptyList(),
+    val timestamps: List<TimeStamp> = emptyList(),
+    val internalData: String = "",
+    val initialized: Boolean = false,
+    // TODO(1.6): Remove after ext lib bump
+    val videoPageUrl: String = "",
+) {
 
-    @Suppress("UNCHECKED_CAST")
-    @Throws(IOException::class, ClassNotFoundException::class)
-    private fun readObject(input: ObjectInputStream) {
-        input.defaultReadObject()
-        val headersMap = input.readObject() as? Map<String, List<String>>
-        headers = headersMap?.let { map ->
-            val builder = Headers.Builder()
-            for ((key, values) in map) {
-                for (value in values) {
-                    builder.add(key, value)
+    companion object {
+        fun List<Video>.serialize(): String =
+            Json.encodeToString(
+                this.map { vid ->
+                    SerializableVideo(
+                        vid.videoUrl,
+                        vid.videoTitle,
+                        vid.resolution,
+                        vid.bitrate,
+                        vid.headers?.toList(),
+                        vid.preferred,
+                        vid.subtitleTracks,
+                        vid.audioTracks,
+                        vid.timestamps,
+                        vid.internalData,
+                        vid.initialized,
+                        vid.videoPageUrl,
+                    )
+                },
+            )
+
+        fun String.toVideoList(): List<Video> =
+            Json.decodeFromString<List<SerializableVideo>>(this)
+                .map { sVid ->
+                    Video(
+                        sVid.videoUrl,
+                        sVid.videoTitle,
+                        sVid.resolution,
+                        sVid.bitrate,
+                        sVid.headers
+                            ?.flatMap { it.toList() }
+                            ?.let { Headers.headersOf(*it.toTypedArray()) },
+                        sVid.preferred,
+                        sVid.subtitleTracks,
+                        sVid.audioTracks,
+                        sVid.timestamps,
+                        sVid.internalData,
+                        sVid.initialized,
+                        sVid.videoPageUrl,
+                    )
                 }
-            }
-            builder.build()
-        }
-
     }
 }
+
