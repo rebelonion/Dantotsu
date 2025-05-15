@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.extension.api
 
+import ani.dantotsu.asyncMap
 import ani.dantotsu.parsers.novel.AvailableNovelSources
 import ani.dantotsu.parsers.novel.NovelExtension
 import ani.dantotsu.settings.saving.PrefManager
@@ -67,7 +68,7 @@ internal class ExtensionGithubApi {
             val repos =
                 PrefManager.getVal<Set<String>>(PrefName.AnimeExtensionRepos).toMutableList()
 
-            repos.forEach {
+            repos.asyncMap {
                 val repoUrl = if (it.contains("index.min.json")) {
                     it
                 } else {
@@ -155,7 +156,7 @@ internal class ExtensionGithubApi {
             val repos =
                 PrefManager.getVal<Set<String>>(PrefName.MangaExtensionRepos).toMutableList()
 
-            repos.forEach {
+            repos.asyncMap {
                 val repoUrl = if (it.contains("index.min.json")) {
                     it
                 } else {
@@ -207,7 +208,7 @@ internal class ExtensionGithubApi {
             val repos =
                 PrefManager.getVal<Set<String>>(PrefName.NovelExtensionRepos).toMutableList()
 
-            repos.forEach {
+            repos.asyncMap {
                 val repoUrl = if (it.contains("index.min.json")) {
                     it
                 } else {

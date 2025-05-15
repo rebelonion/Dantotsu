@@ -113,21 +113,28 @@ class App : MultiDexApplication() {
             }
         }
 
-        CoroutineScope(Dispatchers.IO).launch {
+        val scope = CoroutineScope(Dispatchers.IO)
+        scope.launch {
             animeExtensionManager = Injekt.get()
-            animeExtensionManager.findAvailableExtensions()
+            launch {
+                animeExtensionManager.findAvailableExtensions()
+            }
             Logger.log("Anime Extensions: ${animeExtensionManager.installedExtensionsFlow.first()}")
             AnimeSources.init(animeExtensionManager.installedExtensionsFlow)
         }
-        CoroutineScope(Dispatchers.IO).launch {
+        scope.launch {
             mangaExtensionManager = Injekt.get()
-            mangaExtensionManager.findAvailableExtensions()
+            launch {
+                mangaExtensionManager.findAvailableExtensions()
+            }
             Logger.log("Manga Extensions: ${mangaExtensionManager.installedExtensionsFlow.first()}")
             MangaSources.init(mangaExtensionManager.installedExtensionsFlow)
         }
-        CoroutineScope(Dispatchers.IO).launch {
+        scope.launch {
             novelExtensionManager = Injekt.get()
-            novelExtensionManager.findAvailableExtensions()
+            launch {
+                novelExtensionManager.findAvailableExtensions()
+            }
             Logger.log("Novel Extensions: ${novelExtensionManager.installedExtensionsFlow.first()}")
             NovelSources.init(novelExtensionManager.installedExtensionsFlow)
         }

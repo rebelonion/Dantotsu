@@ -26,7 +26,6 @@ object AnimeSources : WatchSources() {
         )
         isInitialized = true
 
-        // Update as StateFlow emits new values
         fromExtensions.collect { extensions ->
             list = sortPinnedAnimeSources(
                 createParsersFromExtensions(extensions),
