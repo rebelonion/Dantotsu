@@ -1,6 +1,8 @@
 package ani.dantotsu.media
 
 import android.content.Context
+import androidx.core.net.toFile
+import androidx.core.net.toUri
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.parsers.SubtitleType
@@ -21,34 +23,47 @@ class SubtitleDownloader {
         suspend fun loadSubtitleType(url: String): SubtitleType =
             withContext(Dispatchers.IO) {
                 return@withContext try {
-                    // Initialize the NetworkHelper instance. Replace this line based on how you usually initialize it
-                    val networkHelper = Injekt.get<NetworkHelper>()
-                    val request = Request.Builder()
-                        .url(url)
-                        .build()
+                    if (!url.startsWith("file")) {
+                        // Initialize the NetworkHelper instance. Replace this line based on how you usually initialize it
+                        val networkHelper = Injekt.get<NetworkHelper>()
+                        val request = Request.Builder()
+                            .url(url)
+                            .build()
 
-                    val response = networkHelper.client.newCall(request).execute()
+                        val response = networkHelper.client.newCall(request).execute()
 
-                    // Check if response is successful
-                    if (response.isSuccessful) {
-                        val responseBody = response.body.string()
+                        // Check if response is successful
+                        if (response.isSuccessful) {
+                            val responseBody = response.body.string()
 
 
-                        val subtitleType = when {
-                            responseBody.contains("[Script Info]") -> SubtitleType.ASS
-                            responseBody.contains("WEBVTT") -> SubtitleType.VTT
-                            else -> SubtitleType.SRT
+                            val subtitleType = getType(responseBody)
+
+                            subtitleType
+                        } else {
+                            SubtitleType.UNKNOWN
                         }
-
-                        subtitleType
                     } else {
-                        SubtitleType.UNKNOWN
+                        val uri = url.toUri()
+                        val file = uri.toFile()
+                        val fileBody = file.readText()
+                        val subtitleType = getType(fileBody)
+                        subtitleType
                     }
                 } catch (e: Exception) {
                     Logger.log(e)
                     SubtitleType.UNKNOWN
                 }
             }
+
+        private fun getType(content: String): SubtitleType {
+            return when {
+                content.contains("[Script Info]") -> SubtitleType.ASS
+                content.contains("WEBVTT") -> SubtitleType.VTT
+                content.contains("SRT") -> SubtitleType.SRT
+                else -> SubtitleType.UNKNOWN
+            }
+        }
 
         //actually downloads lol
         @Deprecated("handled externally")

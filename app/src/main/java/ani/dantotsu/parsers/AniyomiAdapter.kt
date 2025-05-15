@@ -646,7 +646,6 @@ class VideoServerPassthrough(private val videoServer: VideoServer) : VideoExtrac
     }
 
     private fun trackToSubtitle(track: Track): Subtitle {
-        //use Dispatchers.IO to make a HTTP request to determine the subtitle type
         var type: SubtitleType?
         runBlocking {
             type = findSubtitleType(track.url)

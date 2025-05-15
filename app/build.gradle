@@ -48,6 +48,10 @@ android {
             manifestPlaceholders.icon_placeholder_round = "@mipmap/ic_launcher_alpha_round"
             debuggable System.getenv("CI") == null
             isDefault true
+            debuggable true
+            jniDebuggable true
+            minifyEnabled false
+            shrinkResources false
         }
         debug {
             applicationIdSuffix ".beta"
@@ -81,25 +85,26 @@ android {
 dependencies {
 
 //  FireBase
-    googleImplementation platform('com.google.firebase:firebase-bom:33.0.0')
-    googleImplementation 'com.google.firebase:firebase-analytics-ktx:22.0.0'
-    googleImplementation 'com.google.firebase:firebase-crashlytics-ktx:19.0.0'
+    googleImplementation platform('com.google.firebase:firebase-bom:33.13.0')
+    googleImplementation 'com.google.firebase:firebase-analytics-ktx:22.4.0'
+    googleImplementation 'com.google.firebase:firebase-crashlytics-ktx:19.4.3'
 //  Core
-    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'androidx.browser:browser:1.8.0'
-    implementation 'androidx.core:core-ktx:1.13.1'
-    implementation 'androidx.fragment:fragment-ktx:1.6.2'
+    implementation 'androidx.core:core-ktx:1.16.0'
+    implementation 'androidx.fragment:fragment-ktx:1.8.6'
+    implementation 'androidx.activity:activity-ktx:1.10.1'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation "androidx.work:work-runtime-ktx:2.9.0"
+    implementation "androidx.work:work-runtime-ktx:2.10.1"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'com.github.Blatzar:NiceHttp:0.4.4'
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3'
     implementation 'androidx.preference:preference-ktx:1.2.1'
-    implementation 'androidx.webkit:webkit:1.11.0'
+    implementation 'androidx.webkit:webkit:1.13.0'
     implementation "com.anggrayudi:storage:1.5.5"
     implementation "androidx.biometric:biometric:1.1.0"
 
@@ -113,7 +118,7 @@ dependencies {
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
 
 //  Exoplayer
-    ext.exo_version = '1.5.1'
+    ext.exo_version = '1.6.1'
     implementation "androidx.media3:media3-exoplayer:$exo_version"
     implementation "androidx.media3:media3-ui:$exo_version"
     implementation "androidx.media3:media3-exoplayer-hls:$exo_version"
@@ -133,7 +138,7 @@ dependencies {
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
     implementation 'com.alexvasilkov:gesture-views:2.8.3'
     implementation 'com.github.VipulOG:ebook-reader:0.1.6'
-    implementation 'androidx.paging:paging-runtime-ktx:3.2.1'
+    implementation 'androidx.paging:paging-runtime-ktx:3.3.6'
     implementation 'com.github.eltos:simpledialogfragments:v3.7'
     implementation 'com.github.AAChartModel:AAChartCore-Kotlin:7.2.3'
 
@@ -162,13 +167,13 @@ dependencies {
     implementation 'ca.gosyer:voyager-navigator:1.0.0-rc07'
     implementation 'com.squareup.logcat:logcat:0.1'
     implementation 'uy.kohesive.injekt:injekt-core:1.16.+'
-    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.12'
-    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.12'
+    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.14'
+    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.14'
     implementation 'com.squareup.okhttp3:okhttp-dnsoverhttps'
-    implementation 'com.squareup.okio:okio:3.8.0'
-    implementation 'com.squareup.okhttp3:okhttp-brotli:5.0.0-alpha.12'
-    implementation 'org.jsoup:jsoup:1.16.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json-okio:1.6.3'
+    implementation 'com.squareup.okio:okio:3.9.1'
+    implementation 'com.squareup.okhttp3:okhttp-brotli:5.0.0-alpha.14'
+    implementation 'org.jsoup:jsoup:1.18.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json-okio:1.7.3'
     implementation 'com.jakewharton.rxrelay:rxrelay:1.2.0'
     implementation 'com.github.tachiyomiorg:unifile:17bec43'
     implementation 'com.github.gpanther:java-nat-sort:natural-comparator-1.1'
