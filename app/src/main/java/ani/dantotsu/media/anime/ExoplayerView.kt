@@ -1308,7 +1308,7 @@ class ExoplayerView :
                 setTitle(R.string.speed)
                 singleChoiceItems(speedsName, curSpeed) { i ->
                     PrefManager.setCustomVal("${media.id}_speed", i)
-                    speed = speeds[i]
+                    speed = speeds.getOrNull(i) ?: 1f
                     curSpeed = i
                     playbackParameters = PlaybackParameters(speed)
                     exoPlayer.playbackParameters = playbackParameters
